@@ -1,5 +1,7 @@
 <p align="center">
-    <img src="docs/public/assets/images/logo-name.png" width="200" alt="Nuclui" />
+    <a href="http://nuclui.chintristan.io/">
+        <img src="docs/public/assets/images/logo-name.png" width="200" alt="Nuclui" />
+    </a>
 </p>
 
 ---

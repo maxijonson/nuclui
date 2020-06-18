@@ -12,7 +12,7 @@
     "test:heroku": "npm run heroku-postbuild && heroku local web",
     "build:docs:dev": "npm run clean && webpack --env.NODE_ENV=development --config=\"webpack.config.ts\"",
     "build:docs:prod": "npm run clean && webpack -p --env.NODE_ENV=production --config=\"webpack.config.ts\"",
-    "prepublishOnly": "node scripts/prepublishOnly.js",
+    "prepublishOnly": "npm run compile && node scripts/prepublishOnly.js",
     "postpublish": "node scripts/postpublish.js",
     "heroku-postbuild": "npm run build:docs:prod && tsc --project tsconfig.server.json"
   },
