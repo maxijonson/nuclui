@@ -1,0 +1,151 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true
+    },
+    "extends": [
+        "airbnb",
+        "typescript",
+        "typescript/react",
+        "typescript/prettier-react",
+        "plugin:react/recommended",
+        "plugin:@typescript-eslint/recommended",
+        "prettier/@typescript-eslint",
+        "plugin:prettier/recommended"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 2018,
+        "import/parsers": {
+            "@typescript-eslint/parser": [
+                ".ts",
+                ".tsx"
+            ]
+        },
+        "import/resolver": {
+            "typescript": {}
+        },
+        "project": "./tsconfig.json",
+        "sourceType": "module",
+        "tsconfigRootDir": ".",
+        "useJSXTextNode": true
+    },
+    "plugins": [
+        "react",
+        "react-hooks",
+        "@typescript-eslint",
+        "prettier"
+    ],
+    "rules": {
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/interface-name-prefix": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-object-literal-type-assertion": "off",
+        "@typescript-eslint/no-unused-vars": [
+            "warn",
+            {
+                "argsIgnorePattern": "^_",
+                "ignoreRestSiblings": true
+            }
+        ],
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "class-methods-use-this": "off",
+        "consistent-return": "off",
+        "eqeqeq": "off",
+        "import/extensions": [
+            "error",
+            {
+                "config": "always",
+                "js": "never",
+                "json": "always",
+                "jsx": "never",
+                "ts": "never",
+                "tsx": "never"
+            }
+        ],
+        "import/no-extraneous-dependencies": "off",
+        "import/no-unresolved": "off",
+        "import/order": "warn",
+        "import/prefer-default-export": "off",
+        "jsx-a11y/anchor-is-valid": "off",
+        "jsx-a11y/click-events-have-key-events": "off",
+        "jsx-a11y/control-has-associated-label": "off",
+        "jsx-a11y/no-static-element-interactions": "off",
+        "lines-between-class-members": "off",
+        "no-console": [
+            "warn",
+            {
+                "allow": [
+                    "warn",
+                    "error",
+                    "info"
+                ]
+            }
+        ],
+        "no-new": "off",
+        "no-param-reassign": [
+            "warn",
+            {
+                "props": false
+            }
+        ],
+        "no-restricted-globals": "off",
+        "no-restricted-syntax": "off",
+        "no-shadow": [
+            "error",
+            {
+                "allow": [
+                    "theme"
+                ]
+            }
+        ],
+        "no-underscore-dangle": "off",
+        "prettier/prettier": [
+            "warn",
+            {
+                "arrowParens": "always",
+                "semi": true,
+                "tabWidth": 4,
+                "trailingComma": "es5"
+            }
+        ],
+        "react-hooks/exhaustive-deps": "warn",
+        "react-hooks/rules-of-hooks": "error",
+        "react/destructuring-assignment": "off",
+        "react/display-name": "off",
+        "react/jsx-filename-extension": [
+            1,
+            {
+                "extensions": [
+                    ".tsx",
+                    ".jsx"
+                ]
+            }
+        ],
+        "react/jsx-props-no-spreading": "off",
+        "react/no-children-prop": "off",
+        "react/no-multi-comp": "off",
+        "react/prop-types": "off",
+        "spaced-comment": [
+            "warn",
+            "always",
+            {
+                "markers": [
+                    "/"
+                ]
+            }
+        ]
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
+    }
+}
