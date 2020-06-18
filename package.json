@@ -35,10 +35,7 @@
     "url": "https://github.com/maxijonson/nuclui/issues"
   },
   "homepage": "https://github.com/maxijonson/nuclui#readme",
-  "files": [
-    "dist",
-    "docs/public/assets/images/logo*.png"
-  ],
+  "files": ["dist"],
   "dependencies": {
     "express": "4.17.1",
     "express-sslify": "1.2.0",
