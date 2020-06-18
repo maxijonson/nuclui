@@ -1,4 +1,4 @@
-<p style="text-align:center">
+<p align="center">
     <img src="docs/public/assets/images/logo-name.png" width="200" alt="Nuclui" />
 </p>
 
