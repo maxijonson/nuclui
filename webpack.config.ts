@@ -40,7 +40,7 @@ const config = (env: NodeJS.ProcessEnv): webpack.Configuration => {
                         {
                             loader: "ts-loader",
                             options: {
-                                configFile: "tsconfig.docs.json",
+                                configFile: "docs/tsconfig.json",
                                 logLevel: isProduction ? "warn" : "info",
                             },
                         },

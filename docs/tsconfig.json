@@ -1,0 +1,11 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "paths": {
+            "nuclui": ["./src/index.ts"],
+            "nuclui/*": ["./src/*"]
+        }
+    },
+    "include": ["."],
+    "exclude": ["./**/*.test.tsx", "./**/*.test.ts"]
+}

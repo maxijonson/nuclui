@@ -1,6 +1,6 @@
 <p align="center">
     <a href="http://nuclui.chintristan.io/">
-        <img src="http://nuclui.chintristan.io/assets/images/logo-name.png" width="200" alt="Nuclui" />
+        <img src="docs/public/assets/images/logo-name.png" alt="Nuclui Logo" width="200" />
     </a>
 </p>
 
@@ -19,7 +19,9 @@ Use your favorite package manager to install Nuclui!
 ```bash
 npm i nuclui
 ```
+
 or
+
 ```bash
 yarn add nuclui
 ```
@@ -30,4 +32,5 @@ Nuclui is under development and is not yet production ready. The components and 
 
 ## FYI
 
-Nuclui is a reboot of a previous unfinished React library: [tchin-react-components](https://github.com/maxijonson/tchin-react-components).
+- Nuclui is a reboot of a previous unfinished React library: [tchin-react-components](https://github.com/maxijonson/tchin-react-components).
+- Although some docs specific are declared in the `dependencies` of [package.json](./package.json), they are stripped out before publishing to NPM using [scripts](./scripts/prepublishOnly.js). Since the docs are hosted on Heroku, this was necessary in order to make the docs work while keeping these docs specific dependencies out of the final product. I am aware this is a hacky solution and [I am looking for cleaner alternatives](https://stackoverflow.com/questions/62460197/how-do-you-exclude-certain-dependencies-from-being-published-with-npm).

@@ -2,3 +2,5 @@
 *.scss
 *.json
 scripts
+dist
+node_modules

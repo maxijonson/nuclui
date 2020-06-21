@@ -1,3 +1,8 @@
 import React from "react";
+import { createComponentName } from "src/utils";
 
-export default () => <div>Example</div>;
+const Example = () => <div>Example</div>;
+
+Example.displayName = createComponentName("example");
+
+export default Example;

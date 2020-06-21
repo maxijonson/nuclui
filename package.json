@@ -7,14 +7,17 @@
     "start:prod": "node docs/dist-server/server.js",
     "start:dev": "webpack-dev-server --config=\"webpack.config.ts\" --host 0.0.0.0 --env.NODE_ENV=development --port=3000",
     "clean": "rm -rf dist package docs/public/dist docs/dist-server *.tsbuildinfo",
-    "compile": "npm run clean && tsc --project tsconfig.nuclui.json",
-    "test:publish": "npm run compile && npm run prepublishOnly && npm pack && tar xvzf *.tgz && rm -rf *.tgz && npm run postpublish",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0",
+    "test": "npm run lint && jest",
+    "test:watch": "npm run lint && jest --watch",
+    "test:publish": "npm run prepublishOnly && npm pack && tar xvzf *.tgz && rm -rf *.tgz && npm run postpublish",
     "test:heroku": "npm run heroku-postbuild && heroku local web",
-    "build:docs:dev": "npm run clean && webpack --env.NODE_ENV=development --config=\"webpack.config.ts\"",
-    "build:docs:prod": "npm run clean && webpack -p --env.NODE_ENV=production --config=\"webpack.config.ts\"",
+    "compile": "npm-run-all clean test && tsc --project src",
+    "build:docs:dev": "npm-run-all clean test && webpack --env.NODE_ENV=development --config=\"webpack.config.ts\"",
+    "build:docs:prod": "npm-run-all clean test && webpack -p --env.NODE_ENV=production --config=\"webpack.config.ts\"",
     "prepublishOnly": "npm run compile && node scripts/prepublishOnly.js",
     "postpublish": "node scripts/postpublish.js",
-    "heroku-postbuild": "npm run build:docs:prod && tsc --project tsconfig.server.json"
+    "heroku-postbuild": "npm run build:docs:prod && tsc --project docs/server"
   },
   "repository": {
     "type": "git",
@@ -35,18 +38,27 @@
     "url": "https://github.com/maxijonson/nuclui/issues"
   },
   "homepage": "https://github.com/maxijonson/nuclui#readme",
-  "files": ["dist"],
-  "dependencies": {
-    "express": "4.17.1",
-    "express-sslify": "1.2.0",
+  "files": [
+    "dist",
+    "docs/public/assets/images/logo*.png"
+  ],
+  "peerDependencies": {
     "react": "16.13.1",
     "react-dom": "16.13.1"
+  },
+  "dependencies": {
+    "express": "4.17.1",
+    "express-sslify": "1.2.0"
   },
   "devDependencies": {
     "@babel/core": "7.10.2",
     "@types/circular-dependency-plugin": "5.0.1",
+    "@types/enzyme": "3.10.5",
+    "@types/enzyme-adapter-react-16": "1.0.6",
+    "@types/enzyme-to-json": "1.5.3",
     "@types/express": "4.17.6",
     "@types/express-sslify": "1.2.1",
+    "@types/jest": "26.0.0",
     "@types/node": "14.0.13",
     "@types/react": "16.9.36",
     "@types/react-dom": "16.9.8",
@@ -58,6 +70,9 @@
     "babel-polyfill": "6.26.0",
     "circular-dependency-plugin": "5.2.0",
     "dotenv": "8.2.0",
+    "enzyme": "3.11.0",
+    "enzyme-adapter-react-16": "1.15.2",
+    "enzyme-to-json": "3.5.0",
     "eslint": "6.8.0",
     "eslint-config-airbnb": "18.1.0",
     "eslint-config-prettier": "6.11.0",
@@ -68,7 +83,12 @@
     "eslint-plugin-prettier": "3.1.4",
     "eslint-plugin-react": "7.20.0",
     "eslint-plugin-react-hooks": "2.5.1",
+    "jest": "26.0.1",
+    "npm-run-all": "4.1.5",
     "prettier": "2.0.5",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "ts-jest": "26.1.0",
     "ts-loader": "7.0.5",
     "ts-node": "8.10.2",
     "typescript": "3.9.5",
