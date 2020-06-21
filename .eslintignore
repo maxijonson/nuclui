@@ -4,3 +4,4 @@
 scripts
 dist
 node_modules
+docs/dist-server

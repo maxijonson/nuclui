@@ -24,10 +24,7 @@
         },
         "ecmaVersion": 2018,
         "import/parsers": {
-            "@typescript-eslint/parser": [
-                ".ts",
-                ".tsx"
-            ]
+            "@typescript-eslint/parser": [".ts", ".tsx"]
         },
         "import/resolver": {
             "typescript": {}
@@ -37,12 +34,7 @@
         "tsconfigRootDir": ".",
         "useJSXTextNode": true
     },
-    "plugins": [
-        "react",
-        "react-hooks",
-        "@typescript-eslint",
-        "prettier"
-    ],
+    "plugins": ["react", "react-hooks", "@typescript-eslint", "prettier"],
     "rules": {
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/interface-name-prefix": "off",
@@ -82,11 +74,7 @@
         "no-console": [
             "warn",
             {
-                "allow": [
-                    "warn",
-                    "error",
-                    "info"
-                ]
+                "allow": ["warn", "error", "info"]
             }
         ],
         "no-new": "off",
@@ -101,19 +89,24 @@
         "no-shadow": [
             "error",
             {
-                "allow": [
-                    "theme"
-                ]
+                "allow": ["theme"]
             }
         ],
         "no-underscore-dangle": "off",
         "prettier/prettier": [
             "warn",
             {
-                "arrowParens": "always",
-                "semi": true,
                 "tabWidth": 4,
-                "trailingComma": "es5"
+                "useTabs": false,
+                "semi": true,
+                "singleQuote": false,
+                "quoteProps": "consistent",
+                "jsxSingleQuote": false,
+                "trailingComma": "es5",
+                "bracketSpacing": true,
+                "jsxBracketSameLine": false,
+                "arrowParens": "always",
+                "endOfLine": "lf"
             }
         ],
         "react-hooks/exhaustive-deps": "warn",
@@ -123,10 +116,7 @@
         "react/jsx-filename-extension": [
             1,
             {
-                "extensions": [
-                    ".tsx",
-                    ".jsx"
-                ]
+                "extensions": [".tsx", ".jsx"]
             }
         ],
         "react/jsx-props-no-spreading": "off",
@@ -137,9 +127,7 @@
             "warn",
             "always",
             {
-                "markers": [
-                    "/"
-                ]
+                "markers": ["/"]
             }
         ]
     },

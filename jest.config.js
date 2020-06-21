@@ -11,7 +11,7 @@ module.exports = {
     setupFilesAfterEnv: ["<rootDir>/src/config/setupEnzyme.ts"],
     moduleNameMapper: {
         "^components(.*)$": "<rootDir>/src/components$1",
-        nuclui: ["<rootDir>/src/index.ts"],
+        "nuclui": ["<rootDir>/src/index.ts"],
         "^nuclui(.*)$": ["<rootDir>/src$1"],
     },
 };
