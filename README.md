@@ -9,6 +9,8 @@
 <div align="center">
 
 [![tests](https://github.com/maxijonson/nuclui/workflows/tests/badge.svg)](https://github.com/maxijonson/nuclui/actions?query=workflow%3Atests)
+[![build](https://github.com/maxijonson/nuclui/workflows/build/badge.svg)](https://github.com/maxijonson/nuclui/actions?query=workflow%3Abuild)
+[![build-docs](https://github.com/maxijonson/nuclui/workflows/build-docs/badge.svg)](https://github.com/maxijonson/nuclui/actions?query=workflow%3Abuild-docs)
 
 </div>
 

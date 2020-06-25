@@ -1,0 +1,42 @@
+name: build-docs
+
+on:
+    push:
+        branches: [master]
+    pull_request:
+        branches: [master]
+
+jobs:
+    build-docs:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Use Node.js
+              uses: actions/setup-node@v1
+              with:
+                  node-version: "12.x"
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Compile docs
+              run: npm run build:docs:prod
+
+    build-server:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Use Node.js
+              uses: actions/setup-node@v1
+              with:
+                  node-version: "12.x"
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Compile server
+              run: tsc --project docs/server
