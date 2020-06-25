@@ -3,10 +3,14 @@
         <img src="docs/public/assets/images/logo-name.png" alt="Nuclui Logo" width="200" />
     </a>
 </p>
-<div align="center">
-    [![tests](https://github.com/maxijonson/nuclui/workflows/tests/badge.svg)](https://github.com/maxijonson/nuclui/actions?query=workflow%3Atests)
-</div>
+
 ---
+
+<div align="center">
+
+[![tests](https://github.com/maxijonson/nuclui/workflows/tests/badge.svg)](https://github.com/maxijonson/nuclui/actions?query=workflow%3Atests)
+
+</div>
 
 A React UI framework to make your developement easier so you can give more focus on your app and less on the design! It is entirely developed with TypeScript, so it provides full typing support.
 
