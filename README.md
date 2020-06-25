@@ -3,7 +3,9 @@
         <img src="docs/public/assets/images/logo-name.png" alt="Nuclui Logo" width="200" />
     </a>
 </p>
-
+<div align="center">
+    ![tests](https://github.com/maxijonson/nuclui/workflows/tests/badge.svg)
+</div>
 ---
 
 A React UI framework to make your developement easier so you can give more focus on your app and less on the design! It is entirely developed with TypeScript, so it provides full typing support.
