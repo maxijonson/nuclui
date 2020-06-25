@@ -4,7 +4,7 @@
     </a>
 </p>
 <div align="center">
-    ![tests](https://github.com/maxijonson/nuclui/workflows/tests/badge.svg)
+    [![tests](https://github.com/maxijonson/nuclui/workflows/tests/badge.svg)](https://github.com/maxijonson/nuclui/actions?query=workflow%3Atests)
 </div>
 ---
 
