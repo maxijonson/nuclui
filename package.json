@@ -14,10 +14,11 @@
     "test:publish": "npm run prepublishOnly && npm pack && tar xvzf *.tgz && rm -rf *.tgz && npm run postpublish",
     "test:heroku": "npm run heroku-postbuild && heroku local web",
     "compile": "npm-run-all clean test && tsc --project src",
+    "compile:scripts": "tsc --project scripts",
     "build:docs:dev": "npm-run-all clean test && webpack --env.NODE_ENV=development --config=\"webpack.config.ts\"",
     "build:docs:prod": "npm-run-all clean test && webpack -p --env.NODE_ENV=production --config=\"webpack.config.ts\"",
-    "prepublishOnly": "npm run compile && node scripts/prepublishOnly.js",
-    "postpublish": "node scripts/postpublish.js",
+    "prepublishOnly": "npm-run-all compile && node scripts/compiled/prepublishOnly.js",
+    "postpublish": "node scripts/compiled/postpublish.js",
     "heroku-postbuild": "npm run build:docs:prod && tsc --project docs/server"
   },
   "repository": {

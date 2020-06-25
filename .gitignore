@@ -140,3 +140,4 @@ docs/public/dist
 docs/dist-server
 
 scripts/package.restore.json
+scripts/compiled

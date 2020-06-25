@@ -5,3 +5,4 @@ docs/dist-server
 package.json
 package-lock.json
 tsconfig.json
+scripts/compiled
