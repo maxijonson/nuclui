@@ -14,4 +14,5 @@ module.exports = {
         "nuclui": ["<rootDir>/src/index.ts"],
         "^nuclui(.*)$": ["<rootDir>/src$1"],
     },
+    collectCoverage: true,
 };

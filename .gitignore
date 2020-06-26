@@ -136,8 +136,10 @@ sketch
 # NPM Test package
 package
 
+# Docs dists
 docs/public/dist
 docs/dist-server
 
+# NPM scripts
 scripts/package.restore.json
 scripts/compiled
