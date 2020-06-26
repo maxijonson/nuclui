@@ -11,6 +11,7 @@
 [![tests](https://github.com/maxijonson/nuclui/workflows/tests/badge.svg)](https://github.com/maxijonson/nuclui/actions?query=workflow%3Atests)
 [![build](https://github.com/maxijonson/nuclui/workflows/build/badge.svg)](https://github.com/maxijonson/nuclui/actions?query=workflow%3Abuild)
 [![build-docs](https://github.com/maxijonson/nuclui/workflows/build-docs/badge.svg)](https://github.com/maxijonson/nuclui/actions?query=workflow%3Abuild-docs)
+[![codecov](https://codecov.io/gh/maxijonson/nuclui/branch/master/graph/badge.svg)](https://codecov.io/gh/maxijonson/nuclui)
 
 </div>
 
