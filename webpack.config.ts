@@ -54,7 +54,10 @@ const config = (env: NodeJS.ProcessEnv): webpack.Configuration => {
             modules: [path.resolve(__dirname), "node_modules"],
             extensions: [".tsx", ".ts", ".js", ".json"],
             alias: {
-                nuclui: path.resolve(__dirname, "src/"),
+                "nuclui": path.resolve(__dirname, "src/"),
+                "@utils": path.resolve(__dirname, "src/utils/"),
+                "@components": path.resolve(__dirname, "src/components/"),
+                "@config": path.resolve(__dirname, "src/config/"),
             },
         },
         plugins: [CircularDependency],

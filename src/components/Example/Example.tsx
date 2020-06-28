@@ -1,5 +1,5 @@
 import React from "react";
-import { createComponentName } from "src/utils";
+import { createComponentName } from "@utils";
 
 const Example = () => <div>Example</div>;
 

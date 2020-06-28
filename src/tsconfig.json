@@ -2,7 +2,15 @@
     "extends": "../tsconfig.json",
     "compilerOptions": {
         "declaration": true,
-        "declarationMap": true
+        "declarationMap": true,
+        "paths": {
+            "@components": ["src/components"],
+            "@components/*": ["src/components/*"],
+            "@utils": ["src/utils"],
+            "@utils/*": ["src/utils/*"],
+            "@config": ["src/config"],
+            "@config/*": ["src/config/*"]
+        }
     },
     "include": [".", "../index.ts"],
     "exclude": ["./**/*.test.tsx", "./**/*.test.ts"]

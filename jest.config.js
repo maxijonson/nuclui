@@ -10,9 +10,15 @@ module.exports = {
     snapshotSerializers: ["enzyme-to-json/serializer"],
     setupFilesAfterEnv: ["<rootDir>/src/config/setupEnzyme.ts"],
     moduleNameMapper: {
-        "^components(.*)$": "<rootDir>/src/components$1",
-        "nuclui": ["<rootDir>/src/index.ts"],
-        "^nuclui(.*)$": ["<rootDir>/src$1"],
+        // Regex: https://regexr.com/57flk
+        "^@config(?:(?=/).*|(?!/))$": "<rootDir>/src/config",
+        "^@utils(?:(?=/).*|(?!/))$": "<rootDir>/src/utils",
+        "^@components(?:(?=/).*|(?!/))$": "<rootDir>/src/components",
     },
     collectCoverage: true,
+    globals: {
+        "ts-jest": {
+            tsConfig: "./src/tsconfig.json",
+        },
+    },
 };
