@@ -166,7 +166,7 @@ const main = async () => {
             choices: _.map(
                 kinds,
                 (k): Partial<Choice> => ({
-                    name: k.name,
+                    name: `${k.name} (@${k.tag})`,
                     value: k.value,
                     disabled: k.disabled,
                 })

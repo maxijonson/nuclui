@@ -10,7 +10,11 @@
             "@utils/*": ["src/utils/*"],
             "@config": ["src/config"],
             "@config/*": ["src/config/*"]
-        }
+        },
+        "plugins": [
+            { "transform": "typescript-transform-paths" },
+            { "transform": "typescript-transform-paths", "afterDeclarations": true }
+        ]
     },
     "include": [".", "../index.ts"],
     "exclude": ["./**/*.test.tsx", "./**/*.test.ts"]
