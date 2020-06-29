@@ -23,7 +23,8 @@
     "changelog": "auto-changelog -p -u -l 20 -b 20 --hide-credit",
     "preversion": "npm test",
     "version": "npm run changelog && git add CHANGELOG.md",
-    "createVersion": "node scripts/compiled/createVersion.js"
+    "createVersion": "node scripts/compiled/createVersion.js",
+    "createPublish": "node scripts/compiled/createPublish.js"
   },
   "repository": {
     "type": "git",

@@ -1,32 +1,18 @@
 import yargs from "yargs";
 import inquirer from "inquirer";
 import path from "path";
-import { DIR } from "./config";
+import {
+    DIR,
+    severities,
+    Params,
+    Kind,
+    getKinds,
+    parseVersionKind,
+} from "./config";
 import simpleGit from "simple-git";
 import _ from "lodash";
 import Choice from "inquirer/lib/objects/choice";
 import { execSync } from "child_process";
-
-interface Severity {
-    name: string;
-    value: "patch" | "minor" | "major";
-    apply: () => string;
-}
-
-interface Kind {
-    name: string;
-    preRelease: boolean;
-    value: "latest" | "beta" | "dev"; // Version pre-id (except latest)
-    tag: "latest" | "next" | "dev"; // Release channel
-    disabled: boolean;
-}
-
-interface Params {
-    keepPreRelease: boolean;
-    severity: Severity["value"];
-    kind: Kind["value"];
-    confirm: boolean;
-}
 
 const main = async () => {
     const git = simpleGit();
@@ -38,53 +24,12 @@ const main = async () => {
     const mainVersion: string = isPreRelease
         ? version.substring(0, version.indexOf("-"))
         : version;
-    const [M, m, p] = mainVersion.split("."); // [Major, minor, patch]
 
-    const severities: { [name in Severity["value"]]: Severity } = {
-        patch: {
-            name: "Patch",
-            value: "patch",
-            apply: () => `${M}.${m}.${Number(p) + 1}`,
-        },
-        minor: {
-            name: "Minor",
-            value: "minor",
-            apply: () => `${M}.${Number(m) + 1}.0`,
-        },
-        major: {
-            name: "Major",
-            value: "major",
-            apply: () => `${Number(M) + 1}.0.0`,
-        },
-    };
-
-    const kinds: { [name in Kind["value"]]: Kind } = {
-        latest: {
-            name: "Latest",
-            value: "latest",
-            tag: "latest",
-            preRelease: false,
-            disabled: branch.current != "master",
-        },
-        beta: {
-            name: "Next",
-            value: "beta",
-            tag: "next",
-            preRelease: true,
-            disabled: branch.current != "develop",
-        },
-        dev: {
-            name: "Dev",
-            value: "dev",
-            tag: "dev",
-            preRelease: true,
-            disabled: _.includes(["master", "develop"], branch.current),
-        },
-    };
+    const kinds = await getKinds();
 
     const argv = yargs
         .option("keepPreRelease", {
-            alias: "preserve",
+            alias: "p",
             boolean: true,
             description:
                 "If the current version is detected as a pre-release, specify if the build number should be bumped. If it is a pre-release and this is set to true, all other questions (except confirmation) are bypassed.",
@@ -104,21 +49,27 @@ const main = async () => {
             boolean: true,
             description: "If set to true, confirms the changes without asking.",
         })
+        .option("dry", {
+            alias: "d",
+            boolean: true,
+            description: "Runs the command without executing 'npm version'",
+            default: false,
+        })
         .help().argv;
 
     const getNextVersion = (params: Params) => {
         if (isPreRelease && params.keepPreRelease) {
-            const [kind, n] = version
-                .substring(version.indexOf("-") + 1)
-                .split(".");
+            const parsedKind = parseVersionKind(version, kinds);
+            if (!parsedKind) throw new Error("Version is not in pre-release");
 
-            return `${mainVersion}-${kind}.${Number(n) + 1}`;
+            const { kind, build } = parsedKind;
+            return `${mainVersion}-${kind}.${Number(build) + 1}`;
         }
 
         const severity = severities[params.severity];
         const kind = kinds[params.kind];
 
-        return `${severity.apply()}${
+        return `${severity.apply(mainVersion)}${
             kind.preRelease ? `-${kind.value}.0` : ""
         }`;
     };
@@ -187,7 +138,15 @@ const main = async () => {
 
     if (!params.confirm) return;
 
-    execSync(`npm version ${getNextVersion(params as Params)}`);
+    const next = getNextVersion(params as Params);
+    const command = `npm version ${next}`;
+
+    if (argv.dry) {
+        console.info(`${version} -> ${next}`);
+        console.info(command);
+    } else {
+        execSync(command);
+    }
 };
 
 // Can't use TS top-level await as target is 'es5'
