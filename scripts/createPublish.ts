@@ -21,6 +21,7 @@ const main = async () => {
         parsedKind ? `${parsedKind.kind.tag}` : "latest"
     } ${argv.dry ? "--dry-run" : ""}`;
 
+    console.info(`[INFO] ${command}`);
     execSync(command);
 };
 

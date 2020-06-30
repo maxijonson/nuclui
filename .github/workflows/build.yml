@@ -7,6 +7,29 @@ on:
         branches: [master]
 
 jobs:
+    test:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Use Node.js
+              uses: actions/setup-node@v1
+              with:
+                  node-version: "12.x"
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Run tests
+              run: npm test
+
+            - name: Codecov
+              uses: codecov/codecov-action@v1
+              with:
+                  token: ${{ secrets.CODECOV_TOKEN }}
+                  fail_ci_if_error: true
+
     build:
         runs-on: ubuntu-latest
 
@@ -23,3 +46,37 @@ jobs:
 
             - name: Compile Nuclui
               run: npm run compile
+
+    build-docs:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Use Node.js
+              uses: actions/setup-node@v1
+              with:
+                  node-version: "12.x"
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Compile docs
+              run: npm run build:docs:prod
+
+    build-server:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Use Node.js
+              uses: actions/setup-node@v1
+              with:
+                  node-version: "12.x"
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Compile server
+              run: tsc --project docs/server
