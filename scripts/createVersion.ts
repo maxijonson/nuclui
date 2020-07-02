@@ -1,150 +1,162 @@
 import yargs from "yargs";
 import inquirer from "inquirer";
 import path from "path";
-import {
-    DIR,
-    severities,
-    Params,
-    Kind,
-    getKinds,
-    parseVersionKind,
-} from "./config";
+import { DIR, versions, Version } from "./config";
 import simpleGit from "simple-git";
 import _ from "lodash";
 import Choice from "inquirer/lib/objects/choice";
 import { execSync } from "child_process";
 
+export interface Params {
+    version: Version["id"];
+    severity: Version["severities"][0]["id"];
+    confirm: boolean;
+}
+
 const main = async () => {
-    const git = simpleGit();
-    const branch = await git.branch();
-
-    const pkg = require(path.resolve(DIR, "../package.json"));
-    const version: string = pkg.version;
-    const isPreRelease = version.indexOf("-") != -1;
-    const mainVersion: string = isPreRelease
-        ? version.substring(0, version.indexOf("-"))
-        : version;
-
-    const kinds = await getKinds();
+    const branch = (await simpleGit().branch()).current;
+    const currentVersion: string = require(path.resolve(DIR, "../package.json"))
+        .version;
 
     const argv = yargs
-        .option("keepPreRelease", {
-            alias: "p",
-            boolean: true,
-            description:
-                "If the current version is detected as a pre-release, specify if the build number should be bumped. If it is a pre-release and this is set to true, all other questions (except confirmation) are bypassed.",
+        .version(false)
+        .option("version", {
+            alias: "v",
+            describe: "Version kind of the bump",
+            type: "string",
         })
         .option("severity", {
             alias: "s",
-            choices: _.map(severities, (s) => s.value),
-            description: "The severity of the new version.",
-        })
-        .option("kind", {
-            alias: "k",
-            choices: _.map(kinds, (k) => k.value),
-            description: "The kind of the release.",
-        })
-        .option("yes", {
-            alias: "y",
-            boolean: true,
-            description: "If set to true, confirms the changes without asking.",
+            describe: "The severity of the bump",
+            type: "string",
         })
         .option("dry", {
             alias: "d",
-            boolean: true,
-            description: "Runs the command without executing 'npm version'",
-            default: false,
+            describe: "Run without npm version",
+            type: "boolean",
+        })
+        .check((args) => {
+            if (args.version) {
+                const version = versions[args.version];
+
+                if (!version) {
+                    throw new Error(
+                        `Invalid version: ${
+                            args.version
+                        }. Valid versions are: ${_.map(
+                            versions,
+                            (v) => v.id
+                        ).join(", ")}`
+                    );
+                }
+                if (!version.branch.test(branch)) {
+                    throw new Error(
+                        `Branch ${branch} is not allowed to create the version kind: ${args.version}`
+                    );
+                }
+                if (version.disabled && version.disabled(currentVersion)) {
+                    throw new Error(
+                        `${args.version} is disabled for version: ${currentVersion}`
+                    );
+                }
+            }
+
+            if (args.severity) {
+                if (!args.version) {
+                    throw new Error(
+                        `Cannot specify a severity without a version`
+                    );
+                }
+                const severity =
+                    versions[args.version].severities[args.severity];
+
+                if (!severity) {
+                    throw new Error(
+                        `Invalid severity for version ${args.version}: ${
+                            args.severity
+                        }. Valid severities are: ${_.map(
+                            versions[args.version].severities,
+                            (s) => s.id
+                        ).join(", ")}`
+                    );
+                }
+                if (severity.disabled && severity.disabled(currentVersion)) {
+                    throw new Error(
+                        `Severity ${severity.name.toLowerCase()} is disabled for version: ${currentVersion}`
+                    );
+                }
+            }
+
+            return true;
         })
         .help().argv;
 
-    const getNextVersion = (params: Params) => {
-        if (isPreRelease && params.keepPreRelease) {
-            const parsedKind = parseVersionKind(version, kinds);
-            if (!parsedKind) throw new Error("Version is not in pre-release");
-
-            const { kind, build } = parsedKind;
-            return `${mainVersion}-${kind}.${Number(build) + 1}`;
-        }
-
-        const severity = severities[params.severity];
-        const kind = kinds[params.kind];
-
-        return `${severity.apply(mainVersion)}${
-            kind.preRelease ? `-${kind.value}.0` : ""
-        }`;
-    };
-
-    let params: Partial<Params> = {
-        keepPreRelease: argv.keepPreRelease,
-        severity: argv.severity,
-        kind: argv.kind,
-        confirm: argv.yes,
-    };
-
-    console.info(`Nuclui v${version}\nOn branch ${branch.current}\n`);
-
     const answers = await inquirer.prompt<Params>([
         {
-            name: "keepPreRelease",
-            message: `The package is currently in pre-release version ${version}. Do you wish to keep this version and increment the build number?`,
-            type: "confirm",
-            when: isPreRelease && !_.isBoolean(params.keepPreRelease),
+            name: "version",
+            message: "What kind of version is this?",
+            type: "list",
+            choices: _.map(versions, (v) => ({
+                name: v.name,
+                value: v.id,
+                disabled:
+                    !branch.match(v.branch) ||
+                    (v.disabled ? v.disabled(currentVersion) : false),
+            })),
+            when: !argv.version,
         },
         {
             name: "severity",
             message: "What is the severity of the version?",
             type: "list",
-            when: (ans) =>
-                !ans.keepPreRelease &&
-                (!params.severity || !severities[params.severity]),
-            choices: _.map(
-                severities,
-                (s): Partial<Choice> => ({
-                    name: s.name,
-                    value: s.value,
-                })
-            ),
-        },
-        {
-            name: "kind",
-            message: "What is the kind of this version?",
-            type: "list",
-            when: (ans) =>
-                !ans.keepPreRelease &&
-                (!params.kind ||
-                    !kinds[params.kind] ||
-                    kinds[params.kind].disabled),
-            choices: _.map(
-                kinds,
-                (k): Partial<Choice> => ({
-                    name: `${k.name} (@${k.tag})`,
-                    value: k.value,
-                    disabled: k.disabled,
-                })
-            ),
+            choices: (a) => {
+                const version = argv.version ?? a.version;
+                return _.map(versions[version].severities, (s) => {
+                    const disabled = s.disabled
+                        ? s.disabled(currentVersion)
+                        : false;
+                    return {
+                        name: `${s.name} ${
+                            disabled
+                                ? ""
+                                : `(${s.getNextVersion(currentVersion)})`
+                        }`.trim(),
+                        value: s.id,
+                        disabled,
+                    };
+                });
+            },
+            when: !argv.severity,
         },
         {
             name: "confirm",
             message: (ans) => {
-                const nextVersion = getNextVersion({ ...params, ...ans });
-                return `v${nextVersion} -> Is this correct?`;
+                const version = argv.version ?? ans.version;
+                const severity = argv.severity ?? ans.severity;
+                const next = versions[version].severities[
+                    severity
+                ].getNextVersion(currentVersion);
+                return `Is this correct? ${currentVersion} -> ${next}`;
             },
-            when: !params.confirm,
             type: "confirm",
+            when: !argv.version || !argv.severity,
         },
     ]);
 
-    params = { ...params, ...answers };
+    if ((!argv.version || !argv.severity) && !answers.confirm) return;
 
-    if (!params.confirm) return;
-
-    const next = getNextVersion(params as Params);
-    const command = `npm version ${next}`;
+    const version = versions[argv.version ?? answers.version];
+    const severity = version.severities[argv.severity ?? answers.severity];
+    const next = severity.getNextVersion(currentVersion);
+    const command = `npm version ${next} ${
+        version.noGitTag ? "--no-git-tag-version" : ""
+    }`.trim();
 
     if (argv.dry) {
-        console.info(`${version} -> ${next}`);
+        console.info(`${currentVersion} -> ${next}`);
         console.info(command);
     } else {
+        console.info(`[INFO] ${command}`);
         execSync(command);
     }
 };
