@@ -158,7 +158,7 @@ export const versions: { [name: string]: Version } = {
     dev: {
         id: "dev",
         name: "Dev",
-        branch: /^((?!^master$)(?!^develop$).)*$/,
+        branch: /^(feature|component)\/.+[^-wip]$/,
         channel: "dev",
         noGitTag: true,
         pattern: /^[0-9]+\.[0-9]+\.[0-9]+-dev[0-9]+\.[0-9]+$/,
