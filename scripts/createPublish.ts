@@ -26,7 +26,7 @@ const main = async () => {
         return matches[0];
     })();
 
-    if (!version.branch.test(branch)) {
+    if (!version.branch.test(branch) && branch != `v${currentVersion}`) {
         throw new Error(
             `The current branch (${branch}) is not allowed to execute a publish for a ${version.name.toLowerCase()} version. Switch to an eligible branch to publish the version`
         );
@@ -48,4 +48,7 @@ const main = async () => {
     execSync(command);
 };
 
-main();
+main().catch((e) => {
+    console.error(e);
+    process.exit(1);
+});

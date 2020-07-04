@@ -162,4 +162,7 @@ const main = async () => {
 };
 
 // Can't use TS top-level await as target is 'es5'
-main();
+main().catch((e) => {
+    console.error(e);
+    process.exit(1);
+});
