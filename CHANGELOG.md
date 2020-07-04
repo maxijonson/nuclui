@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [v0.0.5](https://github.com/maxijonson/nuclui/compare/v0.0.4...v0.0.5)
+
+> 4 July 2020
+
+- Rewrote version and publish scripts [`62d6a01`](https://github.com/maxijonson/nuclui/commit/62d6a01f76047cd9dc4257c7363d44bb6312e0d2)
+- Unify build workflow [`8ba731b`](https://github.com/maxijonson/nuclui/commit/8ba731b0f3dfcce409642852b9122d7603eb795d)
+- Update workflows [`3e56e4c`](https://github.com/maxijonson/nuclui/commit/3e56e4c614f7ba1f1c3ef4bbcb3eb50b86bc76a3)
+- Edit publish workflow [`f081442`](https://github.com/maxijonson/nuclui/commit/f08144235ccbbe4f39ee00423954032340b9b3fb)
+- Prevent WIP branches to make dev versions [`4357c86`](https://github.com/maxijonson/nuclui/commit/4357c86fce9c64dad4c26b22dbe8f5d18a76fd3e)
+
 #### [v0.0.4](https://github.com/maxijonson/nuclui/compare/v0.0.3...v0.0.4)
 
 > 29 June 2020
