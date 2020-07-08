@@ -1,5 +1,5 @@
 import React from "react";
-import { Example } from "nuclui/components";
+import { Example } from "nuclui";
 
 export default () => (
     <div>

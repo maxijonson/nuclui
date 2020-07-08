@@ -1,1 +1,2 @@
-export { default as Example } from "./Example/Example";
+export * from "./Example";
+export * from "./Normalize";

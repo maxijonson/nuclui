@@ -16,6 +16,10 @@ module.exports = {
         "^@components(?:(?=/).*|(?!/))$": "<rootDir>/src/components",
     },
     collectCoverage: true,
+    collectCoverageFrom: [
+        "src/**/*.{js,jsx,ts,tsx}",
+        "!**/index.{ts,tsx,js,jsx}",
+    ],
     globals: {
         "ts-jest": {
             tsConfig: "./src/tsconfig.json",

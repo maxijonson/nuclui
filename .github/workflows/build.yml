@@ -4,15 +4,9 @@ on:
     push:
         branches:
             - master
-            - develop
-            - "feature/**"
-            - "component/**"
-            - "!**-wip"
-            - "!wip/**"
     pull_request:
         branches:
             - master
-            - develop
 
 jobs:
     test:
