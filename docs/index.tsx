@@ -1,12 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Normalize } from "nuclui";
+import { Root } from "nuclui";
 import Home from "./pages/Home/Home";
 
 ReactDOM.render(
-    <>
-        <Normalize />
+    <Root>
         <Home />
-    </>,
+    </Root>,
     document.getElementById("root")
 );

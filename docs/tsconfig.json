@@ -9,7 +9,11 @@
             "@utils": ["./src/utils"],
             "@utils/*": ["./src/utils/*"],
             "@config": ["./src/config"],
-            "@config/*": ["./src/config/*"]
+            "@config/*": ["./src/config/*"],
+            "@theme": ["./src/theme"],
+            "@theme/*": ["./src/theme/*"],
+            "@fonts": ["./src/fonts"],
+            "@fonts/*": ["./src/fonts/*"]
         }
     },
     "include": ["."],

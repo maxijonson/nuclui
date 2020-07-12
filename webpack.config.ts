@@ -58,14 +58,17 @@ const config = (env: NodeJS.ProcessEnv): webpack.Configuration => {
                 "@utils": path.resolve(__dirname, "src/utils/"),
                 "@components": path.resolve(__dirname, "src/components/"),
                 "@config": path.resolve(__dirname, "src/config/"),
+                "@theme": path.resolve(__dirname, "src/theme/"),
+                "@fonts": path.resolve(__dirname, "src/fonts/"),
             },
         },
         plugins: [CircularDependency],
         mode: isProduction ? "production" : "development",
         devtool: isProduction ? "source-map" : "eval-source-map",
         devServer: {
-            contentBase: path.join(__dirname, "docs/public"),
+            port: 3000,
             historyApiFallback: true,
+            contentBase: path.join(__dirname, "docs/public"),
             publicPath: "/dist/",
         },
     };

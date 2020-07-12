@@ -1,15 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Example from "./Example";
+import Fonts from "./Fonts";
 
-describe("App", () => {
+describe("Fonts", () => {
     it("should render without crashing", () => {
         const div = document.createElement("div");
-        ReactDOM.render(<Example />, div);
+        ReactDOM.render(<Fonts />, div);
         ReactDOM.unmountComponentAtNode(div);
     });
 
     it("should display the correct name", () => {
-        expect(Example.displayName).toEqual("NuiExample");
+        expect(Fonts.displayName).toEqual("NuiFonts");
     });
 });

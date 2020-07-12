@@ -2,23 +2,24 @@ module.exports = {
     roots: ["<rootDir>", "<rootDir>/src"],
     modulePaths: ["<rootDir>"],
     moduleDirectories: ["node_modules"],
-    transform: {
-        "^.+\\.tsx?$": "ts-jest",
-    },
+    preset: "ts-jest",
     testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
     snapshotSerializers: ["enzyme-to-json/serializer"],
     setupFilesAfterEnv: ["<rootDir>/src/config/setupEnzyme.ts"],
     moduleNameMapper: {
-        // Regex: https://regexr.com/57flk
-        "^@config(?:(?=/).*|(?!/))$": "<rootDir>/src/config",
-        "^@utils(?:(?=/).*|(?!/))$": "<rootDir>/src/utils",
-        "^@components(?:(?=/).*|(?!/))$": "<rootDir>/src/components",
+        // Regex: https://regexr.com/57fm3
+        "^@config((?=/).*|(?!/))$": "<rootDir>/src/config$1",
+        "^@utils((?=/).*|(?!/))$": "<rootDir>/src/utils$1",
+        "^@components((?=/).*|(?!/))$": "<rootDir>/src/components$1",
+        "^@theme((?=/).*|(?!/))$": "<rootDir>/src/theme$1",
+        "^@fonts((?=/).*|(?!/))$": "<rootDir>/src/fonts$1",
     },
-    collectCoverage: true,
+    // collectCoverage: true,
     collectCoverageFrom: [
         "src/**/*.{js,jsx,ts,tsx}",
         "!**/index.{ts,tsx,js,jsx}",
+        "!**/*.d.ts",
     ],
     globals: {
         "ts-jest": {
