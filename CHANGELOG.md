@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [v0.0.6-beta.2](https://github.com/maxijonson/nuclui/compare/v0.0.6-beta.1...v0.0.6-beta.2)
+
+> 13 July 2020
+
+- Rename Page to Container [`8c588c0`](https://github.com/maxijonson/nuclui/commit/8c588c0afef3cf13b09772d0b4616ea4edcf55a3)
+
 #### [v0.0.6-beta.1](https://github.com/maxijonson/nuclui/compare/v0.0.6-beta.0...v0.0.6-beta.1)
 
 > 13 July 2020
