@@ -2,9 +2,17 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [v0.0.6-beta.0](https://github.com/maxijonson/nuclui/compare/v0.0.5...v0.0.6-beta.0)
+
+> 13 July 2020
+
+- Add Page component and theming [`d5b965f`](https://github.com/maxijonson/nuclui/commit/d5b965fb8f6c18e8abd842884dde6a4e0f58005c)
+- Add Normalize CSS [`4919198`](https://github.com/maxijonson/nuclui/commit/4919198b490b67ad833313d1e2906a1757a34999)
+- Make scripts fail on error [`ceebbb7`](https://github.com/maxijonson/nuclui/commit/ceebbb789e3e52f29e5edea22dbb03c6e4aaa643)
+
 #### [v0.0.5](https://github.com/maxijonson/nuclui/compare/v0.0.4...v0.0.5)
 
-> 4 July 2020
+> 3 July 2020
 
 - Rewrote version and publish scripts [`62d6a01`](https://github.com/maxijonson/nuclui/commit/62d6a01f76047cd9dc4257c7363d44bb6312e0d2)
 - Unify build workflow [`8ba731b`](https://github.com/maxijonson/nuclui/commit/8ba731b0f3dfcce409642852b9122d7603eb795d)
