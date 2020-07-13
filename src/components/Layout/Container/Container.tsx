@@ -3,7 +3,7 @@ import { createComponentName } from "@utils";
 import { background, text } from "@theme";
 import { quicksand } from "@fonts";
 
-const Page = styled.main`
+const Container = styled.main`
     ${background.primary}
     ${text.primary}
     ${quicksand}
@@ -36,6 +36,6 @@ const Page = styled.main`
     }
 `;
 
-Page.displayName = createComponentName("Page");
+Container.displayName = createComponentName("Container");
 
-export default Page;
+export default Container;
