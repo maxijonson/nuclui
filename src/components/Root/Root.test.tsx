@@ -27,7 +27,9 @@ describe("Root", () => {
                 <div />
             </Root>
         );
-        expect(wrapper.find(ThemeProvider).prop("theme")).toEqual(defaultTheme);
+        expect(wrapper.find(ThemeProvider).prop("theme")).toEqual({
+            nui: defaultTheme,
+        });
     });
 
     it("should merge the default theme with the provided theme", () => {
@@ -38,8 +40,10 @@ describe("Root", () => {
             </Root>
         );
         expect(wrapper.find(ThemeProvider).prop("theme")).toEqual({
-            ...defaultTheme,
-            background: { ...defaultTheme.background, primary: color },
+            nui: {
+                ...defaultTheme,
+                background: { ...defaultTheme.background, primary: color },
+            },
         });
     });
 });

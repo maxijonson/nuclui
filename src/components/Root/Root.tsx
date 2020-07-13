@@ -15,7 +15,7 @@ import { Fonts } from "./Fonts";
  */
 const Root = ({ theme = {}, children }: NuiRootProps) => {
     const mergedTheme = React.useMemo(
-        () => _.merge({ ...defaultTheme }, theme),
+        () => _.merge({ nui: { ...defaultTheme } }, { nui: theme }),
         [theme]
     );
 
