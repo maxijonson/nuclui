@@ -2,9 +2,15 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
-#### [v0.0.6-beta.0](https://github.com/maxijonson/nuclui/compare/v0.0.5...v0.0.6-beta.0)
+#### [v0.0.6-beta.1](https://github.com/maxijonson/nuclui/compare/v0.0.6-beta.0...v0.0.6-beta.1)
 
 > 13 July 2020
+
+- Fix Root theme [`8e3f039`](https://github.com/maxijonson/nuclui/commit/8e3f039c8c27b532d073783f1f58e976b3fcd664)
+
+#### [v0.0.6-beta.0](https://github.com/maxijonson/nuclui/compare/v0.0.5...v0.0.6-beta.0)
+
+> 12 July 2020
 
 - Add Page component and theming [`d5b965f`](https://github.com/maxijonson/nuclui/commit/d5b965fb8f6c18e8abd842884dde6a4e0f58005c)
 - Add Normalize CSS [`4919198`](https://github.com/maxijonson/nuclui/commit/4919198b490b67ad833313d1e2906a1757a34999)
