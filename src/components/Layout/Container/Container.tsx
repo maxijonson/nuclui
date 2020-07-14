@@ -1,9 +1,20 @@
+import React from "react";
 import styled from "styled-components";
 import { createComponentName } from "@utils";
 import { background, text } from "@theme";
 import { quicksand } from "@fonts";
+import { NuiContainerProps } from "./types";
 
-const Container = styled.main`
+const Container: NuiFC<NuiContainerProps> = ({ children, className }) => {
+    return (
+        <main children={children} className={`nui-container ${className}`} />
+    );
+};
+
+/**
+ * A responsive container for your content
+ */
+const StyledContainer = styled(Container)`
     ${background.primary}
     ${text.primary}
     ${quicksand}
@@ -36,6 +47,6 @@ const Container = styled.main`
     }
 `;
 
-Container.displayName = createComponentName("Container");
+StyledContainer.displayName = createComponentName("Container");
 
-export default Container;
+export default StyledContainer;

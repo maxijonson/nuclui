@@ -3,9 +3,9 @@ import _ from "lodash";
 import { createComponentName } from "@utils";
 import { ThemeProvider } from "styled-components";
 import defaultTheme from "@theme/defaultTheme";
-import { NuiRootProps } from "./types";
 import { Normalize } from "./Normalize";
 import { Fonts } from "./Fonts";
+import { NuiRootProps } from "./types";
 
 /**
  * Root of Nuclui. Ideally, this component should not be necessary, but can be helpful for setting up:
@@ -13,7 +13,7 @@ import { Fonts } from "./Fonts";
  * - CSS Reset (manually done by adding your own reset or using the Normalize component)
  * - Fonts (manually done by importing the used fonts into your app)
  */
-const Root = ({ theme = {}, children }: NuiRootProps) => {
+const Root: NuiFC<NuiRootProps> = ({ theme = {}, children }) => {
     const mergedTheme = React.useMemo(
         () => _.merge({ nui: { ...defaultTheme } }, { nui: theme }),
         [theme]
