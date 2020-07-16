@@ -5,9 +5,16 @@ import { background, text } from "@theme";
 import { quicksand } from "@fonts";
 import { NuiContainerProps } from "./types";
 
-const Container: NuiFC<NuiContainerProps> = ({ children, className }) => {
+const Container: NuiFC<NuiContainerProps & NuiCustomRootProp> = ({
+    children,
+    className,
+    as: Component = "div",
+}) => {
     return (
-        <main children={children} className={`nui-container ${className}`} />
+        <Component
+            children={children}
+            className={`nui-container ${className}`}
+        />
     );
 };
 
@@ -49,4 +56,4 @@ const StyledContainer = styled(Container)`
 
 StyledContainer.displayName = createComponentName("Container");
 
-export default StyledContainer;
+export default StyledContainer as typeof Container;
