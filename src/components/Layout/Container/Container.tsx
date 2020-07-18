@@ -5,18 +5,21 @@ import { background, text } from "@theme";
 import { quicksand } from "@fonts";
 import { NuiContainerProps } from "./types";
 
-const Container: NuiFC<NuiContainerProps & NuiCustomRootProp> = ({
-    children,
-    className,
+const Container: NuiCustomComponent<NuiContainerProps, "div"> = ({
     as: Component = "div",
-}) => {
-    return (
-        <Component
-            children={children}
-            className={`nui-container ${className}`}
-        />
-    );
-};
+    children,
+    test,
+    className,
+    ref,
+    ...otherProps
+}) => (
+    <Component
+        {...otherProps}
+        children={children}
+        ref={ref}
+        className={`NuiContainer ${className}`}
+    />
+);
 
 /**
  * A responsive container for your content

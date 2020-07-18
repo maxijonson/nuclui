@@ -4,29 +4,34 @@
  */
 
 /**
- * Safe equivalent of "{}"
- */
-type NuiObject = Record<string, unknown>;
-
-/**
  * Base component props
  */
-type NuiProps<P = NuiObject> = {
+type NuiProps<P = {}> = {
     children?: React.ReactNode;
     className?: string;
 } & P;
 
 /**
- * Adds props for custom root component node
- */
-type NuiCustomRootProp = { as?: React.ElementType };
-
-/**
  * Same as React.FunctionComponent, but with className as an optional prop (for Styled-Components)
+ * @generic P Type of component props
  */
-type NuiFunctionalComponent<P = NuiObject> = React.FC<NuiProps<P>>;
+type NuiFunctionalComponent<P = {}> = React.FC<NuiProps<P>>;
 
 /**
  * Short for NuiFunctionalComponent
+ * @generic P Type of component props
  */
-type NuiFC<P = NuiObject> = NuiFunctionalComponent<P>;
+type NuiFC<P = {}> = NuiFunctionalComponent<P>;
+
+/**
+ * Type of a functionnal component (with ref) which the root node can be overriden with the "as" prop.
+ * - The ref is typed based on the "as" prop.
+ * - The HTML attributes are typed based on the "as" prop
+ * @generic P Type of component props
+ * @generic D default root node component (should match the default props)
+ */
+interface NuiCustomComponent<P extends object, D extends React.ElementType> {
+    <C extends React.ElementType = D>(
+        props: P & { as?: C } & Omit<React.ComponentPropsWithRef<C>, keyof P>
+    ): JSX.Element;
+}
