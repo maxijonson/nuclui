@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { shallow } from "enzyme";
+import { mount } from "enzyme";
 import Container from "./Container";
 
 describe("Container", () => {
@@ -15,9 +15,18 @@ describe("Container", () => {
     });
 
     it("should use button as root node", () => {
-        const wrapper = shallow(
-            <Container as="button">A button container</Container>
-        );
-        expect(wrapper.getElements()[0].type).toBe("button");
+        const text = "A button container";
+        const wrapper = mount(<Container component="button">{text}</Container>);
+        const root = wrapper.find("button").first();
+        expect(root.length).toBe(1);
+        expect(root.children().text()).toBe(text);
+    });
+
+    it("should use div as default root node", () => {
+        const text = "A default container";
+        const wrapper = mount(<Container>{text}</Container>);
+        const root = wrapper.find("div").first();
+        expect(root.length).toBe(1);
+        expect(root.children().text()).toBe(text);
     });
 });
