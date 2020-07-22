@@ -1,6 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { createComponentName } from "@utils";
+import {
+    createComponentName,
+    breakpointUnder,
+    createBreakpoints,
+} from "@utils";
 import { background, text } from "@theme";
 import { quicksand } from "@fonts";
 import { NuiContainerProps } from "./types";
@@ -8,21 +12,22 @@ import { NuiContainerProps } from "./types";
 const Container: NuiCustomComponent<NuiContainerProps, "div"> = (props) => {
     const {
         component: Component = "div",
-        children,
         className,
-        ref,
-        ...otherProps
+        fixed,
+        maxPadding,
+        maxWidth,
+        ...restProps
     } = props;
-
-    return (
-        <Component
-            {...otherProps}
-            children={children}
-            ref={ref}
-            className={`NuiContainer ${className}`}
-        />
-    );
+    return <Component {...restProps} className={`NuiContainer ${className}`} />;
 };
+
+Container.defaultProps = {
+    fixed: false,
+    maxPadding: undefined,
+    maxWidth: undefined,
+};
+
+const bp = createBreakpoints({ sm: 620, md: 980, lg: 1280, xl: 1920 });
 
 /**
  * A responsive container for your content
@@ -38,25 +43,51 @@ const StyledContainer = styled(Container)`
     box-sizing: border-box;
     margin-right: auto;
     margin-left: auto;
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: ${({ maxPadding }) => maxPadding != "none" && "16px"};
+    padding-right: ${({ maxPadding }) => maxPadding != "none" && "16px"};
     font-size: 1rem;
     font-weight: 400;
+    word-wrap: break-word;
 
-    @media (min-width: 620px) {
-        padding-left: 24px;
-        padding-right: 24px;
+    /* SM */
+    @media (min-width: ${bp.sm}px) {
+        max-width: ${({ maxWidth }) => maxWidth == "sm" && `${bp.sm}px`};
+        width: ${({ fixed }) => (fixed ? `${bp.sm}px` : undefined)};
+        padding-left: ${({ maxPadding }) =>
+            breakpointUnder(maxPadding, "sm") && "25px"};
+        padding-right: ${({ maxPadding }) =>
+            breakpointUnder(maxPadding, "sm") && "25px"};
     }
 
-    @media (min-width: 980px) {
-        max-width: 980px;
-        padding-left: 38px;
-        padding-right: 38px;
+    /* MD */
+    @media (min-width: ${bp.md}px) {
+        max-width: ${({ maxWidth }) => maxWidth == "md" && `${bp.md}px`};
+        width: ${({ fixed }) => (fixed ? `${bp.md}px` : undefined)};
+        padding-left: ${({ maxPadding }) =>
+            breakpointUnder(maxPadding, "md") && "38px"};
+        padding-right: ${({ maxPadding }) =>
+            breakpointUnder(maxPadding, "md") && "38px"};
     }
 
-    @media (min-width: 1280px) {
-        padding-left: 50px;
-        padding-right: 50px;
+    /* LG */
+    @media (min-width: ${bp.lg}px) {
+        max-width: ${({ maxWidth }) => maxWidth == "lg" && `${bp.lg}px`};
+        width: ${({ fixed }) => (fixed ? `${bp.lg}px` : undefined)};
+        padding-left: ${({ maxPadding }) =>
+            breakpointUnder(maxPadding, "lg") && "50px"};
+        padding-right: ${({ maxPadding }) =>
+            breakpointUnder(maxPadding, "lg") && "50px"};
+        
+    }
+
+    /* XL */
+    @media (min-width: ${bp.xl}px) {
+        max-width: ${({ maxWidth }) => maxWidth == "xl" && `${bp.xl}px`};
+        width: ${({ fixed }) => (fixed ? `${bp.xl}px` : undefined)};
+        padding-left: ${({ maxPadding }) =>
+            breakpointUnder(maxPadding, "xl") && "62px"};
+        padding-right: ${({ maxPadding }) =>
+            breakpointUnder(maxPadding, "xl") && "62px"};
     }
 `;
 

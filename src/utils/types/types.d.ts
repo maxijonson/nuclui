@@ -39,6 +39,10 @@ interface NuiCustomComponent<P extends object, D extends React.ElementType> {
     ): JSX.Element;
     propTypes?: React.WeakValidationMap<P>;
     contextTypes?: React.ValidationMap<any>;
-    defaultProps?: Partial<P>;
+    defaultProps?: Partial<
+        P & { component?: D } & Omit<React.ComponentPropsWithRef<D>, keyof P>
+    >;
     displayName?: string;
 }
+
+type NuiBreakpoint = "xs" | "sm" | "md" | "lg" | "xl";
