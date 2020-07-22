@@ -9,9 +9,9 @@ import { SafeDictionary } from "ts-essentials";
  * - xl: 1920
  */
 export default (
-    breakpoints: SafeDictionary<number, NuiBreakpoint>
+    breakpoints: SafeDictionary<number, Nui.Breakpoint>
 ): {
-    [bp in NuiBreakpoint]: number;
+    [bp in Nui.Breakpoint]: number;
 } => ({
     xs: 0,
     sm: 620,

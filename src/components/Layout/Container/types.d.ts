@@ -1,5 +1,5 @@
-export interface NuiContainerProps {
-    maxWidth?: NuiBreakpoint;
-    maxPadding?: NuiBreakpoint | "none";
+export interface ContainerProps {
+    maxWidth?: Nui.Breakpoint;
+    maxPadding?: Nui.Breakpoint | "none";
     fixed?: boolean;
 }

@@ -1,6 +1,6 @@
 import defaultTheme from "@theme/defaultTheme";
 import { DeepPartial } from "ts-essentials";
 
-export interface NuiRootProps {
+export interface RootProps {
     theme?: DeepPartial<typeof defaultTheme>;
 }

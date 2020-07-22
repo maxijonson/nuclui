@@ -16,6 +16,6 @@
             "@fonts/*": ["./src/fonts/*"]
         }
     },
-    "include": [".", "../src/utils/types"],
+    "include": [".", "../src/types"],
     "exclude": ["./**/*.test.tsx", "./**/*.test.ts"]
 }

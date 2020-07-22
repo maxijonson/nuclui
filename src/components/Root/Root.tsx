@@ -5,7 +5,7 @@ import { ThemeProvider } from "styled-components";
 import defaultTheme from "@theme/defaultTheme";
 import { Normalize } from "./Normalize";
 import { Fonts } from "./Fonts";
-import { NuiRootProps } from "./types";
+import { RootProps } from "./types";
 
 /**
  * Root of Nuclui. Ideally, this component should not be necessary, but can be helpful for setting up:
@@ -13,7 +13,7 @@ import { NuiRootProps } from "./types";
  * - CSS Reset (manually done by adding your own reset or using the Normalize component)
  * - Fonts (manually done by importing the used fonts into your app)
  */
-const Root: NuiFC<NuiRootProps> = ({ theme = {}, children }) => {
+const Root: Nui.FC<RootProps> = ({ theme = {}, children }) => {
     const mergedTheme = React.useMemo(
         () => _.merge({ nui: { ...defaultTheme } }, { nui: theme }),
         [theme]

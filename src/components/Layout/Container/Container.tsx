@@ -7,9 +7,9 @@ import {
 } from "@utils";
 import { background, text } from "@theme";
 import { quicksand } from "@fonts";
-import { NuiContainerProps } from "./types";
+import { ContainerProps } from "./types";
 
-const Container: NuiCustomComponent<NuiContainerProps, "div"> = (props) => {
+const Container: Nui.CustomComponent<ContainerProps, "div"> = (props) => {
     const {
         component: Component = "div",
         className,
