@@ -1,6 +1,6 @@
 {
   "name": "nuclui",
-  "version": "0.0.6-dev1594708286803.3",
+  "version": "0.0.6-dev1594708286803.4",
   "description": "A React UI framework, built with TypeScript, to make your developement easier so you can give more focus on your app and less on the design!",
   "main": "dist/index.js",
   "scripts": {
@@ -25,6 +25,7 @@
     "preversion": "npm run test:full",
     "version": "npm run changelog && git add CHANGELOG.md",
     "createVersion": "node scripts/compiled/createVersion.js",
+    "createVersion:dev": "node scripts/compiled/createVersion.js -v dev -s dev && git reset HEAD CHANGELOG.md && git checkout -- CHANGELOG.md",
     "createPublish": "node scripts/compiled/createPublish.js",
     "reinstall": "rm -rf node_modules && npm i",
     "copyDeclarations": "copyfiles -u 1 \"src/**/*.d.ts\" dist/src"
