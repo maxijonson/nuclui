@@ -28,6 +28,7 @@ Container.defaultProps = {
 };
 
 const bp = createBreakpoints({ sm: 620, md: 980, lg: 1280, xl: 1920 });
+const padding = createBreakpoints({ xs: 16, sm: 25, md: 38, lg: 50, xl: 62 });
 
 /**
  * A responsive container for your content
@@ -43,8 +44,10 @@ const StyledContainer = styled(Container)`
     box-sizing: border-box;
     margin-right: auto;
     margin-left: auto;
-    padding-left: ${({ maxPadding }) => maxPadding != "none" && "16px"};
-    padding-right: ${({ maxPadding }) => maxPadding != "none" && "16px"};
+    padding-left: ${({ maxPadding }) =>
+        maxPadding != "none" && `${padding.xs}px`};
+    padding-right: ${({ maxPadding }) =>
+        maxPadding != "none" && `${padding.xs}px`};
     font-size: 1rem;
     font-weight: 400;
     word-wrap: break-word;
@@ -54,9 +57,11 @@ const StyledContainer = styled(Container)`
         max-width: ${({ maxWidth }) => maxWidth == "sm" && `${bp.sm}px`};
         width: ${({ fixed }) => (fixed ? `${bp.sm}px` : undefined)};
         padding-left: ${({ maxPadding }) =>
-            breakpointUnder(maxPadding, "sm") && "25px"};
+            (!maxPadding || breakpointUnder("sm", maxPadding)) &&
+            `${padding.sm}px`};
         padding-right: ${({ maxPadding }) =>
-            breakpointUnder(maxPadding, "sm") && "25px"};
+            (!maxPadding || breakpointUnder("sm", maxPadding)) &&
+            `${padding.sm}px`};
     }
 
     /* MD */
@@ -64,9 +69,11 @@ const StyledContainer = styled(Container)`
         max-width: ${({ maxWidth }) => maxWidth == "md" && `${bp.md}px`};
         width: ${({ fixed }) => (fixed ? `${bp.md}px` : undefined)};
         padding-left: ${({ maxPadding }) =>
-            breakpointUnder(maxPadding, "md") && "38px"};
+            (!maxPadding || breakpointUnder("md", maxPadding)) &&
+            `${padding.md}px`};
         padding-right: ${({ maxPadding }) =>
-            breakpointUnder(maxPadding, "md") && "38px"};
+            (!maxPadding || breakpointUnder("md", maxPadding)) &&
+            `${padding.md}px`};
     }
 
     /* LG */
@@ -74,9 +81,11 @@ const StyledContainer = styled(Container)`
         max-width: ${({ maxWidth }) => maxWidth == "lg" && `${bp.lg}px`};
         width: ${({ fixed }) => (fixed ? `${bp.lg}px` : undefined)};
         padding-left: ${({ maxPadding }) =>
-            breakpointUnder(maxPadding, "lg") && "50px"};
+            (!maxPadding || breakpointUnder("lg", maxPadding)) &&
+            `${padding.lg}px`};
         padding-right: ${({ maxPadding }) =>
-            breakpointUnder(maxPadding, "lg") && "50px"};
+            (!maxPadding || breakpointUnder("lg", maxPadding)) &&
+            `${padding.lg}px`};
         
     }
 
@@ -85,9 +94,11 @@ const StyledContainer = styled(Container)`
         max-width: ${({ maxWidth }) => maxWidth == "xl" && `${bp.xl}px`};
         width: ${({ fixed }) => (fixed ? `${bp.xl}px` : undefined)};
         padding-left: ${({ maxPadding }) =>
-            breakpointUnder(maxPadding, "xl") && "62px"};
+            (!maxPadding || breakpointUnder("xl", maxPadding)) &&
+            `${padding.xl}px`};
         padding-right: ${({ maxPadding }) =>
-            breakpointUnder(maxPadding, "xl") && "62px"};
+            (!maxPadding || breakpointUnder("xl", maxPadding)) &&
+            `${padding.xl}px`};
     }
 `;
 

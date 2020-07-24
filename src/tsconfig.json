@@ -4,6 +4,7 @@
         "declaration": true,
         "declarationMap": true,
         "removeComments": false,
+        "typeRoots": ["../node_modules/@types", "./nuclui"],
         "paths": {
             "@components": ["src/components"],
             "@components/*": ["src/components/*"],
@@ -21,6 +22,5 @@
             { "transform": "typescript-transform-paths", "afterDeclarations": true }
         ]
     },
-    "include": [".", "../index.ts"],
-    "exclude": ["./**/*.test.tsx", "./**/*.test.ts"]
+    "include": [".", "../index.ts"]
 }

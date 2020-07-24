@@ -1,12 +1,7 @@
 import { SafeDictionary } from "ts-essentials";
 
 /**
- * Creates a set of breakpoints. Default breakpoints are supplied when it isn't specified:
- * - xs: 0
- * - sm: 620
- * - md: 980
- * - lg: 1280
- * - xl: 1920
+ * Creates a set of breakpoints. Default breakpoints are supplied when it isn't specified with value of 0
  */
 export default (
     breakpoints: SafeDictionary<number, Nui.Breakpoint>
@@ -14,9 +9,9 @@ export default (
     [bp in Nui.Breakpoint]: number;
 } => ({
     xs: 0,
-    sm: 620,
-    md: 980,
-    lg: 1280,
-    xl: 1920,
+    sm: 0,
+    md: 0,
+    lg: 0,
+    xl: 0,
     ...breakpoints,
 });

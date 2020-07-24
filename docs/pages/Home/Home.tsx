@@ -2,10 +2,10 @@ import React from "react";
 import { Container } from "nuclui";
 
 const Home = () => (
-    <Container maxWidth="md" fixed>
-        Nuclui is under developement! The docs website is only a sandbox for
-        developing the components. Docs will be gradually created once the core
-        components are made!
+    <Container maxPadding="sm">
+        Nuclui is under developement! For now, The docs website is only a
+        sandbox for developing the components. Docs will be gradually created
+        once the core components are made!
     </Container>
 );
 

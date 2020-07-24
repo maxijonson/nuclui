@@ -17,11 +17,11 @@ describe("breakpointUnder", () => {
         expect(breakpointUnder("md", "md", false)).toBeFalsy();
     });
 
-    it("should be false when 'bp' is not a breakpoint", () => {
-        expect(breakpointUnder("potato", "lg")).toBeFalsy();
+    it("should be false when 'under' is not a breakpoint", () => {
+        expect(breakpointUnder("lg", "potato")).toBeFalsy();
     });
 
-    it("should be false when 'bp' is undefined", () => {
-        expect(breakpointUnder(undefined, "lg")).toBeFalsy();
+    it("should be false when 'under' is undefined", () => {
+        expect(breakpointUnder("lg", undefined)).toBeFalsy();
     });
 });

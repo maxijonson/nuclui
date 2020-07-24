@@ -14,7 +14,7 @@
     "test:watch": "npm run lint && jest --watch",
     "test:publish": "npm run prepublishOnly && npm pack && tar xvzf *.tgz && rm -rf *.tgz && npm run postpublish",
     "test:heroku": "npm run heroku-postbuild && heroku local web",
-    "compile": "npm-run-all clean test:full && ttsc --project src && npm run copyDeclarations",
+    "compile": "npm-run-all clean test:full && ttsc --project src/tsconfig.prod.json && npm run copyDeclarations",
     "compile:scripts": "tsc --project scripts",
     "build:docs:dev": "npm-run-all clean test:full && webpack --env.NODE_ENV=development --config=\"webpack.config.ts\"",
     "build:docs:prod": "npm-run-all clean test:full && webpack -p --env.NODE_ENV=production --config=\"webpack.config.ts\"",

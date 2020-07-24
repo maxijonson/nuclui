@@ -15,17 +15,17 @@ enum BP {
  * @param equal If it is false, then only breakpoints under `under` will return true.
  */
 export default (
-    bp: string | undefined,
-    under: Nui.Breakpoint,
+    bp: Nui.Breakpoint,
+    under: string | undefined,
     equal = true
 ) => {
     if (
-        !bp ||
-        !_.includes(["xs", "sm", "md", "lg", "xl"] as Nui.Breakpoint[], bp)
+        !under ||
+        !_.includes(["xs", "sm", "md", "lg", "xl"] as Nui.Breakpoint[], under)
     ) {
         return false;
     }
     return equal
-        ? BP[bp as Nui.Breakpoint] <= BP[under]
-        : BP[bp as Nui.Breakpoint] < BP[under];
+        ? BP[bp] <= BP[under as Nui.Breakpoint]
+        : BP[bp] < BP[under as Nui.Breakpoint];
 };
