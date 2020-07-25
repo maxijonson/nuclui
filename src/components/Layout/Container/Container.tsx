@@ -9,22 +9,32 @@ import { background, text } from "@theme";
 import { quicksand } from "@fonts";
 import { ContainerProps } from "./types";
 
-const Container: Nui.CustomComponent<ContainerProps, "div"> = (props) => {
-    const {
-        component: Component = "div",
-        className,
-        fixed,
-        maxPadding,
-        maxWidth,
-        ...restProps
-    } = props;
-    return <Component {...restProps} className={`NuiContainer ${className}`} />;
-};
+const Container: Nui.FRC<Nui.Props<ContainerProps>, "div"> = React.forwardRef(
+    (props, ref) => {
+        const {
+            as: Component = "div",
+            className,
+            fixed,
+            maxPadding,
+            maxWidth,
+            ...restProps
+        } = props;
+
+        return (
+            <Component
+                {...restProps}
+                ref={ref}
+                className={`NuiContainer ${className}`}
+            />
+        );
+    }
+);
 
 Container.defaultProps = {
     fixed: false,
     maxPadding: undefined,
     maxWidth: undefined,
+    as: "div",
 };
 
 const bp = createBreakpoints({ sm: 620, md: 980, lg: 1280, xl: 1920 });

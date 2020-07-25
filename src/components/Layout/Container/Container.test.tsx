@@ -33,9 +33,7 @@ describe("Container", () => {
     describe("component", () => {
         it("should use button as root node", () => {
             const text = "A button container";
-            const wrapper = mount(
-                <Container component="button">{text}</Container>
-            );
+            const wrapper = mount(<Container as="button">{text}</Container>);
             const root = wrapper.find("button").first();
             expect(root.length).toBe(1);
             expect(root.children().text()).toBe(text);
@@ -47,6 +45,24 @@ describe("Container", () => {
             const root = wrapper.find("div").first();
             expect(root.length).toBe(1);
             expect(root.children().text()).toBe(text);
+        });
+
+        it("should have the ref forwarded to the default node", () => {
+            const ref = React.createRef<HTMLDivElement>();
+            const wrapper = mount(<Container ref={ref}>Container</Container>);
+            const div = wrapper.find("div").first().getDOMNode();
+            expect(div).toBe(ref.current);
+        });
+
+        it("should have the ref forwarded to the overriden node", () => {
+            const ref = React.createRef<HTMLButtonElement>();
+            const wrapper = mount(
+                <Container as="button" ref={ref}>
+                    Container
+                </Container>
+            );
+            const btn = wrapper.find("button").first().getDOMNode();
+            expect(btn).toBe(ref.current);
         });
     });
 

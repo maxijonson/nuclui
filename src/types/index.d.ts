@@ -20,29 +20,45 @@ declare namespace Nui {
     type FC<P = {}> = FunctionalComponent<P>;
 
     /**
-     * Type of a functionnal component (with ref) which the root node can be overriden with the "component" prop.
+     * Type of a functionnal component with forwarded ref which the root node can be overriden with the "component" prop.
      * - The ref is typed based on the "component" prop.
      * - The HTML attributes are typed based on the "component" prop
      * @generic P Type of component props
      * @generic D default root node component (should match the default props)
      */
-    interface CustomComponent<P extends object, D extends React.ElementType> {
+    interface FowardedRefComponent<
+        P extends object,
+        D extends React.ElementType
+    > {
         <C extends React.ElementType = D>(
-            props: P & { component?: C } & Omit<
+            props: P & { as?: C } & Omit<
                     React.ComponentPropsWithRef<C>,
                     keyof P
                 >
-        ): JSX.Element;
-        propTypes?: React.WeakValidationMap<P>;
-        contextTypes?: React.ValidationMap<any>;
+        ): React.ReactElement | null;
+        readonly $$typeof: symbol;
         defaultProps?: Partial<
-            P & { component?: D } & Omit<
+            P & { as?: React.ElementType } & Omit<
+                    React.ComponentPropsWithRef<D>,
+                    keyof P
+                >
+        >;
+        propTypes?: React.WeakValidationMap<
+            P & { as?: React.ElementType } & Omit<
                     React.ComponentPropsWithRef<D>,
                     keyof P
                 >
         >;
         displayName?: string;
     }
+
+    /**
+     * Short for FowardedRefComponent
+     */
+    type FRC<P extends {}, D extends React.ElementType> = FowardedRefComponent<
+        P,
+        D
+    >;
 
     type Breakpoint = "xs" | "sm" | "md" | "lg" | "xl";
 }
