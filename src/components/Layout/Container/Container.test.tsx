@@ -30,7 +30,7 @@ describe("Container", () => {
         expect(Container.displayName).toEqual("NuiContainer");
     });
 
-    describe("component", () => {
+    describe("as", () => {
         it("should use button as root node", () => {
             const text = "A button container";
             const wrapper = mount(<Container as="button">{text}</Container>);
@@ -46,10 +46,12 @@ describe("Container", () => {
             expect(root.length).toBe(1);
             expect(root.children().text()).toBe(text);
         });
+    });
 
+    describe("ref", () => {
         it("should have the ref forwarded to the default node", () => {
             const ref = React.createRef<HTMLDivElement>();
-            const wrapper = mount(<Container ref={ref}>Container</Container>);
+            const wrapper = mount(<Container ref={ref} />);
             const div = wrapper.find("div").first().getDOMNode();
             expect(div).toBe(ref.current);
         });
@@ -66,45 +68,63 @@ describe("Container", () => {
         });
     });
 
+    describe("className", () => {
+        it("should use the default className", () => {
+            const wrapper = mount(<Container />);
+            const div = wrapper.find("div").first();
+            expect(div.hasClass("NuiContainer")).toBeTruthy();
+        });
+
+        it("should use the default className with the one provided", () => {
+            const wrapper = mount(<Container className="test potato" />);
+            const div = wrapper.find("div").first();
+            expect(div.hasClass("NuiContainer")).toBeTruthy();
+            expect(div.hasClass("test")).toBeTruthy();
+            expect(div.hasClass("potato")).toBeTruthy();
+        });
+    });
+
     describe("maxWidth", () => {
+        beforeAll(() => {
+            resetBps();
+        });
+
         it("should use the default maxWidth", () => {
-            const wrapper = mount(<Container>Container</Container>);
+            const wrapper = mount(<Container />);
             expect(wrapper).toHaveStyleRule("max-width", undefined);
         });
 
+        it("should use the xs maxWidth", () => {
+            const wrapper = mount(<Container maxWidth="xs" />);
+            expect(wrapper).toHaveStyleRule("max-width", undefined);
+            expect(wrapper).toHaveStyleRule("width", "100%");
+        });
+
         it("should use the sm maxWidth", () => {
-            const wrapper = mount(
-                <Container maxWidth="sm">Container</Container>
-            );
-            expect(wrapper).toHaveStyleRule("max-width", "620px", {
-                media: "(min-width: 620px)",
+            const wrapper = mount(<Container maxWidth="sm" />);
+            expect(wrapper).toHaveStyleRule("max-width", `${bps.sm.media}px`, {
+                media: `(min-width: ${bps.sm.media}px)`,
             });
         });
 
         it("should use the md maxWidth", () => {
-            const wrapper = mount(
-                <Container maxWidth="md">Container</Container>
-            );
-            expect(wrapper).toHaveStyleRule("max-width", "980px", {
-                media: "(min-width: 980px)",
+            const wrapper = mount(<Container maxWidth="md" />);
+            expect(wrapper).toHaveStyleRule("max-width", `${bps.md.media}px`, {
+                media: `(min-width: ${bps.md.media}px)`,
             });
         });
 
         it("should use the lg maxWidth", () => {
-            const wrapper = mount(
-                <Container maxWidth="lg">Container</Container>
-            );
-            expect(wrapper).toHaveStyleRule("max-width", "1280px", {
-                media: "(min-width: 1280px)",
+            const wrapper = mount(<Container maxWidth="lg" />);
+            expect(wrapper).toHaveStyleRule("max-width", `${bps.lg.media}px`, {
+                media: `(min-width: ${bps.lg.media}px)`,
             });
         });
 
         it("should use the xl maxWidth", () => {
-            const wrapper = mount(
-                <Container maxWidth="xl">Container</Container>
-            );
-            expect(wrapper).toHaveStyleRule("max-width", "1920px", {
-                media: "(min-width: 1920px)",
+            const wrapper = mount(<Container maxWidth="xl" />);
+            expect(wrapper).toHaveStyleRule("max-width", `${bps.xl.media}px`, {
+                media: `(min-width: ${bps.xl.media}px)`,
             });
         });
     });
@@ -168,24 +188,24 @@ describe("Container", () => {
             bps.lg.available = true;
             bps.xl.available = true;
 
-            assertQueries(shallow(<Container>Container</Container>));
+            assertQueries(shallow(<Container />));
+        });
+
+        it("should use no padding", () => {
+            assertQueries(shallow(<Container maxPadding="none" />));
         });
 
         it("should use the xs maxPadding", () => {
             bps.xs.available = true;
 
-            assertQueries(
-                shallow(<Container maxPadding="xs">Container</Container>)
-            );
+            assertQueries(shallow(<Container maxPadding="xs" />));
         });
 
         it("should use the sm maxPadding", () => {
             bps.xs.available = true;
             bps.sm.available = true;
 
-            assertQueries(
-                shallow(<Container maxPadding="sm">Container</Container>)
-            );
+            assertQueries(shallow(<Container maxPadding="sm" />));
         });
 
         it("should use the md maxPadding", () => {
@@ -193,9 +213,7 @@ describe("Container", () => {
             bps.sm.available = true;
             bps.md.available = true;
 
-            assertQueries(
-                shallow(<Container maxPadding="md">Container</Container>)
-            );
+            assertQueries(shallow(<Container maxPadding="md" />));
         });
 
         it("should use the lg maxPadding", () => {
@@ -204,9 +222,7 @@ describe("Container", () => {
             bps.md.available = true;
             bps.lg.available = true;
 
-            assertQueries(
-                shallow(<Container maxPadding="lg">Container</Container>)
-            );
+            assertQueries(shallow(<Container maxPadding="lg" />));
         });
 
         it("should use the xl maxPadding", () => {
@@ -216,9 +232,91 @@ describe("Container", () => {
             bps.lg.available = true;
             bps.xl.available = true;
 
-            assertQueries(
-                shallow(<Container maxPadding="xl">Container</Container>)
-            );
+            assertQueries(shallow(<Container maxPadding="xl" />));
+        });
+    });
+
+    describe("fixed", () => {
+        beforeAll(() => resetBps());
+
+        beforeEach(() => {
+            _.forEach(bps, (bp) => {
+                bp.available = false;
+            });
+        });
+
+        const assertQueries = (wrapper: CommonWrapper) => {
+            _.forEach(bps, (bp, key) => {
+                if (key == "xs") return;
+
+                if (bp.available) {
+                    expect(wrapper).toHaveStyleRule(
+                        "max-width",
+                        `${bp.media}px`,
+                        bp.media
+                            ? { media: `(min-width: ${bp.media}px)` }
+                            : undefined
+                    );
+                } else {
+                    expect(wrapper).not.toHaveStyleRule(
+                        "max-width",
+                        `${bp.media}px`,
+                        bp.media
+                            ? { media: `(min-width: ${bp.media}px)` }
+                            : undefined
+                    );
+                }
+            });
+        };
+
+        it("should use the max-width of every breakpoints", () => {
+            bps.xs.available = true;
+            bps.sm.available = true;
+            bps.md.available = true;
+            bps.lg.available = true;
+            bps.xl.available = true;
+
+            assertQueries(shallow(<Container fixed />));
+        });
+
+        it("should use the max-width up to xs", () => {
+            bps.xs.available = true;
+
+            assertQueries(shallow(<Container fixed maxWidth="xs" />));
+        });
+
+        it("should use the max-width up to sm", () => {
+            bps.xs.available = true;
+            bps.sm.available = true;
+
+            assertQueries(shallow(<Container fixed maxWidth="sm" />));
+        });
+
+        it("should use the max-width up to md", () => {
+            bps.xs.available = true;
+            bps.sm.available = true;
+            bps.md.available = true;
+
+            assertQueries(shallow(<Container fixed maxWidth="md" />));
+        });
+
+        it("should use the max-width up to lg", () => {
+            bps.xs.available = true;
+            bps.sm.available = true;
+            bps.md.available = true;
+            bps.lg.available = true;
+
+            assertQueries(shallow(<Container fixed maxWidth="lg" />));
+        });
+
+        it("should use the max-width up to xl", () => {
+            bps.xs.available = true;
+            bps.sm.available = true;
+            bps.md.available = true;
+            bps.lg.available = true;
+            bps.xl.available = true;
+
+            assertQueries(shallow(<Container fixed maxWidth="xl" />));
         });
     });
 });

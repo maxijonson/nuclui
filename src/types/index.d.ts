@@ -20,9 +20,9 @@ declare namespace Nui {
     type FC<P = {}> = FunctionalComponent<P>;
 
     /**
-     * Type of a functionnal component with forwarded ref which the root node can be overriden with the "component" prop.
-     * - The ref is typed based on the "component" prop.
-     * - The HTML attributes are typed based on the "component" prop
+     * Type of a functionnal component with forwarded ref which the root node can be overriden with the "as" prop.
+     * - The ref is typed based on the "as" prop.
+     * - The HTML attributes are typed based on the "as" prop
      * @generic P Type of component props
      * @generic D default root node component (should match the default props)
      */

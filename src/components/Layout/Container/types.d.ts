@@ -3,3 +3,5 @@ export interface ContainerProps {
     maxPadding?: Nui.Breakpoint | "none";
     fixed?: boolean;
 }
+
+export type NuiContainer = Nui.FRC<Nui.Props<ContainerProps>, "div">;
