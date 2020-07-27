@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [v0.0.7-beta.0](https://github.com/maxijonson/nuclui/compare/v0.0.6-beta.2...v0.0.7-beta.0)
+
+> 27 July 2020
+
+- Bump lodash from 4.17.15 to 4.17.19 [`#1`](https://github.com/maxijonson/nuclui/pull/1)
+- Bump codecov from 3.7.0 to 3.7.1 [`#2`](https://github.com/maxijonson/nuclui/pull/2)
+- Add Flex component [`56cb3fc`](https://github.com/maxijonson/nuclui/commit/56cb3fc30c165c173994e026458546d247969a38)
+- Finish Container tests [`9b0b1c3`](https://github.com/maxijonson/nuclui/commit/9b0b1c33dc44ea70fb5cdadf1d2c27987a9f91c0)
+- Add Container tests [`c8cf71c`](https://github.com/maxijonson/nuclui/commit/c8cf71ce824ec46d90ee0c89f7bff2a9835c861b)
+- Add Container props [`c4fd0be`](https://github.com/maxijonson/nuclui/commit/c4fd0be895c45c2ec69711c8985959b94378b977)
+- Improve global typings [`50b97e9`](https://github.com/maxijonson/nuclui/commit/50b97e9752febd2c032bc2e55b012de06b1dc9e7)
+- Fix Container types [`878756b`](https://github.com/maxijonson/nuclui/commit/878756b7eda044710be0ae29820928200affce1a)
+- Fix coverage [`3a3085d`](https://github.com/maxijonson/nuclui/commit/3a3085d3fbbe63a39dfd527879de45620411dffb)
+- Fix Container tests [`ccc588a`](https://github.com/maxijonson/nuclui/commit/ccc588a93f5e6e9101b11ca47a01bd2df9930275)
+- Add NuiCustomComponent type [`8271a25`](https://github.com/maxijonson/nuclui/commit/8271a25f937c74cb1fe271ad3bf74eaa2d88b854)
+- Add component "as" prop [`23fd0db`](https://github.com/maxijonson/nuclui/commit/23fd0dbc2649466e82c52c473e69aee54e819875)
+- Improve typings on Container [`e7aad13`](https://github.com/maxijonson/nuclui/commit/e7aad13cd160a801c3fe82fa23a421176b9baa10)
+- Add @types/styled-components to dependencies [`bab2e4f`](https://github.com/maxijonson/nuclui/commit/bab2e4f45333f78b6e58df9309e9c44ea8bf9c43)
+- Add comments [`2d39f85`](https://github.com/maxijonson/nuclui/commit/2d39f85c833d833da0850025e2427251f5590276)
+
 #### [v0.0.6-beta.2](https://github.com/maxijonson/nuclui/compare/v0.0.6-beta.1...v0.0.6-beta.2)
 
 > 13 July 2020
