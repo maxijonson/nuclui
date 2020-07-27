@@ -27,6 +27,12 @@ describe("Flex", () => {
             const root = wrapper.find("div").first();
             expect(root.length).toBe(1);
         });
+
+        it("should use div as root node", () => {
+            const wrapper = mount(<Flex as="div" />);
+            const root = wrapper.find("div").first();
+            expect(root.length).toBe(1);
+        });
     });
 
     describe("ref", () => {
@@ -136,6 +142,11 @@ describe("Flex", () => {
         it("should use the center justify", () => {
             const wrapper = shallow(<Flex justify="center" />);
             expect(wrapper).toHaveStyleRule("justify-content", "center");
+        });
+
+        it("should use the flexStart justify", () => {
+            const wrapper = shallow(<Flex justify="flexStart" />);
+            expect(wrapper).toHaveStyleRule("justify-content", "flex-start");
         });
 
         it("should use the flexEnd justify", () => {

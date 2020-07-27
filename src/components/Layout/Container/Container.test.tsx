@@ -46,6 +46,14 @@ describe("Container", () => {
             expect(root.length).toBe(1);
             expect(root.children().text()).toBe(text);
         });
+
+        it("should use div as root node", () => {
+            const text = "A default container";
+            const wrapper = mount(<Container as="div">{text}</Container>);
+            const root = wrapper.find("div").first();
+            expect(root.length).toBe(1);
+            expect(root.children().text()).toBe(text);
+        });
     });
 
     describe("ref", () => {

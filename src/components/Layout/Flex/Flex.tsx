@@ -7,7 +7,7 @@ import { NuiFlex } from "./types";
 
 const Flex: NuiFlex = React.forwardRef((props, ref) => {
     const {
-        as: Component = "div",
+        as,
         className,
         inline,
         direction,
@@ -15,6 +15,9 @@ const Flex: NuiFlex = React.forwardRef((props, ref) => {
         justify,
         ...restProps
     } = props;
+
+    const Component = as || "div";
+
     return (
         <Component
             {...restProps}
@@ -23,10 +26,6 @@ const Flex: NuiFlex = React.forwardRef((props, ref) => {
         />
     );
 });
-
-Flex.defaultProps = {
-    as: "div",
-};
 
 const StyledFlex = styled(Flex)`
     ${background.primary}

@@ -10,14 +10,9 @@ import { quicksand } from "@fonts";
 import { NuiContainer } from "./types";
 
 const Container: NuiContainer = React.forwardRef((props, ref) => {
-    const {
-        as: Component = "div",
-        className,
-        fixed,
-        maxPadding,
-        maxWidth,
-        ...restProps
-    } = props;
+    const { as, className, fixed, maxPadding, maxWidth, ...restProps } = props;
+
+    const Component = as || "div";
 
     return (
         <Component
@@ -32,7 +27,6 @@ Container.defaultProps = {
     fixed: false,
     maxPadding: undefined,
     maxWidth: undefined,
-    as: "div",
 };
 
 const bp = createBreakpoints({ sm: 620, md: 980, lg: 1280, xl: 1920 });

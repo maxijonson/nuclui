@@ -15,7 +15,6 @@ module.exports = {
         "^@theme((?=/).*|(?!/))$": "<rootDir>/src/theme$1",
         "^@fonts((?=/).*|(?!/))$": "<rootDir>/src/fonts$1",
     },
-    // collectCoverage: true,
     collectCoverageFrom: [
         "src/**/*.{js,jsx,ts,tsx}",
         "!**/index.{ts,tsx,js,jsx}",
