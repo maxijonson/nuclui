@@ -1,7 +1,6 @@
 import defaultTheme from "@theme/defaultTheme";
 import { DeepPartial } from "ts-essentials";
 
-interface NuiRootProps {
+export interface RootProps {
     theme?: DeepPartial<typeof defaultTheme>;
-    children: React.ReactElement;
 }

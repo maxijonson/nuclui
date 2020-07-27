@@ -1,6 +1,6 @@
 {
   "name": "nuclui",
-  "version": "0.0.6-beta.2",
+  "version": "0.0.6-dev1594708286803.6",
   "description": "A React UI framework, built with TypeScript, to make your developement easier so you can give more focus on your app and less on the design!",
   "main": "dist/index.js",
   "scripts": {
@@ -14,7 +14,7 @@
     "test:watch": "npm run lint && jest --watch",
     "test:publish": "npm run prepublishOnly && npm pack && tar xvzf *.tgz && rm -rf *.tgz && npm run postpublish",
     "test:heroku": "npm run heroku-postbuild && heroku local web",
-    "compile": "npm-run-all clean test:full && ttsc --project src",
+    "compile": "npm-run-all clean test:full && ttsc --project src/tsconfig.prod.json && npm run copyDeclarations",
     "compile:scripts": "tsc --project scripts",
     "build:docs:dev": "npm-run-all clean test:full && webpack --env.NODE_ENV=development --config=\"webpack.config.ts\"",
     "build:docs:prod": "npm-run-all clean test:full && webpack -p --env.NODE_ENV=production --config=\"webpack.config.ts\"",
@@ -25,7 +25,10 @@
     "preversion": "npm run test:full",
     "version": "npm run changelog && git add CHANGELOG.md",
     "createVersion": "node scripts/compiled/createVersion.js",
-    "createPublish": "node scripts/compiled/createPublish.js"
+    "createVersion:dev": "node scripts/compiled/createVersion.js -v dev -s dev && git reset HEAD CHANGELOG.md && git checkout -- CHANGELOG.md",
+    "createPublish": "node scripts/compiled/createPublish.js",
+    "reinstall": "rm -rf node_modules && npm i",
+    "copyDeclarations": "copyfiles -u 1 \"src/**/*.d.ts\" dist/src"
   },
   "repository": {
     "type": "git",
@@ -55,6 +58,7 @@
     "react-dom": "16.13.1"
   },
   "dependencies": {
+    "@types/styled-components": "5.1.0",
     "express": "4.17.1",
     "express-sslify": "1.2.0",
     "react-helmet": "6.1.0",
@@ -76,7 +80,6 @@
     "@types/react": "16.9.36",
     "@types/react-dom": "16.9.8",
     "@types/react-helmet": "6.0.0",
-    "@types/styled-components": "5.1.0",
     "@types/webpack": "4.41.17",
     "@types/webpack-dev-server": "3.11.0",
     "@types/yargs": "15.0.5",
@@ -87,6 +90,7 @@
     "babel-polyfill": "6.26.0",
     "circular-dependency-plugin": "5.2.0",
     "codecov": "3.7.1",
+    "copyfiles": "2.3.0",
     "dotenv": "8.2.0",
     "enzyme": "3.11.0",
     "enzyme-adapter-react-16": "1.15.2",
