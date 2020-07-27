@@ -39,7 +39,7 @@ const bp = createBreakpoints({ sm: 620, md: 980, lg: 1280, xl: 1920 });
 const padding = createBreakpoints({ xs: 16, sm: 25, md: 38, lg: 50, xl: 62 });
 
 /**
- * A responsive container for your content
+ * A responsive container for your main content
  */
 const StyledContainer = styled(Container)`
     ${background.primary}

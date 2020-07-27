@@ -1,3 +1,6 @@
+/**
+ * Nuclui's main namespace for typing utils
+ */
 declare namespace Nui {
     /**
      * Base component props
@@ -60,6 +63,9 @@ declare namespace Nui {
         D
     >;
 
+    /**
+     * Breakpoint names
+     */
     type Breakpoint = "xs" | "sm" | "md" | "lg" | "xl";
 }
 
