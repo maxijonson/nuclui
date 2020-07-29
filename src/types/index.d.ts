@@ -24,8 +24,8 @@ declare namespace Nui {
 
     /**
      * Type of a functionnal component with forwarded ref which the root node can be overriden with the "as" prop.
-     * - The ref is typed based on the "as" prop.
-     * - The HTML attributes are typed based on the "as" prop
+     * - The ref is typed based on the `as` prop.
+     * - The HTML attributes are typed based on the `as` prop
      * @generic P Type of component props
      * @generic D default root node component (should match the default props)
      */
@@ -56,12 +56,43 @@ declare namespace Nui {
     }
 
     /**
+     * Type of a functionnal component with forwarded ref.
+     * - The HTML attributes are typed based on the `D` template
+     * @generic P Type of component props
+     * @generic D The element type of the root node
+     */
+    interface FowardedRefComponentWithoutAs<
+        P extends object,
+        D extends React.ElementType
+    > {
+        (
+            props: P & Omit<React.ComponentPropsWithRef<D>, keyof P>
+        ): React.ReactElement | null;
+        readonly $$typeof: symbol;
+        defaultProps?: Partial<
+            P & Omit<React.ComponentPropsWithRef<D>, keyof P>
+        >;
+        propTypes?: React.WeakValidationMap<
+            P & Omit<React.ComponentPropsWithRef<D>, keyof P>
+        >;
+        displayName?: string;
+    }
+
+    /**
      * Short for FowardedRefComponent
      */
     type FRC<P extends {}, D extends React.ElementType> = FowardedRefComponent<
         P,
         D
     >;
+
+    /**
+     * Short for FowardedRefComponentWithoutAs
+     */
+    type FRCWA<
+        P extends {},
+        D extends React.ElementType
+    > = FowardedRefComponentWithoutAs<P, D>;
 
     /**
      * Breakpoint names
