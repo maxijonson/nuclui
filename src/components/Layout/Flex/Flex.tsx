@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { createComponentName } from "@utils";
-import { background, text } from "@theme";
 import { quicksand } from "@fonts";
 import { NuiFlex } from "./types";
 
@@ -13,6 +12,7 @@ const Flex: NuiFlex = React.forwardRef((props, ref) => {
         direction,
         wrap,
         justify,
+        align,
         ...restProps
     } = props;
 
@@ -28,12 +28,11 @@ const Flex: NuiFlex = React.forwardRef((props, ref) => {
 });
 
 const StyledFlex = styled(Flex)`
-    ${background.primary}
-    ${text.primary}
     ${quicksand}
 
     display: ${({ inline }) => (inline ? "inline-flex" : "flex")};
     position: relative;
+    box-sizing: border-box;
     flex-direction: ${({ direction }) => {
         if (!direction) return "row";
         switch (direction) {

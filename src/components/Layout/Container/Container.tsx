@@ -37,7 +37,6 @@ const StyledContainer = styled(Container)`
     ${text.primary}
     ${quicksand}
 
-    display: block;
     position: relative;
     width: 100%;
     box-sizing: border-box;

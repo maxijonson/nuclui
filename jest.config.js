@@ -6,7 +6,10 @@ module.exports = {
     testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
     snapshotSerializers: ["enzyme-to-json/serializer"],
-    setupFilesAfterEnv: ["<rootDir>/src/config/setupEnzyme.ts"],
+    setupFilesAfterEnv: [
+        "<rootDir>/src/config/setupEnzyme.ts",
+        "jest-mock-console/dist/setupTestFramework.js",
+    ],
     moduleNameMapper: {
         // Regex: https://regexr.com/57fm3
         "^@config((?=/).*|(?!/))$": "<rootDir>/src/config$1",
