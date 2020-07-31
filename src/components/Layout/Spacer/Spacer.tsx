@@ -8,7 +8,7 @@ const Spacer: NuiSpacer = React.forwardRef((props, ref) => {
     const { size, className, ...otherProps } = props;
 
     React.useEffect(() => {
-        if (_.isNumber(size)) {
+        if (_.isNumber(size) && size < 0) {
             nuiLog.warn("Spacer size prop should not be below 0.");
         }
     }, [size]);

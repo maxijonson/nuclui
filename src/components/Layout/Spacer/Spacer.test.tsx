@@ -77,6 +77,13 @@ describe("Spacer", () => {
             expect(wrapper).toHaveStyleRule("height", "20px");
         });
 
+        it("should not warn when the size is equal to 0", () => {
+            mockConsole("warn");
+            const wrapper = mount(<Spacer size={0} />);
+            expect(wrapper).toHaveStyleRule("height", "0px");
+            expect(console.warn).toHaveBeenCalledTimes(0);
+        });
+
         it("should warn when the size is under 0", () => {
             mockConsole("warn");
             const wrapper = mount(<Spacer size={-1} />);

@@ -1,13 +1,13 @@
 import React from "react";
 import _ from "lodash";
-import { Container, Flex, FlexItem, Spacer, Card } from "nuclui";
+import { Container, Flex, FlexItem, Spacer, Card, HR } from "nuclui";
 
 const Home = () => (
     <Container maxWidth="lg">
         Nuclui is under developement! For now, The docs website is only a
         sandbox for developing the components. Docs will be gradually created
         once the core components are made!
-        <Spacer />
+        <HR />
         Lorem, ipsum dolor sit amet consectetur adipisicing elit. Provident
         libero consequatur voluptatibus dicta ad sunt, ipsa, reprehenderit animi
         quis veritatis laboriosam, necessitatibus distinctio vel voluptatum
