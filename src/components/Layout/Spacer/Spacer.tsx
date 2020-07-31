@@ -20,8 +20,8 @@ const Spacer: NuiSpacer = React.forwardRef((props, ref) => {
 
 const StyledSpacer = styled(Spacer)`
     width: 100%;
+    box-sizing: border-box;
     height: ${({ size }) => {
-        if (!size) return "32px";
         switch (size) {
             case "xs":
                 return "4px";
@@ -29,6 +29,7 @@ const StyledSpacer = styled(Spacer)`
                 return "8px";
             case "md":
                 return "16px";
+            case undefined:
             case "lg":
                 return "32px";
             case "xl":

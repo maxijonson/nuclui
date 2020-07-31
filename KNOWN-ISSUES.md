@@ -38,3 +38,17 @@ const CustomComponent = (props) => {
 See:
 
 -   [why is a constructor parameter considered a branch and not covered?](https://github.com/istanbuljs/istanbuljs/issues/70)
+
+## JSDocs on components
+
+Since a lot of components' default export is really a Styled-Component and I don't want some of its props (such as `as` and `theme`) to be included, the type of the export is changed:
+
+```ts
+const Component = () => {
+    /* ... */
+};
+const StyledComponent = styled(Component)``;
+export default StyledComponent as typeof Component;
+```
+
+This is done for many reasons. The reason why the Styled-Component is exported in the first place is because some of the components have a dynamic root node and I don't know how to make a s

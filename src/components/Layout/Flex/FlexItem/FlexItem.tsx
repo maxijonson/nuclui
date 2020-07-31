@@ -46,18 +46,20 @@ const StyledFlexItem = styled(FlexItem)`
     ${quicksand}
 
     position: relative;
+    box-sizing: border-box;
     margin: 10px;
     flex-grow: ${({ grow }) => grow ?? 1};
     order: ${({ order }) => order ?? 0};
     flex-shrink: ${({ shrink }) => shrink ?? 1};
     flex-basis: ${({ basis }) => basis ?? "auto"};
     align-self: ${({ align }) => {
-        if (!align) return "auto";
         switch (align) {
             case "flexStart":
                 return "flex-start";
             case "flexEnd":
                 return "flex-end";
+            case undefined:
+                return "auto";
             default:
                 return align;
         }

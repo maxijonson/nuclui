@@ -37,11 +37,13 @@ const StyledContainer = styled(Container)`
     ${text.primary}
     ${quicksand}
 
+    display: block;
     position: relative;
     width: 100%;
     box-sizing: border-box;
     margin-right: auto;
     margin-left: auto;
+    line-height: 1.5;
     padding-left: ${({ maxPadding }) =>
         maxPadding != "none" ? `${padding.xs}px` : undefined};
     padding-right: ${({ maxPadding }) =>

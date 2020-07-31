@@ -34,27 +34,28 @@ const StyledFlex = styled(Flex)`
     position: relative;
     box-sizing: border-box;
     flex-direction: ${({ direction }) => {
-        if (!direction) return "row";
         switch (direction) {
             case "columnReverse":
                 return "column-reverse";
             case "rowReverse":
                 return "row-reverse";
+            case undefined:
+                return "row";
             default:
                 return direction;
         }
     }};
     flex-wrap: ${({ wrap }) => {
-        if (!wrap) return "wrap";
         switch (wrap) {
             case "wrapReverse":
                 return "wrap-reverse";
+            case undefined:
+                return "wrap";
             default:
                 return wrap;
         }
     }};
     justify-content: ${({ justify }) => {
-        if (!justify) return "center";
         switch (justify) {
             case "flexEnd":
                 return "flex-end";
@@ -66,12 +67,13 @@ const StyledFlex = styled(Flex)`
                 return "space-between";
             case "spaceEvenly":
                 return "space-evenly";
+            case undefined:
+                return "center";
             default:
                 return justify;
         }
     }};
     align-items: ${({ align }) => {
-        if (!align) return "stretch";
         switch (align) {
             case "flexEnd":
                 return "flex-end";
@@ -81,6 +83,8 @@ const StyledFlex = styled(Flex)`
                 return "self-end";
             case "selfStart":
                 return "self-start";
+            case undefined:
+                return "stretch";
             default:
                 return align;
         }
