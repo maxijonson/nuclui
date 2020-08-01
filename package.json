@@ -10,7 +10,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0",
     "prettier:report": "prettier --check --config .prettierrc.js .",
     "test": "npm-run-all prettier:report lint && jest",
-    "test:full": "npm-run-all prettier:report lint && jest --collectCoverage",
+    "test:full": "npm-run-all prettier:report lint && jest --collectCoverage --no-cache",
     "test:watch": "npm run lint && jest --watch",
     "test:publish": "npm run prepublishOnly && npm pack && tar xvzf *.tgz && rm -rf *.tgz && npm run postpublish",
     "test:heroku": "npm run heroku-postbuild && heroku local web",

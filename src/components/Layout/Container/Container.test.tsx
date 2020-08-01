@@ -30,10 +30,12 @@ describe("Container", () => {
         expect(Container.displayName).toEqual("NuiContainer");
     });
 
-    describe("as", () => {
+    describe("component", () => {
         it("should use button as root node", () => {
             const text = "A button container";
-            const wrapper = mount(<Container as="button">{text}</Container>);
+            const wrapper = mount(
+                <Container component="button">{text}</Container>
+            );
             const root = wrapper.find("button").first();
             expect(root.length).toBe(1);
             expect(root.children().text()).toBe(text);
@@ -49,7 +51,9 @@ describe("Container", () => {
 
         it("should use div as root node", () => {
             const text = "A default container";
-            const wrapper = mount(<Container as="div">{text}</Container>);
+            const wrapper = mount(
+                <Container component="div">{text}</Container>
+            );
             const root = wrapper.find("div").first();
             expect(root.length).toBe(1);
             expect(root.children().text()).toBe(text);
@@ -67,7 +71,7 @@ describe("Container", () => {
         it("should have the ref forwarded to the overriden node", () => {
             const ref = React.createRef<HTMLButtonElement>();
             const wrapper = mount(
-                <Container as="button" ref={ref}>
+                <Container component="button" ref={ref}>
                     Container
                 </Container>
             );
