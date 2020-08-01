@@ -6,7 +6,7 @@ import { NuiFlexItem } from "./types";
 
 const FlexItem: NuiFlexItem = React.forwardRef((props, ref) => {
     const {
-        as,
+        component,
         className,
         grow,
         order,
@@ -16,7 +16,7 @@ const FlexItem: NuiFlexItem = React.forwardRef((props, ref) => {
         ...restProps
     } = props;
 
-    const Component = as || "div";
+    const Component = component || "div";
 
     React.useEffect(() => {
         const warns: string[] = [];

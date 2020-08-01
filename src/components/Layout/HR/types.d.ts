@@ -14,4 +14,4 @@ export interface HRProps {
     spacing?: Nui.Breakpoint | number;
 }
 
-export type NuiHR = Nui.FRCWA<HRProps, "div">;
+export type NuiHR = Nui.FRCWC<HRProps, "div">;

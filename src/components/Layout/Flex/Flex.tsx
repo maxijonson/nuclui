@@ -6,7 +6,7 @@ import { NuiFlex } from "./types";
 
 const Flex: NuiFlex = React.forwardRef((props, ref) => {
     const {
-        as,
+        component,
         className,
         inline,
         direction,
@@ -16,7 +16,7 @@ const Flex: NuiFlex = React.forwardRef((props, ref) => {
         ...restProps
     } = props;
 
-    const Component = as || "div";
+    const Component = component || "div";
 
     return (
         <Component

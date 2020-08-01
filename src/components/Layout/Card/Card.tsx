@@ -7,7 +7,7 @@ import { NuiCard } from "./types";
 
 const Card: NuiCard = React.forwardRef((props, ref) => {
     const {
-        as,
+        component,
         className,
         padding,
         outline,
@@ -15,7 +15,7 @@ const Card: NuiCard = React.forwardRef((props, ref) => {
         ...restProps
     } = props;
 
-    const Component = as || "div";
+    const Component = component || "div";
 
     return (
         <Component

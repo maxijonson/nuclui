@@ -11,4 +11,4 @@ export interface SpacerProps {
 /**
  * Adds space between content
  */
-export type NuiSpacer = Nui.FRCWA<SpacerProps, "div">;
+export type NuiSpacer = Nui.FRCWC<SpacerProps, "div">;

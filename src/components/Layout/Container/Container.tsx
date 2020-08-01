@@ -10,9 +10,16 @@ import { quicksand } from "@fonts";
 import { NuiContainer } from "./types";
 
 const Container: NuiContainer = React.forwardRef((props, ref) => {
-    const { as, className, fixed, maxPadding, maxWidth, ...restProps } = props;
+    const {
+        component,
+        className,
+        fixed,
+        maxPadding,
+        maxWidth,
+        ...restProps
+    } = props;
 
-    const Component = as || "div";
+    const Component = component || "div";
 
     return (
         <Component

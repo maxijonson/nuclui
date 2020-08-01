@@ -16,9 +16,9 @@ describe("Flex", () => {
         expect(FlexItem.displayName).toEqual("NuiFlexItem");
     });
 
-    describe("as", () => {
+    describe("component", () => {
         it("should use button as root node", () => {
-            const wrapper = mount(<FlexItem as="button" />);
+            const wrapper = mount(<FlexItem component="button" />);
             const root = wrapper.find("button").first();
             expect(root.length).toBe(1);
         });
@@ -30,7 +30,7 @@ describe("Flex", () => {
         });
 
         it("should use div as root node", () => {
-            const wrapper = mount(<FlexItem as="div" />);
+            const wrapper = mount(<FlexItem component="div" />);
             const root = wrapper.find("div").first();
             expect(root.length).toBe(1);
         });
@@ -46,7 +46,7 @@ describe("Flex", () => {
 
         it("should have the ref forwarded to the overriden node", () => {
             const ref = React.createRef<HTMLButtonElement>();
-            const wrapper = mount(<FlexItem as="button" ref={ref} />);
+            const wrapper = mount(<FlexItem component="button" ref={ref} />);
             const btn = wrapper.find("button").first().getDOMNode();
             expect(btn).toBe(ref.current);
         });
