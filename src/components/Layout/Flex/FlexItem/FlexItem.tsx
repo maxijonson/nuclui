@@ -47,11 +47,20 @@ const StyledFlexItem = styled(FlexItem)`
 
     position: relative;
     box-sizing: border-box;
-    margin: 10px;
-    flex-grow: ${({ grow }) => grow ?? 1};
+    margin: 0;
+    flex-grow: ${({ theme, grow }) => {
+        const itemGrow: typeof grow = theme.nui?.$parent?.flex?.itemGrow;
+        return grow ?? itemGrow ?? 1;
+    }};
     order: ${({ order }) => order ?? 0};
-    flex-shrink: ${({ shrink }) => shrink ?? 1};
-    flex-basis: ${({ basis }) => basis ?? "auto"};
+    flex-shrink: ${({ theme, shrink }) => {
+        const itemShrink: typeof shrink = theme.nui?.$parent?.flex?.itemShrink;
+        return shrink ?? itemShrink ?? 1;
+    }};
+    flex-basis: ${({ theme, basis }) => {
+        const itemBasis: typeof basis = theme.nui?.$parent?.flex?.itemBasis;
+        return basis ?? itemBasis ?? "auto";
+    }};
     align-self: ${({ align }) => {
         switch (align) {
             case "flexStart":
@@ -62,6 +71,29 @@ const StyledFlexItem = styled(FlexItem)`
                 return "auto";
             default:
                 return align;
+        }
+    }};
+    padding: ${({ theme, spacing }) => {
+        const itemSpacing: typeof spacing =
+            theme.nui?.$parent?.flex?.itemSpacing;
+        const value = spacing ?? itemSpacing;
+
+        switch (value) {
+            case "xs":
+                return "5px";
+            case undefined:
+            case "sm":
+                return "10px";
+            case "md":
+                return "15px";
+            case "lg":
+                return "20px";
+            case "xl":
+                return "30px";
+            case "none":
+                return "0px";
+            default:
+                return `${value}px`;
         }
     }};
 `;

@@ -1,3 +1,5 @@
+import { FlexItemProps } from "./FlexItem/types";
+
 export interface FlexProps {
     /**
      * If the flex container be inline
@@ -19,7 +21,6 @@ export interface FlexProps {
 
     /**
      * The item alignment along the horizontal axis
-     * ***NOTE***: the only browser-safe values are flexStart, center and flexEnd. The others may be incompatible by some browsers.
      * @default "center"
      */
     justify?:
@@ -48,6 +49,26 @@ export interface FlexProps {
         | "selfEnd"
         | "center"
         | "baseline";
+
+    /**
+     * Overrides the child FlexItems' default `grow` value
+     */
+    itemGrow?: FlexItemProps["grow"];
+
+    /**
+     * Overrides the child FlexItems' default `shrink` value
+     */
+    itemShrink?: FlexItemProps["shrink"];
+
+    /**
+     * Overrides the child FlexItems' default `basis` value
+     */
+    itemBasis?: FlexItemProps["basis"];
+
+    /**
+     * Overrides the child FlexItems' default `spacing` value
+     */
+    itemSpacing?: FlexItemProps["spacing"];
 }
 
 /**

@@ -24,7 +24,7 @@ export interface FlexItemProps {
     basis?: string;
 
     /**
-     * Overrides the alignment of the container defined by its `align` (align-items) property
+     * Overrides the cross-axis alignment of the container's `align` (align-items) property
      * @default auto
      */
     align?:
@@ -34,6 +34,13 @@ export interface FlexItemProps {
         | "center"
         | "baseline"
         | "stretch";
+
+    /**
+     * Spacing around the `FlexItem`.
+     *
+     * @default "sm" or the `itemSpacing` value given to the parent Flex
+     */
+    spacing?: Nui.Breakpoint | "none" | number;
 }
 
 /**

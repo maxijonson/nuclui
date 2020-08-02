@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import { createComponentName } from "@utils";
 import { quicksand } from "@fonts";
 import { NuiFlex } from "./types";
@@ -13,17 +13,35 @@ const Flex: NuiFlex = React.forwardRef((props, ref) => {
         wrap,
         justify,
         align,
+        children,
+        itemGrow,
+        itemShrink,
+        itemBasis,
+        itemSpacing,
         ...restProps
     } = props;
 
     const Component = component || "div";
 
     return (
-        <Component
-            {...restProps}
-            ref={ref}
-            className={`NuiFlex ${className}`}
-        />
+        <Component {...restProps} ref={ref} className={`NuiFlex ${className}`}>
+            <ThemeProvider
+                theme={{
+                    nui: {
+                        $parent: {
+                            flex: {
+                                itemGrow,
+                                itemShrink,
+                                itemBasis,
+                                itemSpacing,
+                            },
+                        },
+                    },
+                }}
+            >
+                {children}
+            </ThemeProvider>
+        </Component>
     );
 });
 

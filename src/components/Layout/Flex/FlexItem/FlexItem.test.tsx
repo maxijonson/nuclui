@@ -4,6 +4,7 @@ import { mount, shallow } from "enzyme";
 import mockConsole from "jest-mock-console";
 import FlexItem from "./FlexItem";
 import "jest-styled-components";
+import Flex from "../Flex";
 
 describe("Flex", () => {
     it("should render without crashing", () => {
@@ -89,6 +90,26 @@ describe("Flex", () => {
                 "FlexItem grow prop should not be below 0."
             );
         });
+
+        it("should use the parent provided grow value", () => {
+            const wrapper = mount(
+                <Flex itemGrow={2}>
+                    <FlexItem>Item</FlexItem>
+                </Flex>
+            );
+            const provided = wrapper.find(FlexItem);
+            expect(provided).toHaveStyleRule("flex-grow", "2");
+        });
+
+        it("should use its own grow value", () => {
+            const wrapper = mount(
+                <Flex itemGrow={2}>
+                    <FlexItem grow={3}>Item</FlexItem>
+                </Flex>
+            );
+            const provided = wrapper.find(FlexItem);
+            expect(provided).toHaveStyleRule("flex-grow", "3");
+        });
     });
 
     describe("order", () => {
@@ -129,6 +150,26 @@ describe("Flex", () => {
                 "FlexItem shrink prop should not be below 0."
             );
         });
+
+        it("should use the parent provided shrink value", () => {
+            const wrapper = mount(
+                <Flex itemShrink={2}>
+                    <FlexItem>Item</FlexItem>
+                </Flex>
+            );
+            const provided = wrapper.find(FlexItem);
+            expect(provided).toHaveStyleRule("flex-shrink", "2");
+        });
+
+        it("should use its own shrink value", () => {
+            const wrapper = mount(
+                <Flex itemShrink={2}>
+                    <FlexItem shrink={3}>Item</FlexItem>
+                </Flex>
+            );
+            const provided = wrapper.find(FlexItem);
+            expect(provided).toHaveStyleRule("flex-shrink", "3");
+        });
     });
 
     describe("basis", () => {
@@ -140,6 +181,26 @@ describe("Flex", () => {
         it("should use a custom basis value", () => {
             const wrapper = shallow(<FlexItem basis="25px" />);
             expect(wrapper).toHaveStyleRule("flex-basis", "25px");
+        });
+
+        it("should use the parent provided basis value", () => {
+            const wrapper = mount(
+                <Flex itemBasis="25%">
+                    <FlexItem>Item</FlexItem>
+                </Flex>
+            );
+            const provided = wrapper.find(FlexItem);
+            expect(provided).toHaveStyleRule("flex-basis", "25%");
+        });
+
+        it("should use its own basis value", () => {
+            const wrapper = mount(
+                <Flex itemBasis="25%">
+                    <FlexItem basis="50%">Item</FlexItem>
+                </Flex>
+            );
+            const provided = wrapper.find(FlexItem);
+            expect(provided).toHaveStyleRule("flex-basis", "50%");
         });
     });
 
@@ -177,6 +238,68 @@ describe("Flex", () => {
         it("should use the stretch align value", () => {
             const wrapper = shallow(<FlexItem align="stretch" />);
             expect(wrapper).toHaveStyleRule("align-self", "stretch");
+        });
+    });
+
+    describe("spacing", () => {
+        it("should use the default spacing value", () => {
+            const wrapper = shallow(<FlexItem />);
+            expect(wrapper).toHaveStyleRule("padding", "10px");
+        });
+
+        it("should use the xs spacing value", () => {
+            const wrapper = shallow(<FlexItem spacing="xs" />);
+            expect(wrapper).toHaveStyleRule("padding", "5px");
+        });
+
+        it("should use the sm spacing value", () => {
+            const wrapper = shallow(<FlexItem spacing="sm" />);
+            expect(wrapper).toHaveStyleRule("padding", "10px");
+        });
+
+        it("should use the md spacing value", () => {
+            const wrapper = shallow(<FlexItem spacing="md" />);
+            expect(wrapper).toHaveStyleRule("padding", "15px");
+        });
+
+        it("should use the lg spacing value", () => {
+            const wrapper = shallow(<FlexItem spacing="lg" />);
+            expect(wrapper).toHaveStyleRule("padding", "20px");
+        });
+
+        it("should use the xl spacing value", () => {
+            const wrapper = shallow(<FlexItem spacing="xl" />);
+            expect(wrapper).toHaveStyleRule("padding", "30px");
+        });
+
+        it("should use the none spacing value", () => {
+            const wrapper = shallow(<FlexItem spacing="none" />);
+            expect(wrapper).toHaveStyleRule("padding", "0px");
+        });
+
+        it("should use the custom spacing value", () => {
+            const wrapper = shallow(<FlexItem spacing={7} />);
+            expect(wrapper).toHaveStyleRule("padding", "7px");
+        });
+
+        it("should use the parent provided spacing value", () => {
+            const wrapper = mount(
+                <Flex itemSpacing="xs">
+                    <FlexItem>Item</FlexItem>
+                </Flex>
+            );
+            const provided = wrapper.find(FlexItem);
+            expect(provided).toHaveStyleRule("padding", "5px");
+        });
+
+        it("should use its own spacing value", () => {
+            const wrapper = mount(
+                <Flex itemSpacing="lg">
+                    <FlexItem spacing={7}>Item</FlexItem>
+                </Flex>
+            );
+            const provided = wrapper.find(FlexItem);
+            expect(provided).toHaveStyleRule("padding", "7px");
         });
     });
 });
