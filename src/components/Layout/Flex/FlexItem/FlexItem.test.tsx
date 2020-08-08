@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import _ from "lodash";
 import { mount, shallow, CommonWrapper } from "enzyme";
 import mockConsole from "jest-mock-console";
+import { nuiLog } from "@utils";
 import FlexItem from "./FlexItem";
 import "jest-styled-components";
 import Flex from "../Flex";
@@ -191,6 +192,8 @@ describe("Flex", () => {
     describe("basis", () => {
         beforeAll(() => resetBps());
 
+        beforeEach(() => nuiLog.clearHistory());
+
         const assertBasis = (
             basis: FlexItemProps["basis"],
             wrapper: CommonWrapper
@@ -265,11 +268,13 @@ describe("Flex", () => {
         });
 
         it("should clamp non-integer values to the max", () => {
+            mockConsole("warn");
             const wrapper = shallow(<FlexItem basis={12.6} />);
             expect(wrapper).toHaveStyleRule("flex-basis", "100%");
         });
 
         it("should clamp non-integer values to the min", () => {
+            mockConsole("warn");
             const wrapper = shallow(<FlexItem basis={-0.6} />);
             expect(wrapper).toHaveStyleRule("flex-basis", `0%`);
         });
@@ -277,6 +282,7 @@ describe("Flex", () => {
         it("should warn when using values over max", () => {
             mockConsole("warn");
             const wrapper = shallow(<FlexItem basis={13} />);
+            expect(console.warn).toHaveBeenCalledTimes(1);
             expect(console.warn).toHaveBeenLastCalledWith(
                 "(NUI)",
                 "FlexItem basis, when specified as a number, must be between 0 and 12. Clamped value will be used."
@@ -287,6 +293,7 @@ describe("Flex", () => {
         it("should warn when using values under min", () => {
             mockConsole("warn");
             const wrapper = shallow(<FlexItem basis={-1} />);
+            expect(console.warn).toHaveBeenCalledTimes(1);
             expect(console.warn).toHaveBeenLastCalledWith(
                 "(NUI)",
                 "FlexItem basis, when specified as a number, must be between 0 and 12. Clamped value will be used."

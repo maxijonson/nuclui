@@ -36,7 +36,7 @@ const FlexItem: NuiFlexItem = React.forwardRef((props, ref) => {
         }
 
         if (warns.length != 0) {
-            nuiLog.warn(warns);
+            nuiLog.warn(warns, { once: true });
         }
     }, [grow, shrink]);
 
@@ -63,12 +63,14 @@ const getBasis = (basis: number | string | undefined) => {
 
         if (!_.isInteger(basis)) {
             nuiLog.warn(
-                `FlexItem basis, when specified as a number, must be an integer. The rounded number will be used`
+                `FlexItem basis, when specified as a number, must be an integer. The rounded number will be used`,
+                { once: "FlexItem-getBasis-integer" }
             );
             numericBasis = _.clamp(_.round(basis), min, max);
         } else if (basis < min || basis > max) {
             nuiLog.warn(
-                `FlexItem basis, when specified as a number, must be between ${min} and ${max}. Clamped value will be used.`
+                `FlexItem basis, when specified as a number, must be between ${min} and ${max}. Clamped value will be used.`,
+                { once: "FlexItem-getBasis-bounds" }
             );
             numericBasis = _.clamp(basis, min, max);
         }

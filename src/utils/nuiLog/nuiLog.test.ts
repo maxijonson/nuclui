@@ -39,7 +39,7 @@ describe("nuiLog", () => {
                 expect(console[level]).toHaveBeenCalledWith("(NUI)", message);
             });
 
-            it(`Should log an array of string using the ${level} method`, () => {
+            it(`should log an array of string using the ${level} method`, () => {
                 const message = ["a", level, "message"];
 
                 nuiLog[level](message);
@@ -50,6 +50,83 @@ describe("nuiLog", () => {
                     `a\n      ${level}\n      message`
                 );
             });
+
+            it(`should log the message only once using the ${level} method with "once" as a boolean`, () => {
+                const message = `A ${level} unique message`;
+
+                _.times(2, () => nuiLog[level](message, { once: true }));
+                expect(console[level]).toHaveBeenCalledTimes(1);
+                expect(console[level]).toHaveBeenLastCalledWith(
+                    "(NUI)",
+                    message
+                );
+            });
+
+            it(`should log the message only once using the ${level} method with "once" as a string`, () => {
+                const message = `A unique ${level} message`;
+                const once = `id-${level}`;
+
+                _.times(2, () => nuiLog[level](message, { once }));
+                expect(console[level]).toHaveBeenCalledTimes(1);
+                expect(console[level]).toHaveBeenLastCalledWith(
+                    "(NUI)",
+                    message
+                );
+
+                nuiLog[level](message, { once: true });
+                expect(console[level]).toHaveBeenCalledTimes(2);
+                expect(console[level]).toHaveBeenLastCalledWith(
+                    "(NUI)",
+                    message
+                );
+            });
+
+            it(`should log the message array only once using the ${level} method with "once" as a boolean`, () => {
+                const message = ["unique", level, "message"];
+
+                _.times(2, () => nuiLog[level](message, { once: true }));
+                expect(console[level]).toHaveBeenCalledTimes(1);
+                expect(console[level]).toHaveBeenCalledWith(
+                    "(NUI)",
+                    `unique\n      ${level}\n      message`
+                );
+            });
+
+            it(`should log the message array only once using the ${level} method with "once" as a string`, () => {
+                const message = ["uniqueid", level, "message"];
+                const once = `idarr-${level}`;
+
+                _.times(2, () => nuiLog[level](message, { once }));
+                expect(console[level]).toHaveBeenCalledTimes(1);
+                expect(console[level]).toHaveBeenCalledWith(
+                    "(NUI)",
+                    `uniqueid\n      ${level}\n      message`
+                );
+
+                nuiLog[level](message, { once: true });
+                expect(console[level]).toHaveBeenCalledTimes(2);
+                expect(console[level]).toHaveBeenCalledWith(
+                    "(NUI)",
+                    `uniqueid\n      ${level}\n      message`
+                );
+            });
         });
+    });
+
+    it("should clear the history", () => {
+        mockConsole("info");
+        const message = "clear me!";
+        nuiLog(message, { once: true });
+        nuiLog.clearHistory();
+        const deleted = nuiLog.deleteFromHistory(message);
+        expect(deleted).toBeFalsy();
+    });
+
+    it("should delete a history entry", () => {
+        mockConsole("info");
+        const id = "delete-id";
+        nuiLog("Delete id", { once: id });
+        const deleted = nuiLog.deleteFromHistory(id);
+        expect(deleted).toBeTruthy();
     });
 });
