@@ -257,11 +257,11 @@ describe("Flex", () => {
         it("should warn when using non-integer values", () => {
             mockConsole("warn");
             const wrapper = shallow(<FlexItem basis={5.5} />);
+            expect(wrapper).toHaveStyleRule("flex-basis", "50%");
             expect(console.warn).toHaveBeenLastCalledWith(
                 "(NUI)",
                 "FlexItem basis, when specified as a number, must be an integer. The rounded number will be used"
             );
-            expect(wrapper).toHaveStyleRule("flex-basis", "50%");
         });
 
         it("should clamp non-integer values to the max", () => {
@@ -443,6 +443,36 @@ describe("Flex", () => {
                         assertQueries(
                             shallow(<FlexItem {...{ [bpKey]: "25px" }} />)
                         );
+                    });
+
+                    it(`should use the ${bpKey} value provided by the parent Flex`, () => {
+                        const wrapper = mount(
+                            <Flex
+                                {...{
+                                    [`item${_.capitalize(bpKey)}`]: "10px",
+                                }}
+                            >
+                                <FlexItem />
+                            </Flex>
+                        );
+
+                        bps[bpKey].basis = "10px";
+                        assertQueries(wrapper.find(FlexItem));
+                    });
+
+                    it(`should use its own ${bpKey} value`, () => {
+                        const wrapper = mount(
+                            <Flex
+                                {...{
+                                    [`item${_.capitalize(bpKey)}`]: "10px",
+                                }}
+                            >
+                                <FlexItem {...{ [bpKey]: "25px" }} />
+                            </Flex>
+                        );
+
+                        bps[bpKey].basis = "25px";
+                        assertQueries(wrapper.find(FlexItem));
                     });
                 });
             }

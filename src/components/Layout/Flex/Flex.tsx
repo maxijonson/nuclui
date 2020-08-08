@@ -18,6 +18,11 @@ const Flex: NuiFlex = React.forwardRef((props, ref) => {
         itemShrink,
         itemBasis,
         itemSpacing,
+        itemXs,
+        itemSm,
+        itemMd,
+        itemLg,
+        itemXl,
         ...restProps
     } = props;
 
@@ -34,6 +39,11 @@ const Flex: NuiFlex = React.forwardRef((props, ref) => {
                                 itemShrink,
                                 itemBasis,
                                 itemSpacing,
+                                itemXs,
+                                itemSm,
+                                itemMd,
+                                itemLg,
+                                itemXl,
                             },
                         },
                     },

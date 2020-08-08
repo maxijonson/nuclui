@@ -69,6 +69,31 @@ export interface FlexProps {
      * Overrides the child FlexItems' default `spacing` value
      */
     itemSpacing?: FlexItemProps["spacing"];
+
+    /**
+     * Gives a default "xs" value for the children FlexItem
+     */
+    itemXs?: FlexItemProps["xs"];
+
+    /**
+     * Gives a default "sm" value for the children FlexItem
+     */
+    itemSm?: FlexItemProps["sm"];
+
+    /**
+     * Gives a default "md" value for the children FlexItem
+     */
+    itemMd?: FlexItemProps["md"];
+
+    /**
+     * Gives a default "lg" value for the children FlexItem
+     */
+    itemLg?: FlexItemProps["lg"];
+
+    /**
+     * Gives a default "xl" value for the children FlexItem
+     */
+    itemXl?: FlexItemProps["xl"];
 }
 
 /**
