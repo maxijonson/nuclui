@@ -23,11 +23,11 @@ const Home = () => (
                 Lorem ipsum dolor, sit amet consectetur adipisicing elit.
             </Card>
         ))}
-        <Flex>
+        <Flex itemGrow={0} itemBasis="25%" justify="left">
             {_.map(
                 ["none", "xs", "sm", "md", "lg", "xl"] as const,
                 (bp, key) => (
-                    <FlexItem basis="0%" key={key}>
+                    <FlexItem key={key}>
                         <Card padding={bp} disableShadow={key % 3 == 0}>
                             Lorem ipsum dolor, sit amet consectetur adipisicing
                             elit. Dolores pariatur quibusdam ab quasi inventore,
@@ -40,14 +40,40 @@ const Home = () => (
             )}
         </Flex>
         <Spacer />
-        <Card>
-            <Flex>
-                <FlexItem style={{ background: "" }}>Item</FlexItem>
-                <FlexItem style={{ background: "" }}>Item</FlexItem>
-                <FlexItem style={{ background: "" }}>Item</FlexItem>
-                <FlexItem style={{ background: "" }}>Item</FlexItem>
-            </Flex>
-        </Card>
+        <Flex>
+            <FlexItem xs={12} sm={6}>
+                <Card>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Voluptatum illum voluptate a atque quisquam ab consectetur
+                    nesciunt consequatur, reiciendis voluptates odio corporis
+                    autem eos qui eveniet quas mollitia, nam quae.
+                </Card>
+            </FlexItem>
+            <FlexItem xs={12} sm={6}>
+                <Card>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Voluptatum illum voluptate a atque quisquam ab consectetur
+                    nesciunt consequatur, reiciendis voluptates odio corporis
+                    autem eos qui eveniet quas mollitia, nam quae.
+                </Card>
+            </FlexItem>
+            <FlexItem xs={12} sm={6}>
+                <Card>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Voluptatum illum voluptate a atque quisquam ab consectetur
+                    nesciunt consequatur, reiciendis voluptates odio corporis
+                    autem eos qui eveniet quas mollitia, nam quae.
+                </Card>
+            </FlexItem>
+            <FlexItem xs={12} sm={6}>
+                <Card>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Voluptatum illum voluptate a atque quisquam ab consectetur
+                    nesciunt consequatur, reiciendis voluptates odio corporis
+                    autem eos qui eveniet quas mollitia, nam quae.
+                </Card>
+            </FlexItem>
+        </Flex>
     </Container>
 );
 

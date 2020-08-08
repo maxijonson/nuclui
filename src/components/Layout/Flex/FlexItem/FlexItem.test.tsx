@@ -1,10 +1,26 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { mount, shallow } from "enzyme";
+import _ from "lodash";
+import { mount, shallow, CommonWrapper } from "enzyme";
 import mockConsole from "jest-mock-console";
 import FlexItem from "./FlexItem";
 import "jest-styled-components";
 import Flex from "../Flex";
+import { FlexItemProps } from "./types";
+
+let bps: {
+    [bp in Nui.Breakpoint]: { media: number | null; [key: string]: any };
+};
+
+const resetBps = () => {
+    bps = {
+        xs: { media: null }, // xs
+        sm: { media: 620 }, // sm
+        md: { media: 980 }, // md
+        lg: { media: 1280 }, // lg
+        xl: { media: 1920 }, // xl
+    };
+};
 
 describe("Flex", () => {
     it("should render without crashing", () => {
@@ -173,34 +189,109 @@ describe("Flex", () => {
     });
 
     describe("basis", () => {
+        beforeAll(() => resetBps());
+
+        const assertBasis = (
+            basis: FlexItemProps["basis"],
+            wrapper: CommonWrapper
+        ) => {
+            expect(wrapper).toHaveStyleRule("flex-basis", basis);
+            expect(wrapper).toHaveStyleRule("flex-basis", basis, {
+                media: `(min-width: ${bps.sm.media}px)`,
+            });
+            expect(wrapper).toHaveStyleRule("flex-basis", basis, {
+                media: `(min-width: ${bps.md.media}px)`,
+            });
+            expect(wrapper).toHaveStyleRule("flex-basis", basis, {
+                media: `(min-width: ${bps.lg.media}px)`,
+            });
+            expect(wrapper).toHaveStyleRule("flex-basis", basis, {
+                media: `(min-width: ${bps.xl.media}px)`,
+            });
+        };
+
         it("should use the default basis value", () => {
             const wrapper = shallow(<FlexItem />);
-            expect(wrapper).toHaveStyleRule("flex-basis", "auto");
+            _.forEach(bps, ({ media }) => {
+                expect(wrapper).not.toHaveStyleRule(
+                    "flex-basis",
+                    expect.any(String),
+                    media ? { media: `(min-width: ${media}px)` } : undefined
+                );
+            });
+        });
+
+        it("should use a numeric basis value", () => {
+            const wrapper = shallow(<FlexItem basis={6} />);
+            assertBasis("50%", wrapper);
         });
 
         it("should use a custom basis value", () => {
-            const wrapper = shallow(<FlexItem basis="25px" />);
-            expect(wrapper).toHaveStyleRule("flex-basis", "25px");
+            const basis = "25px";
+            const wrapper = shallow(<FlexItem basis={basis} />);
+            assertBasis(basis, wrapper);
         });
 
         it("should use the parent provided basis value", () => {
+            const basis = "25%";
             const wrapper = mount(
-                <Flex itemBasis="25%">
+                <Flex itemBasis={basis}>
                     <FlexItem>Item</FlexItem>
                 </Flex>
             );
             const provided = wrapper.find(FlexItem);
-            expect(provided).toHaveStyleRule("flex-basis", "25%");
+            assertBasis(basis, provided);
         });
 
         it("should use its own basis value", () => {
+            const basis = "50%";
             const wrapper = mount(
                 <Flex itemBasis="25%">
-                    <FlexItem basis="50%">Item</FlexItem>
+                    <FlexItem basis={basis}>Item</FlexItem>
                 </Flex>
             );
             const provided = wrapper.find(FlexItem);
-            expect(provided).toHaveStyleRule("flex-basis", "50%");
+            assertBasis(basis, provided);
+        });
+
+        it("should warn when using non-integer values", () => {
+            mockConsole("warn");
+            const wrapper = shallow(<FlexItem basis={5.5} />);
+            expect(console.warn).toHaveBeenLastCalledWith(
+                "(NUI)",
+                "FlexItem basis, when specified as a number, must be an integer. The rounded number will be used"
+            );
+            expect(wrapper).toHaveStyleRule("flex-basis", "50%");
+        });
+
+        it("should clamp non-integer values to the max", () => {
+            const wrapper = shallow(<FlexItem basis={12.6} />);
+            expect(wrapper).toHaveStyleRule("flex-basis", "100%");
+        });
+
+        it("should clamp non-integer values to the min", () => {
+            const wrapper = shallow(<FlexItem basis={-0.6} />);
+            expect(wrapper).toHaveStyleRule("flex-basis", `0%`);
+        });
+
+        it("should warn when using values over max", () => {
+            mockConsole("warn");
+            const wrapper = shallow(<FlexItem basis={13} />);
+            expect(console.warn).toHaveBeenLastCalledWith(
+                "(NUI)",
+                "FlexItem basis, when specified as a number, must be between 0 and 12. Clamped value will be used."
+            );
+            expect(wrapper).toHaveStyleRule("flex-basis", "100%");
+        });
+
+        it("should warn when using values under min", () => {
+            mockConsole("warn");
+            const wrapper = shallow(<FlexItem basis={-1} />);
+            expect(console.warn).toHaveBeenLastCalledWith(
+                "(NUI)",
+                "FlexItem basis, when specified as a number, must be between 0 and 12. Clamped value will be used."
+            );
+            expect(wrapper).toHaveStyleRule("flex-basis", `0%`);
         });
     });
 
@@ -300,6 +391,104 @@ describe("Flex", () => {
             );
             const provided = wrapper.find(FlexItem);
             expect(provided).toHaveStyleRule("padding", "7px");
+        });
+    });
+
+    describe("breakpoints", () => {
+        beforeAll(() => resetBps());
+
+        beforeEach(() => {
+            bps.xs.basis = undefined;
+            bps.sm.basis = undefined;
+            bps.md.basis = undefined;
+            bps.lg.basis = undefined;
+            bps.xl.basis = undefined;
+        });
+
+        const assertQueries = (wrapper: CommonWrapper) => {
+            _.forEach(bps, ({ media, basis }) => {
+                if (basis) {
+                    expect(wrapper).toHaveStyleRule(
+                        "flex-basis",
+                        basis,
+                        media ? { media: `(min-width: ${media}px)` } : undefined
+                    );
+                } else {
+                    expect(wrapper).not.toHaveStyleRule(
+                        "flex-basis",
+                        expect.any(String),
+                        media ? { media: `(min-width: ${media}px)` } : undefined
+                    );
+                }
+            });
+        };
+
+        _.forEach(
+            ["xs", "sm", "md", "lg", "xl"] as Nui.Breakpoint[],
+            (bpKey) => {
+                describe(bpKey, () => {
+                    it(`should use the default ${bpKey} value`, () => {
+                        assertQueries(shallow(<FlexItem />));
+                    });
+
+                    it(`should use a numeric ${bpKey} value`, () => {
+                        bps[bpKey].basis = "50%";
+                        assertQueries(
+                            shallow(<FlexItem {...{ [bpKey]: 6 }} />)
+                        );
+                    });
+
+                    it(`should use a custom ${bpKey} value`, () => {
+                        bps[bpKey].basis = "25px";
+                        assertQueries(
+                            shallow(<FlexItem {...{ [bpKey]: "25px" }} />)
+                        );
+                    });
+                });
+            }
+        );
+
+        describe("with basis", () => {
+            const basis = "1337px";
+
+            beforeEach(() => {
+                bps.xs.basis = basis;
+                bps.sm.basis = basis;
+                bps.md.basis = basis;
+                bps.lg.basis = basis;
+                bps.xl.basis = basis;
+            });
+
+            _.forEach(
+                ["xs", "sm", "md", "lg", "xl"] as Nui.Breakpoint[],
+                (bpKey) => {
+                    describe(bpKey, () => {
+                        it(`should use the basis as default with overriden ${bpKey} value`, () => {
+                            bps[bpKey].basis = "25%";
+                            assertQueries(
+                                shallow(
+                                    <FlexItem
+                                        basis={basis}
+                                        {...{ [bpKey]: "25%" }}
+                                    />
+                                )
+                            );
+                        });
+
+                        it(`should use the basis as default with overriden numeric ${bpKey} value`, () => {
+                            bps[bpKey].basis = "50%";
+                            assertQueries(
+                                shallow(
+                                    <FlexItem
+                                        basis={basis}
+                                        {...{ [bpKey]: 6 }}
+                                    />
+                                )
+                            );
+                        });
+                    });
+                }
+            );
         });
     });
 });

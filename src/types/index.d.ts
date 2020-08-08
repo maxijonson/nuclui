@@ -41,16 +41,10 @@ declare namespace Nui {
         ): React.ReactElement | null;
         readonly $$typeof: symbol;
         defaultProps?: Partial<
-            P & { component?: React.ElementType } & Omit<
-                    React.ComponentPropsWithRef<D>,
-                    keyof P
-                >
+            Nui.Props<P> & { component?: React.ElementType }
         >;
         propTypes?: React.WeakValidationMap<
-            P & { component?: React.ElementType } & Omit<
-                    React.ComponentPropsWithRef<D>,
-                    keyof P
-                >
+            Nui.Props<P> & { component?: React.ElementType }
         >;
         displayName?: string;
     }
@@ -69,12 +63,8 @@ declare namespace Nui {
             props: P & Omit<React.ComponentPropsWithRef<D>, keyof P>
         ): React.ReactElement | null;
         readonly $$typeof: symbol;
-        defaultProps?: Partial<
-            P & Omit<React.ComponentPropsWithRef<D>, keyof P>
-        >;
-        propTypes?: React.WeakValidationMap<
-            P & Omit<React.ComponentPropsWithRef<D>, keyof P>
-        >;
+        defaultProps?: Partial<Nui.Props<P>>;
+        propTypes?: React.WeakValidationMap<Nui.Props<P>>;
         displayName?: string;
     }
 

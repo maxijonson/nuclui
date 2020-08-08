@@ -20,7 +20,7 @@ export interface FlexProps {
     wrap?: "nowrap" | "wrap" | "wrapReverse";
 
     /**
-     * The item alignment along the horizontal axis
+     * The item alignment along the main axis
      * @default "center"
      */
     justify?:
@@ -36,7 +36,7 @@ export interface FlexProps {
         | "spaceEvenly";
 
     /**
-     * The item alignment along the vertical axis
+     * The item alignment along the cross axis
      * @default "stretch"
      */
     align?:

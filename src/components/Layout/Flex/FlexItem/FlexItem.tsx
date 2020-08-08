@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { createComponentName, nuiLog } from "@utils";
+import _ from "lodash";
+import { createComponentName, nuiLog, createBreakpoints } from "@utils";
 import { quicksand } from "@fonts";
 import { NuiFlexItem } from "./types";
 
@@ -13,6 +14,12 @@ const FlexItem: NuiFlexItem = React.forwardRef((props, ref) => {
         shrink,
         basis,
         align,
+        spacing,
+        xs,
+        sm,
+        md,
+        lg,
+        xl,
         ...restProps
     } = props;
 
@@ -42,6 +49,38 @@ const FlexItem: NuiFlexItem = React.forwardRef((props, ref) => {
     );
 });
 
+/**
+ * Given a value, returns the appropriate flex-basis value. Giving a number will return a fraction of the 12-based grid.
+ * @param basis the basis value
+ */
+const getBasis = (basis: number | string | undefined) => {
+    if (!basis) return undefined;
+
+    if (typeof basis === "number") {
+        const min = 0;
+        const max = 12;
+        let numericBasis = basis;
+
+        if (!_.isInteger(basis)) {
+            nuiLog.warn(
+                `FlexItem basis, when specified as a number, must be an integer. The rounded number will be used`
+            );
+            numericBasis = _.clamp(_.round(basis), min, max);
+        } else if (basis < min || basis > max) {
+            nuiLog.warn(
+                `FlexItem basis, when specified as a number, must be between ${min} and ${max}. Clamped value will be used.`
+            );
+            numericBasis = _.clamp(basis, min, max);
+        }
+
+        return `${(numericBasis / max) * 100}%`;
+    }
+
+    return basis;
+};
+
+const bp = createBreakpoints({ sm: 620, md: 980, lg: 1280, xl: 1920 });
+
 const StyledFlexItem = styled(FlexItem)`
     ${quicksand}
 
@@ -57,9 +96,11 @@ const StyledFlexItem = styled(FlexItem)`
         const itemShrink: typeof shrink = theme.nui?.$parent?.flex?.itemShrink;
         return shrink ?? itemShrink ?? 1;
     }};
-    flex-basis: ${({ theme, basis }) => {
-        const itemBasis: typeof basis = theme.nui?.$parent?.flex?.itemBasis;
-        return basis ?? itemBasis ?? "auto";
+    flex-basis: ${({ theme, basis, xs }) => {
+        const itemBasis: typeof basis =
+            theme.nui?.$parent?.flex?.itemXs ??
+            theme.nui?.$parent?.flex?.itemBasis;
+        return getBasis(xs ?? basis) ?? itemBasis;
     }};
     align-self: ${({ align }) => {
         switch (align) {
@@ -96,6 +137,42 @@ const StyledFlexItem = styled(FlexItem)`
                 return `${value}px`;
         }
     }};
+
+    @media (min-width: ${bp.sm}px) {
+        flex-basis: ${({ theme, basis, sm }) => {
+            const itemBasis: typeof basis =
+                theme.nui?.$parent?.flex?.itemSm ??
+                theme.nui?.$parent?.flex?.itemBasis;
+            return getBasis(sm ?? basis) ?? itemBasis;
+        }};
+    }
+
+    @media (min-width: ${bp.md}px) {
+        flex-basis: ${({ theme, basis, md }) => {
+            const itemBasis: typeof basis =
+                theme.nui?.$parent?.flex?.itemMd ??
+                theme.nui?.$parent?.flex?.itemBasis;
+            return getBasis(md ?? basis) ?? itemBasis;
+        }};
+    }
+
+    @media (min-width: ${bp.lg}px) {
+        flex-basis: ${({ theme, basis, lg }) => {
+            const itemBasis: typeof basis =
+                theme.nui?.$parent?.flex?.itemLg ??
+                theme.nui?.$parent?.flex?.itemBasis;
+            return getBasis(lg ?? basis) ?? itemBasis;
+        }};
+    }
+
+    @media (min-width: ${bp.xl}px) {
+        flex-basis: ${({ theme, basis, xl }) => {
+            const itemBasis: typeof basis =
+                theme.nui?.$parent?.flex?.itemXl ??
+                theme.nui?.$parent?.flex?.itemBasis;
+            return getBasis(xl ?? basis) ?? itemBasis;
+        }};
+    }
 `;
 
 StyledFlexItem.displayName = createComponentName("FlexItem");

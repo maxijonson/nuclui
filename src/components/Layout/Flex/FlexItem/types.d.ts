@@ -1,4 +1,4 @@
-export interface FlexItemProps {
+export type FlexItemProps = {
     /**
      * The flex-grow property to be applied
      * @default 1
@@ -18,12 +18,6 @@ export interface FlexItemProps {
     shrink?: number;
 
     /**
-     * The initial size of the size item
-     * @default auto
-     */
-    basis?: string;
-
-    /**
      * Overrides the cross-axis alignment of the container's `align` (align-items) property
      * @default auto
      */
@@ -41,7 +35,37 @@ export interface FlexItemProps {
      * @default "sm" or the `itemSpacing` value given to the parent Flex
      */
     spacing?: Nui.Breakpoint | "none" | number;
-}
+
+    /**
+     * The flex-basis to use for a breakpoint is not defined
+     */
+    basis?: number | string;
+
+    /**
+     * Flex-basis for the xs breakpoint
+     */
+    xs?: number | string;
+
+    /**
+     * Flex-basis for the sm breakpoint
+     */
+    sm?: number | string;
+
+    /**
+     * Flex-basis for the md breakpoint
+     */
+    md?: number | string;
+
+    /**
+     * Flex-basis for the lg breakpoint
+     */
+    lg?: number | string;
+
+    /**
+     * Flex-basis for the xl breakpoint
+     */
+    xl?: number | string;
+};
 
 /**
  * A flex item designed to be the children of the Flex component
