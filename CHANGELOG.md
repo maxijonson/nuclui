@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [v0.0.8-beta.0](https://github.com/maxijonson/nuclui/compare/v0.0.7-beta.0...v0.0.8-beta.0)
+
+> 9 August 2020
+
+- Add Card component [`5243f01`](https://github.com/maxijonson/nuclui/commit/5243f01d06c4990e5a496161381840f5967aadde)
+- Add FlexItem component [`66a5f08`](https://github.com/maxijonson/nuclui/commit/66a5f08cd2809164a14d72a8b6aaf41731a4c3a1)
+- Add FlexItem props for basis and breakpoints [`78e5c0f`](https://github.com/maxijonson/nuclui/commit/78e5c0f9ea41d7b61ae8dbf3eefe63e1a91b4833)
+- Add HR component [`3fa42e5`](https://github.com/maxijonson/nuclui/commit/3fa42e54c66804b138478a53c15039765fdae600)
+- Add Flex provider for FlexItems [`2073c69`](https://github.com/maxijonson/nuclui/commit/2073c69ad5b2a0b217a4af0226c245c17963ea55)
+- Add Spacer Component [`a4960c1`](https://github.com/maxijonson/nuclui/commit/a4960c12408920093e16e92c8fb06311992feb3a)
+- Rename 'as' prop to 'component' [`33c08ee`](https://github.com/maxijonson/nuclui/commit/33c08ee946c8193057e67ccb8992bb4d6d27e72d)
+- Add nuiLog unique logs [`617ac4f`](https://github.com/maxijonson/nuclui/commit/617ac4f3807ff6ba8d0156fc74b5960c195705a9)
+- Covered FlexItem tests [`5846d1e`](https://github.com/maxijonson/nuclui/commit/5846d1ea39f56605ddeb638dd460164c0672a0d2)
+- Fix Container tests [`de5f03e`](https://github.com/maxijonson/nuclui/commit/de5f03e7a009f11bd74ef71c70579db1530818e0)
+- Audit fix [`4b67d06`](https://github.com/maxijonson/nuclui/commit/4b67d06124842ce62c5e2b766580d4cc5e96682e)
+
 #### [v0.0.7-beta.0](https://github.com/maxijonson/nuclui/compare/v0.0.6-beta.2...v0.0.7-beta.0)
 
 > 27 July 2020
