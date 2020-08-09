@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [v0.0.8](https://github.com/maxijonson/nuclui/compare/v0.0.8-beta.0...v0.0.8)
+
+> 9 August 2020
+
 #### [v0.0.8-beta.0](https://github.com/maxijonson/nuclui/compare/v0.0.7-beta.0...v0.0.8-beta.0)
 
 > 9 August 2020
