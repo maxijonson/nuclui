@@ -13,6 +13,16 @@ const FormContext = React.createContext<FormCtx>({
             );
         },
         value: null,
+        errors: [],
+        formErrors: [],
+        setErrors: () => {
+            nuiLog.warn(
+                "setError has been called, but the component is not a child of Form.",
+                {
+                    once: true,
+                }
+            );
+        },
         unregister: () => undefined,
         init: () => undefined,
     }),

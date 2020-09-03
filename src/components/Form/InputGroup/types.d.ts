@@ -1,7 +1,6 @@
 export interface InputGroupProps<T> {
     name: string;
     children?: React.ReactNode;
-    initial?: T[];
 }
 
 export interface NuiInputGroup {

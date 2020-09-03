@@ -1,7 +1,12 @@
+/** Errors type */
+type E = string[];
+
 export interface RegisterFunc<T extends any = any> {
     (name: string, initialValue: T): {
-        setValue: (value: T | ((v: T) => T)) => void;
         value: T;
+        setValue: (value: T | ((v: T) => T)) => void;
+        errors: E;
+        setErrors: (error: E | E[0] | null | ((e: E) => E)) => void;
         unregister: () => void;
         init: () => void;
     };

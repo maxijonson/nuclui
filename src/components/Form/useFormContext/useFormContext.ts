@@ -4,7 +4,10 @@ import { FormContext } from "../FormContext";
 
 const useFormContext = <T extends any>(name: string, initialValue: T) => {
     const { register } = React.useContext(FormContext) as FormCtx<T>;
-    const { init, value, setValue, unregister } = register(name, initialValue);
+    const { init, value, setValue, unregister, errors, setErrors } = register(
+        name,
+        initialValue
+    );
     const hasInit = React.useRef(false);
 
     React.useEffect(() => {
@@ -13,7 +16,13 @@ const useFormContext = <T extends any>(name: string, initialValue: T) => {
         return () => unregister();
     }, [init, unregister]);
 
-    return [value, setValue, hasInit.current] as const;
+    return {
+        value,
+        setValue,
+        errors,
+        setErrors,
+        hasInit: hasInit.current,
+    } as const;
 };
 
 export default useFormContext;

@@ -7,15 +7,24 @@ import { FormContext } from "../FormContext";
 import { useFormContext } from "../useFormContext";
 import { RegisterFunc } from "../FormContext/types";
 
+const ERROR_SEP = "__IGSEP__";
+
 const InputGroup = React.memo((props) => {
-    type T = NonNullable<typeof props.initial>[0];
+    type T = any;
 
-    const [ctxValue, setCtxValue, hasInit] = useFormContext(
-        props.name,
-        props.initial ?? []
-    );
+    const {
+        value: ctxValue,
+        setValue: setCtxValue,
+        errors: ctxErrors,
+        setErrors: setCtxErrors,
+        hasInit,
+    } = useFormContext<T[]>(props.name, []);
 
-    const indexes = React.useRef({} as { [name: string]: number });
+    // Keeps track of which index each input is in the respective array
+    const dataIndexes = React.useRef({} as { [name: string]: number });
+    const errorIndexes = React.useRef({} as { [name: string]: number | null });
+
+    // Overrides the Form registry to create its own, since the InputGroup itself has to register
     const registry = React.useRef(
         {} as { [name: string]: ReturnType<RegisterFunc<T>> }
     );
@@ -25,46 +34,106 @@ const InputGroup = React.memo((props) => {
             type R = ReturnType<RegisterFunc<T>>;
 
             if (registry.current[name]) {
-                const index = indexes.current[name];
-                if (registry.current[name].value != ctxValue[index]) {
-                    registry.current[name].value = ctxValue[index];
+                const dataIndex = dataIndexes.current[name];
+                if (registry.current[name].value != ctxValue[dataIndex]) {
+                    registry.current[name].value = ctxValue[dataIndex];
                 }
+
+                const errorIndex = errorIndexes.current[name];
+                if (
+                    errorIndex != null &&
+                    _.join(registry.current[name].errors, ERROR_SEP) !=
+                        ctxErrors[errorIndex]
+                ) {
+                    // Update the error registry before returning it
+                    registry.current[name].errors = _.split(
+                        ctxErrors[errorIndex],
+                        ERROR_SEP
+                    );
+                }
+
                 return registry.current[name];
             }
 
             const init: R["init"] = () => {
                 setCtxValue((current) =>
                     produce(current, (draft) => {
-                        indexes.current[name] = draft.length;
+                        dataIndexes.current[name] = draft.length;
                         draft.push(initialValue);
-                        console.info("INDEXES", indexes.current);
                     })
                 );
+                errorIndexes.current[name] = null;
             };
 
             const setValue: R["setValue"] = (v) => {
                 setCtxValue((current) =>
                     produce(current, (draft) => {
-                        const index = indexes.current[name];
+                        const index = dataIndexes.current[name];
                         draft[index] = _.isFunction(v) ? v(draft[index]) : v;
                     })
                 );
             };
 
+            const setErrors: R["setErrors"] = (e) => {
+                setCtxErrors((current) =>
+                    produce(current, (draft) => {
+                        const index = errorIndexes.current[name];
+                        const currentErrors = index
+                            ? _.split(draft[index], ERROR_SEP)
+                            : [];
+                        const next = _.isFunction(e) ? e(currentErrors) : e;
+                        const compacted = _.compact(
+                            _.isArray(next) ? next : [next]
+                        );
+
+                        if (compacted.length && index == null) {
+                            // Create a new errorIndex
+                            errorIndexes.current[name] = draft.length;
+                            draft.push(compacted.join(ERROR_SEP));
+                        } else if (compacted.length && index != null) {
+                            // update the existing one
+                            draft[index] = compacted.join(ERROR_SEP);
+                        } else if (!compacted.length && index != null) {
+                            // remove the exisiting one
+                            draft.splice(index, 1);
+                            errorIndexes.current[name] = null;
+                            registry.current[name].errors = [];
+                            _.forEach(errorIndexes.current, (i, n) => {
+                                if (i != null && i > index) {
+                                    errorIndexes.current[n] = i - 1;
+                                }
+                            });
+                        }
+                    })
+                );
+            };
+
             const unregister: R["unregister"] = () => {
+                const errorIndex = errorIndexes.current[name];
+                if (errorIndex) {
+                    setCtxErrors((current) =>
+                        produce(current, (draft) => {
+                            draft.splice(errorIndex, 1);
+                            delete errorIndexes.current[name];
+                            _.forEach(errorIndexes.current, (i, n) => {
+                                if (i && i > errorIndex) {
+                                    errorIndexes.current[n] = i - 1;
+                                }
+                            });
+                        })
+                    );
+                }
                 setCtxValue((current) =>
                     produce(current, (draft) => {
-                        const index = indexes.current[name];
+                        const index = dataIndexes.current[name];
                         draft.splice(index, 1);
-                        delete indexes.current[name];
+                        delete dataIndexes.current[name];
                         delete registry.current[name];
-                        _.forEach(indexes.current, (i, n) => {
+                        _.forEach(dataIndexes.current, (i, n) => {
                             if (i > index) {
-                                indexes.current[n] = i - 1;
+                                dataIndexes.current[n] = i - 1;
                             }
                         });
-                        console.info("InputGroup UNREGISTER", name);
-                        console.info("INDEXES", indexes.current);
                     })
                 );
             };
@@ -72,15 +141,15 @@ const InputGroup = React.memo((props) => {
             registry.current[name] = {
                 init,
                 value: initialValue,
+                errors: [],
+                setErrors,
                 setValue,
                 unregister,
             };
             return registry.current[name];
         },
-        [ctxValue, setCtxValue]
+        [ctxErrors, ctxValue, setCtxErrors, setCtxValue]
     );
-
-    console.info("InputGroup RENDER");
 
     return (
         <FormContext.Provider value={{ register }}>
