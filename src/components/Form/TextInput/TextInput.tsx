@@ -3,20 +3,14 @@ import styled from "styled-components";
 import clsx from "clsx";
 import _ from "lodash";
 import MaskedInput from "react-text-mask";
-import { createComponentName } from "@utils";
+import { createComponentName, nuiLog } from "@utils";
 import { border, shadow, text, background, context } from "@theme";
 import { NuiTextInput, HTMLInputProps, TextInputProps } from "./types";
-import { useFormContext } from "../useFormContext";
 
 const TextInput: NuiTextInput = React.memo(
     React.forwardRef((props, ref) => {
         const {
-            initial = "",
-            initialTouched = false,
             type = "text",
-            validateWhen = "blur",
-            transformWhen = "change",
-            required = false,
             mask = false,
             guide = true,
             placeholderChar = "_",
@@ -26,118 +20,73 @@ const TextInput: NuiTextInput = React.memo(
             name,
             label,
             className,
-            validate,
-            transform,
             variant,
+            onFocus,
+            onChange,
+            onBlur,
+            transform,
             ...restProps
         } = props;
 
-        const { value, setValue, errors, setErrors } = useFormContext(
-            name,
-            initial
-        );
-        const [touched, setTouched] = React.useState(initialTouched);
         const [focused, setFocused] = React.useState(false);
+        const [touched, setTouched] = React.useState(false);
 
-        const prevChangeValue = React.useRef(value);
-        const prevBlurValue = React.useRef(value);
-
-        const runValidation = React.useCallback(
-            (v: string) => {
-                // No validation required
-                if (!validate && !required) return;
-
-                // Require that there is a value
-                if (required && !v) return setErrors("This field is required");
-
-                // Use the validation function provided
-                if (validate) {
-                    const valid = validate(v);
-                    if (valid == false || typeof valid === "string") {
-                        return setErrors(
-                            typeof valid === "string"
-                                ? valid
-                                : "Field validation failed"
-                        );
-                    }
-                }
-
-                setErrors(null);
-            },
-            [required, setErrors, validate]
-        );
+        const errors = React.useMemo(() => props.errors || [], [props.errors]);
 
         const transformValue = React.useCallback(
-            (prev: string, v: string) => (transform ? transform(prev, v) : v),
+            (v: string) => transform?.(v) || v,
             [transform]
         );
 
-        const onChange = React.useCallback<HTMLInputProps["onChange"]>(
-            (evt) => {
-                const evtValue = evt.target.value;
-                const next =
-                    transformWhen == "change"
-                        ? transformValue(prevChangeValue.current, evtValue)
-                        : evtValue;
+        const handleFocus = React.useCallback<HTMLInputProps["onFocus"]>(
+            (e) => {
+                setFocused(true);
 
-                if (validateWhen == "change") {
-                    runValidation(next);
+                if (onFocus) {
+                    onFocus(e);
                 }
-
-                setValue(next);
-                prevChangeValue.current = next;
             },
-            [
-                runValidation,
-                setValue,
-                transformValue,
-                transformWhen,
-                validateWhen,
-            ]
+            [onFocus]
         );
 
-        const onFocus = React.useCallback(() => {
-            setFocused(true);
-        }, []);
-
-        const onBlur = React.useCallback<HTMLInputProps["onBlur"]>(
-            (evt) => {
-                const evtValue = evt.target.value;
-                const next =
-                    transformWhen == "blur"
-                        ? transformValue(prevBlurValue.current, evtValue)
-                        : evtValue;
-
-                if (validateWhen == "blur") {
-                    runValidation(next);
+        const handleChange = React.useCallback<HTMLInputProps["onChange"]>(
+            (e) => {
+                if (onChange) {
+                    onChange(transformValue(e.target.value), e);
                 }
+            },
+            [onChange, transformValue]
+        );
 
-                if (next != evtValue) {
-                    setValue(next);
-                }
+        const handleBlur = React.useCallback<HTMLInputProps["onBlur"]>(
+            (e) => {
+                setFocused(false);
 
                 if (!touched) {
                     setTouched(true);
                 }
 
-                setFocused(false);
-                prevBlurValue.current = next;
+                if (onBlur) {
+                    onBlur(e);
+                }
             },
-            [
-                runValidation,
-                setValue,
-                touched,
-                transformValue,
-                transformWhen,
-                validateWhen,
-            ]
+            [onBlur, touched]
         );
 
         React.useEffect(() => {
-            runValidation(initial);
-            // This effect should only run once in the TextInput's lifecycle. Changes in the "initial" prop should have no effect to the component at all.
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, []);
+            if (mask && transform) {
+                nuiLog.warn(
+                    `TextInput: when using the "mask" prop, use the "pipe" prop instead of "transform" to avoid potential value errors`,
+                    { once: true }
+                );
+            }
+            if (!mask && pipe) {
+                nuiLog.warn(
+                    `TextInput: using the "pipe" prop without "mask" has no effect. Use the "transform" prop instead`,
+                    { once: true }
+                );
+            }
+        }, [mask, pipe, transform]);
 
         return (
             <div className={`NuiTextInput ${className}`}>
@@ -164,10 +113,9 @@ const TextInput: NuiTextInput = React.memo(
                         className="NuiTextInput__input"
                         ref={ref}
                         type={type}
-                        onChange={onChange}
-                        onBlur={onBlur}
-                        onFocus={onFocus}
-                        value={value}
+                        onChange={handleChange}
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
                         mask={mask}
                         guide={guide}
                         placeholderChar={placeholderChar}
@@ -216,6 +164,8 @@ const StyledTextInput = styled(TextInput)`
 
     width: 30ch;
     margin: 10px 0;
+    opacity: ${({ disabled }) => (disabled ? "0.5" : "1")};
+    pointer-events: ${({ disabled }) => (disabled ? "none" : "all")};
 
     & .NuiTextInput__input {
         box-sizing: border-box;
@@ -226,6 +176,14 @@ const StyledTextInput = styled(TextInput)`
 
         &:focus {
             outline: none;
+        }
+
+        &:-webkit-autofill,
+        &:-webkit-autofill:hover, 
+        &:-webkit-autofill:focus {
+            -webkit-text-fill-color: inherit;
+            box-shadow: 0 0 0px 1000px inherit inset;
+            transition: background-color 5000s ease-in-out 0s;
         }
     }
 
@@ -263,6 +221,7 @@ const StyledTextInput = styled(TextInput)`
 
         box-sizing: border-box;
         transition: background-image 0.2s, border-color 0.2s, background-size 0.2s;
+        background-image: ${getUnderline("primary")};
         background-repeat: no-repeat;
         background-position: center;
         background-size: 0% 100%;

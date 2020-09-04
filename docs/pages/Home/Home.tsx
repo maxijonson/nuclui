@@ -36,7 +36,7 @@ const UseFormTest = React.memo(() => {
             last: {
                 initial: "",
                 validate: (v) => {
-                    if (v == "error") return ["error"];
+                    if (v == "error" || v == "Chin") return ["error"];
                 },
             },
             email: {
@@ -47,249 +47,56 @@ const UseFormTest = React.memo(() => {
             },
             postalcode: {
                 initial: "",
+                validate: (v) => {
+                    if (!/^[A-Z]\d[A-Z]\s\d[A-Z]\d$/.test(v)) {
+                        return ["Invalid postal code"];
+                    }
+                },
             },
         },
     });
 
-    const onChangeFirst = React.useCallback(
-        (e) => {
-            fields.first.onChange(e.target.value);
-        },
-        [fields.first]
-    );
-    const onChangeLast = React.useCallback(
-        (e) => {
-            fields.last.onChange(e.target.value);
-        },
-        [fields.last]
-    );
-
-    return (
-        <>
-            <input type="text" {...fields.first} onChange={onChangeFirst} />
-            <div>{fields.first.errors.length}</div>
-            <input type="text" {...fields.last} onChange={onChangeLast} />
-            <div>{fields.last.errors.length}</div>
-        </>
-    );
-});
-
-const TypicalForm = () => {
-    const validateEmail = React.useCallback((value: string) => {
-        if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value))
-            return "Enter a valid email address";
-    }, []);
-
-    const validatePostalCode = React.useCallback((value: string) => {
-        if (!/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(value))
-            return "Enter a valid postal code";
-    }, []);
-
-    const postalCodeMask = React.useMemo(
+    const mask = React.useMemo(
         () => [/[A-Za-z]/, /\d/, /[A-Za-z]/, " ", /\d/, /[A-Za-z]/, /\d/],
         []
     );
 
-    const transformPostalCode = React.useCallback(
-        (_prev: string, next: string) => next.toUpperCase(),
+    const pipe = React.useCallback<NonNullable<TextInputProps["pipe"]>>(
+        (conformed) => conformed.toUpperCase(),
         []
     );
-
-    const onSubmit = React.useCallback<
-        NonNullable<React.ComponentProps<typeof Form>["onSubmit"]>
-    >((fd, evt) => {
-        evt.preventDefault();
-        console.info("fd", fd);
-    }, []);
 
     return (
         <>
-            <Form onSubmit={onSubmit}>
-                <button type="submit" hidden />
-                <TextInput
-                    name="first"
-                    label="First Name"
-                    placeholder="First Name"
-                    required
-                    autoComplete="off"
-                />
-                <TextInput
-                    name="last"
-                    label="Last Name"
-                    placeholder="Last Name"
-                    required
-                    autoComplete="off"
-                />
-                <TextInput
-                    name="email"
-                    label="Email"
-                    placeholder="Email"
-                    validate={validateEmail}
-                    validateWhen="blur"
-                    required
-                    autoComplete="off"
-                />
-                <TextInput
-                    name="confirm"
-                    label="Confirm"
-                    placeholder="Confirm"
-                    validate={validateEmail}
-                    validateWhen="blur"
-                    required
-                    autoComplete="off"
-                />
-                <TextInput
-                    name="postalcode"
-                    label="Postal Code"
-                    placeholder="Postal Code"
-                    validate={validatePostalCode}
-                    transform={transformPostalCode}
-                    mask={postalCodeMask}
-                    validateWhen="blur"
-                    required
-                    autoComplete="off"
-                />
-            </Form>
+            <TextInput
+                {...fields.first}
+                label="First Name"
+                variant="filled-underline"
+            />
+            <div>{fields.first.errors.length}</div>
+            <TextInput
+                {...fields.last}
+                label="Last Name"
+                variant="filled-none"
+            />
+            <div>{fields.last.errors.length}</div>
+            <TextInput
+                {...fields.postalcode}
+                label="Postal Code"
+                mask={mask}
+                pipe={pipe}
+                guide={false}
+            />
+            <div>{fields.postalcode.errors.length}</div>
         </>
     );
-};
+});
 
 const Home = React.memo(() => {
-    const [inputs, setInputs] = React.useState<string[][]>([
-        [Date.now().toString()],
-    ]);
-    const ref = React.useRef<HTMLButtonElement>(null);
-
-    const addInputGroup = React.useCallback(() => {
-        setInputs((state) =>
-            produce(state, (draft) => {
-                draft.push([]);
-            })
-        );
-    }, []);
-
-    const addInput = React.useCallback(
-        (index: number) => () => {
-            setInputs((state) =>
-                produce(state, (draft) => {
-                    draft[index].push(Date.now().toString());
-                })
-            );
-        },
-        []
-    );
-
-    const removeInput = React.useCallback(
-        (group: number, index: number) => () => {
-            setInputs((state) =>
-                produce(state, (draft) => {
-                    draft[group].splice(index, 1);
-                })
-            );
-        },
-        []
-    );
-
-    const onSubmit = React.useCallback<
-        NonNullable<React.ComponentProps<typeof Form>["onSubmit"]>
-    >((fd, evt) => {
-        evt.preventDefault();
-        console.info("fd", fd);
-    }, []);
-
-    const buttonClick = React.useCallback(() => {
-        if (ref.current) {
-            ref.current.click();
-        }
-    }, []);
-
-    const validate = React.useCallback((v: string) => {
-        if (v == "custom") return "this is a custom error";
-        if (v == "default") return false;
-    }, []);
-
-    const transform = React.useCallback((prev: string, v: string) => {
-        console.warn("transform", prev, v);
-        if (v.length == 3) return `${v} `;
-        if (v.length == 4 && prev.length > 4) return v.substring(0, 3);
-        if (v.length == 4) return `${v.substring(0, 3)} ${v[3]}`;
-        if (v.length > 7) return prev;
-        return v;
-    }, []);
-
     return (
         <Container maxWidth="lg">
             <div>useForm Test</div>
             <UseFormTest />
-            <div>Typical Form</div>
-            <TypicalForm />
-            <div>With Form</div>
-            <button type="button" onClick={buttonClick} children="Submit" />
-            <Form onSubmit={onSubmit}>
-                <button type="submit" ref={ref} hidden />
-                {/* {_.map(
-                    [
-                        "outline",
-                        "underline",
-                        "filled",
-                        "filled-underline",
-                        "filled-none",
-                        "none",
-                    ] as NonNullable<TextInputProps["variant"]>[],
-                    (variant) => (
-                        <TextInput
-                            key={variant}
-                            name={variant}
-                            initial={variant}
-                            label={variant}
-                            placeholder={variant}
-                            variant={variant}
-                            autoComplete="off"
-                        />
-                    )
-                )} */}
-                <HR />
-                {_.map(inputs, (group, i) => (
-                    <div key={i}>
-                        <InputGroup name={`group${i + 1}`}>
-                            {_.map(group, (input, j) => (
-                                <Flex key={input}>
-                                    <TextInput
-                                        name={input}
-                                        required
-                                        initial="Hello"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={removeInput(i, j)}
-                                        children="Remove"
-                                    />
-                                </Flex>
-                            ))}
-                        </InputGroup>
-                        <button
-                            type="button"
-                            onClick={addInput(i)}
-                            children="Add Input"
-                        />
-                    </div>
-                ))}
-                <button
-                    type="button"
-                    onClick={addInputGroup}
-                    children="Add Group"
-                />
-                {/* <TextInput
-                    name="test"
-                    label="Test"
-                    validate={validate}
-                    validateWhen="blur"
-                    required
-                    initialTouched
-                    transform={transform}
-                    transformWhen="change"
-                /> */}
-            </Form>
             Nuclui is under developement! For now, The docs website is only a
             sandbox for developing the components. Docs will be gradually
             created once the core components are made!

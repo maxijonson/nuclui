@@ -131,7 +131,6 @@ export const useForm = <T extends {}>(options: UseFormOptions<T>) => {
 
     _.forEach(formErrors, (error, name) => {
         if (!_.isEqual(error, fieldProps.current[name as N].errors)) {
-            console.warn("update", name);
             fieldProps.current[name as N].errors = error;
         }
     });
