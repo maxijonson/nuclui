@@ -19,8 +19,12 @@ import { FormContext } from "./FormContext";
 interface UseFormOptions<T extends {}> {
     fields: {
         [name in keyof T]: {
+            /** Initial value */
             initial: T[name];
+            /** Validation function. Errors are returned in a string[] */
             validate?: (value: T[name], values: T) => void | null | string[];
+            /** Bind the field to other fields. When the binded field value updates, this field is re-evaluated. This is useful when some fields' validation depends on another fields' value */
+            bind?: (keyof T)[];
         };
     };
 }
@@ -39,80 +43,96 @@ type FormErrors<T extends {}> = {
 };
 
 export const useForm = <T extends {}>(options: UseFormOptions<T>) => {
+    // Shortcut for keyof T, since some places (lodash) require it to be typed every time (annoying)
     type N = keyof T;
 
+    // The final form value
     const [formData, setFormData] = React.useState(
         _.reduce(
             options.fields,
             (data, field, name) => {
-                data[name as keyof T] = field.initial;
+                data[name as N] = field.initial;
                 return data;
             },
             {} as T
         )
     );
     const formDataRef = React.useRef(formData);
+    const formDataChanges = React.useRef<N[]>([]);
 
+    const validate = React.useCallback(
+        (
+            validateFn:
+                | ((value: T[N], values: T) => void | null | string[])
+                | undefined,
+            v: T[N],
+            currentErrors: string[]
+        ) => {
+            // No validation
+            if (!validateFn) return currentErrors;
+
+            const errors = validateFn(v, formDataRef.current) || [];
+
+            // No errors between validations, return the current ones (keep the reference)
+            if (!errors.length && !currentErrors.length) return currentErrors;
+            // No more errors, whatever the previous amount was, return the new ones (empty)
+            if (!errors.length) return errors;
+            // Last check (and most expensive). Errors are the same, return the current ones (keep the reference)
+            if (_.isEqual(errors, currentErrors)) return currentErrors;
+            // Errors don't match, return the new errors
+            return errors;
+        },
+        []
+    );
+
+    // Errors accross all fields
     const [formErrors, setFormErrors] = React.useState(
         _.reduce(
             options.fields,
-            (errors, _field, name) => {
-                errors[name as keyof T] = [];
+            (errors, field, name) => {
+                errors[name as N] = validate(field.validate, field.initial, []);
                 return errors;
             },
             {} as FormErrors<T>
         )
     );
     const formErrorsRef = React.useRef(formErrors);
+    const formErrorsChanges = React.useRef<N[]>([]);
 
     const fieldProps = React.useRef(
         _.reduce(
             options.fields,
             (fields, field, name) => {
-                fields[name as keyof T] = {
-                    name: name as keyof T,
-                    value: formDataRef.current[name as keyof T],
-                    errors: formErrorsRef.current[name as keyof T],
+                fields[name as N] = {
+                    name: name as N,
+                    value: formData[name as N],
+                    errors: formErrors[name as N],
                     onChange: (v) => {
-                        if (field.validate) {
-                            const errors = field.validate(
-                                v,
-                                formDataRef.current
+                        // Validate the next value
+                        const currentErrors = formErrorsRef.current[name as N];
+                        const errors = validate(
+                            field.validate,
+                            v,
+                            currentErrors
+                        );
+                        if (errors != currentErrors) {
+                            setFormErrors(
+                                produce((e) => {
+                                    e[name] = errors;
+                                    formErrorsRef.current[name as N] = errors;
+                                    formErrorsChanges.current.push(name as N);
+                                })
                             );
-                            const currentErrors =
-                                formErrorsRef.current[name as keyof T];
-
-                            if (
-                                (!errors || errors.length == 0) &&
-                                currentErrors.length > 0
-                            ) {
-                                setFormErrors(
-                                    produce((e) => {
-                                        e[name] = [];
-                                        formErrorsRef.current[
-                                            name as keyof T
-                                        ] = [];
-                                    })
-                                );
-                            } else if (
-                                errors &&
-                                !_.isEqual(errors, currentErrors)
-                            ) {
-                                setFormErrors(
-                                    produce((e) => {
-                                        e[name] = errors;
-                                        formErrorsRef.current[
-                                            name as keyof T
-                                        ] = errors;
-                                    })
-                                );
-                            }
                         }
 
+                        // Update the value if it changed
                         setFormData(
                             produce((data) => {
-                                data[name] = v;
-                                formDataRef.current[name as keyof T] = v;
+                                if (v != data[name]) {
+                                    data[name] = v;
+                                    formDataRef.current[name as N] = v;
+                                    formDataChanges.current.push(name as N);
+                                }
                             })
                         );
                     },
@@ -123,17 +143,49 @@ export const useForm = <T extends {}>(options: UseFormOptions<T>) => {
         )
     );
 
-    _.forEach(formData, (data, name) => {
-        if (data != fieldProps.current[name as N].value) {
-            fieldProps.current[name as N].value = data;
-        }
-    });
+    // Keep the bindings between each fields in a collection
+    const bindings = React.useRef(
+        _.reduce(
+            options.fields,
+            (binds, field, name) => {
+                if (!binds[name as N]) binds[name as N] = [];
+                _.forEach(field.bind, (b) => {
+                    if (!binds[b as N]) binds[b as N] = [];
+                    binds[b].push(name as N);
+                });
+                return binds;
+            },
+            {} as { [name in N]: N[] }
+        )
+    );
 
-    _.forEach(formErrors, (error, name) => {
-        if (!_.isEqual(error, fieldProps.current[name as N].errors)) {
-            fieldProps.current[name as N].errors = error;
+    // Update the fieldProps value individually to prevent re-renders of unchanged fields. Also update the binded fields of each changed fields.
+    _.forEach(formDataChanges.current, (name) => {
+        const data = formData[name];
+
+        // Don't update unecessarily
+        if (data != fieldProps.current[name].value) {
+            // Update the fieldProp.value
+            fieldProps.current[name].value = data;
+            // Trigger an update of the binded fields
+            _.forEach(bindings.current[name], (binding) => {
+                fieldProps.current[binding].onChange(
+                    fieldProps.current[binding].value
+                );
+            });
         }
     });
+    formDataChanges.current = [];
+
+    // Same as the above loop, but for errors.
+    _.forEach(formErrorsChanges.current, (name) => {
+        const errors = formErrors[name];
+
+        if (!_.isEqual(errors, fieldProps.current[name].errors)) {
+            fieldProps.current[name].errors = errors;
+        }
+    });
+    formErrorsChanges.current = [];
 
     return [fieldProps.current] as const;
 };

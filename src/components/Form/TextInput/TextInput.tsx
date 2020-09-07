@@ -159,11 +159,14 @@ const getUnderline = (type: "primary" | "danger") => ({
     }
 };
 
+const ANIMATE_TIME = 0.2;
+
 const StyledTextInput = styled(TextInput)`
     ${context}
 
     width: 30ch;
     margin: 10px 0;
+    transition: opacity ${ANIMATE_TIME}s;
     opacity: ${({ disabled }) => (disabled ? "0.5" : "1")};
     pointer-events: ${({ disabled }) => (disabled ? "none" : "all")};
 
@@ -190,7 +193,7 @@ const StyledTextInput = styled(TextInput)`
     & label, & .NuiTextInput__error {
         ${text.secondary}
 
-        transition: color 0.2s;
+        transition: color ${ANIMATE_TIME}s;
         font-size: 0.8em;
         font-weight: 500;
         text-rendering: optimizeLegibility !important;
@@ -220,7 +223,7 @@ const StyledTextInput = styled(TextInput)`
         }}
 
         box-sizing: border-box;
-        transition: background-image 0.2s, border-color 0.2s, background-size 0.2s;
+        transition: background-image ${ANIMATE_TIME}s, border-color ${ANIMATE_TIME}s, background-size ${ANIMATE_TIME}s;
         background-image: ${getUnderline("primary")};
         background-repeat: no-repeat;
         background-position: center;

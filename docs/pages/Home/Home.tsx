@@ -30,20 +30,27 @@ const UseFormTest = React.memo(() => {
             first: {
                 initial: "",
                 validate: (v) => {
-                    if (v == "error") return ["error"];
+                    if (v.length == 0) return ["This field is required"];
                 },
             },
             last: {
                 initial: "",
                 validate: (v) => {
-                    if (v == "error" || v == "Chin") return ["error"];
+                    if (v.length == 0) return ["This field is required"];
                 },
             },
             email: {
                 initial: "",
+                validate: (v) => {
+                    if (v.length == 0) return ["This field is required"];
+                },
             },
             confirm: {
                 initial: "",
+                validate: (v, fd) => {
+                    if (v != fd.email) return ["Emails do not match"];
+                },
+                bind: ["email"],
             },
             postalcode: {
                 initial: "",
@@ -55,6 +62,7 @@ const UseFormTest = React.memo(() => {
             },
         },
     });
+    console.warn("fields", fields);
 
     const mask = React.useMemo(
         () => [/[A-Za-z]/, /\d/, /[A-Za-z]/, " ", /\d/, /[A-Za-z]/, /\d/],
@@ -67,28 +75,25 @@ const UseFormTest = React.memo(() => {
     );
 
     return (
-        <>
+        <form autoComplete="off">
+            <TextInput {...fields.first} label="First Name" />
+            <TextInput {...fields.last} label="Last Name" variant="filled" />
+            <TextInput {...fields.email} label="Email" variant="filled-none" />
             <TextInput
-                {...fields.first}
-                label="First Name"
+                {...fields.confirm}
+                label="Confirm Email"
                 variant="filled-underline"
+                disabled={fields.email.value == ""}
             />
-            <div>{fields.first.errors.length}</div>
-            <TextInput
-                {...fields.last}
-                label="Last Name"
-                variant="filled-none"
-            />
-            <div>{fields.last.errors.length}</div>
             <TextInput
                 {...fields.postalcode}
                 label="Postal Code"
+                variant="underline"
                 mask={mask}
                 pipe={pipe}
                 guide={false}
             />
-            <div>{fields.postalcode.errors.length}</div>
-        </>
+        </form>
     );
 });
 
