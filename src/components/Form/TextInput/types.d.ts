@@ -136,6 +136,19 @@ export interface TextInputProps {
     label?: string;
 
     /**
+     * Gets called when the value of the input changes. The first parameter is the next value and the second is the input change event.
+     */
+    onChange?: (
+        v: string,
+        e?: Parameters<HTMLInputProps["onChange"]>[0]
+    ) => void;
+
+    /**
+     * The errors associated with the field. Only the first one is shown.
+     */
+    errors?: string[];
+
+    /**
      * The style variant of the input \
      * **outline** - the input is surrounded by a border \
      * **underline** - the input is underlined \
@@ -202,19 +215,19 @@ export interface TextInputProps {
      */
     showMask?: MaskedInputProps["showMask"];
 
-    onChange?: (
-        v: string,
-        e?: Parameters<HTMLInputProps["onChange"]>[0]
-    ) => void;
-
-    errors?: string[];
-
     /**
      * Custom transformer function to change the value of the text field based on the given value.
      *
      * **NOTE**: If you are using the `mask` prop, use the `pipe` prop instead of this one
      */
     transform?: (value: string) => string;
+
+    /**
+     * If the input should be displayed as inline-block
+     *
+     * @default false
+     */
+    inline?: boolean;
 }
 
 /**

@@ -34,7 +34,7 @@ type FieldProps<T extends {}> = {
         name: name;
         value: T[name];
         errors: string[];
-        onChange: (v: T[name]) => void;
+        onChange: (v: T[name] | ((current: T[name]) => T[name])) => void;
     };
 };
 
@@ -108,11 +108,15 @@ export const useForm = <T extends {}>(options: UseFormOptions<T>) => {
                     value: formData[name as N],
                     errors: formErrors[name as N],
                     onChange: (v) => {
+                        const next = _.isFunction(v)
+                            ? v(formDataRef.current[name as N])
+                            : v;
+
                         // Validate the next value
                         const currentErrors = formErrorsRef.current[name as N];
                         const errors = validate(
                             field.validate,
-                            v,
+                            next,
                             currentErrors
                         );
                         if (errors != currentErrors) {
@@ -128,9 +132,9 @@ export const useForm = <T extends {}>(options: UseFormOptions<T>) => {
                         // Update the value if it changed
                         setFormData(
                             produce((data) => {
-                                if (v != data[name]) {
-                                    data[name] = v;
-                                    formDataRef.current[name as N] = v;
+                                if (next != data[name]) {
+                                    data[name] = next;
+                                    formDataRef.current[name as N] = next;
                                     formDataChanges.current.push(name as N);
                                 }
                             })
@@ -187,7 +191,7 @@ export const useForm = <T extends {}>(options: UseFormOptions<T>) => {
     });
     formErrorsChanges.current = [];
 
-    return [fieldProps.current] as const;
+    return [fieldProps.current, formData] as const;
 };
 
 const Form = React.memo(

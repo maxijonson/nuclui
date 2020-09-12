@@ -16,16 +16,8 @@ import {
 import { TextInputProps } from "nuclui/components/Form/TextInput/types";
 import { useForm } from "nuclui/components/Form/Form";
 
-interface FD {
-    first: string;
-    last: string;
-    email: string;
-    confirm: string;
-    postalcode: string;
-}
-
 const UseFormTest = React.memo(() => {
-    const [fields] = useForm<FD>({
+    const [fields, data] = useForm({
         fields: {
             first: {
                 initial: "",
@@ -60,9 +52,50 @@ const UseFormTest = React.memo(() => {
                     }
                 },
             },
+            adresses: {
+                initial: ["Address One", "Address Two"] as string[],
+            },
+            grades: {
+                initial: [{ class: "", grade: 0 }] as {
+                    class: string;
+                    grade: number;
+                }[],
+            },
+            contact: {
+                initial: { type: "", phone: "" },
+            },
         },
     });
-    console.warn("fields", fields);
+
+    const onAddressChange = React.useCallback(
+        (index: number) => (v: string) => {
+            fields.adresses.onChange((current) =>
+                produce(current, (draft) => {
+                    draft[index] = v;
+                })
+            );
+        },
+        [fields.adresses]
+    );
+
+    const onContactChange = React.useCallback(
+        (index: keyof typeof fields.contact.value) => (v: string) => {
+            fields.contact.onChange((current) =>
+                produce(current, (draft) => {
+                    draft[index] = v;
+                })
+            );
+        },
+        [fields]
+    );
+
+    const onSubmit = React.useCallback(
+        (e: any) => {
+            e.preventDefault();
+            console.info(data);
+        },
+        [data]
+    );
 
     const mask = React.useMemo(
         () => [/[A-Za-z]/, /\d/, /[A-Za-z]/, " ", /\d/, /[A-Za-z]/, /\d/],
@@ -75,7 +108,7 @@ const UseFormTest = React.memo(() => {
     );
 
     return (
-        <form autoComplete="off">
+        <form autoComplete="off" onSubmit={onSubmit}>
             <TextInput {...fields.first} label="First Name" />
             <TextInput {...fields.last} label="Last Name" variant="filled" />
             <TextInput {...fields.email} label="Email" variant="filled-none" />
@@ -92,6 +125,31 @@ const UseFormTest = React.memo(() => {
                 mask={mask}
                 pipe={pipe}
                 guide={false}
+            />
+            {_.map(fields.adresses.value, (v, i) => (
+                <TextInput
+                    key={`Address${i}`}
+                    label={`Address ${i + 1}`}
+                    value={v}
+                    onChange={onAddressChange(i)}
+                />
+            ))}
+            <TextInput
+                inline
+                label="Contact Type"
+                value={fields.contact.value.type}
+                onChange={onContactChange("type")}
+            />
+            <TextInput
+                inline
+                label="Contact Phone"
+                value={fields.contact.value.phone}
+                onChange={onContactChange("phone")}
+            />
+            <button
+                type="submit"
+                children="Submit"
+                style={{ display: "block" }}
             />
         </form>
     );

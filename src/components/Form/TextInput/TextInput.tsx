@@ -25,6 +25,7 @@ const TextInput: NuiTextInput = React.memo(
             onChange,
             onBlur,
             transform,
+            inline,
             ...restProps
         } = props;
 
@@ -164,8 +165,9 @@ const ANIMATE_TIME = 0.2;
 const StyledTextInput = styled(TextInput)`
     ${context}
 
+    display: ${({ inline }) => (inline ? "inline-block" : "block")};
     width: 30ch;
-    margin: 10px 0;
+    margin: ${({ inline }) => (inline ? "10px 10px 10px 0" : "10px 0")};
     transition: opacity ${ANIMATE_TIME}s;
     opacity: ${({ disabled }) => (disabled ? "0.5" : "1")};
     pointer-events: ${({ disabled }) => (disabled ? "none" : "all")};
