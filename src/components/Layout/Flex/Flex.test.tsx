@@ -236,4 +236,41 @@ describe("Flex", () => {
             expect(wrapper).toHaveStyleRule("align-items", "baseline");
         });
     });
+
+    describe("gap", () => {
+        it("should use the default gap value", () => {
+            const wrapper = shallow(<Flex />);
+            expect(wrapper).not.toHaveStyleRule("gap");
+        });
+
+        it("should use the xs gap value", () => {
+            const wrapper = shallow(<Flex gap="xs" />);
+            expect(wrapper).toHaveStyleRule("gap", "5px");
+        });
+
+        it("should use the sm gap value", () => {
+            const wrapper = shallow(<Flex gap="sm" />);
+            expect(wrapper).toHaveStyleRule("gap", "10px");
+        });
+
+        it("should use the md gap value", () => {
+            const wrapper = shallow(<Flex gap="md" />);
+            expect(wrapper).toHaveStyleRule("gap", "15px");
+        });
+
+        it("should use the lg gap value", () => {
+            const wrapper = shallow(<Flex gap="lg" />);
+            expect(wrapper).toHaveStyleRule("gap", "20px");
+        });
+
+        it("should use the xl gap value", () => {
+            const wrapper = shallow(<Flex gap="xl" />);
+            expect(wrapper).toHaveStyleRule("gap", "30px");
+        });
+
+        it("should use the custom gap value", () => {
+            const wrapper = shallow(<Flex gap={7} />);
+            expect(wrapper).toHaveStyleRule("gap", "7px");
+        });
+    });
 });

@@ -153,7 +153,13 @@ const UseFormTest = React.memo(() => {
                 value={fields.contact.value.phone}
                 onChange={onContactChange("phone")}
             />
-            <Flex justify="spaceBetween" itemBasis={5} itemSpacing={0} inline>
+            <Flex
+                justify="spaceBetween"
+                itemBasis={5}
+                itemSpacing="none"
+                inline
+                gap="sm"
+            >
                 <FlexItem>
                     <TextInput
                         size="100%"

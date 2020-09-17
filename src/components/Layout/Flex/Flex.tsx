@@ -13,6 +13,7 @@ const Flex: NuiFlex = React.forwardRef((props, ref) => {
         wrap,
         justify,
         align,
+        gap,
         children,
         itemGrow,
         itemShrink,
@@ -61,6 +62,25 @@ const StyledFlex = styled(Flex)`
     display: ${({ inline }) => (inline ? "inline-flex" : "flex")};
     position: relative;
     box-sizing: border-box;
+    width: 100%;
+    gap: ${({ gap }) => {
+        switch (gap) {
+            case "xs":
+                return "5px";
+            case "sm":
+                return "10px";
+            case "md":
+                return "15px";
+            case "lg":
+                return "20px";
+            case "xl":
+                return "30px";
+            case undefined:
+                return undefined;
+            default:
+                return `${gap}px`;
+        }
+    }};
     flex-direction: ${({ direction }) => {
         switch (direction) {
             case "columnReverse":
@@ -117,7 +137,6 @@ const StyledFlex = styled(Flex)`
                 return align;
         }
     }};
-    width: 100%;
 `;
 
 StyledFlex.displayName = createComponentName("Flex");

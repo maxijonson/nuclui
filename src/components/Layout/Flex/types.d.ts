@@ -51,6 +51,14 @@ export interface FlexProps {
         | "baseline";
 
     /**
+     * Similar to `itemSpacing`, except that it takes advantage of the CSS "gap" property. This is useful when there should be spacing between items but not on the edges.
+     * A common combinaison would be to set `itemSpacing` to "none" and `gap` to something.
+     *
+     * @note When specified as a number, the number is the amount of pixels
+     */
+    gap?: Nui.Breakpoint | number;
+
+    /**
      * Overrides the child FlexItems' default `grow` value
      */
     itemGrow?: FlexItemProps["grow"];
