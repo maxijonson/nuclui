@@ -25,7 +25,9 @@ const TextInput: NuiTextInput = React.memo(
             onChange,
             onBlur,
             transform,
-            inline,
+            append,
+            prepend,
+            size,
             ...restProps
         } = props;
 
@@ -108,6 +110,15 @@ const TextInput: NuiTextInput = React.memo(
                         errors.length && touched && "invalid",
                     ])}
                 >
+                    {prepend && (
+                        <div
+                            className={clsx([
+                                "NuiTextInput__prepend",
+                                focused && "focused",
+                            ])}
+                            children={prepend}
+                        />
+                    )}
                     <MaskedInput
                         {...restProps}
                         name={name}
@@ -124,6 +135,12 @@ const TextInput: NuiTextInput = React.memo(
                         showMask={showMask}
                         pipe={pipe}
                     />
+                    {append && (
+                        <div
+                            className="NuiTextInput__append"
+                            children={append}
+                        />
+                    )}
                 </div>
                 {errors.length > 0 && touched && (
                     <div
@@ -160,23 +177,26 @@ const getUnderline = (type: "primary" | "danger") => ({
     }
 };
 
-const ANIMATE_TIME = 0.2;
+const TRANSITION_TIME = 0.2;
 
 const StyledTextInput = styled(TextInput)`
     ${context}
 
-    display: ${({ inline }) => (inline ? "inline-block" : "block")};
-    width: 30ch;
-    margin: ${({ inline }) => (inline ? "10px 10px 10px 0" : "10px 0")};
-    transition: opacity ${ANIMATE_TIME}s;
+    position: relative;
+    max-width: 100%;
+    margin: 10px 0;
+    transition: opacity ${TRANSITION_TIME}s;
     opacity: ${({ disabled }) => (disabled ? "0.5" : "1")};
     pointer-events: ${({ disabled }) => (disabled ? "none" : "all")};
+    width: ${({ size }) => {
+        if (size) return typeof size === "string" ? size : `${size}ch`;
+        return "30ch";
+    }};
 
     & .NuiTextInput__input {
         box-sizing: border-box;
         width: 100%;
         background: transparent;
-        padding: 8px;
         border: none;
 
         &:focus {
@@ -192,10 +212,45 @@ const StyledTextInput = styled(TextInput)`
         }
     }
 
-    & label, & .NuiTextInput__error {
+    & .NuiTextInput__input, & .NuiTextInput__prepend, & .NuiTextInput__append {
+        padding: 8px;
+        font-size: 16px;
+        line-height: 19px;
+    }
+
+    & .NuiTextInput__prepend, & .NuiTextInput__append {
+        ${({ variant }) => {
+            switch (variant) {
+                case "filled":
+                case "filled-none":
+                case "filled-underline":
+                    return background.dimmed;
+                default:
+                    return background.secondary;
+            }
+        }}
+
+        display: flex;
+        align-items: center;
+        margin-bottom: 0px;
+
+        &.focused {
+            padding-bottom: 7px;
+            margin-bottom: 1px;
+        }
+
+        & > svg {
+            fill: currentColor;
+            width: 1em;
+            height: 1em;
+            user-select: none;
+        }
+    }
+
+    & .NuiTextInput__label, & .NuiTextInput__error {
         ${text.secondary}
 
-        transition: color ${ANIMATE_TIME}s;
+        transition: color ${TRANSITION_TIME}s;
         font-size: 0.8em;
         font-weight: 500;
         text-rendering: optimizeLegibility !important;
@@ -224,8 +279,9 @@ const StyledTextInput = styled(TextInput)`
             }
         }}
 
+        display: flex;
         box-sizing: border-box;
-        transition: background-image ${ANIMATE_TIME}s, border-color ${ANIMATE_TIME}s, background-size ${ANIMATE_TIME}s;
+        transition: background-image ${TRANSITION_TIME}s, border-color ${TRANSITION_TIME}s, background-size ${TRANSITION_TIME}s;
         background-image: ${getUnderline("primary")};
         background-repeat: no-repeat;
         background-position: center;
@@ -237,7 +293,6 @@ const StyledTextInput = styled(TextInput)`
                 case "filled":
                 case "filled-underline":
                 case "outline":
-                case "filled-none":
                     return "0 1px 2px -1px var(--nui-shadow)";
                 default:
                     return undefined;

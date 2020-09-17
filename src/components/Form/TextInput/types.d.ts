@@ -223,11 +223,19 @@ export interface TextInputProps {
     transform?: (value: string) => string;
 
     /**
-     * If the input should be displayed as inline-block
-     *
-     * @default false
+     * Prepend a component in the InputContainer (before the input)
      */
-    inline?: boolean;
+    prepend?: React.ReactNode;
+
+    /**
+     * Append a component in the InputContainer (after the input)
+     */
+    append?: React.ReactNode;
+
+    /**
+     * Size of the input (number in ch or string for custom size type)
+     */
+    size?: number | string;
 }
 
 /**

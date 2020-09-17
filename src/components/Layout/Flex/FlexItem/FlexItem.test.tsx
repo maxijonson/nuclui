@@ -267,6 +267,21 @@ describe("Flex", () => {
             );
         });
 
+        it("should warn when using non-integer provided values", () => {
+            mockConsole("warn");
+            const wrapper = mount(
+                <Flex itemBasis={5.5}>
+                    <FlexItem />
+                </Flex>
+            );
+            const provided = wrapper.find(FlexItem);
+            expect(provided).toHaveStyleRule("flex-basis", "50%");
+            expect(console.warn).toHaveBeenLastCalledWith(
+                "(NUI)",
+                "FlexItem basis, when specified as a number, must be an integer. The rounded number will be used"
+            );
+        });
+
         it("should clamp non-integer values to the max", () => {
             mockConsole("warn");
             const wrapper = shallow(<FlexItem basis={12.6} />);
@@ -290,6 +305,22 @@ describe("Flex", () => {
             expect(wrapper).toHaveStyleRule("flex-basis", "100%");
         });
 
+        it("should warn when using provided values over max", () => {
+            mockConsole("warn");
+            const wrapper = mount(
+                <Flex itemBasis={13}>
+                    <FlexItem />
+                </Flex>
+            );
+            const provided = wrapper.find(FlexItem);
+            expect(console.warn).toHaveBeenCalledTimes(1);
+            expect(console.warn).toHaveBeenLastCalledWith(
+                "(NUI)",
+                "FlexItem basis, when specified as a number, must be between 0 and 12. Clamped value will be used."
+            );
+            expect(provided).toHaveStyleRule("flex-basis", "100%");
+        });
+
         it("should warn when using values under min", () => {
             mockConsole("warn");
             const wrapper = shallow(<FlexItem basis={-1} />);
@@ -299,6 +330,22 @@ describe("Flex", () => {
                 "FlexItem basis, when specified as a number, must be between 0 and 12. Clamped value will be used."
             );
             expect(wrapper).toHaveStyleRule("flex-basis", `0%`);
+        });
+
+        it("should warn when using provided values under min", () => {
+            mockConsole("warn");
+            const wrapper = mount(
+                <Flex itemBasis={-1}>
+                    <FlexItem />
+                </Flex>
+            );
+            const provided = wrapper.find(FlexItem);
+            expect(console.warn).toHaveBeenCalledTimes(1);
+            expect(console.warn).toHaveBeenLastCalledWith(
+                "(NUI)",
+                "FlexItem basis, when specified as a number, must be between 0 and 12. Clamped value will be used."
+            );
+            expect(provided).toHaveStyleRule("flex-basis", "0%");
         });
     });
 

@@ -5,6 +5,7 @@ const defaultTheme = {
     background: {
         primary: "#FFFFFF",
         secondary: "#F3F6F9",
+        dimmed: "#E9EBEF",
     },
     border: {
         primary: "#777E85",

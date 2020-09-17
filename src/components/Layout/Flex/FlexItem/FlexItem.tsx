@@ -102,7 +102,7 @@ const StyledFlexItem = styled(FlexItem)`
         const itemBasis: typeof basis =
             theme.nui?.$parent?.flex?.itemXs ??
             theme.nui?.$parent?.flex?.itemBasis;
-        return getBasis(xs ?? basis) ?? itemBasis;
+        return getBasis(xs ?? basis ?? itemBasis);
     }};
     align-self: ${({ align }) => {
         switch (align) {
@@ -145,7 +145,7 @@ const StyledFlexItem = styled(FlexItem)`
             const itemBasis: typeof basis =
                 theme.nui?.$parent?.flex?.itemSm ??
                 theme.nui?.$parent?.flex?.itemBasis;
-            return getBasis(sm ?? basis) ?? itemBasis;
+            return getBasis(sm ?? basis ?? itemBasis);
         }};
     }
 
@@ -154,7 +154,7 @@ const StyledFlexItem = styled(FlexItem)`
             const itemBasis: typeof basis =
                 theme.nui?.$parent?.flex?.itemMd ??
                 theme.nui?.$parent?.flex?.itemBasis;
-            return getBasis(md ?? basis) ?? itemBasis;
+            return getBasis(md ?? basis ?? itemBasis);
         }};
     }
 
@@ -163,7 +163,7 @@ const StyledFlexItem = styled(FlexItem)`
             const itemBasis: typeof basis =
                 theme.nui?.$parent?.flex?.itemLg ??
                 theme.nui?.$parent?.flex?.itemBasis;
-            return getBasis(lg ?? basis) ?? itemBasis;
+            return getBasis(lg ?? basis ?? itemBasis);
         }};
     }
 
@@ -172,7 +172,7 @@ const StyledFlexItem = styled(FlexItem)`
             const itemBasis: typeof basis =
                 theme.nui?.$parent?.flex?.itemXl ??
                 theme.nui?.$parent?.flex?.itemBasis;
-            return getBasis(xl ?? basis) ?? itemBasis;
+            return getBasis(xl ?? basis ?? itemBasis);
         }};
     }
 `;

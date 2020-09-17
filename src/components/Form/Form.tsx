@@ -119,6 +119,8 @@ export const useForm = <T extends {}>(options: UseFormOptions<T>) => {
                             next,
                             currentErrors
                         );
+
+                        // Update field errors
                         if (errors != currentErrors) {
                             setFormErrors(
                                 produce((e) => {
