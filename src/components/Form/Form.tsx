@@ -2,10 +2,7 @@
 import React from "react";
 import produce from "immer";
 import _ from "lodash";
-import { createComponentName } from "@utils";
-import { NuiForm } from "./types";
-import { RegisterFunc } from "./FormContext/types";
-import { FormContext } from "./FormContext";
+import { UseFormOptions, FieldProps, FormErrors } from "./types";
 
 /**
  * FORM GOALS:
@@ -15,32 +12,6 @@ import { FormContext } from "./FormContext";
  * - Possibility for one field to depend on another field
  * - Make it extensible for others to make their own inputs
  */
-
-interface UseFormOptions<T extends {}> {
-    fields: {
-        [name in keyof T]: {
-            /** Initial value */
-            initial: T[name];
-            /** Validation function. Errors are returned in a string[] */
-            validate?: (value: T[name], values: T) => void | null | string[];
-            /** Bind the field to other fields. When the binded field value updates, this field is re-evaluated. This is useful when some fields' validation depends on another fields' value */
-            bind?: (keyof T)[];
-        };
-    };
-}
-
-type FieldProps<T extends {}> = {
-    [name in keyof T]: {
-        name: name;
-        value: T[name];
-        errors: string[];
-        onChange: (v: T[name] | ((current: T[name]) => T[name])) => void;
-    };
-};
-
-type FormErrors<T extends {}> = {
-    [name in keyof T]: string[];
-};
 
 export const useForm = <T extends {}>(options: UseFormOptions<T>) => {
     // Shortcut for keyof T, since some places (lodash) require it to be typed every time (annoying)
@@ -195,128 +166,3 @@ export const useForm = <T extends {}>(options: UseFormOptions<T>) => {
 
     return [fieldProps.current, formData] as const;
 };
-
-const Form = React.memo(
-    React.forwardRef((props, ref) => {
-        const { children, className, onSubmit, ...restProps } = props;
-
-        type T = Parameters<NonNullable<typeof onSubmit>>[0];
-
-        const [formData, setFormData] = React.useState({} as T);
-        const [formErrors, setFormErrors] = React.useState(
-            {} as { [key in keyof T]: string[] }
-        );
-        const registry = React.useRef(
-            {} as { [name in keyof T]: ReturnType<RegisterFunc<T[name]>> }
-        );
-
-        const register = React.useCallback<RegisterFunc<T[keyof T]>>(
-            (name, initialValue) => {
-                type R = ReturnType<RegisterFunc<T[keyof T]>>;
-
-                if (registry.current[name]) {
-                    if (registry.current[name].value != formData[name]) {
-                        registry.current[name].value = formData[name];
-                    }
-                    if (registry.current[name].errors != formErrors[name]) {
-                        registry.current[name].errors = formErrors[name];
-                    }
-                    return registry.current[name];
-                }
-
-                const init: R["init"] = () => {
-                    setFormData((state) =>
-                        produce(state, (draft) => {
-                            draft[name] = initialValue;
-                        })
-                    );
-                    setFormErrors((state) =>
-                        produce(state, (draft) => {
-                            draft[name] = [];
-                        })
-                    );
-                };
-
-                const setValue: R["setValue"] = (v) => {
-                    setFormData((state) =>
-                        produce(state, (draft) => {
-                            draft[name] = _.isFunction(v) ? v(draft[name]) : v;
-                        })
-                    );
-                };
-
-                const setErrors: R["setErrors"] = (e) => {
-                    setFormErrors((state) =>
-                        produce(state, (draft) => {
-                            const next = _.isFunction(e) ? e(draft[name]) : e;
-                            const compacted = _.compact(
-                                _.isArray(next) ? next : [next]
-                            );
-                            if (!_.isEqual(draft[name], compacted)) {
-                                draft[name] = compacted;
-                            }
-                        })
-                    );
-                };
-
-                const unregister: R["unregister"] = () => {
-                    setFormData((state) =>
-                        produce(state, (draft) => {
-                            delete draft[name];
-                        })
-                    );
-                    setFormErrors((state) =>
-                        produce(state, (draft) => {
-                            delete draft[name];
-                        })
-                    );
-                    delete registry.current[name];
-                };
-
-                registry.current[name] = {
-                    setValue,
-                    value: initialValue,
-                    errors: [],
-                    setErrors,
-                    init,
-                    unregister,
-                };
-                return registry.current[name];
-            },
-            [formData, formErrors]
-        );
-
-        const handleOnSubmit = React.useCallback(
-            (evt: React.FormEvent<HTMLFormElement>) => {
-                const hasErrors = _.some(
-                    formErrors,
-                    (error) => error.length > 0
-                );
-                if (hasErrors) {
-                    evt.preventDefault();
-                }
-                if (onSubmit && !hasErrors) {
-                    onSubmit(formData, evt);
-                }
-            },
-            [formData, formErrors, onSubmit]
-        );
-
-        return (
-            <form
-                {...restProps}
-                onSubmit={handleOnSubmit}
-                ref={ref}
-                className={`NuiForm ${className}`}
-            >
-                <FormContext.Provider value={{ register }}>
-                    {children}
-                </FormContext.Provider>
-            </form>
-        );
-    })
-) as NuiForm;
-
-Form.displayName = createComponentName("Form");
-
-export default Form;
