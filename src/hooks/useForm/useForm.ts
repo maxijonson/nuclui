@@ -13,7 +13,7 @@ import { UseFormOptions, FieldProps, FormErrors } from "./types";
  * - Make it extensible for others to make their own inputs
  */
 
-export const useForm = <T extends {}>(options: UseFormOptions<T>) => {
+const useForm = <T extends {}>(options: UseFormOptions<T>) => {
     // Shortcut for keyof T, since some places (lodash) require it to be typed every time (annoying)
     type N = keyof T;
 
@@ -166,3 +166,5 @@ export const useForm = <T extends {}>(options: UseFormOptions<T>) => {
 
     return [fieldProps.current, formData] as const;
 };
+
+export default useForm;

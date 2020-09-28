@@ -60,6 +60,7 @@ const config = (env: NodeJS.ProcessEnv): webpack.Configuration => {
                 "@config": path.resolve(__dirname, "src/config/"),
                 "@theme": path.resolve(__dirname, "src/theme/"),
                 "@fonts": path.resolve(__dirname, "src/fonts/"),
+                "@hooks": path.resolve(__dirname, "src/hooks/"),
             },
         },
         plugins: [CircularDependency],
