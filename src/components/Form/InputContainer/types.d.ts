@@ -51,3 +51,7 @@ export interface InputContainerProps {
 }
 
 export type NuiInputContainer = Nui.FRCWC<InputContainerProps, "div">;
+
+export type HTMLInputProps = Required<
+    React.InputHTMLAttributes<HTMLInputElement>
+>;

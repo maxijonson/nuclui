@@ -1,12 +1,30 @@
 import MaskedInput, { MaskedInputProps } from "react-text-mask";
 import { StrictOmit } from "ts-essentials";
-import { InputContainerProps } from "../InputContainer/types";
+import { InputContainerProps, HTMLInputProps } from "../InputContainer/types";
 
 export interface TextInputProps {
     children?: never;
+
+    /**
+     * Input type. Use NumberInput for type "number"
+     */
     type?: "text" | "password" | "tel" | "url" | "search";
+
+    /**
+     * Input name
+     */
     name?: string;
+
+    /**
+     * Label over the input
+     */
     label?: string;
+
+    /**
+     * Value of the input
+     *
+     * @note do not switch between a nullish value and non-null value
+     */
     value?: string;
 
     /**
@@ -81,8 +99,4 @@ export type NuiTextInput = Nui.FRCWC<
         TextInputProps & StrictOmit<InputContainerProps, "focused" | "touched">
     >,
     typeof MaskedInput
->;
-
-export type HTMLInputProps = Required<
-    React.InputHTMLAttributes<HTMLInputElement>
 >;

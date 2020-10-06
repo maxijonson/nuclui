@@ -2,8 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import MaskedInput from "react-text-mask";
 import { createComponentName, nuiLog } from "@utils";
-import { NuiTextInput, HTMLInputProps } from "./types";
+import { NuiTextInput } from "./types";
 import { InputContainer } from "../InputContainer";
+import { HTMLInputProps } from "../InputContainer/types";
 
 const TextInput: NuiTextInput = React.memo(
     React.forwardRef((props, ref) => {
