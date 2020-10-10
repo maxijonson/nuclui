@@ -11,19 +11,7 @@ export interface TextInputProps {
     type?: "text" | "password" | "tel" | "url" | "search";
 
     /**
-     * Input name
-     */
-    name?: string;
-
-    /**
-     * Label over the input
-     */
-    label?: string;
-
-    /**
      * Value of the input
-     *
-     * @note do not switch between a nullish value and non-null value
      */
     value?: string;
 

@@ -10,6 +10,7 @@ import {
     Card,
     HR,
     TextInput,
+    NumberInput,
     useForm,
 } from "nuclui";
 import { TextInputProps } from "nuclui/components/Form/TextInput/types";
@@ -77,6 +78,13 @@ const UseFormTest = React.memo(() => {
             contact: {
                 initial: { type: "", phone: "" },
             },
+            age: {
+                initial: 0,
+                validate: (v) => {
+                    if (v == null) return ["Field cannot be empty"];
+                    if (v < 18) return ["Must be over 18"];
+                },
+            },
         },
     });
 
@@ -122,6 +130,13 @@ const UseFormTest = React.memo(() => {
 
     return (
         <form autoComplete="off" onSubmit={onSubmit}>
+            <NumberInput
+                {...fields.age}
+                label="Age"
+                min={0}
+                max={24}
+                step={3}
+            />
             <TextInput {...fields.first} label="First Name" size="100%" />
             <TextInput
                 {...fields.middle}

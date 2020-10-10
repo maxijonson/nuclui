@@ -5,10 +5,12 @@ import { primary, secondary } from "./index";
 import defaultTheme from "../defaultTheme";
 import "jest-styled-components";
 
+const varPrimary = "--nui-border-primary";
 const Primary = styled.div`
     ${primary}
 `;
 
+const varSecondary = "--nui-border-secondary";
 const Secondary = styled.div`
     ${secondary}
 `;
@@ -17,9 +19,10 @@ describe("theme/border", () => {
     it("should use the default primary theme color", () => {
         const wrapper = shallow(<Primary />);
         expect(wrapper).toHaveStyleRule(
-            "border-color",
+            varPrimary,
             defaultTheme.border.primary
         );
+        expect(wrapper).toHaveStyleRule("border-color", `var(${varPrimary})`);
     });
 
     it("should use the provided primary theme color", () => {
@@ -27,15 +30,17 @@ describe("theme/border", () => {
         const wrapper = shallow(
             <Primary theme={{ nui: { border: { primary: color } } }} />
         );
-        expect(wrapper).toHaveStyleRule("border-color", color);
+        expect(wrapper).toHaveStyleRule(varPrimary, color);
+        expect(wrapper).toHaveStyleRule("border-color", `var(${varPrimary})`);
     });
 
     it("should use the default secondary theme color", () => {
         const wrapper = shallow(<Secondary />);
         expect(wrapper).toHaveStyleRule(
-            "border-color",
+            varSecondary,
             defaultTheme.border.secondary
         );
+        expect(wrapper).toHaveStyleRule("border-color", `var(${varSecondary})`);
     });
 
     it("should use the provided primary theme color", () => {
@@ -43,6 +48,7 @@ describe("theme/border", () => {
         const wrapper = shallow(
             <Secondary theme={{ nui: { border: { secondary: color } } }} />
         );
-        expect(wrapper).toHaveStyleRule("border-color", color);
+        expect(wrapper).toHaveStyleRule(varSecondary, color);
+        expect(wrapper).toHaveStyleRule("border-color", `var(${varSecondary})`);
     });
 });

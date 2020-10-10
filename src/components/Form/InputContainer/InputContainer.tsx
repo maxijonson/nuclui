@@ -16,8 +16,8 @@ const InputContainer: NuiInputContainer = React.memo(
             prepend,
             size,
             children,
-            focused,
-            touched,
+            focused = false,
+            touched = true,
             ...restProps
         } = props;
 
@@ -25,7 +25,11 @@ const InputContainer: NuiInputContainer = React.memo(
 
         return (
             <div
-                className={`NuiInputContainer ${className}`}
+                className={clsx([
+                    "NuiInputContainer",
+                    className,
+                    focused && "focused",
+                ])}
                 ref={ref}
                 {...restProps}
             >
