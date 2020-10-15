@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import clsx from "clsx";
 import { createComponentName } from "@utils";
 import { quicksand } from "@fonts";
 import { background, text, border, shadow } from "@theme";
@@ -21,7 +22,7 @@ const Card: NuiCard = React.forwardRef((props, ref) => {
         <Component
             {...restProps}
             ref={ref}
-            className={`NuiCard ${className}`}
+            className={clsx(["NuiCard", className])}
         />
     );
 });

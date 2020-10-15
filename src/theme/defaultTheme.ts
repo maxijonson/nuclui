@@ -12,7 +12,7 @@ const defaultTheme = {
         secondary: "#B5BFC9",
     },
     context: {
-        primary: "#3673BA",
+        primary: "#1698ED",
         secondary: "#CBCBCB",
         success: "#3BDB66",
         info: "#28CCB4",

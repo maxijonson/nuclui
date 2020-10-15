@@ -11,6 +11,7 @@ import {
     HR,
     TextInput,
     NumberInput,
+    Checkbox,
     useForm,
 } from "nuclui";
 import { TextInputProps } from "nuclui/components/Form/TextInput/types";
@@ -85,6 +86,12 @@ const UseFormTest = React.memo(() => {
                     if (v < 18) return ["Must be over 18"];
                 },
             },
+            toc: {
+                initial: true,
+            },
+            choices: {
+                initial: [] as ("choice1" | "choice2" | "choice3")[],
+            },
         },
     });
 
@@ -130,6 +137,16 @@ const UseFormTest = React.memo(() => {
 
     return (
         <form autoComplete="off" onSubmit={onSubmit}>
+            <Flex justify="spaceEvenly">
+                <Checkbox {...fields.toc} label="Default (right)" />
+                <Checkbox {...fields.toc} label="Top" labelPosition="top" />
+                <Checkbox
+                    {...fields.toc}
+                    label="Bottom"
+                    labelPosition="bottom"
+                />
+                <Checkbox {...fields.toc} label="Left" labelPosition="left" />
+            </Flex>
             <NumberInput
                 {...fields.age}
                 label="Age"
@@ -137,33 +154,43 @@ const UseFormTest = React.memo(() => {
                 max={24}
                 step={3}
             />
-            <TextInput {...fields.first} label="First Name" size="100%" />
+            <TextInput
+                {...fields.first}
+                placeholder="Placeholder"
+                label="First Name"
+                size="100%"
+            />
             <TextInput
                 {...fields.middle}
+                placeholder="Placeholder"
                 label="Middle Name"
                 variant="none"
                 prepend="Search"
             />
             <TextInput
                 {...fields.last}
+                placeholder="Placeholder"
                 label="Last Name"
                 variant="filled"
                 prepend="Search"
             />
             <TextInput
                 {...fields.email}
+                placeholder="Placeholder"
                 label="Email"
                 variant="filled-none"
                 prepend="Search"
             />
             <TextInput
                 {...fields.confirm}
+                placeholder="Placeholder"
                 label="Confirm Email"
                 variant="filled-underline"
                 disabled={fields.email.value == ""}
                 prepend="Search"
             />
             <TextInput
+                placeholder="Placeholder"
                 label="Contact Phone Test"
                 prepend={Icon}
                 value={fields.contact.value.phone}

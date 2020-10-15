@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import _ from "lodash";
+import clsx from "clsx";
 import { createComponentName, nuiLog, createBreakpoints } from "@utils";
 import { quicksand } from "@fonts";
 import { NuiFlexItem } from "./types";
@@ -44,7 +45,7 @@ const FlexItem: NuiFlexItem = React.forwardRef((props, ref) => {
         <Component
             {...restProps}
             ref={ref}
-            className={`NuiFlexItem ${className}`}
+            className={clsx(["NuiFlexItem", className])}
         />
     );
 });

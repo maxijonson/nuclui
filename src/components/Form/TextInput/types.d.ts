@@ -16,7 +16,6 @@ export interface TextInputProps {
     value?: string;
 
     /**
-     * Gets called when the value of the input changes. The first parameter is the next value and the second is the input change event.
      */
     onChange?: (
         v: string,

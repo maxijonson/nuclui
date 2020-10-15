@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import _ from "lodash";
+import clsx from "clsx";
 import { border } from "@theme";
 import { createComponentName, nuiLog } from "@utils";
 import { NuiHR } from "./types";
@@ -17,7 +18,9 @@ const HR: NuiHR = React.forwardRef((props, ref) => {
         }
     }, [size, spacing]);
 
-    return <div {...restProps} ref={ref} className={`NuiHR ${className}`} />;
+    return (
+        <div {...restProps} ref={ref} className={clsx(["NuiHR", className])} />
+    );
 });
 
 const StyledHR = styled(HR)`

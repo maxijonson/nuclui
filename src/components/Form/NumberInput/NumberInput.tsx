@@ -141,7 +141,7 @@ const NumberInput: NuiNumberInput = React.memo(
                 append={append}
                 label={label}
                 variant={variant}
-                className="NuiNumberInput"
+                className={clsx(["NuiNumberInput", className])}
             >
                 <input
                     {...restProps}
@@ -194,6 +194,7 @@ const StyledNumberInput = styled(InputContainer)`
         width: 100%;
         background: transparent;
         border: none;
+        -moz-appearance: textfield;
 
         &:focus {
             outline: none;

@@ -1,5 +1,6 @@
 import React from "react";
 import styled, { ThemeProvider } from "styled-components";
+import clsx from "clsx";
 import { createComponentName } from "@utils";
 import { quicksand } from "@fonts";
 import { NuiFlex } from "./types";
@@ -30,7 +31,11 @@ const Flex: NuiFlex = React.forwardRef((props, ref) => {
     const Component = component || "div";
 
     return (
-        <Component {...restProps} ref={ref} className={`NuiFlex ${className}`}>
+        <Component
+            {...restProps}
+            ref={ref}
+            className={clsx(["NuiFlex", className])}
+        >
             <ThemeProvider
                 theme={{
                     nui: {

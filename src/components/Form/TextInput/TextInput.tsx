@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import MaskedInput from "react-text-mask";
+import clsx from "clsx";
 import { createComponentName, nuiLog } from "@utils";
 import { NuiTextInput } from "./types";
 import { InputContainer } from "../InputContainer";
@@ -105,7 +106,7 @@ const TextInput: NuiTextInput = React.memo(
                 append={append}
                 label={label}
                 variant={variant}
-                className="NuiTextInput"
+                className={clsx(["NuiTextInput", className])}
             >
                 <MaskedInput
                     {...restProps}

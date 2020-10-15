@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import _ from "lodash";
+import clsx from "clsx";
 import { nuiLog, createComponentName } from "@utils";
 import { NuiSpacer } from "./types";
 
@@ -14,7 +15,11 @@ const Spacer: NuiSpacer = React.forwardRef((props, ref) => {
     }, [size]);
 
     return (
-        <div {...otherProps} ref={ref} className={`NuiSpacer ${className}`} />
+        <div
+            {...otherProps}
+            ref={ref}
+            className={clsx(["NuiSpacer", className])}
+        />
     );
 });
 

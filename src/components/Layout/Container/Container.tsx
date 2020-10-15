@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import clsx from "clsx";
 import {
     createComponentName,
     breakpointUnder,
@@ -25,7 +26,7 @@ const Container: NuiContainer = React.forwardRef((props, ref) => {
         <Component
             {...restProps}
             ref={ref}
-            className={`NuiContainer ${className}`}
+            className={clsx(["NuiContainer", className])}
         />
     );
 });
