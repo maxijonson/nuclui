@@ -8,6 +8,7 @@ declare namespace Nui {
     type Props<P = {}> = {
         children?: React.ReactNode;
         className?: string;
+        style?: React.CSSProperties;
     } & P;
 
     /**

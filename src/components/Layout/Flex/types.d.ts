@@ -109,3 +109,15 @@ export interface FlexProps {
  * @reference https://css-tricks.com/snippets/css/a-guide-to-flexbox/
  */
 export type NuiFlex = Nui.FRC<FlexProps, "div">;
+
+export interface FlexContextType {
+    itemGrow?: FlexItemProps["grow"];
+    itemShrink?: FlexItemProps["shrink"];
+    itemBasis?: FlexItemProps["basis"];
+    itemSpacing?: FlexItemProps["spacing"];
+    itemXs?: FlexItemProps["xs"];
+    itemSm?: FlexItemProps["sm"];
+    itemMd?: FlexItemProps["md"];
+    itemLg?: FlexItemProps["lg"];
+    itemXl?: FlexItemProps["xl"];
+}

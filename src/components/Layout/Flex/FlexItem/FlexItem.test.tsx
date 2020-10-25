@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import ReactDOM from "react-dom";
 import _ from "lodash";
-import { mount, shallow, CommonWrapper } from "enzyme";
+import { mount, ReactWrapper } from "enzyme";
 import mockConsole from "jest-mock-console";
 import { nuiLog } from "@utils";
 import FlexItem from "./FlexItem";
@@ -15,15 +16,15 @@ let bps: {
 
 const resetBps = () => {
     bps = {
-        xs: { media: null }, // xs
-        sm: { media: 620 }, // sm
-        md: { media: 980 }, // md
-        lg: { media: 1280 }, // lg
-        xl: { media: 1920 }, // xl
+        xs: { media: null },
+        sm: { media: 620 },
+        md: { media: 980 },
+        lg: { media: 1280 },
+        xl: { media: 1920 },
     };
 };
 
-describe("Flex", () => {
+describe("FlexItem", () => {
     it("should render without crashing", () => {
         const div = document.createElement("div");
         ReactDOM.render(<FlexItem />, div);
@@ -87,20 +88,25 @@ describe("Flex", () => {
     });
 
     describe("grow", () => {
+        const assertGrow = (
+            grow: FlexItemProps["grow"],
+            wrapper: ReactWrapper
+        ) => {
+            const flexItem = wrapper.find(".NuiFlexItem").first();
+            expect(flexItem.prop("style")).toHaveProperty("flexGrow", grow);
+        };
+
         it("should have the default grow value", () => {
-            const wrapper = shallow(<FlexItem />);
-            expect(wrapper).toHaveStyleRule("flex-grow", "1");
+            assertGrow(undefined, mount(<FlexItem />));
         });
 
         it("should have the grow value of 2", () => {
-            const wrapper = shallow(<FlexItem grow={2} />);
-            expect(wrapper).toHaveStyleRule("flex-grow", "2");
+            assertGrow(2, mount(<FlexItem grow={2} />));
         });
 
         it("should warn when using the grow value of -1", () => {
             mockConsole("warn");
-            const wrapper = mount(<FlexItem grow={-1} />);
-            expect(wrapper).toHaveStyleRule("flex-grow", "-1");
+            assertGrow(-1, mount(<FlexItem grow={-1} />));
             expect(console.warn).toHaveBeenCalledTimes(1);
             expect(console.warn).toHaveBeenCalledWith(
                 "(NUI)",
@@ -109,59 +115,70 @@ describe("Flex", () => {
         });
 
         it("should use the parent provided grow value", () => {
-            const wrapper = mount(
-                <Flex itemGrow={2}>
-                    <FlexItem>Item</FlexItem>
-                </Flex>
+            assertGrow(
+                2,
+                mount(
+                    <Flex itemGrow={2}>
+                        <FlexItem>Item</FlexItem>
+                    </Flex>
+                )
             );
-            const provided = wrapper.find(FlexItem);
-            expect(provided).toHaveStyleRule("flex-grow", "2");
         });
 
         it("should use its own grow value", () => {
-            const wrapper = mount(
-                <Flex itemGrow={2}>
-                    <FlexItem grow={3}>Item</FlexItem>
-                </Flex>
+            assertGrow(
+                3,
+                mount(
+                    <Flex itemGrow={2}>
+                        <FlexItem grow={3}>Item</FlexItem>
+                    </Flex>
+                )
             );
-            const provided = wrapper.find(FlexItem);
-            expect(provided).toHaveStyleRule("flex-grow", "3");
         });
     });
 
     describe("order", () => {
+        const assertOrder = (
+            order: FlexItemProps["order"],
+            wrapper: ReactWrapper
+        ) => {
+            const flexItem = wrapper.find(".NuiFlexItem").first();
+            expect(flexItem.prop("style")).toHaveProperty("order", order);
+        };
+
         it("should have the default order value", () => {
-            const wrapper = shallow(<FlexItem />);
-            expect(wrapper).toHaveStyleRule("order", "0");
+            assertOrder(undefined, mount(<FlexItem />));
         });
 
         it("should have the order value of 1", () => {
-            const wrapper = shallow(<FlexItem order={1} />);
-            expect(wrapper).toHaveStyleRule("order", "1");
+            assertOrder(1, mount(<FlexItem order={1} />));
         });
 
         it("should have the order value of -1", () => {
-            const wrapper = shallow(<FlexItem order={-1} />);
-            expect(wrapper).toHaveStyleRule("order", "-1");
+            assertOrder(-1, mount(<FlexItem order={-1} />));
         });
     });
 
     describe("shrink", () => {
+        const assertShrink = (
+            shrink: FlexItemProps["shrink"],
+            wrapper: ReactWrapper
+        ) => {
+            const flexItem = wrapper.find(".NuiFlexItem").first();
+            expect(flexItem.prop("style")).toHaveProperty("flexShrink", shrink);
+        };
+
         it("should have the default shrink value", () => {
-            const wrapper = shallow(<FlexItem />);
-            expect(wrapper).toHaveStyleRule("flex-shrink", "1");
+            assertShrink(undefined, mount(<FlexItem />));
         });
 
         it("should have the shrink value of 2", () => {
-            const wrapper = shallow(<FlexItem shrink={2} />);
-            expect(wrapper).toHaveStyleRule("flex-shrink", "2");
+            assertShrink(2, mount(<FlexItem shrink={2} />));
         });
 
         it("should warn when using the shrink value of -1", () => {
             mockConsole("warn");
-            const wrapper = mount(<FlexItem shrink={-1} />);
-            expect(wrapper).toHaveStyleRule("flex-shrink", "-1");
-            expect(console.warn).toHaveBeenCalledTimes(1);
+            assertShrink(-1, mount(<FlexItem shrink={-1} />));
             expect(console.warn).toHaveBeenCalledWith(
                 "(NUI)",
                 "FlexItem shrink prop should not be below 0."
@@ -169,23 +186,25 @@ describe("Flex", () => {
         });
 
         it("should use the parent provided shrink value", () => {
-            const wrapper = mount(
-                <Flex itemShrink={2}>
-                    <FlexItem>Item</FlexItem>
-                </Flex>
+            assertShrink(
+                2,
+                mount(
+                    <Flex itemShrink={2}>
+                        <FlexItem>Item</FlexItem>
+                    </Flex>
+                )
             );
-            const provided = wrapper.find(FlexItem);
-            expect(provided).toHaveStyleRule("flex-shrink", "2");
         });
 
         it("should use its own shrink value", () => {
-            const wrapper = mount(
-                <Flex itemShrink={2}>
-                    <FlexItem shrink={3}>Item</FlexItem>
-                </Flex>
+            assertShrink(
+                3,
+                mount(
+                    <Flex itemShrink={2}>
+                        <FlexItem shrink={3}>Item</FlexItem>
+                    </Flex>
+                )
             );
-            const provided = wrapper.find(FlexItem);
-            expect(provided).toHaveStyleRule("flex-shrink", "3");
         });
     });
 
@@ -196,72 +215,53 @@ describe("Flex", () => {
 
         const assertBasis = (
             basis: FlexItemProps["basis"],
-            wrapper: CommonWrapper
+            wrapper: ReactWrapper
         ) => {
-            expect(wrapper).toHaveStyleRule("flex-basis", basis);
-            expect(wrapper).toHaveStyleRule("flex-basis", basis, {
-                media: `(min-width: ${bps.sm.media}px)`,
-            });
-            expect(wrapper).toHaveStyleRule("flex-basis", basis, {
-                media: `(min-width: ${bps.md.media}px)`,
-            });
-            expect(wrapper).toHaveStyleRule("flex-basis", basis, {
-                media: `(min-width: ${bps.lg.media}px)`,
-            });
-            expect(wrapper).toHaveStyleRule("flex-basis", basis, {
-                media: `(min-width: ${bps.xl.media}px)`,
-            });
+            const flexItem = wrapper.find(".NuiFlexItem").first();
+            expect(flexItem.prop("style")).toHaveProperty("flexBasis", basis);
         };
 
         it("should use the default basis value", () => {
-            const wrapper = shallow(<FlexItem />);
-            _.forEach(bps, ({ media }) => {
-                expect(wrapper).not.toHaveStyleRule(
-                    "flex-basis",
-                    expect.any(String),
-                    media ? { media: `(min-width: ${media}px)` } : undefined
-                );
-            });
+            assertBasis(undefined, mount(<FlexItem />));
         });
 
         it("should use a numeric basis value", () => {
-            const wrapper = shallow(<FlexItem basis={6} />);
-            assertBasis("50%", wrapper);
+            assertBasis("50%", mount(<FlexItem basis={6} />));
         });
 
         it("should use a custom basis value", () => {
             const basis = "25px";
-            const wrapper = shallow(<FlexItem basis={basis} />);
-            assertBasis(basis, wrapper);
+            assertBasis(basis, mount(<FlexItem basis={basis} />));
         });
 
         it("should use the parent provided basis value", () => {
             const basis = "25%";
-            const wrapper = mount(
-                <Flex itemBasis={basis}>
-                    <FlexItem>Item</FlexItem>
-                </Flex>
+            assertBasis(
+                basis,
+                mount(
+                    <Flex itemBasis={basis}>
+                        <FlexItem>Item</FlexItem>
+                    </Flex>
+                )
             );
-            const provided = wrapper.find(FlexItem);
-            assertBasis(basis, provided);
         });
 
         it("should use its own basis value", () => {
             const basis = "50%";
-            const wrapper = mount(
-                <Flex itemBasis="25%">
-                    <FlexItem basis={basis}>Item</FlexItem>
-                </Flex>
+            assertBasis(
+                basis,
+                mount(
+                    <Flex itemBasis="25%">
+                        <FlexItem basis={basis}>Item</FlexItem>
+                    </Flex>
+                )
             );
-            const provided = wrapper.find(FlexItem);
-            assertBasis(basis, provided);
         });
 
         it("should warn when using non-integer values", () => {
             mockConsole("warn");
-            const wrapper = shallow(<FlexItem basis={5.5} />);
-            expect(wrapper).toHaveStyleRule("flex-basis", "50%");
-            expect(console.warn).toHaveBeenLastCalledWith(
+            assertBasis("50%", mount(<FlexItem basis={5.5} />));
+            expect(console.warn).toHaveBeenCalledWith(
                 "(NUI)",
                 "FlexItem basis, when specified as a number, must be an integer. The rounded number will be used"
             );
@@ -269,14 +269,15 @@ describe("Flex", () => {
 
         it("should warn when using non-integer provided values", () => {
             mockConsole("warn");
-            const wrapper = mount(
-                <Flex itemBasis={5.5}>
-                    <FlexItem />
-                </Flex>
+            assertBasis(
+                "50%",
+                mount(
+                    <Flex itemBasis={5.5}>
+                        <FlexItem />
+                    </Flex>
+                )
             );
-            const provided = wrapper.find(FlexItem);
-            expect(provided).toHaveStyleRule("flex-basis", "50%");
-            expect(console.warn).toHaveBeenLastCalledWith(
+            expect(console.warn).toHaveBeenCalledWith(
                 "(NUI)",
                 "FlexItem basis, when specified as a number, must be an integer. The rounded number will be used"
             );
@@ -284,223 +285,217 @@ describe("Flex", () => {
 
         it("should clamp non-integer values to the max", () => {
             mockConsole("warn");
-            const wrapper = shallow(<FlexItem basis={12.6} />);
-            expect(wrapper).toHaveStyleRule("flex-basis", "100%");
+            assertBasis("100%", mount(<FlexItem basis={12.6} />));
         });
 
         it("should clamp non-integer values to the min", () => {
             mockConsole("warn");
-            const wrapper = shallow(<FlexItem basis={-0.6} />);
-            expect(wrapper).toHaveStyleRule("flex-basis", `0%`);
+            assertBasis("0%", mount(<FlexItem basis={-0.6} />));
         });
 
         it("should warn when using values over max", () => {
             mockConsole("warn");
-            const wrapper = shallow(<FlexItem basis={13} />);
-            expect(console.warn).toHaveBeenCalledTimes(1);
-            expect(console.warn).toHaveBeenLastCalledWith(
+            assertBasis("100%", mount(<FlexItem basis={13} />));
+            expect(console.warn).toHaveBeenCalledWith(
                 "(NUI)",
                 "FlexItem basis, when specified as a number, must be between 0 and 12. Clamped value will be used."
             );
-            expect(wrapper).toHaveStyleRule("flex-basis", "100%");
         });
 
         it("should warn when using provided values over max", () => {
             mockConsole("warn");
-            const wrapper = mount(
-                <Flex itemBasis={13}>
-                    <FlexItem />
-                </Flex>
+            assertBasis(
+                "100%",
+                mount(
+                    <Flex itemBasis={13}>
+                        <FlexItem />
+                    </Flex>
+                )
             );
-            const provided = wrapper.find(FlexItem);
-            expect(console.warn).toHaveBeenCalledTimes(1);
-            expect(console.warn).toHaveBeenLastCalledWith(
+            expect(console.warn).toHaveBeenCalledWith(
                 "(NUI)",
                 "FlexItem basis, when specified as a number, must be between 0 and 12. Clamped value will be used."
             );
-            expect(provided).toHaveStyleRule("flex-basis", "100%");
         });
 
         it("should warn when using values under min", () => {
             mockConsole("warn");
-            const wrapper = shallow(<FlexItem basis={-1} />);
-            expect(console.warn).toHaveBeenCalledTimes(1);
-            expect(console.warn).toHaveBeenLastCalledWith(
+            assertBasis("0%", mount(<FlexItem basis={-1} />));
+            expect(console.warn).toHaveBeenCalledWith(
                 "(NUI)",
                 "FlexItem basis, when specified as a number, must be between 0 and 12. Clamped value will be used."
             );
-            expect(wrapper).toHaveStyleRule("flex-basis", `0%`);
         });
 
         it("should warn when using provided values under min", () => {
             mockConsole("warn");
-            const wrapper = mount(
-                <Flex itemBasis={-1}>
-                    <FlexItem />
-                </Flex>
+            assertBasis(
+                "0%",
+                mount(
+                    <Flex itemBasis={-1}>
+                        <FlexItem />
+                    </Flex>
+                )
             );
-            const provided = wrapper.find(FlexItem);
-            expect(console.warn).toHaveBeenCalledTimes(1);
-            expect(console.warn).toHaveBeenLastCalledWith(
+            expect(console.warn).toHaveBeenCalledWith(
                 "(NUI)",
                 "FlexItem basis, when specified as a number, must be between 0 and 12. Clamped value will be used."
             );
-            expect(provided).toHaveStyleRule("flex-basis", "0%");
         });
     });
 
     describe("align", () => {
+        const assertAlign = (className: string, wrapper: ReactWrapper) => {
+            const flexItem = wrapper.find(".NuiFlexItem").first();
+            expect(
+                flexItem.hasClass(`NuiFlexItem--align-${className}`)
+            ).toBeTruthy();
+        };
+
         it("should use the default align value", () => {
-            const wrapper = shallow(<FlexItem />);
-            expect(wrapper).toHaveStyleRule("align-self", "auto");
+            assertAlign("auto", mount(<FlexItem />));
         });
 
         it("should use the auto align value", () => {
-            const wrapper = shallow(<FlexItem align="auto" />);
-            expect(wrapper).toHaveStyleRule("align-self", "auto");
+            assertAlign("auto", mount(<FlexItem align="auto" />));
         });
 
         it("should use the flexStart align value", () => {
-            const wrapper = shallow(<FlexItem align="flexStart" />);
-            expect(wrapper).toHaveStyleRule("align-self", "flex-start");
+            assertAlign("fstart", mount(<FlexItem align="flexStart" />));
         });
 
         it("should use the flexEnd align value", () => {
-            const wrapper = shallow(<FlexItem align="flexEnd" />);
-            expect(wrapper).toHaveStyleRule("align-self", "flex-end");
+            assertAlign("fend", mount(<FlexItem align="flexEnd" />));
         });
 
         it("should use the center align value", () => {
-            const wrapper = shallow(<FlexItem align="center" />);
-            expect(wrapper).toHaveStyleRule("align-self", "center");
+            assertAlign("center", mount(<FlexItem align="center" />));
         });
 
         it("should use the baseline align value", () => {
-            const wrapper = shallow(<FlexItem align="baseline" />);
-            expect(wrapper).toHaveStyleRule("align-self", "baseline");
+            assertAlign("base", mount(<FlexItem align="baseline" />));
         });
 
         it("should use the stretch align value", () => {
-            const wrapper = shallow(<FlexItem align="stretch" />);
-            expect(wrapper).toHaveStyleRule("align-self", "stretch");
+            assertAlign("stretch", mount(<FlexItem align="stretch" />));
         });
     });
 
     describe("spacing", () => {
+        const assertSpacing = (
+            className: string | undefined,
+            padding: string | undefined,
+            wrapper: ReactWrapper
+        ) => {
+            const flexItem = wrapper.find(".NuiFlexItem").first();
+            if (className) {
+                expect(
+                    flexItem.hasClass(`NuiFlexItem--spacing-${className}`)
+                ).toBeTruthy();
+            }
+            expect(flexItem.prop("style")).toHaveProperty("padding", padding);
+        };
+
         it("should use the default spacing value", () => {
-            const wrapper = shallow(<FlexItem />);
-            expect(wrapper).toHaveStyleRule("padding", "10px");
+            assertSpacing("sm", undefined, mount(<FlexItem />));
         });
 
         it("should use the xs spacing value", () => {
-            const wrapper = shallow(<FlexItem spacing="xs" />);
-            expect(wrapper).toHaveStyleRule("padding", "5px");
+            assertSpacing("xs", undefined, mount(<FlexItem spacing="xs" />));
         });
 
         it("should use the sm spacing value", () => {
-            const wrapper = shallow(<FlexItem spacing="sm" />);
-            expect(wrapper).toHaveStyleRule("padding", "10px");
+            assertSpacing("sm", undefined, mount(<FlexItem spacing="sm" />));
         });
 
         it("should use the md spacing value", () => {
-            const wrapper = shallow(<FlexItem spacing="md" />);
-            expect(wrapper).toHaveStyleRule("padding", "15px");
+            assertSpacing("md", undefined, mount(<FlexItem spacing="md" />));
         });
 
         it("should use the lg spacing value", () => {
-            const wrapper = shallow(<FlexItem spacing="lg" />);
-            expect(wrapper).toHaveStyleRule("padding", "20px");
+            assertSpacing("lg", undefined, mount(<FlexItem spacing="lg" />));
         });
 
         it("should use the xl spacing value", () => {
-            const wrapper = shallow(<FlexItem spacing="xl" />);
-            expect(wrapper).toHaveStyleRule("padding", "30px");
+            assertSpacing("xl", undefined, mount(<FlexItem spacing="xl" />));
         });
 
         it("should use the none spacing value", () => {
-            const wrapper = shallow(<FlexItem spacing="none" />);
-            expect(wrapper).toHaveStyleRule("padding", "0px");
+            assertSpacing(
+                "none",
+                undefined,
+                mount(<FlexItem spacing="none" />)
+            );
         });
 
         it("should use the custom spacing value", () => {
-            const wrapper = shallow(<FlexItem spacing={7} />);
-            expect(wrapper).toHaveStyleRule("padding", "7px");
+            assertSpacing(undefined, "7px", mount(<FlexItem spacing={7} />));
         });
 
         it("should use the parent provided spacing value", () => {
-            const wrapper = mount(
-                <Flex itemSpacing="xs">
-                    <FlexItem>Item</FlexItem>
-                </Flex>
+            assertSpacing(
+                "xs",
+                undefined,
+                mount(
+                    <Flex itemSpacing="xs">
+                        <FlexItem>Item</FlexItem>
+                    </Flex>
+                )
             );
-            const provided = wrapper.find(FlexItem);
-            expect(provided).toHaveStyleRule("padding", "5px");
         });
 
         it("should use its own spacing value", () => {
-            const wrapper = mount(
-                <Flex itemSpacing="lg">
-                    <FlexItem spacing={7}>Item</FlexItem>
-                </Flex>
+            assertSpacing(
+                undefined,
+                "7px",
+                mount(
+                    <Flex itemSpacing="lg">
+                        <FlexItem spacing={7}>Item</FlexItem>
+                    </Flex>
+                )
             );
-            const provided = wrapper.find(FlexItem);
-            expect(provided).toHaveStyleRule("padding", "7px");
         });
     });
 
     describe("breakpoints", () => {
-        beforeAll(() => resetBps());
-
-        beforeEach(() => {
-            bps.xs.basis = undefined;
-            bps.sm.basis = undefined;
-            bps.md.basis = undefined;
-            bps.lg.basis = undefined;
-            bps.xl.basis = undefined;
-        });
-
-        const assertQueries = (wrapper: CommonWrapper) => {
-            _.forEach(bps, ({ media, basis }) => {
-                if (basis) {
-                    expect(wrapper).toHaveStyleRule(
-                        "flex-basis",
-                        basis,
-                        media ? { media: `(min-width: ${media}px)` } : undefined
-                    );
-                } else {
-                    expect(wrapper).not.toHaveStyleRule(
-                        "flex-basis",
-                        expect.any(String),
-                        media ? { media: `(min-width: ${media}px)` } : undefined
-                    );
-                }
-            });
+        const assertBreakpoint = (
+            basis: FlexItemProps["basis"],
+            wrapper: ReactWrapper
+        ) => {
+            const flexItem = wrapper.find(".NuiFlexItem").first();
+            expect(flexItem.prop("style")).toHaveProperty("flexBasis", basis);
         };
 
-        _.forEach(
-            ["xs", "sm", "md", "lg", "xl"] as Nui.Breakpoint[],
+        it("should use the default value (no breakpoints)", () => {
+            assertBreakpoint(undefined, mount(<FlexItem />));
+        });
+
+        describe.each(["xs", "sm", "md", "lg", "xl"] as Nui.Breakpoint[])(
+            "%s",
             (bpKey) => {
-                describe(bpKey, () => {
-                    it(`should use the default ${bpKey} value`, () => {
-                        assertQueries(shallow(<FlexItem />));
-                    });
+                beforeAll(() => {
+                    const size = bps[bpKey].media ?? 100;
+                    window.resizeTo(size, size / 2);
+                });
 
-                    it(`should use a numeric ${bpKey} value`, () => {
-                        bps[bpKey].basis = "50%";
-                        assertQueries(
-                            shallow(<FlexItem {...{ [bpKey]: 6 }} />)
-                        );
-                    });
+                it(`should use a numeric ${bpKey} value`, () => {
+                    assertBreakpoint(
+                        "50%",
+                        mount(<FlexItem {...{ [bpKey]: 6 }} />)
+                    );
+                });
 
-                    it(`should use a custom ${bpKey} value`, () => {
-                        bps[bpKey].basis = "25px";
-                        assertQueries(
-                            shallow(<FlexItem {...{ [bpKey]: "25px" }} />)
-                        );
-                    });
+                it(`should use a custom ${bpKey} value`, () => {
+                    assertBreakpoint(
+                        "25px",
+                        mount(<FlexItem {...{ [bpKey]: "25px" }} />)
+                    );
+                });
 
-                    it(`should use the ${bpKey} value provided by the parent Flex`, () => {
-                        const wrapper = mount(
+                it(`should use the ${bpKey} value provided by the parent Flex`, () => {
+                    assertBreakpoint(
+                        "10px",
+                        mount(
                             <Flex
                                 {...{
                                     [`item${_.capitalize(bpKey)}`]: "10px",
@@ -508,14 +503,14 @@ describe("Flex", () => {
                             >
                                 <FlexItem />
                             </Flex>
-                        );
+                        )
+                    );
+                });
 
-                        bps[bpKey].basis = "10px";
-                        assertQueries(wrapper.find(FlexItem));
-                    });
-
-                    it(`should use its own ${bpKey} value`, () => {
-                        const wrapper = mount(
+                it(`should use its own ${bpKey} value`, () => {
+                    assertBreakpoint(
+                        "25px",
+                        mount(
                             <Flex
                                 {...{
                                     [`item${_.capitalize(bpKey)}`]: "10px",
@@ -523,48 +518,55 @@ describe("Flex", () => {
                             >
                                 <FlexItem {...{ [bpKey]: "25px" }} />
                             </Flex>
-                        );
-
-                        bps[bpKey].basis = "25px";
-                        assertQueries(wrapper.find(FlexItem));
-                    });
+                        )
+                    );
                 });
             }
         );
 
         describe("with basis", () => {
-            const basis = "1337px";
+            const defaultBasis = "1337px";
 
             beforeEach(() => {
-                bps.xs.basis = basis;
-                bps.sm.basis = basis;
-                bps.md.basis = basis;
-                bps.lg.basis = basis;
-                bps.xl.basis = basis;
+                bps.xs.basis = defaultBasis;
+                bps.sm.basis = defaultBasis;
+                bps.md.basis = defaultBasis;
+                bps.lg.basis = defaultBasis;
+                bps.xl.basis = defaultBasis;
             });
 
-            _.forEach(
-                ["xs", "sm", "md", "lg", "xl"] as Nui.Breakpoint[],
+            describe.each(["xs", "sm", "md", "lg", "xl"] as Nui.Breakpoint[])(
+                "%s",
                 (bpKey) => {
-                    describe(bpKey, () => {
-                        it(`should use the basis as default with overriden ${bpKey} value`, () => {
-                            bps[bpKey].basis = "25%";
-                            assertQueries(
-                                shallow(
+                    it(`should use the basis as default with overriden ${bpKey} value`, () => {
+                        bps[bpKey].basis = "25%";
+
+                        _.forEach(bps, ({ media }, key) => {
+                            const size = media ?? 100;
+                            window.resizeTo(size, size / 2);
+                            assertBreakpoint(
+                                key == bpKey ? "25%" : defaultBasis,
+                                mount(
                                     <FlexItem
-                                        basis={basis}
+                                        basis={defaultBasis}
                                         {...{ [bpKey]: "25%" }}
                                     />
                                 )
                             );
                         });
+                    });
 
-                        it(`should use the basis as default with overriden numeric ${bpKey} value`, () => {
-                            bps[bpKey].basis = "50%";
-                            assertQueries(
-                                shallow(
+                    it(`should use the basis as default with overriden numeric ${bpKey} value`, () => {
+                        bps[bpKey].basis = "50%";
+
+                        _.forEach(bps, ({ media }, key) => {
+                            const size = media ?? 100;
+                            window.resizeTo(size, size / 2);
+                            assertBreakpoint(
+                                key == bpKey ? "50%" : defaultBasis,
+                                mount(
                                     <FlexItem
-                                        basis={basis}
+                                        basis={defaultBasis}
                                         {...{ [bpKey]: 6 }}
                                     />
                                 )

@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { mount, shallow } from "enzyme";
+import _ from "lodash";
+import { mount } from "enzyme";
 import mockConsole from "jest-mock-console";
 import HR from "./HR";
 import "jest-styled-components";
@@ -43,51 +44,38 @@ describe("HR", () => {
 
     describe("size", () => {
         it("should use the default size value", () => {
-            const wrapper = shallow(<HR />);
-            expect(wrapper).toHaveStyleRule("border-width", "1px");
+            const wrapper = mount(<HR />);
+            const hr = wrapper.find(".NuiHR").first();
+
+            expect(hr.hasClass("NuiHR--size-xs")).toBeTruthy();
         });
 
-        it("should use the xs size value", () => {
-            const wrapper = shallow(<HR size="xs" />);
-            expect(wrapper).toHaveStyleRule("border-width", "1px");
-        });
-
-        it("should use the sm size value", () => {
-            const wrapper = shallow(<HR size="sm" />);
-            expect(wrapper).toHaveStyleRule("border-width", "2px");
-        });
-
-        it("should use the md size value", () => {
-            const wrapper = shallow(<HR size="md" />);
-            expect(wrapper).toHaveStyleRule("border-width", "4px");
-        });
-
-        it("should use the lg size value", () => {
-            const wrapper = shallow(<HR size="lg" />);
-            expect(wrapper).toHaveStyleRule("border-width", "6px");
-        });
-
-        it("should use the xl size value", () => {
-            const wrapper = shallow(<HR size="xl" />);
-            expect(wrapper).toHaveStyleRule("border-width", "8px");
+        _.forEach(["xs", "sm", "md", "lg", "xl"] as Nui.Breakpoint[], (bp) => {
+            it(`should use the ${bp} size value`, () => {
+                const wrapper = mount(<HR size={bp} />);
+                const hr = wrapper.find(".NuiHR").first();
+                expect(hr.hasClass(`NuiHR--size-${bp}`)).toBeTruthy();
+            });
         });
 
         it("should use the custom size value", () => {
-            const wrapper = shallow(<HR size={20} />);
-            expect(wrapper).toHaveStyleRule("border-width", "20px");
+            const wrapper = mount(<HR size={20} />);
+            const hr = wrapper.find(".NuiHR").first();
+            expect(hr.prop("style")).toHaveProperty("borderWidth", "20px");
         });
 
         it("should not warn when the size is equal to 0", () => {
             mockConsole("warn");
             const wrapper = mount(<HR size={0} />);
-            expect(wrapper).toHaveStyleRule("border-width", "0px");
-            expect(console.warn).toHaveBeenCalledTimes(0);
+            const hr = wrapper.find(".NuiHR").first();
+            expect(hr.prop("style")).toHaveProperty("borderWidth", "0px");
         });
 
         it("should warn when the size is under 0", () => {
             mockConsole("warn");
             const wrapper = mount(<HR size={-1} />);
-            expect(wrapper).toHaveStyleRule("border-width", "-1px");
+            const hr = wrapper.find(".NuiHR").first();
+            expect(hr.prop("style")).toHaveProperty("borderWidth", "-1px");
             expect(console.warn).toHaveBeenCalledTimes(1);
             expect(console.warn).toHaveBeenCalledWith(
                 "(NUI)",
@@ -98,51 +86,44 @@ describe("HR", () => {
 
     describe("spacing", () => {
         it("should use the default spacing value", () => {
-            const wrapper = shallow(<HR />);
-            expect(wrapper).toHaveStyleRule("--nui-hr-spacing", "16px");
+            const wrapper = mount(<HR />);
+            const hr = wrapper.find(".NuiHR").first();
+            expect(hr.hasClass("NuiHR--spacing-lg")).toBeTruthy();
         });
 
-        it("should use the xs spacing value", () => {
-            const wrapper = shallow(<HR spacing="xs" />);
-            expect(wrapper).toHaveStyleRule("--nui-hr-spacing", "2px");
-        });
-
-        it("should use the sm spacing value", () => {
-            const wrapper = shallow(<HR spacing="sm" />);
-            expect(wrapper).toHaveStyleRule("--nui-hr-spacing", "4px");
-        });
-
-        it("should use the md spacing value", () => {
-            const wrapper = shallow(<HR spacing="md" />);
-            expect(wrapper).toHaveStyleRule("--nui-hr-spacing", "8px");
-        });
-
-        it("should use the lg spacing value", () => {
-            const wrapper = shallow(<HR spacing="lg" />);
-            expect(wrapper).toHaveStyleRule("--nui-hr-spacing", "16px");
-        });
-
-        it("should use the xl spacing value", () => {
-            const wrapper = shallow(<HR spacing="xl" />);
-            expect(wrapper).toHaveStyleRule("--nui-hr-spacing", "32px");
+        _.forEach(["xs", "sm", "md", "lg", "xl"] as Nui.Breakpoint[], (bp) => {
+            it(`should use the ${bp} spacing value`, () => {
+                const wrapper = mount(<HR spacing={bp} />);
+                const hr = wrapper.find(".NuiHR").first();
+                expect(hr.hasClass(`NuiHR--spacing-${bp}`)).toBeTruthy();
+            });
         });
 
         it("should use the custom spacing value", () => {
-            const wrapper = shallow(<HR spacing={20} />);
-            expect(wrapper).toHaveStyleRule("--nui-hr-spacing", "20px");
+            const wrapper = mount(<HR spacing={20} />);
+            const hr = wrapper.find(".NuiHR").first();
+            const style = hr.prop("style");
+            expect(style).toHaveProperty("marginTop", "20px");
+            expect(style).toHaveProperty("marginBottom", "20px");
         });
 
         it("should not warn when the spacing is equal to 0", () => {
             mockConsole("warn");
             const wrapper = mount(<HR spacing={0} />);
-            expect(wrapper).toHaveStyleRule("--nui-hr-spacing", "0px");
+            const hr = wrapper.find(".NuiHR").first();
+            const style = hr.prop("style");
+            expect(style).toHaveProperty("marginTop", "0px");
+            expect(style).toHaveProperty("marginBottom", "0px");
             expect(console.warn).toHaveBeenCalledTimes(0);
         });
 
         it("should warn when the spacing is under 0", () => {
             mockConsole("warn");
             const wrapper = mount(<HR spacing={-1} />);
-            expect(wrapper).toHaveStyleRule("--nui-hr-spacing", "-1px");
+            const hr = wrapper.find(".NuiHR").first();
+            const style = hr.prop("style");
+            expect(style).toHaveProperty("marginTop", "-1px");
+            expect(style).toHaveProperty("marginBottom", "-1px");
             expect(console.warn).toHaveBeenCalledTimes(1);
             expect(console.warn).toHaveBeenCalledWith(
                 "(NUI)",

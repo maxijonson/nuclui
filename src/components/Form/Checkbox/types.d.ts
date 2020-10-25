@@ -39,4 +39,4 @@ export interface CheckboxProps {
 /**
  * TODO: Description
  */
-export type NuiCheckbox = Nui.FRCWC<Nui.Props<CheckboxProps>, "input">;
+export type NuiCheckbox = Nui.FRCWC<CheckboxProps, "input">;

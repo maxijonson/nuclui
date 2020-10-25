@@ -6,56 +6,52 @@ import { nuiLog, createComponentName, isBreakpoint } from "@utils";
 import { NuiSpacer } from "./types";
 
 const Spacer: NuiSpacer = React.forwardRef((props, ref) => {
-    const { size: sizeProp = "lg", className, ...otherProps } = props;
+    const { size = "lg", className, ...otherProps } = props;
 
-    const size = React.useMemo(
-        () => (isBreakpoint(sizeProp) ? sizeProp : null),
-        [sizeProp]
+    const style = React.useMemo(
+        () => ({
+            height: _.isNumber(size) ? `${size}px` : undefined,
+            ...props.style,
+        }),
+        [size, props.style]
+    );
+
+    const classes = React.useMemo(
+        () =>
+            clsx([
+                "NuiSpacer",
+                isBreakpoint(size) && `NuiSpacer--size-${size}`,
+                className,
+            ]),
+        [className, size]
     );
 
     React.useEffect(() => {
-        if (_.isNumber(sizeProp) && sizeProp < 0) {
+        if (_.isNumber(size) && size < 0) {
             nuiLog.warn("Spacer size prop should not be below 0.");
         }
-    }, [sizeProp]);
+    }, [size]);
 
-    return (
-        <div
-            {...otherProps}
-            ref={ref}
-            style={{
-                height: _.isNumber(sizeProp) ? `${sizeProp}px` : undefined,
-            }}
-            className={clsx([
-                "NuiSpacer",
-                size && `NuiSpacer--${size}`,
-                className,
-            ])}
-        />
-    );
+    return <div {...otherProps} ref={ref} style={style} className={classes} />;
 });
 
 const StyledSpacer = styled(Spacer)`
     width: 100%;
     box-sizing: border-box;
 
-    &.NuiSpacer--xs {
+    &.NuiSpacer--size-xs {
         height: 4px;
     }
-
-    &.NuiSpacer--sm {
+    &.NuiSpacer--size-sm {
         height: 8px;
     }
-
-    &.NuiSpacer--md {
+    &.NuiSpacer--size-md {
         height: 16px;
     }
-
-    &.NuiSpacer--lg {
+    &.NuiSpacer--size-lg {
         height: 32px;
     }
-
-    &.NuiSpacer--xl {
+    &.NuiSpacer--size-xl {
         height: 64px;
     }
 `;

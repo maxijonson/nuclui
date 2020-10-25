@@ -7,7 +7,7 @@ module.exports = {
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
     snapshotSerializers: ["enzyme-to-json/serializer"],
     setupFilesAfterEnv: [
-        "<rootDir>/src/config/setupEnzyme.ts",
+        "<rootDir>/src/config/setupTests.ts",
         "jest-mock-console/dist/setupTestFramework.js",
     ],
     moduleNameMapper: {

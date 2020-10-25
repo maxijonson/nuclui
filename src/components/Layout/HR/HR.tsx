@@ -3,11 +3,32 @@ import styled from "styled-components";
 import _ from "lodash";
 import clsx from "clsx";
 import { border } from "@theme";
-import { createComponentName, nuiLog } from "@utils";
+import { createComponentName, isBreakpoint, nuiLog } from "@utils";
 import { NuiHR } from "./types";
 
 const HR: NuiHR = React.forwardRef((props, ref) => {
-    const { size, spacing, className, ...restProps } = props;
+    const { size = "xs", spacing = "lg", className, ...restProps } = props;
+
+    const style = React.useMemo(() => {
+        const margin = _.isNumber(spacing) ? `${spacing}px` : undefined;
+        return {
+            borderWidth: _.isNumber(size) ? `${size}px` : undefined,
+            marginTop: margin,
+            marginBottom: margin,
+            ...props.style,
+        };
+    }, [size, spacing, props.style]);
+
+    const classes = React.useMemo(
+        () =>
+            clsx([
+                "NuiHR",
+                isBreakpoint(size) && `NuiHR--size-${size}`,
+                isBreakpoint(spacing) && `NuiHR--spacing-${spacing}`,
+                className,
+            ]),
+        [className, size, spacing]
+    );
 
     React.useEffect(() => {
         if (_.isNumber(size) && size < 0) {
@@ -18,57 +39,55 @@ const HR: NuiHR = React.forwardRef((props, ref) => {
         }
     }, [size, spacing]);
 
-    return (
-        <div {...restProps} ref={ref} className={clsx(["NuiHR", className])} />
-    );
+    return <div {...restProps} ref={ref} style={style} className={classes} />;
 });
 
 const StyledHR = styled(HR)`
     ${border.secondary}
-
-    --nui-hr-spacing: ${({ spacing }) => {
-        switch (spacing) {
-            case "xs":
-                return "2px";
-            case "sm":
-                return "4px";
-            case "md":
-                return "8px";
-            case undefined:
-            case "lg":
-                return "16px";
-            case "xl":
-                return "32px";
-            default:
-                return `${spacing}px`;
-        }
-    }};
 
     display: block;
     width: 100%;
     opacity: 0.5;
     border-style: solid;
     box-sizing: border-box;
-    border-width: ${({ size }) => {
-        switch (size) {
-            case undefined:
-            case "xs":
-                return "1px";
-            case "sm":
-                return "2px";
-            case "md":
-                return "4px";
-            case "lg":
-                return "6px";
-            case "xl":
-                return "8px";
-            default:
-                return `${size}px`;
-        }
-    }};
     border-radius: 4px;
-    margin-top: var(--nui-hr-spacing);
-    margin-bottom: var(--nui-hr-spacing);
+
+    &.NuiHR--size-xs {
+        border-width: 1px;
+    }
+    &.NuiHR--size-sm {
+        border-width: 2px;
+    }
+    &.NuiHR--size-md {
+        border-width: 4px;
+    }
+    &.NuiHR--size-lg {
+        border-width: 6px;
+    }
+    &.NuiHR--size-xl {
+        border-width: 8px;
+    }
+
+    &.NuiHR--spacing-xs {
+        margin-top: 2px;
+        margin-bottom: 2px;
+    }
+    &.NuiHR--spacing-sm {
+        margin-top: 4px;
+        margin-bottom: 4px;
+    }
+    &.NuiHR--spacing-md {
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+    &.NuiHR--spacing-lg {
+        margin-top: 16px;
+        margin-bottom: 16px;
+    }
+    &.NuiHR--spacing-xl {
+        margin-top: 32px;
+        margin-bottom: 32px;
+    }
 `;
 
 StyledHR.displayName = createComponentName("HR");

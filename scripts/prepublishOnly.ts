@@ -13,7 +13,7 @@ const pkg = require(PKG_PATH);
 // Create a restore file of package.json
 fs.copyFileSync(PKG_PATH, PKG_RESTORE_PATH);
 
-const deps = ["express", "express-sslify", "ts-node"];
+const deps = ["express", "express-sslify", "ts-node", "react-router-dom"];
 
 deps.forEach((dep) => delete pkg.dependencies[dep]);
 

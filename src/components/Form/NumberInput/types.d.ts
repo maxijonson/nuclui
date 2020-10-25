@@ -44,9 +44,6 @@ interface NumberInputProps {
  * A number input for entering string data
  */
 export type NuiNumberInput = Nui.FRCWC<
-    Nui.Props<
-        NumberInputProps &
-            StrictOmit<InputContainerProps, "focused" | "touched">
-    >,
+    NumberInputProps & StrictOmit<InputContainerProps, "focused" | "touched">,
     "input"
 >;

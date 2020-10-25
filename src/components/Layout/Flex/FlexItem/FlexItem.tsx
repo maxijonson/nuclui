@@ -4,51 +4,9 @@ import _ from "lodash";
 import clsx from "clsx";
 import { createComponentName, nuiLog, createBreakpoints } from "@utils";
 import { quicksand } from "@fonts";
+import { useMediaQuery } from "@hooks";
 import { NuiFlexItem } from "./types";
-
-const FlexItem: NuiFlexItem = React.forwardRef((props, ref) => {
-    const {
-        component,
-        className,
-        grow,
-        order,
-        shrink,
-        basis,
-        align,
-        spacing,
-        xs,
-        sm,
-        md,
-        lg,
-        xl,
-        ...restProps
-    } = props;
-
-    const Component = component || "div";
-
-    React.useEffect(() => {
-        const warns: string[] = [];
-
-        if (grow && grow < 0) {
-            warns.push("FlexItem grow prop should not be below 0.");
-        }
-        if (shrink && shrink < 0) {
-            warns.push("FlexItem shrink prop should not be below 0.");
-        }
-
-        if (warns.length != 0) {
-            nuiLog.warn(warns, { once: true });
-        }
-    }, [grow, shrink]);
-
-    return (
-        <Component
-            {...restProps}
-            ref={ref}
-            className={clsx(["NuiFlexItem", className])}
-        />
-    );
-});
+import FlexContext from "../FlexContext";
 
 /**
  * Given a value, returns the appropriate flex-basis value. Giving a number will return a fraction of the 12-based grid.
@@ -83,6 +41,136 @@ const getBasis = (basis: number | string | undefined) => {
 };
 
 const bp = createBreakpoints({ sm: 620, md: 980, lg: 1280, xl: 1920 });
+const breakpoints = {
+    sm: `(min-width: ${bp.sm}px)`,
+    md: `(min-width: ${bp.md}px)`,
+    lg: `(min-width: ${bp.lg}px)`,
+    xl: `(min-width: ${bp.xl}px)`,
+};
+
+const FlexItem: NuiFlexItem = React.forwardRef((props, ref) => {
+    const {
+        component,
+        className,
+        grow,
+        order,
+        shrink,
+        align = "auto",
+        spacing,
+        basis,
+        xs,
+        sm,
+        md,
+        lg,
+        xl,
+        ...restProps
+    } = props;
+
+    const Component = component || "div";
+
+    const context = React.useContext(FlexContext);
+    const query = useMediaQuery(breakpoints);
+
+    const style = React.useMemo(() => {
+        const spacingVal = spacing ?? context.itemSpacing;
+        return {
+            flexGrow: grow ?? context.itemGrow,
+            order,
+            flexShrink: shrink ?? context.itemShrink,
+            padding: _.isNumber(spacingVal) ? `${spacingVal}px` : undefined,
+            flexBasis: (() => {
+                const basisXl =
+                    query.xl &&
+                    getBasis(
+                        xl ?? basis ?? context.itemXl ?? context.itemBasis
+                    );
+                const basisLg =
+                    !basisXl &&
+                    query.lg &&
+                    getBasis(
+                        lg ?? basis ?? context.itemLg ?? context.itemBasis
+                    );
+                const basisMd =
+                    !basisLg &&
+                    query.md &&
+                    getBasis(
+                        md ?? basis ?? context.itemMd ?? context.itemBasis
+                    );
+                const basisSm =
+                    !basisMd &&
+                    query.sm &&
+                    getBasis(
+                        sm ?? basis ?? context.itemSm ?? context.itemBasis
+                    );
+                return (
+                    basisXl ||
+                    basisLg ||
+                    basisMd ||
+                    basisSm ||
+                    getBasis(xs ?? basis ?? context.itemXs ?? context.itemBasis)
+                );
+            })(),
+            ...props.style,
+        };
+    }, [
+        basis,
+        context,
+        grow,
+        lg,
+        md,
+        order,
+        props.style,
+        query,
+        shrink,
+        sm,
+        spacing,
+        xl,
+        xs,
+    ]);
+
+    const classes = React.useMemo(() => {
+        const spacingVal = spacing ?? context.itemSpacing ?? "sm";
+        return clsx([
+            "NuiFlexItem",
+            [
+                align == "auto" && "NuiFlexItem--align-auto",
+                align == "flexStart" && "NuiFlexItem--align-fstart",
+                align == "flexEnd" && "NuiFlexItem--align-fend",
+                align == "center" && "NuiFlexItem--align-center",
+                align == "baseline" && "NuiFlexItem--align-base",
+                align == "stretch" && "NuiFlexItem--align-stretch",
+            ],
+            [
+                spacingVal == "none" && "NuiFlexItem--spacing-none",
+                spacingVal == "xs" && "NuiFlexItem--spacing-xs",
+                spacingVal == "sm" && "NuiFlexItem--spacing-sm",
+                spacingVal == "md" && "NuiFlexItem--spacing-md",
+                spacingVal == "lg" && "NuiFlexItem--spacing-lg",
+                spacingVal == "xl" && "NuiFlexItem--spacing-xl",
+            ],
+            className,
+        ]);
+    }, [align, className, context.itemSpacing, spacing]);
+
+    React.useEffect(() => {
+        const warns: string[] = [];
+
+        if (grow && grow < 0) {
+            warns.push("FlexItem grow prop should not be below 0.");
+        }
+        if (shrink && shrink < 0) {
+            warns.push("FlexItem shrink prop should not be below 0.");
+        }
+
+        if (warns.length != 0) {
+            nuiLog.warn(warns, { once: true });
+        }
+    }, [grow, shrink]);
+
+    return (
+        <Component {...restProps} ref={ref} className={classes} style={style} />
+    );
+});
 
 const StyledFlexItem = styled(FlexItem)`
     ${quicksand}
@@ -90,91 +178,43 @@ const StyledFlexItem = styled(FlexItem)`
     position: relative;
     box-sizing: border-box;
     margin: 0;
-    flex-grow: ${({ theme, grow }) => {
-        const itemGrow: typeof grow = theme.nui?.$parent?.flex?.itemGrow;
-        return grow ?? itemGrow ?? 1;
-    }};
-    order: ${({ order }) => order ?? 0};
-    flex-shrink: ${({ theme, shrink }) => {
-        const itemShrink: typeof shrink = theme.nui?.$parent?.flex?.itemShrink;
-        return shrink ?? itemShrink ?? 1;
-    }};
-    flex-basis: ${({ theme, basis, xs }) => {
-        const itemBasis: typeof basis =
-            theme.nui?.$parent?.flex?.itemXs ??
-            theme.nui?.$parent?.flex?.itemBasis;
-        return getBasis(xs ?? basis ?? itemBasis);
-    }};
-    align-self: ${({ align }) => {
-        switch (align) {
-            case "flexStart":
-                return "flex-start";
-            case "flexEnd":
-                return "flex-end";
-            case undefined:
-                return "auto";
-            default:
-                return align;
-        }
-    }};
-    padding: ${({ theme, spacing }) => {
-        const itemSpacing: typeof spacing =
-            theme.nui?.$parent?.flex?.itemSpacing;
-        const value = spacing ?? itemSpacing;
+    flex-grow: 1;
+    order: 0;
+    flex-shrink: 1;
 
-        switch (value) {
-            case "xs":
-                return "5px";
-            case undefined:
-            case "sm":
-                return "10px";
-            case "md":
-                return "15px";
-            case "lg":
-                return "20px";
-            case "xl":
-                return "30px";
-            case "none":
-                return "0px";
-            default:
-                return `${value}px`;
-        }
-    }};
-
-    @media (min-width: ${bp.sm}px) {
-        flex-basis: ${({ theme, basis, sm }) => {
-            const itemBasis: typeof basis =
-                theme.nui?.$parent?.flex?.itemSm ??
-                theme.nui?.$parent?.flex?.itemBasis;
-            return getBasis(sm ?? basis ?? itemBasis);
-        }};
+    &.NuiFlexItem--align-auto {
+        align-self: auto;
+    }
+    &.NuiFlexItem--align-fstart {
+        align-self: flex-start;
+    }
+    &.NuiFlexItem--align-fend {
+        align-self: flex-end;
+    }
+    &.NuiFlexItem--align-base {
+        align-self: baseline;
+    }
+    &.NuiFlexItem--align-stretch {
+        align-self: stretch;
     }
 
-    @media (min-width: ${bp.md}px) {
-        flex-basis: ${({ theme, basis, md }) => {
-            const itemBasis: typeof basis =
-                theme.nui?.$parent?.flex?.itemMd ??
-                theme.nui?.$parent?.flex?.itemBasis;
-            return getBasis(md ?? basis ?? itemBasis);
-        }};
+    &.NuiFlexItem--spacing-xs {
+        padding: 5px;
     }
-
-    @media (min-width: ${bp.lg}px) {
-        flex-basis: ${({ theme, basis, lg }) => {
-            const itemBasis: typeof basis =
-                theme.nui?.$parent?.flex?.itemLg ??
-                theme.nui?.$parent?.flex?.itemBasis;
-            return getBasis(lg ?? basis ?? itemBasis);
-        }};
+    &.NuiFlexItem--spacing-sm {
+        padding: 10px;
     }
-
-    @media (min-width: ${bp.xl}px) {
-        flex-basis: ${({ theme, basis, xl }) => {
-            const itemBasis: typeof basis =
-                theme.nui?.$parent?.flex?.itemXl ??
-                theme.nui?.$parent?.flex?.itemBasis;
-            return getBasis(xl ?? basis ?? itemBasis);
-        }};
+    &.NuiFlexItem--spacing-md {
+        padding: 15px;
+    }
+    &.NuiFlexItem--spacing-lg {
+        padding: 20px;
+    }
+    &.NuiFlexItem--spacing-xl {
+        padding: 30px;
+    }
+    &.NuiFlexItem--spacing-none {
+        padding: 0px;
     }
 `;
 

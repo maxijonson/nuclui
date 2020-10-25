@@ -15,6 +15,7 @@ import {
     useForm,
 } from "nuclui";
 import { TextInputProps } from "nuclui/components/Form/TextInput/types";
+import { Link } from "react-router-dom";
 
 const Icon = (
     <svg viewBox="0 0 640 512">
@@ -270,12 +271,13 @@ const UseFormTest = React.memo(() => {
 const Home = React.memo(() => {
     return (
         <Container maxWidth="lg">
+            <Link to="/benchmark">Benchmark</Link>
             <div>useForm Test</div>
             <UseFormTest />
             Nuclui is under developement! For now, The docs website is only a
             sandbox for developing the components. Docs will be gradually
             created once the core components are made!
-            <HR />
+            <HR style={{ transform: "scale(2)" }} />
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Provident
             libero consequatur voluptatibus dicta ad sunt, ipsa, reprehenderit
             animi quis veritatis laboriosam, necessitatibus distinctio vel

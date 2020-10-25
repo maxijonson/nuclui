@@ -46,14 +46,14 @@ describe("Spacer", () => {
         it("should use the default size value", () => {
             const wrapper = mount(<Spacer />);
             const spacer = wrapper.find(".NuiSpacer").first();
-            expect(spacer.hasClass("NuiSpacer--lg")).toBeTruthy();
+            expect(spacer.hasClass("NuiSpacer--size-lg")).toBeTruthy();
         });
 
         _.forEach(["xs", "sm", "md", "lg", "xl"] as Nui.Breakpoint[], (bp) => {
             it(`should use the ${bp} size value`, () => {
                 const wrapper = mount(<Spacer size={bp} />);
                 const spacer = wrapper.find(".NuiSpacer").first();
-                expect(spacer.hasClass(`NuiSpacer--${bp}`)).toBeTruthy();
+                expect(spacer.hasClass(`NuiSpacer--size-${bp}`)).toBeTruthy();
             });
         });
 

@@ -32,12 +32,12 @@ export type FlexItemProps = {
     /**
      * Spacing around the `FlexItem`.
      *
-     * @default "sm" or the `itemSpacing` value given to the parent Flex
+     * @default the `itemSpacing` value given to the parent Flex or "sm"
      */
     spacing?: Nui.Breakpoint | "none" | number;
 
     /**
-     * The flex-basis to use for a breakpoint is not defined
+     * The flex-basis to use for a breakpoint that is not defined
      */
     basis?: number | string;
 
