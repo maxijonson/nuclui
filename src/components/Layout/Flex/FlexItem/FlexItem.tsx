@@ -129,11 +129,10 @@ const FlexItem: NuiFlexItem = React.forwardRef((props, ref) => {
     ]);
 
     const classes = React.useMemo(() => {
-        const spacingVal = spacing ?? context.itemSpacing ?? "sm";
+        const spacingVal = spacing ?? context.itemSpacing;
         return clsx([
             "NuiFlexItem",
             [
-                align == "auto" && "NuiFlexItem--align-auto",
                 align == "flexStart" && "NuiFlexItem--align-fstart",
                 align == "flexEnd" && "NuiFlexItem--align-fend",
                 align == "center" && "NuiFlexItem--align-center",
@@ -143,7 +142,6 @@ const FlexItem: NuiFlexItem = React.forwardRef((props, ref) => {
             [
                 spacingVal == "none" && "NuiFlexItem--spacing-none",
                 spacingVal == "xs" && "NuiFlexItem--spacing-xs",
-                spacingVal == "sm" && "NuiFlexItem--spacing-sm",
                 spacingVal == "md" && "NuiFlexItem--spacing-md",
                 spacingVal == "lg" && "NuiFlexItem--spacing-lg",
                 spacingVal == "xl" && "NuiFlexItem--spacing-xl",
@@ -181,10 +179,9 @@ const StyledFlexItem = styled(FlexItem)`
     flex-grow: 1;
     order: 0;
     flex-shrink: 1;
+    align-self: auto;
+    padding: 10px;
 
-    &.NuiFlexItem--align-auto {
-        align-self: auto;
-    }
     &.NuiFlexItem--align-fstart {
         align-self: flex-start;
     }
@@ -200,9 +197,6 @@ const StyledFlexItem = styled(FlexItem)`
 
     &.NuiFlexItem--spacing-xs {
         padding: 5px;
-    }
-    &.NuiFlexItem--spacing-sm {
-        padding: 10px;
     }
     &.NuiFlexItem--spacing-md {
         padding: 15px;

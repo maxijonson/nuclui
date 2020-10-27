@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { mount } from "enzyme";
-import _ from "lodash";
 import mockConsole from "jest-mock-console";
 import Spacer from "./Spacer";
 import "jest-styled-components";
@@ -46,16 +45,17 @@ describe("Spacer", () => {
         it("should use the default size value", () => {
             const wrapper = mount(<Spacer />);
             const spacer = wrapper.find(".NuiSpacer").first();
-            expect(spacer.hasClass("NuiSpacer--size-lg")).toBeTruthy();
+            expect(spacer.prop("className")).not.toContain("NuiSpacer--size");
         });
 
-        _.forEach(["xs", "sm", "md", "lg", "xl"] as Nui.Breakpoint[], (bp) => {
-            it(`should use the ${bp} size value`, () => {
+        it.each(["xs", "sm", "md", "xl"] as Nui.Breakpoint[])(
+            "should use the %s size value",
+            (bp) => {
                 const wrapper = mount(<Spacer size={bp} />);
                 const spacer = wrapper.find(".NuiSpacer").first();
                 expect(spacer.hasClass(`NuiSpacer--size-${bp}`)).toBeTruthy();
-            });
-        });
+            }
+        );
 
         it("should not warn when the size is equal to 0", () => {
             mockConsole("warn");

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import _ from "lodash";
 import clsx from "clsx";
-import { nuiLog, createComponentName, isBreakpoint } from "@utils";
+import { nuiLog, createComponentName } from "@utils";
 import { NuiSpacer } from "./types";
 
 const Spacer: NuiSpacer = React.forwardRef((props, ref) => {
@@ -20,7 +20,12 @@ const Spacer: NuiSpacer = React.forwardRef((props, ref) => {
         () =>
             clsx([
                 "NuiSpacer",
-                isBreakpoint(size) && `NuiSpacer--size-${size}`,
+                [
+                    size == "xs" && "NuiSpacer--size-xs",
+                    size == "sm" && "NuiSpacer--size-sm",
+                    size == "md" && "NuiSpacer--size-md",
+                    size == "xl" && "NuiSpacer--size-xl",
+                ],
                 className,
             ]),
         [className, size]
@@ -38,6 +43,7 @@ const Spacer: NuiSpacer = React.forwardRef((props, ref) => {
 const StyledSpacer = styled(Spacer)`
     width: 100%;
     box-sizing: border-box;
+    height: 32px;
 
     &.NuiSpacer--size-xs {
         height: 4px;
@@ -47,9 +53,6 @@ const StyledSpacer = styled(Spacer)`
     }
     &.NuiSpacer--size-md {
         height: 16px;
-    }
-    &.NuiSpacer--size-lg {
-        height: 32px;
     }
     &.NuiSpacer--size-xl {
         height: 64px;

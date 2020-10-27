@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import _ from "lodash";
 import { mount } from "enzyme";
 import mockConsole from "jest-mock-console";
 import HR from "./HR";
@@ -47,16 +46,17 @@ describe("HR", () => {
             const wrapper = mount(<HR />);
             const hr = wrapper.find(".NuiHR").first();
 
-            expect(hr.hasClass("NuiHR--size-xs")).toBeTruthy();
+            expect(hr.prop("className")).not.toContain("NuiHR--size");
         });
 
-        _.forEach(["xs", "sm", "md", "lg", "xl"] as Nui.Breakpoint[], (bp) => {
-            it(`should use the ${bp} size value`, () => {
+        it.each(["sm", "md", "lg", "xl"] as Nui.Breakpoint[])(
+            "should use the %s size value",
+            (bp) => {
                 const wrapper = mount(<HR size={bp} />);
                 const hr = wrapper.find(".NuiHR").first();
                 expect(hr.hasClass(`NuiHR--size-${bp}`)).toBeTruthy();
-            });
-        });
+            }
+        );
 
         it("should use the custom size value", () => {
             const wrapper = mount(<HR size={20} />);
@@ -88,16 +88,17 @@ describe("HR", () => {
         it("should use the default spacing value", () => {
             const wrapper = mount(<HR />);
             const hr = wrapper.find(".NuiHR").first();
-            expect(hr.hasClass("NuiHR--spacing-lg")).toBeTruthy();
+            expect(hr.prop("className")).not.toContain("NuiHR--spacing");
         });
 
-        _.forEach(["xs", "sm", "md", "lg", "xl"] as Nui.Breakpoint[], (bp) => {
-            it(`should use the ${bp} spacing value`, () => {
+        it.each(["xs", "sm", "md", "xl"] as Nui.Breakpoint[])(
+            "should use the %s spacing value",
+            (bp) => {
                 const wrapper = mount(<HR spacing={bp} />);
                 const hr = wrapper.find(".NuiHR").first();
                 expect(hr.hasClass(`NuiHR--spacing-${bp}`)).toBeTruthy();
-            });
-        });
+            }
+        );
 
         it("should use the custom spacing value", () => {
             const wrapper = mount(<HR spacing={20} />);

@@ -46,13 +46,11 @@ const Flex: NuiFlex = React.forwardRef((props, ref) => {
                 "NuiFlex",
                 isBreakpoint(gap) && `NuiFlex--gap-${gap}`,
                 [
-                    direction == "row" && "NuiFlex--dir-r",
                     direction == "rowReverse" && "NuiFlex--dir-rr",
                     direction == "column" && "NuiFlex--dir-c",
                     direction == "columnReverse" && "NuiFlex--dir-cr",
                 ],
                 [
-                    align == "stretch" && "NuiFlex--align-stretch",
                     align == "flexStart" && "NuiFlex--align-fstart",
                     align == "start" && "NuiFlex--align-start",
                     align == "selfStart" && "NuiFlex--align-sstart",
@@ -69,13 +67,11 @@ const Flex: NuiFlex = React.forwardRef((props, ref) => {
                     justify == "end" && "NuiFlex--jc-end",
                     justify == "left" && "NuiFlex--jc-left",
                     justify == "right" && "NuiFlex--jc-right",
-                    justify == "center" && "NuiFlex--jc-center",
                     justify == "spaceBetween" && "NuiFlex--jc-between",
                     justify == "spaceAround" && "NuiFlex--jc-around",
                     justify == "spaceEvenly" && "NuiFlex--jc-even",
                 ],
                 [
-                    wrap == "wrap" && "NuiFlex--wrap-w",
                     wrap == "nowrap" && "NuiFlex--wrap-no",
                     wrap == "wrapReverse" && "NuiFlex--wrap-wr",
                 ],
@@ -145,6 +141,10 @@ const StyledFlex = styled(Flex)`
     position: relative;
     box-sizing: border-box;
     width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
 
     &.NuiFlex--gap-xs {
         gap: 5px;
@@ -171,13 +171,7 @@ const StyledFlex = styled(Flex)`
     &.NuiFlex--dir-c {
         flex-direction: column;
     }
-    &.NuiFlex--dir-r {
-        flex-direction: row;
-    }
 
-    &.NuiFlex--align-stretch {
-        align-items: stretch;
-    }
     &.NuiFlex--align-fstart {
         align-items: flex-start;
     }
@@ -221,9 +215,6 @@ const StyledFlex = styled(Flex)`
     &.NuiFlex--jc-right {
         justify-content: right;
     }
-    &.NuiFlex--jc-center {
-        justify-content: center;
-    }
     &.NuiFlex--jc-between {
         justify-content: space-between;
     }
@@ -236,9 +227,6 @@ const StyledFlex = styled(Flex)`
 
     &.NuiFlex--wrap-no {
         flex-wrap: nowrap;
-    }
-    &.NuiFlex--wrap-w {
-        flex-wrap: wrap;
     }
     &.NuiFlex--wrap-wr {
         flex-wrap: wrap-reverse;

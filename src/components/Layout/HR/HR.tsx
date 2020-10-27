@@ -3,7 +3,7 @@ import styled from "styled-components";
 import _ from "lodash";
 import clsx from "clsx";
 import { border } from "@theme";
-import { createComponentName, isBreakpoint, nuiLog } from "@utils";
+import { createComponentName, nuiLog } from "@utils";
 import { NuiHR } from "./types";
 
 const HR: NuiHR = React.forwardRef((props, ref) => {
@@ -23,8 +23,18 @@ const HR: NuiHR = React.forwardRef((props, ref) => {
         () =>
             clsx([
                 "NuiHR",
-                isBreakpoint(size) && `NuiHR--size-${size}`,
-                isBreakpoint(spacing) && `NuiHR--spacing-${spacing}`,
+                [
+                    size == "sm" && "NuiHR--size-sm",
+                    size == "md" && "NuiHR--size-md",
+                    size == "lg" && "NuiHR--size-lg",
+                    size == "xl" && "NuiHR--size-xl",
+                ],
+                [
+                    spacing == "xs" && "NuiHR--spacing-xs",
+                    spacing == "sm" && "NuiHR--spacing-sm",
+                    spacing == "md" && "NuiHR--spacing-md",
+                    spacing == "xl" && "NuiHR--spacing-xl",
+                ],
                 className,
             ]),
         [className, size, spacing]
@@ -51,10 +61,10 @@ const StyledHR = styled(HR)`
     border-style: solid;
     box-sizing: border-box;
     border-radius: 4px;
+    border-width: 1px;
+    margin-top: 16px;
+    margin-bottom: 16px;
 
-    &.NuiHR--size-xs {
-        border-width: 1px;
-    }
     &.NuiHR--size-sm {
         border-width: 2px;
     }
@@ -79,10 +89,6 @@ const StyledHR = styled(HR)`
     &.NuiHR--spacing-md {
         margin-top: 8px;
         margin-bottom: 8px;
-    }
-    &.NuiHR--spacing-lg {
-        margin-top: 16px;
-        margin-bottom: 16px;
     }
     &.NuiHR--spacing-xl {
         margin-top: 32px;

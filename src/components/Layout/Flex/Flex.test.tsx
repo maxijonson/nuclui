@@ -89,13 +89,13 @@ describe("Flex", () => {
         it("should use the default direction", () => {
             const wrapper = mount(<Flex />);
             const flex = wrapper.find(".NuiFlex").first();
-            expect(flex.hasClass("NuiFlex--dir-r")).toBeTruthy();
+            expect(flex.prop("className")).not.toContain("NuiHR--dir");
         });
 
         it("should use the row direction", () => {
             const wrapper = mount(<Flex direction="row" />);
             const flex = wrapper.find(".NuiFlex").first();
-            expect(flex.hasClass("NuiFlex--dir-r")).toBeTruthy();
+            expect(flex.prop("className")).not.toContain("NuiHR--dir");
         });
 
         it("should use the row-reverse direction", () => {
@@ -121,13 +121,13 @@ describe("Flex", () => {
         it("should use the default wrap", () => {
             const wrapper = mount(<Flex />);
             const flex = wrapper.find(".NuiFlex");
-            expect(flex.hasClass("NuiFlex--wrap-w")).toBeTruthy();
+            expect(flex.prop("className")).not.toContain("NuiHR--wrap");
         });
 
         it("should use the wrap wrap", () => {
             const wrapper = mount(<Flex wrap="wrap" />);
             const flex = wrapper.find(".NuiFlex");
-            expect(flex.hasClass("NuiFlex--wrap-w")).toBeTruthy();
+            expect(flex.prop("className")).not.toContain("NuiHR--wrap");
         });
 
         it("should use the wrap-reverse wrap", () => {
@@ -147,13 +147,13 @@ describe("Flex", () => {
         it("should use the default justify", () => {
             const wrapper = mount(<Flex />);
             const flex = wrapper.find(".NuiFlex").first();
-            expect(flex.hasClass("NuiFlex--jc-center")).toBeTruthy();
+            expect(flex.prop("className")).not.toContain("NuiHR--jc");
         });
 
         it("should use the center justify", () => {
             const wrapper = mount(<Flex justify="center" />);
             const flex = wrapper.find(".NuiFlex").first();
-            expect(flex.hasClass("NuiFlex--jc-center")).toBeTruthy();
+            expect(flex.prop("className")).not.toContain("NuiHR--jc");
         });
 
         it("should use the flexStart justify", () => {
@@ -209,13 +209,13 @@ describe("Flex", () => {
         it("should use the default align", () => {
             const wrapper = mount(<Flex />);
             const flex = wrapper.find(".NuiFlex").first();
-            expect(flex.hasClass("NuiFlex--align-stretch")).toBeTruthy();
+            expect(flex.prop("className")).not.toContain("NuiHR--align");
         });
 
         it("should use the stretch align", () => {
             const wrapper = mount(<Flex />);
             const flex = wrapper.find(".NuiFlex").first();
-            expect(flex.hasClass("NuiFlex--align-stretch")).toBeTruthy();
+            expect(flex.prop("className")).not.toContain("NuiHR--align");
         });
 
         it("should use the flexStart align", () => {

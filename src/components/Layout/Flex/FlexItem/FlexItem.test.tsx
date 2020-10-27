@@ -345,19 +345,27 @@ describe("FlexItem", () => {
     });
 
     describe("align", () => {
-        const assertAlign = (className: string, wrapper: ReactWrapper) => {
+        const assertAlign = (
+            className: string | undefined,
+            wrapper: ReactWrapper
+        ) => {
             const flexItem = wrapper.find(".NuiFlexItem").first();
+            if (!className) {
+                return expect(flexItem.prop("className")).not.toContain(
+                    "NuiFlexItem--align"
+                );
+            }
             expect(
                 flexItem.hasClass(`NuiFlexItem--align-${className}`)
             ).toBeTruthy();
         };
 
         it("should use the default align value", () => {
-            assertAlign("auto", mount(<FlexItem />));
+            assertAlign(undefined, mount(<FlexItem />));
         });
 
         it("should use the auto align value", () => {
-            assertAlign("auto", mount(<FlexItem align="auto" />));
+            assertAlign(undefined, mount(<FlexItem align="auto" />));
         });
 
         it("should use the flexStart align value", () => {
@@ -389,15 +397,18 @@ describe("FlexItem", () => {
         ) => {
             const flexItem = wrapper.find(".NuiFlexItem").first();
             if (className) {
-                expect(
+                return expect(
                     flexItem.hasClass(`NuiFlexItem--spacing-${className}`)
                 ).toBeTruthy();
             }
+            expect(flexItem.prop("className")).not.toContain(
+                "NuiFlexItem--spacing"
+            );
             expect(flexItem.prop("style")).toHaveProperty("padding", padding);
         };
 
         it("should use the default spacing value", () => {
-            assertSpacing("sm", undefined, mount(<FlexItem />));
+            assertSpacing(undefined, undefined, mount(<FlexItem />));
         });
 
         it("should use the xs spacing value", () => {
@@ -405,7 +416,11 @@ describe("FlexItem", () => {
         });
 
         it("should use the sm spacing value", () => {
-            assertSpacing("sm", undefined, mount(<FlexItem spacing="sm" />));
+            assertSpacing(
+                undefined,
+                undefined,
+                mount(<FlexItem spacing="sm" />)
+            );
         });
 
         it("should use the md spacing value", () => {
