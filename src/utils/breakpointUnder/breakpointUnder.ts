@@ -9,7 +9,7 @@ enum BP {
 }
 
 /**
- * Checks if the given `bp` is smaller or equal to `under`.
+ * Checks if the given `bp` is **smaller or equal** to `under`.
  * @param bp the breakpoint to check
  * @param under the breakpoint to compare `bp` against
  * @param equal If it is false, then only breakpoints under `under` will return true.

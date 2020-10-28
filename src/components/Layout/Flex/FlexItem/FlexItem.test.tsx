@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import ReactDOM from "react-dom";
 import _ from "lodash";
@@ -25,6 +24,11 @@ const resetBps = () => {
 };
 
 describe("FlexItem", () => {
+    beforeAll(() => {
+        // Suppress MediaQueryContext warnings
+        mockConsole("warn");
+    });
+
     it("should render without crashing", () => {
         const div = document.createElement("div");
         ReactDOM.render(<FlexItem />, div);
