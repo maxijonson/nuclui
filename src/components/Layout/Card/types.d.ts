@@ -3,29 +3,13 @@ export interface CardProps {
      * The padding size
      * @default "md"
      */
-    padding?: Nui.Breakpoint | "none" | number;
+    padding?: Nui.Breakpoint | "none";
 
     /**
      * If true, no box-shadow rule is applied
      * @default false
      */
     disableShadow?: boolean;
-
-    /**
-     * Style of the Card outline
-     * @default solid
-     */
-    outline?:
-        | "solid"
-        | "dashed"
-        | "dotted"
-        | "double"
-        | "groove"
-        | "none"
-        | "hidden"
-        | "inset"
-        | "outset"
-        | "ridge";
 }
 
 /**

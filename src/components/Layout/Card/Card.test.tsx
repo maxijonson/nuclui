@@ -1,8 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { mount, shallow } from "enzyme";
+import { mount, ReactWrapper } from "enzyme";
 import Card from "./Card";
 import "jest-styled-components";
+import { CardProps } from "./types";
 
 describe("Card", () => {
     it("should render without crashing", () => {
@@ -68,117 +69,72 @@ describe("Card", () => {
     });
 
     describe("padding", () => {
+        const assertPadding = (
+            padding: CardProps["padding"],
+            wrapper: ReactWrapper
+        ) => {
+            const card = wrapper.find(".NuiCard").first();
+            if (!padding) {
+                return expect(card.prop("className")).not.toContain(
+                    "NuiCard--padding"
+                );
+            }
+            expect(card.hasClass(`NuiCard--padding-${padding}`)).toBeTruthy();
+        };
+
         it("should have the default padding value", () => {
-            const wrapper = shallow(<Card />);
-            expect(wrapper).toHaveStyleRule("padding", "21px");
+            assertPadding(undefined, mount(<Card />));
         });
 
         it("should have the xs padding value", () => {
-            const wrapper = shallow(<Card padding="xs" />);
-            expect(wrapper).toHaveStyleRule("padding", "4px");
+            assertPadding("xs", mount(<Card padding="xs" />));
         });
 
         it("should have the sm padding value", () => {
-            const wrapper = shallow(<Card padding="sm" />);
-            expect(wrapper).toHaveStyleRule("padding", "12px");
+            assertPadding("sm", mount(<Card padding="sm" />));
         });
 
         it("should have the md padding value", () => {
-            const wrapper = shallow(<Card padding="md" />);
-            expect(wrapper).toHaveStyleRule("padding", "21px");
+            assertPadding(undefined, mount(<Card padding="md" />));
         });
 
         it("should have the lg padding value", () => {
-            const wrapper = shallow(<Card padding="lg" />);
-            expect(wrapper).toHaveStyleRule("padding", "32px");
+            assertPadding("lg", mount(<Card padding="lg" />));
         });
 
         it("should have the xl padding value", () => {
-            const wrapper = shallow(<Card padding="xl" />);
-            expect(wrapper).toHaveStyleRule("padding", "64px");
+            assertPadding("xl", mount(<Card padding="xl" />));
         });
 
         it("should have the none padding value", () => {
-            const wrapper = shallow(<Card padding="none" />);
-            expect(wrapper).toHaveStyleRule("padding", undefined);
-        });
-
-        it("should have the custom padding value", () => {
-            const wrapper = shallow(<Card padding={1337} />);
-            expect(wrapper).toHaveStyleRule("padding", "1337px");
+            assertPadding("none", mount(<Card padding="none" />));
         });
     });
 
     describe("disableShadow", () => {
+        const assertShadow = (
+            shadow: CardProps["disableShadow"],
+            wrapper: ReactWrapper
+        ) => {
+            const card = wrapper.find(".NuiCard").first();
+            if (!shadow) {
+                return expect(card.prop("className")).not.toContain(
+                    "NuiCard--no-shadow"
+                );
+            }
+            expect(card.hasClass("NuiCard--no-shadow")).toBeTruthy();
+        };
+
         it("should have the default disableShadow value", () => {
-            const wrapper = shallow(<Card />);
-            expect(wrapper).not.toHaveStyleRule("box-shadow", undefined);
+            assertShadow(undefined, mount(<Card />));
         });
 
         it("should have the false disableShadow value", () => {
-            const wrapper = shallow(<Card disableShadow={false} />);
-            expect(wrapper).not.toHaveStyleRule("box-shadow", undefined);
+            assertShadow(false, mount(<Card disableShadow={false} />));
         });
 
         it("should have the true disableShadow value", () => {
-            const wrapper = shallow(<Card disableShadow />);
-            expect(wrapper).not.toHaveStyleRule("box-shadow");
-        });
-    });
-    describe("outline", () => {
-        it("should have the default outline value", () => {
-            const wrapper = shallow(<Card />);
-            expect(wrapper).toHaveStyleRule("border-style", "solid");
-        });
-
-        it("should have the solid outline value", () => {
-            const wrapper = shallow(<Card outline="solid" />);
-            expect(wrapper).toHaveStyleRule("border-style", "solid");
-        });
-
-        it("should have the dashed outline value", () => {
-            const wrapper = shallow(<Card outline="dashed" />);
-            expect(wrapper).toHaveStyleRule("border-style", "dashed");
-        });
-
-        it("should have the dotted outline value", () => {
-            const wrapper = shallow(<Card outline="dotted" />);
-            expect(wrapper).toHaveStyleRule("border-style", "dotted");
-        });
-
-        it("should have the double outline value", () => {
-            const wrapper = shallow(<Card outline="double" />);
-            expect(wrapper).toHaveStyleRule("border-style", "double");
-        });
-
-        it("should have the groove outline value", () => {
-            const wrapper = shallow(<Card outline="groove" />);
-            expect(wrapper).toHaveStyleRule("border-style", "groove");
-        });
-
-        it("should have the none outline value", () => {
-            const wrapper = shallow(<Card outline="none" />);
-            expect(wrapper).toHaveStyleRule("border-style", "none");
-        });
-
-        it("should have the hidden outline value", () => {
-            const wrapper = shallow(<Card outline="hidden" />);
-            expect(wrapper).toHaveStyleRule("border-style", "hidden");
-        });
-
-        it("should have the inset outline value", () => {
-            const wrapper = shallow(<Card outline="inset" />);
-            expect(wrapper).toHaveStyleRule("border-style", "inset");
-        });
-
-        it("should have the outset outline value", () => {
-            const wrapper = shallow(<Card outline="outset" />);
-            expect(wrapper).toHaveStyleRule("border-style", "outset");
-        });
-
-        it("should have the ridge outline value", () => {
-            const wrapper = shallow(<Card outline="ridge" />);
-            expect(wrapper).toHaveStyleRule("border-style", "ridge");
+            assertShadow(true, mount(<Card disableShadow />));
         });
     });
 });

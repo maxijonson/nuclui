@@ -11,20 +11,30 @@ const Card: NuiCard = React.forwardRef((props, ref) => {
         component,
         className,
         padding,
-        outline,
         disableShadow,
         ...restProps
     } = props;
 
     const Component = component || "div";
 
-    return (
-        <Component
-            {...restProps}
-            ref={ref}
-            className={clsx(["NuiCard", className])}
-        />
+    const classes = React.useMemo(
+        () =>
+            clsx([
+                "NuiCard",
+                [
+                    padding == "xs" && "NuiCard--padding-xs",
+                    padding == "sm" && "NuiCard--padding-sm",
+                    padding == "lg" && "NuiCard--padding-lg",
+                    padding == "xl" && "NuiCard--padding-xl",
+                    padding == "none" && "NuiCard--padding-none",
+                ],
+                disableShadow && "NuiCard--no-shadow",
+                className,
+            ]),
+        [className, disableShadow, padding]
     );
+
+    return <Component {...restProps} ref={ref} className={classes} />;
 });
 
 const StyledCard = styled(Card)`
@@ -36,42 +46,34 @@ const StyledCard = styled(Card)`
 
     display: block;
     position: relative;
-    border-radius: 5px;
-    border-width: 1px;
     box-sizing: border-box;
     margin-top: 15px;
     margin-bottom: 15px;
-    box-shadow: ${({ disableShadow }) =>
-        disableShadow
-            ? undefined
-            : "0 2px 3px -1px var(--nui-shadow), 0 1px 1px -1px var(--nui-shadow)"};
-    border-style: ${({ outline }) => {
-        switch (outline) {
-            case undefined:
-                return "solid";
-            default:
-                return outline;
-        }
-    }};
-    padding: ${({ padding }) => {
-        switch (padding) {
-            case "xs":
-                return "4px";
-            case "sm":
-                return "12px";
-            case undefined:
-            case "md":
-                return "21px";
-            case "lg":
-                return "32px";
-            case "xl":
-                return "64px";
-            case "none":
-                return undefined;
-            default:
-                return `${padding}px`;
-        }
-    }}
+    box-shadow: 0 2px 3px -1px var(--nui-shadow), 0 1px 1px -1px var(--nui-shadow);
+    border-radius: 5px;
+    border-width: 1px;
+    border-style: solid;
+    padding: 21px;
+
+    &.NuiCard--padding-xs {
+        padding: 4px;
+    }
+    &.NuiCard--padding-sm {
+        padding: 12px;
+    }
+    &.NuiCard--padding-lg {
+        padding: 32px;
+    }
+    &.NuiCard--padding-xl {
+        padding: 64px;
+    }
+    &.NuiCard--padding-none {
+        padding: 0;
+    }
+
+    &.NuiCard--no-shadow {
+        box-shadow: none;
+    }
 `;
 
 StyledCard.displayName = createComponentName("Card");
