@@ -9,8 +9,9 @@ type Level = Exclude<
 >;
 
 describe("nuiLog", () => {
-    _.forEach(["log", "info", "warn", "error"] as Level[], (level) => {
-        describe(level, () => {
+    describe.each(["log", "info", "warn", "error"] as Level[])(
+        "%s",
+        (level) => {
             beforeEach(() => mockConsole(level));
 
             it(`should log the message using the ${level} method`, () => {
@@ -110,8 +111,8 @@ describe("nuiLog", () => {
                     `uniqueid\n      ${level}\n      message`
                 );
             });
-        });
-    });
+        }
+    );
 
     it("should clear the history", () => {
         mockConsole("info");

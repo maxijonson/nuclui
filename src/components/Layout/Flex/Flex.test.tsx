@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import _ from "lodash";
 import { mount, shallow } from "enzyme";
 import Flex from "./Flex";
 import "jest-styled-components";
@@ -275,13 +274,14 @@ describe("Flex", () => {
             expect(flex.prop("style")).toHaveProperty("gap", undefined);
         });
 
-        _.forEach(["xs", "sm", "md", "lg", "xl"] as Nui.Breakpoint[], (bp) => {
-            it(`should use the ${bp} gap value`, () => {
+        it.each(["xs", "sm", "md", "lg", "xl"] as Nui.Breakpoint[])(
+            "should use the %s gap value",
+            (bp) => {
                 const wrapper = mount(<Flex gap={bp} />);
                 const flex = wrapper.find(".NuiFlex").first();
                 expect(flex.hasClass(`NuiFlex--gap-${bp}`)).toBeTruthy();
-            });
-        });
+            }
+        );
 
         it("should use the custom gap value", () => {
             const wrapper = mount(<Flex gap={7} />);
