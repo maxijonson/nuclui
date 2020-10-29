@@ -4,7 +4,7 @@ import styled from "styled-components";
 import _ from "lodash";
 import { background, border, context, shadow, text } from "@theme";
 import { createComponentName } from "@utils";
-import { InputContainerProps, NuiInputContainer } from "./types";
+import { NuiInputContainer } from "./types";
 
 const InputContainer: NuiInputContainer = React.memo(
     React.forwardRef((props, ref) => {
@@ -16,6 +16,7 @@ const InputContainer: NuiInputContainer = React.memo(
             prepend,
             size,
             children,
+            disabled,
             focused = false,
             touched = true,
             ...restProps
@@ -23,39 +24,49 @@ const InputContainer: NuiInputContainer = React.memo(
 
         const errors = React.useMemo(() => props.errors || [], [props.errors]);
 
-        return (
-            <div
-                className={clsx([
+        const classes = React.useMemo(
+            () =>
+                clsx([
                     "NuiInputContainer",
+                    focused && "NuiInputContainer--focused",
+                    errors.length && touched && "NuiInputContainer--invalid",
+                    [
+                        variant == "underline" &&
+                            "NuiInputContainer--variant-underline",
+                        variant == "none" && "NuiInputContainer--variant-none",
+                        variant == "filled" &&
+                            "NuiInputContainer--variant-filled",
+                        variant == "filled-underline" &&
+                            "NuiInputContainer--variant-filled-underline",
+                        variant == "filled-none" &&
+                            "NuiInputContainer--variant-filled-none",
+                    ],
+                    disabled && "NuiInputContainer--disabled",
                     className,
-                    focused && "focused",
-                ])}
-                ref={ref}
-                {...restProps}
-            >
+                ]),
+            [className, disabled, errors.length, focused, touched, variant]
+        );
+
+        const style = React.useMemo(
+            () => ({
+                width: _.isNumber(size) ? `${size}ch` : size,
+                ...props.style,
+            }),
+            [props.style, size]
+        );
+
+        return (
+            <div {...restProps} className={classes} ref={ref} style={style}>
                 {label && (
                     <label
-                        className={clsx([
-                            "NuiInputContainer__label",
-                            focused && "focused",
-                            errors.length && touched && "invalid",
-                        ])}
+                        className="NuiInputContainer__label"
                         children={label}
                     />
                 )}
-                <div
-                    className={clsx([
-                        "NuiInputContainer__container",
-                        focused && "focused",
-                        errors.length && touched && "invalid",
-                    ])}
-                >
+                <div className="NuiInputContainer__container">
                     {prepend && (
                         <div
-                            className={clsx([
-                                "NuiInputContainer__prepend",
-                                focused && "focused",
-                            ])}
+                            className="NuiInputContainer__prepend"
                             children={prepend}
                         />
                     )}
@@ -78,30 +89,6 @@ const InputContainer: NuiInputContainer = React.memo(
     })
 );
 
-const getBorder = ({ variant }: InputContainerProps) => {
-    switch (variant) {
-        case "none":
-        case "underline":
-        case "filled-none":
-        case "filled-underline":
-            return "none";
-        default:
-            return undefined;
-    }
-};
-
-const getUnderline = (type: "primary" | "danger") => ({
-    variant,
-}: InputContainerProps) => {
-    switch (variant) {
-        case "none":
-        case "filled-none":
-            return undefined;
-        default:
-            return `linear-gradient(to top, var(--nui-context-${type}) 1px, transparent 1px)`;
-    }
-};
-
 const TRANSITION_TIME = 0.2;
 
 const StyledInputContainer = styled(InputContainer)`
@@ -111,24 +98,10 @@ const StyledInputContainer = styled(InputContainer)`
     max-width: 100%;
     margin: 10px 0;
     transition: opacity ${TRANSITION_TIME}s;
-    opacity: ${({ disabled }) => (disabled ? "0.5" : "1")};
-    pointer-events: ${({ disabled }) => (disabled ? "none" : "all")};
-    width: ${({ size }) => {
-        if (size) return typeof size === "string" ? size : `${size}ch`;
-        return "30ch";
-    }};
+    width: 30ch;
 
     & .NuiInputContainer__prepend, & .NuiInputContainer__append {
-        ${({ variant }) => {
-            switch (variant) {
-                case "filled":
-                case "filled-none":
-                case "filled-underline":
-                    return background.dimmed;
-                default:
-                    return background.secondary;
-            }
-        }}
+        ${background.secondary}
 
         display: flex;
         align-items: center;
@@ -136,11 +109,6 @@ const StyledInputContainer = styled(InputContainer)`
         padding: 8px;
         font-size: 16px;
         line-height: 19px;
-
-        &.focused {
-            padding-bottom: 7px;
-            margin-bottom: 1px;
-        }
 
         & svg {
             fill: currentColor;
@@ -161,71 +129,146 @@ const StyledInputContainer = styled(InputContainer)`
         -webkit-font-smoothing: antialiased !important;
     }
 
-    & .NuiInputContainer__error, & label.invalid {
-        color: var(--nui-context-danger);
-    }
-
-    & label.focused {
-        color: var(--nui-context-primary);
-    }
-
     & .NuiInputContainer__container {
         ${border.secondary}
         ${shadow.secondary}
-        ${({ variant }) => {
-            switch (variant) {
-                case "filled":
-                case "filled-none":
-                case "filled-underline":
-                    return background.secondary;
-                default:
-                    return undefined;
-            }
-        }}
 
         display: flex;
         box-sizing: border-box;
         transition: background-image ${TRANSITION_TIME}s, border-color ${TRANSITION_TIME}s, background-size ${TRANSITION_TIME}s;
-        background-image: ${getUnderline("primary")};
         background-repeat: no-repeat;
         background-position: center;
         background-size: 0% 100%;
         padding: 0;
-        box-shadow: ${({ variant }) => {
-            switch (variant) {
-                case undefined:
-                case "filled":
-                case "filled-underline":
-                case "outline":
-                    return "0 1px 2px -1px var(--nui-shadow)";
-                default:
-                    return undefined;
-            }
-        }};
+        box-shadow: 0 1px 2px -1px var(--nui-shadow);
         border-style: solid;
-        border-width: ${({ variant }) => {
-            switch (variant) {
-                case "none":
-                case "filled-none":
-                    return "0";
-                default:
-                    return "1px";
-            }
-        }};
-        border-left: ${getBorder};
-        border-right: ${getBorder};
-        border-top: ${getBorder};
+        border-width: 1px;
+    }
 
-        &.invalid {
-            border-color: var(--nui-context-danger);
-            background-image: ${getUnderline("danger")}
+    &.NuiInputContainer--variant-underline {
+        & .NuiInputContainer__prepend, 
+        & .NuiInputContainer__append {
+            ${background.secondary}
         }
 
-        &.focused {
+        & .NuiInputContainer__container {
+            box-shadow: none;
+            border-width: 1px;
+            border-left: none;
+            border-right: none;
+            border-top: none;
+            background-image: linear-gradient(to top, var(--nui-context-primary) 1px, transparent 1px);
+        }
+    }
+
+    &.NuiInputContainer--variant-none {
+        & .NuiInputContainer__prepend, 
+        & .NuiInputContainer__append {
+            ${background.secondary}
+        }
+
+        & .NuiInputContainer__container {
+            box-shadow: none;
+            border-width: 0;
+            border-left: none;
+            border-right: none;
+            border-top: none;
+        }
+    }
+
+    &.NuiInputContainer--variant-filled {
+        & .NuiInputContainer__prepend, 
+        & .NuiInputContainer__append {
+            ${background.dimmed}
+        }
+
+        & .NuiInputContainer__container {
+            ${background.secondary}
+
+            box-shadow: 0 1px 2px -1px var(--nui-shadow);
+            border-width: 1px;
+            background-image: linear-gradient(to top, var(--nui-context-primary) 1px, transparent 1px);
+        }
+    }
+
+    &.NuiInputContainer--variant-filled-underline {
+        & .NuiInputContainer__prepend, 
+        & .NuiInputContainer__append {
+            ${background.dimmed}
+        }
+
+        & .NuiInputContainer__container {
+            ${background.secondary}
+
+            box-shadow: 0 1px 2px -1px var(--nui-shadow);
+            border-width: 1px;
+            border-left: none;
+            border-right: none;
+            border-top: none;
+            background-image: linear-gradient(to top, var(--nui-context-primary) 1px, transparent 1px);
+        }
+    }
+
+    &.NuiInputContainer--variant-filled-none {
+        & .NuiInputContainer__prepend, 
+        & .NuiInputContainer__append {
+            ${background.dimmed}
+        }
+
+        & .NuiInputContainer__container {
+            ${background.secondary}
+
+            box-shadow: none;
+            border-width: 0;
+            border-left: none;
+            border-right: none;
+            border-top: none;
+        }
+    }
+
+    &.NuiInputContainer--focused {
+        & .NuiInputContainer__prepend, 
+        & .NuiInputContainer__append {
+            padding-bottom: 7px;
+            margin-bottom: 1px;
+        }
+
+        & .NuiInputContainer__label {
+            color: var(--nui-context-primary);
+        }
+
+        & .NuiInputContainer__container {
             border-color: var(--nui-context-primary);
             background-size: 100% 100%;
-            background-image: ${getUnderline("primary")};
+            background-image: linear-gradient(to top, var(--nui-context-primary) 1px, transparent 1px);
         }
+
+        &.NuiInputContainer--variant-none .NuiInputContainer__container, 
+        &.NuiInputContainer--variant-filled-none .NuiInputContainer__container {
+            background-image: none;
+        }
+    }
+
+    &.NuiInputContainer--invalid {
+        & .NuiInputContainer__error, 
+        & .NuiInputContainer__label {
+            color: var(--nui-context-danger);
+        }
+
+        & .NuiInputContainer__container {
+            border-color: var(--nui-context-danger);
+            background-image: linear-gradient(to top, var(--nui-context-danger) 1px, transparent 1px);
+        }
+
+        &.NuiInputContainer--variant-none .NuiInputContainer__container, 
+        &.NuiInputContainer--variant-filled-none .NuiInputContainer__container {
+            background-image: none;
+        }
+    }
+
+    &.NuiInputContainer--disabled {
+        opacity: 0.5;
+        pointer-events: none;
     }
 `;
 
