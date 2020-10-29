@@ -13,6 +13,9 @@ export const defaultMediaQueryCtxValue = Object.freeze({
     },
 });
 
+/**
+ * The React context for MediaQueryContext. This should only be used by the MediaQueryContext component.
+ */
 const MediaQueryCtx = React.createContext<MediaQueryContextValue>(
     defaultMediaQueryCtxValue
 );

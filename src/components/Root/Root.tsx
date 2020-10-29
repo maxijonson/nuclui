@@ -1,6 +1,7 @@
 import React from "react";
 import _ from "lodash";
 import { createComponentName } from "@utils";
+import MediaQueryContext from "@components/Layout/MediaQueryContext/MediaQueryContext";
 import { ThemeProvider } from "styled-components";
 import defaultTheme from "@theme/defaultTheme";
 import { Normalize } from "./Normalize";
@@ -12,6 +13,7 @@ import { RootProps } from "./types";
  * - Theming (manually done by adding the "nui" property to a styled-component ThemeProvider with your theme overrides)
  * - CSS Reset (manually done by adding your own reset or using the Normalize component)
  * - Fonts (manually done by importing the used fonts into your app)
+ * - MediaQueryContext (manually done by adding this component at the root of your app or wherever it is necessary to optimize components that use `useMediaQuery`)
  */
 const Root: Nui.FC<RootProps> = ({ theme = {}, children }) => {
     const mergedTheme = React.useMemo(
@@ -23,7 +25,7 @@ const Root: Nui.FC<RootProps> = ({ theme = {}, children }) => {
         <ThemeProvider theme={mergedTheme}>
             <Normalize />
             <Fonts />
-            {children}
+            <MediaQueryContext>{children}</MediaQueryContext>
         </ThemeProvider>
     );
 };

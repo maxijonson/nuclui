@@ -277,7 +277,7 @@ const Home = React.memo(() => {
             Nuclui is under developement! For now, The docs website is only a
             sandbox for developing the components. Docs will be gradually
             created once the core components are made!
-            <HR style={{ transform: "scale(2)" }} />
+            <HR />
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Provident
             libero consequatur voluptatibus dicta ad sunt, ipsa, reprehenderit
             animi quis veritatis laboriosam, necessitatibus distinctio vel

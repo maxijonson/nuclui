@@ -2,7 +2,7 @@ import React from "react";
 import produce from "immer";
 import MediaQueryCtx from "./MediaQueryCtx";
 
-export default React.memo((props) => {
+const MediaQueryContext = React.memo((props) => {
     const [queryMatches, setQueryMatches] = React.useState<{
         [query: string]: boolean;
     }>({});
@@ -43,3 +43,5 @@ export default React.memo((props) => {
         />
     );
 });
+
+export default MediaQueryContext;
