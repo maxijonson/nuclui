@@ -31,8 +31,23 @@ const Checkbox: NuiCheckbox = React.memo(
             [onChange]
         );
 
+        const classes = React.useMemo(
+            () =>
+                clsx(
+                    "NuiCheckbox",
+                    [
+                        labelPosition == "top" && "NuiCheckbox--position-top",
+                        labelPosition == "bottom" &&
+                            "NuiCheckbox--position-bottom",
+                        labelPosition == "left" && "NuiCheckbox--position-left",
+                    ],
+                    className
+                ),
+            [className, labelPosition]
+        );
+
         return (
-            <label className={clsx(["NuiCheckbox", className])}>
+            <label className={classes}>
                 {label && <div className="NuiCheckbox__label">{label}</div>}
                 <div className="NuiCheckbox__inputContainer">
                     <input
@@ -59,46 +74,23 @@ const StyledCheckbox = styled(Checkbox)`
     width: fit-content;
     align-items: center;
     pointer-events: none;
+    gap: 10px;
+    flex-direction: row-reverse;
 
-    gap: ${({ labelPosition }) => {
-        switch (labelPosition) {
-            case "left":
-            case "right":
-            case undefined:
-                return "10px";
-            default:
-                return undefined;
-        }
-    }};
-
-    flex-direction: ${({ labelPosition }) => {
-        switch (labelPosition) {
-            case "top":
-                return "column";
-            default:
-            case "right":
-                return "row-reverse";
-            case "bottom":
-                return "column-reverse";
-            case "left":
-                return "row";
-        }
-    }};
-
-    .NuiCheckbox__inputContainer {
+    & .NuiCheckbox__inputContainer {
         position: relative;
         width: 18px;
         height: 18px;
     }
 
-    .NuiCheckbox__input,
-    .NuiCheckbox__customInput,
-    .NuiCheckbox__label {
+    & .NuiCheckbox__input,
+    & .NuiCheckbox__customInput,
+    & .NuiCheckbox__label {
         cursor: pointer;
         pointer-events: all;
     }
 
-    .NuiCheckbox__input {
+    & .NuiCheckbox__input {
         position: absolute;
         opacity: 0;
 
@@ -117,7 +109,7 @@ const StyledCheckbox = styled(Checkbox)`
         }
     }
 
-    .NuiCheckbox__customInput {
+    & .NuiCheckbox__customInput {
         ${border.primary}
 
         position: absolute;
@@ -143,6 +135,21 @@ const StyledCheckbox = styled(Checkbox)`
             transition: transform 300ms ease-out;
             content: "";
         }
+    }
+
+    &.NuiCheckbox--position-top {
+        gap: 0;
+        flex-direction: column;
+    }
+
+    &.NuiCheckbox--position-left {
+        gap: 10px;
+        flex-direction: row;
+    }
+
+    &.NuiCheckbox--position-bottom {
+        gap: 0;
+        flex-direction: column-reverse;
     }
 `;
 
