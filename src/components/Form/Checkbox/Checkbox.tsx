@@ -102,10 +102,12 @@ const StyledCheckbox = styled(Checkbox)`
 
         /** Checkmark icon (visible) */
         &:checked ~ .NuiCheckbox__customInput::after {
-            border: 0px solid white;
+            border-color: white;
+            border-width: 0px;
+            border-style: solid;
             border-right-width: 2px;
             border-bottom-width: 2px;
-            transform: rotate(35deg) scale(1);
+            transform: translate(-45%, -58%) rotate(40deg) scale(1);
         }
     }
 
@@ -127,11 +129,11 @@ const StyledCheckbox = styled(Checkbox)`
         /** Checkmark icon (hidden) */
         &::after {
             position: absolute;
-            left: 0.3375em;
-            top: 0.105em;
+            left: 50%;
+            top: 50%;
             width: 3px;
             height: 9px;
-            transform: rotate(35deg) scale(0);
+            transform: translate(-45%, -58%) rotate(40deg) scale(0);
             transition: transform 300ms ease-out;
             content: "";
         }
