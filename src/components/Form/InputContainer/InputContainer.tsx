@@ -19,10 +19,11 @@ const InputContainer: NuiInputContainer = React.memo(
             disabled,
             focused = false,
             touched = true,
+            errors: errorsProp,
             ...restProps
         } = props;
 
-        const errors = React.useMemo(() => props.errors || [], [props.errors]);
+        const errors = React.useMemo(() => errorsProp || [], [errorsProp]);
 
         const classes = React.useMemo(
             () =>

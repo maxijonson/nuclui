@@ -89,6 +89,9 @@ const UseFormTest = React.memo(() => {
             },
             toc: {
                 initial: true,
+                validate: (v) => {
+                    if (!v) return ["Must be checked"];
+                },
             },
             choices: {
                 initial: [] as ("choice1" | "choice2" | "choice3")[],
@@ -148,6 +151,10 @@ const UseFormTest = React.memo(() => {
                 />
                 <Checkbox {...fields.toc} label="Left" labelPosition="left" />
             </Flex>
+            <Checkbox {...fields.toc} disabled label="Default (right)" />
+            <Checkbox {...fields.toc} label="Top" labelPosition="top" />
+            <Checkbox {...fields.toc} label="Bottom" labelPosition="bottom" />
+            <Checkbox {...fields.toc} label="Left" labelPosition="left" />
             <NumberInput
                 {...fields.age}
                 label="Age"

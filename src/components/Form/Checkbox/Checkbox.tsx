@@ -1,34 +1,61 @@
-import { border, context } from "@theme";
-import { createComponentName } from "@utils";
-import clsx from "clsx";
 import React from "react";
 import styled from "styled-components";
+import clsx from "clsx";
+import _ from "lodash";
+import { border, context, text } from "@theme";
+import { createComponentName } from "@utils";
 import { HTMLInputProps } from "../InputContainer/types";
 import { NuiCheckbox } from "./types";
 
-// TODO: errors
-// TODO: touched
-// TODO: focused
-// TODO: disabled
 const Checkbox: NuiCheckbox = React.memo(
     React.forwardRef((props, ref) => {
         const {
             className,
             label,
+            onFocus,
             onChange,
+            onBlur,
             value,
             inputValue,
             labelPosition,
+            errors: errorsProp,
             ...restProps
         } = props;
+
+        const [focused, setFocused] = React.useState(false);
+        const [touched, setTouched] = React.useState(false);
+
+        const errors = React.useMemo(() => errorsProp || [], [errorsProp]);
+
+        const handleFocus = React.useCallback<HTMLInputProps["onFocus"]>(
+            (e) => {
+                setFocused(true);
+                if (onFocus) {
+                    onFocus(e);
+                }
+            },
+            [onFocus]
+        );
 
         const handleChange = React.useCallback<HTMLInputProps["onChange"]>(
             (e) => {
                 if (onChange) {
                     onChange(e.currentTarget.checked, e);
                 }
+                setTouched(true);
             },
             [onChange]
+        );
+
+        const handleBlur = React.useCallback<HTMLInputProps["onBlur"]>(
+            (e) => {
+                setFocused(false);
+                setTouched(true);
+                if (onBlur) {
+                    onBlur(e);
+                }
+            },
+            [onBlur]
         );
 
         const classes = React.useMemo(
@@ -41,26 +68,46 @@ const Checkbox: NuiCheckbox = React.memo(
                             "NuiCheckbox--position-bottom",
                         labelPosition == "left" && "NuiCheckbox--position-left",
                     ],
+                    props.disabled && "NuiCheckbox--disabled",
+                    errors.length && touched && "NuiCheckbox--invalid",
+                    focused && "NuiCheckbox--focused",
                     className
                 ),
-            [className, labelPosition]
+            [
+                className,
+                errors.length,
+                focused,
+                labelPosition,
+                props.disabled,
+                touched,
+            ]
         );
 
         return (
             <label className={classes}>
-                {label && <div className="NuiCheckbox__label">{label}</div>}
-                <div className="NuiCheckbox__inputContainer">
-                    <input
-                        {...restProps}
-                        value={inputValue}
-                        checked={value}
-                        onChange={handleChange}
-                        ref={ref}
-                        type="checkbox"
-                        className="NuiCheckbox__input"
-                    />
-                    <div className="NuiCheckbox__customInput" />
+                <div className="NuiCheckbox__container">
+                    {label && <div className="NuiCheckbox__label">{label}</div>}
+                    <div className="NuiCheckbox__inputContainer">
+                        <input
+                            {...restProps}
+                            value={inputValue}
+                            checked={value}
+                            onFocus={handleFocus}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            ref={ref}
+                            type="checkbox"
+                            className="NuiCheckbox__input"
+                        />
+                        <div className="NuiCheckbox__customInput" />
+                    </div>
                 </div>
+                {errors.length > 0 && touched && (
+                    <div
+                        className="NuiCheckbox__error"
+                        children={_.first(errors)}
+                    />
+                )}
             </label>
         );
     })
@@ -72,10 +119,19 @@ const StyledCheckbox = styled(Checkbox)`
     position: relative;
     display: flex;
     width: fit-content;
-    align-items: center;
     pointer-events: none;
-    gap: 10px;
-    flex-direction: row-reverse;
+    flex-direction: column;
+
+    & .NuiCheckbox__label,
+    & .NuiCheckbox__error {
+        ${text.secondary}
+
+        transition: color 0.2s;
+        font-size: 0.8em;
+        font-weight: 500;
+        text-rendering: optimizeLegibility !important;
+        -webkit-font-smoothing: antialiased !important;
+    }
 
     & .NuiCheckbox__inputContainer {
         position: relative;
@@ -139,19 +195,56 @@ const StyledCheckbox = styled(Checkbox)`
         }
     }
 
+    & .NuiCheckbox__container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-direction: row-reverse;
+    }
+
     &.NuiCheckbox--position-top {
-        gap: 0;
-        flex-direction: column;
+        & .NuiCheckbox__container {
+            gap: 0;
+            flex-direction: column;
+        }
     }
 
     &.NuiCheckbox--position-left {
-        gap: 10px;
-        flex-direction: row;
+        & .NuiCheckbox__container {
+            gap: 10px;
+            flex-direction: row;
+        }
     }
 
     &.NuiCheckbox--position-bottom {
-        gap: 0;
         flex-direction: column-reverse;
+
+        & .NuiCheckbox__container {
+            gap: 0;
+            flex-direction: column-reverse;
+        }
+    }
+
+    &.NuiCheckbox--disabled {
+        opacity: 0.5;
+
+        & .NuiCheckbox__input,
+        & .NuiCheckbox__customInput,
+        & .NuiCheckbox__label {
+            cursor: default;
+            pointer-events: none;
+        }
+
+        & .NuiCheckbox__customInput {
+            border-style: dashed;
+        }
+    }
+
+    &.NuiCheckbox--invalid {
+        & .NuiCheckbox__label,
+        & .NuiCheckbox__error {
+            color: var(--nui-context-danger);
+        }
     }
 `;
 

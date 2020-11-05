@@ -34,6 +34,8 @@ export interface CheckboxProps {
         v: boolean,
         e: Parameters<HTMLInputProps["onChange"]>[0]
     ) => void;
+
+    errors?: string[];
 }
 
 /**

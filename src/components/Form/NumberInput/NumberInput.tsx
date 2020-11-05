@@ -120,14 +120,12 @@ const NumberInput: NuiNumberInput = React.memo(
         const handleBlur = React.useCallback<HTMLInputProps["onBlur"]>(
             (e) => {
                 setFocused(false);
-                if (!touched) {
-                    setTouched(true);
-                }
+                setTouched(true);
                 if (onBlur) {
                     onBlur(e);
                 }
             },
-            [onBlur, touched]
+            [onBlur]
         );
 
         return (

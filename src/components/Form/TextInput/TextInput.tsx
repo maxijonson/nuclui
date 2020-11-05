@@ -64,14 +64,12 @@ const TextInput: NuiTextInput = React.memo(
         const handleBlur = React.useCallback<HTMLInputProps["onBlur"]>(
             (e) => {
                 setFocused(false);
-                if (!touched) {
-                    setTouched(true);
-                }
+                setTouched(true);
                 if (onBlur) {
                     onBlur(e);
                 }
             },
-            [onBlur, touched]
+            [onBlur]
         );
 
         // HACK: When mask is false, MaskedInput will not show the value if it is updated externally
