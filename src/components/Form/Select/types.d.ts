@@ -25,9 +25,22 @@ export interface SelectProps {
     onChange?: (
         v: string,
         e:
-            | Parameters<HTMLOptionProps["onClick"]>[0]
+            | Parameters<HTMLButtonProps["onClick"]>[0]
             | Parameters<HTMLInputProps["onKeyDown"]>[0]
     ) => void;
+
+    /**
+     * Render prop used when rendering an option from the options list
+     *
+     * @param option the option being rendered
+     * @param index the index of the option in the filtered options
+     * @param options the options passed in `props.options` filtered by the search query (if any)
+     */
+    renderOption?: (
+        option: SelectOption,
+        index: number,
+        options: SelectOption[]
+    ) => JSX.Element;
 }
 
 export type NuiSelect = Nui.FRCWC<
@@ -35,6 +48,6 @@ export type NuiSelect = Nui.FRCWC<
     "input"
 >;
 
-export type HTMLOptionProps = Required<
-    React.OptionHTMLAttributes<HTMLOptionElement>
+export type HTMLButtonProps = Required<
+    React.ButtonHTMLAttributes<HTMLButtonElement>
 >;

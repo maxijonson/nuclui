@@ -162,9 +162,20 @@ const UseFormTest = React.memo(() => {
         []
     );
 
+    const renderOption = React.useCallback<
+        Required<React.ComponentProps<typeof Select>>["renderOption"]
+    >((option, i) => {
+        return <b>{`${i + 1}. ${option.label}`}</b>;
+    }, []);
+
     return (
         <form autoComplete="off" onSubmit={onSubmit}>
-            <Select {...fields.gender} label="Gender" options={options2} />
+            <Select
+                {...fields.gender}
+                label="Gender"
+                options={options2}
+                renderOption={renderOption}
+            />
             <Select {...fields.gender} label="Gender" options={options} />
             <Flex justify="spaceEvenly">
                 <Checkbox {...fields.toc} label="Default (right)" />

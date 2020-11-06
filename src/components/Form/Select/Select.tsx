@@ -5,7 +5,7 @@ import _ from "lodash";
 import { background, border, context, shadow, text } from "@theme";
 import { InputContainer } from "../InputContainer";
 import { HTMLInputProps } from "../InputContainer/types";
-import { NuiSelect, SelectOption, HTMLOptionProps } from "./types";
+import { NuiSelect, SelectOption, HTMLButtonProps } from "./types";
 
 // FIXME: Find a better way to know when the input is "focused". Focus is lost when selecting an option, which influenced some "hacks" but has limitations.
 
@@ -25,6 +25,7 @@ const Select: NuiSelect = React.memo(
             size,
             disabled,
             options,
+            renderOption,
             ...restProps
         } = props;
 
@@ -91,7 +92,7 @@ const Select: NuiSelect = React.memo(
         );
 
         /** Fired when selecting an option from the options list */
-        const handleItemSelect = React.useCallback<HTMLOptionProps["onClick"]>(
+        const handleItemSelect = React.useCallback<HTMLButtonProps["onClick"]>(
             (e) => {
                 setSearch(null);
                 setHighlight(-1);
@@ -226,13 +227,14 @@ const Select: NuiSelect = React.memo(
                 <div className="NuiSelect__options">
                     <ul className="NuiSelect__options__list">
                         {filteredOptions.length == 0 && (
-                            <option
+                            <div
                                 children="No Option"
                                 className="NuiSelect__options__list__empty"
                             />
                         )}
                         {_.map(filteredOptions, (option, i) => (
-                            <option
+                            <button
+                                type="button"
                                 className={clsx([
                                     "NuiSelect__options__list__item",
                                     option.value == props.value &&
@@ -241,11 +243,14 @@ const Select: NuiSelect = React.memo(
                                         "NuiSelect__options__list__item--highlighted",
                                 ])}
                                 key={`${i}${option.value}`}
-                                children={option.label}
                                 value={option.value}
                                 onClick={handleItemSelect}
                                 disabled={option.disabled}
-                            />
+                            >
+                                {renderOption
+                                    ? renderOption(option, i, filteredOptions)
+                                    : option.label}
+                            </button>
                         ))}
                     </ul>
                 </div>
@@ -289,11 +294,20 @@ const StyledSelect = styled(InputContainer)`
         overflow-y: auto;
     }
 
+    & .NuiSelect__options__list__item {
+        display: block;
+        border: none;
+        outline: none;
+        width: 100%;
+        text-align: left;
+        margin: 0;
+    }
+
     & .NuiSelect__options__list__item,
     & .NuiSelect__options__list__empty {
         ${background.primary}
         
-        padding: 0 10px;
+        padding: 5px 10px;
         transition: background-color 0.2s, color 0.2s, font-weight 0.2s;
         cursor: pointer;
 
