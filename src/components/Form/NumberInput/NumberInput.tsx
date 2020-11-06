@@ -92,8 +92,9 @@ const NumberInput: NuiNumberInput = React.memo(
 
         const handleChange = React.useCallback<HTMLInputProps["onChange"]>(
             (e) => {
-                if (onChange) {
-                    onChange(e.currentTarget.valueAsNumber, e);
+                const { valueAsNumber } = e.currentTarget;
+                if (onChange && !isNaN(valueAsNumber)) {
+                    onChange(valueAsNumber, e);
                 }
             },
             [onChange]
