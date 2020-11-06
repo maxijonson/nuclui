@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import MaskedInput from "react-text-mask";
 import clsx from "clsx";
 import { createComponentName, nuiLog } from "@utils";
@@ -94,7 +93,7 @@ const TextInput: NuiTextInput = React.memo(
         }, [mask, pipe, transform]);
 
         return (
-            <StyledTextInput
+            <InputContainer
                 disabled={disabled}
                 focused={focused}
                 touched={touched}
@@ -122,34 +121,10 @@ const TextInput: NuiTextInput = React.memo(
                     showMask={showMask}
                     pipe={pipe}
                 />
-            </StyledTextInput>
+            </InputContainer>
         );
     })
 );
-
-const StyledTextInput = styled(InputContainer)`
-    & .NuiTextInput__input {
-        padding: 8px;
-        font-size: 16px;
-        line-height: 19px;
-        box-sizing: border-box;
-        width: 100%;
-        background: transparent;
-        border: none;
-
-        &:focus {
-            outline: none;
-        }
-
-        &:-webkit-autofill,
-        &:-webkit-autofill:hover,
-        &:-webkit-autofill:focus {
-            -webkit-text-fill-color: inherit;
-            box-shadow: 0 0 0px 1000px inherit inset;
-            transition: background-color 5000s ease-in-out 0s;
-        }
-    }
-`;
 
 TextInput.displayName = createComponentName("TextInput");
 

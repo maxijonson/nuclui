@@ -135,6 +135,7 @@ const StyledInputContainer = styled(InputContainer)`
         ${shadow.secondary}
 
         display: flex;
+        position: relative;
         box-sizing: border-box;
         transition: background-image ${TRANSITION_TIME}s, border-color ${TRANSITION_TIME}s, background-size ${TRANSITION_TIME}s;
         background-repeat: no-repeat;
@@ -144,6 +145,28 @@ const StyledInputContainer = styled(InputContainer)`
         box-shadow: 0 1px 2px -1px var(--nui-shadow);
         border-style: solid;
         border-width: 1px;
+
+        & > input {
+            padding: 8px;
+            font-size: 16px;
+            line-height: 19px;
+            box-sizing: border-box;
+            width: 100%;
+            background: transparent;
+            border: none;
+
+            &:focus {
+                outline: none;
+            }
+
+            &:-webkit-autofill,
+            &:-webkit-autofill:hover,
+            &:-webkit-autofill:focus {
+                -webkit-text-fill-color: inherit;
+                box-shadow: 0 0 0px 1000px inherit inset;
+                transition: background-color 5000s ease-in-out 0s;
+            }
+        }
     }
 
     &.NuiInputContainer--variant-underline {

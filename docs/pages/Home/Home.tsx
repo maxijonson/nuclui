@@ -13,6 +13,7 @@ import {
     NumberInput,
     Checkbox,
     useForm,
+    Select,
 } from "nuclui";
 import { TextInputProps } from "nuclui/components/Form/TextInput/types";
 import { Link } from "react-router-dom";
@@ -71,12 +72,6 @@ const UseFormTest = React.memo(() => {
             adresses: {
                 initial: ["Address One", "Address Two"] as string[],
             },
-            grades: {
-                initial: [{ class: "", grade: 0 }] as {
-                    class: string;
-                    grade: number;
-                }[],
-            },
             contact: {
                 initial: { type: "", phone: "" },
             },
@@ -93,8 +88,8 @@ const UseFormTest = React.memo(() => {
                     if (!v) return ["Must be checked"];
                 },
             },
-            choices: {
-                initial: [] as ("choice1" | "choice2" | "choice3")[],
+            gender: {
+                initial: "male",
             },
         },
     });
@@ -139,8 +134,38 @@ const UseFormTest = React.memo(() => {
         []
     );
 
+    const options = React.useMemo(
+        () => [
+            { label: "Male", value: "male" },
+            { label: "Female", value: "female" },
+            { label: "Alien", value: "alien", disabled: true },
+            { label: "Other1", value: "other1" },
+            { label: "Other2", value: "other2" },
+            { label: "Other3", value: "other3" },
+            { label: "Other4", value: "other4" },
+            { label: "Other5", value: "other5" },
+            { label: "Other6", value: "other6" },
+            { label: "Other7", value: "other7" },
+            { label: "Other8", value: "other8" },
+            { label: "Other9", value: "other9" },
+            { label: "Other10", value: "other10" },
+        ],
+        []
+    );
+
+    const options2 = React.useMemo(
+        () => [
+            { label: "Male", value: "male" },
+            { label: "Female", value: "female" },
+            { label: "Alien", value: "alien", disabled: true },
+        ],
+        []
+    );
+
     return (
         <form autoComplete="off" onSubmit={onSubmit}>
+            <Select {...fields.gender} label="Gender" options={options2} />
+            <Select {...fields.gender} label="Gender" options={options} />
             <Flex justify="spaceEvenly">
                 <Checkbox {...fields.toc} label="Default (right)" />
                 <Checkbox {...fields.toc} label="Top" labelPosition="top" />

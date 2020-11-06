@@ -185,26 +185,7 @@ const NumberInput: NuiNumberInput = React.memo(
 
 const StyledNumberInput = styled(InputContainer)`
     & .NuiNumberInput__input {
-        padding: 8px;
-        font-size: 16px;
-        line-height: 19px;
-        box-sizing: border-box;
-        width: 100%;
-        background: transparent;
-        border: none;
         -moz-appearance: textfield;
-
-        &:focus {
-            outline: none;
-        }
-
-        &:-webkit-autofill,
-        &:-webkit-autofill:hover,
-        &:-webkit-autofill:focus {
-            -webkit-text-fill-color: inherit;
-            box-shadow: 0 0 0px 1000px inherit inset;
-            transition: background-color 5000s ease-in-out 0s;
-        }
 
         &::-webkit-inner-spin-button,
         &::-webkit-outer-spin-button {

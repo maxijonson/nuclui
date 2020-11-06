@@ -28,7 +28,7 @@ const useForm = <T extends {}>(options: UseFormOptions<T>) => {
             {} as T
         )
     );
-    const formDataRef = React.useRef(formData);
+    const formDataRef = React.useRef({ ...formData });
     const formDataChanges = React.useRef<N[]>([]);
 
     const validate = React.useCallback(
