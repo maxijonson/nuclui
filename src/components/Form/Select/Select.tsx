@@ -5,7 +5,7 @@ import _ from "lodash";
 import { background, border, context, shadow, text } from "@theme";
 import { InputContainer } from "../InputContainer";
 import { HTMLInputProps } from "../InputContainer/types";
-import { NuiSelect, SelectOption } from "./types";
+import { NuiSelect, SelectOption, HTMLOptionProps } from "./types";
 
 // FIXME: Find a better way to know when the input is "focused". Focus is lost when selecting an option, which influenced some "hacks" but has limitations.
 
@@ -91,15 +91,15 @@ const Select: NuiSelect = React.memo(
         );
 
         /** Fired when selecting an option from the options list */
-        const handleItemSelect = React.useCallback(
-            (e: React.MouseEvent<HTMLOptionElement, MouseEvent>) => {
+        const handleItemSelect = React.useCallback<HTMLOptionProps["onClick"]>(
+            (e) => {
                 setSearch(null);
                 setHighlight(-1);
 
                 window.clearTimeout(timeout.current);
 
                 if (onChange) {
-                    onChange(e.currentTarget.value);
+                    onChange(e.currentTarget.value, e);
                 }
             },
             [onChange]
@@ -137,7 +137,7 @@ const Select: NuiSelect = React.memo(
                         if (option != null && !option.disabled && onChange) {
                             setHighlight(-1);
                             setSearch(null);
-                            onChange(option.value);
+                            onChange(option.value, e);
                         }
                         break;
                     default:
