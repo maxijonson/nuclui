@@ -10,7 +10,7 @@ interface SelectOption {
 export interface SelectProps {
     children?: never;
 
-    options?: SelectOption[];
+    options: SelectOption[];
 
     /**
      * The selected option value
