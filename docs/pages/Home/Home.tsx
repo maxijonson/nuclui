@@ -89,7 +89,7 @@ const UseFormTest = React.memo(() => {
                 },
             },
             gender: {
-                initial: "male",
+                initial: "",
             },
         },
     });
@@ -168,6 +168,11 @@ const UseFormTest = React.memo(() => {
         return <b>{`${i + 1}. ${option.label}`}</b>;
     }, []);
 
+    const onCreate = React.useCallback((value: string) => {
+        if (value == "false") return false;
+        if (value == "custom") return { value: "custom", label: "Custom" };
+    }, []);
+
     return (
         <form autoComplete="off" onSubmit={onSubmit}>
             <Select
@@ -176,7 +181,13 @@ const UseFormTest = React.memo(() => {
                 options={options2}
                 renderOption={renderOption}
             />
-            <Select {...fields.gender} label="Gender" options={options} />
+            <Select
+                {...fields.gender}
+                label="Gender"
+                options={options}
+                creatable
+                onCreate={onCreate}
+            />
             <Flex justify="spaceEvenly">
                 <Checkbox {...fields.toc} label="Default (right)" />
                 <Checkbox {...fields.toc} label="Top" labelPosition="top" />

@@ -41,6 +41,22 @@ export interface SelectProps {
         index: number,
         options: SelectOption[]
     ) => JSX.Element;
+
+    /**
+     * Whether or not the user can create options. The label and value takes the exact value entered (as a string). The behaviour can be customized with `onCreate`
+     *
+     * @default false
+     */
+    creatable?: boolean;
+
+    /**
+     * Called when attempting to create a new option. Given the string entered by the user, you can
+     *
+     * 1. Return nothing - the value and label is taken as is
+     * 2. Return a boolean - false prevents the option creation while true creates the options as is
+     * 3. Return a SelectOption - creates the option with the one returned
+     */
+    onCreate?: (value: string) => void | boolean | SelectOption;
 }
 
 export type NuiSelect = Nui.FRCWC<

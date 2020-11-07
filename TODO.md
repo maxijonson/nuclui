@@ -6,3 +6,35 @@
     -   Some components use default text in English. Find a way to customize these default messages for localization.
         -   Input errors
         -   Select "No Options"
+
+### Components Roadmap
+
+-   Forms
+    -   Switch
+    -   RadioButton
+    -   Button
+    -   Slider
+    -   Date picker
+    -   Textarea
+    -   FilePicker
+-   Data
+    -   Table
+    -   Avatar
+    -   Badge
+    -   Tree
+    -   Tag
+    -   Carousel
+-   Display
+    -   Loading (or Progress)
+    -   Drawer
+    -   Tooltip
+    -   Popover
+    -   Modal
+    -   Toast
+    -   Placeholder (Skeleton)
+    -   Collapse
+-   Utils
+    -   RenderCount
+    -   Portal
+    -   Waypoint
+    -   Animate
