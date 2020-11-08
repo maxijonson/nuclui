@@ -180,6 +180,8 @@ const UseFormTest = React.memo(() => {
                 label="Gender"
                 options={options2}
                 renderOption={renderOption}
+                variant="underline"
+                append="Select"
             />
             <Select
                 {...fields.gender}

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import clsx from "clsx";
 import _ from "lodash";
-import { border, context, text } from "@theme";
+import { border, context, text, background } from "@theme";
 import { createComponentName } from "@utils";
 import { HTMLInputProps } from "../InputContainer/types";
 import { NuiCheckbox } from "./types";
@@ -150,13 +150,22 @@ const StyledCheckbox = styled(Checkbox)`
         position: absolute;
         opacity: 0;
 
+        &:focus-visible ~ .NuiCheckbox__customInput {
+            ${background.dimmed}
+        }
+
+        &:active ~ .NuiCheckbox__customInput {
+            ${background.secondary}
+
+            border-color: var(--nui-context-primary);
+        }
+
         &:checked ~ .NuiCheckbox__customInput {
             background-color: var(--nui-context-primary);
             transform: scale(1);
             border-color: transparent;
         }
 
-        /** Checkmark icon (visible) */
         &:checked ~ .NuiCheckbox__customInput::after {
             border-color: white;
             border-width: 0px;
@@ -164,6 +173,16 @@ const StyledCheckbox = styled(Checkbox)`
             border-right-width: 2px;
             border-bottom-width: 2px;
             transform: translate(-45%, -58%) rotate(40deg) scale(1);
+        }
+
+        &:checked:focus-visible ~ .NuiCheckbox__customInput {
+            background-color: var(--nui-context-primaryLight);
+        }
+
+        &:checked:active ~ .NuiCheckbox__customInput {
+            ${border.primary}
+
+            background-color: var(--nui-context-primaryDark);
         }
     }
 
@@ -182,7 +201,10 @@ const StyledCheckbox = styled(Checkbox)`
         box-sizing: border-box;
         transition: background-color 200ms ease-out, border-color 200ms ease-out;
 
-        /** Checkmark icon (hidden) */
+        &:active {
+            ${background.dimmed}
+        }
+
         &::after {
             position: absolute;
             left: 50%;
@@ -237,6 +259,10 @@ const StyledCheckbox = styled(Checkbox)`
 
         & .NuiCheckbox__customInput {
             border-style: dashed;
+        }
+
+        & .NuiCheckbox__input:checked ~ .NuiCheckbox__customInput {
+            background-color: var(--nui-context-primaryDark);
         }
     }
 

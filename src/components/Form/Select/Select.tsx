@@ -215,6 +215,7 @@ const Select: NuiSelect = React.memo(
             (e) => {
                 setFocused(false);
                 setTouched(true);
+                setHighlight(-1);
 
                 // HACK: Prevent the search to be cleared before handleItemSelect fires
                 timeout.current = window.setTimeout(() => {
@@ -281,17 +282,22 @@ const Select: NuiSelect = React.memo(
                 className={classes}
                 ref={containerRef}
             >
-                <input
-                    {...restProps}
-                    value={inputValue}
-                    className="NuiSelect__input"
-                    ref={ref}
-                    type="text"
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    onKeyDown={handleKeyDown}
-                />
+                <div className="NuiSelect__container">
+                    <input
+                        {...restProps}
+                        disabled={disabled}
+                        value={inputValue}
+                        className="NuiSelect__input"
+                        ref={ref}
+                        type="text"
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        onKeyDown={handleKeyDown}
+                    />
+                    <div className="NuiSelect__icon" />
+                </div>
+
                 <div className="NuiSelect__options">
                     <ul className="NuiSelect__options__list">
                         {!canCreate && filteredOptions.length == 0 && (
@@ -331,7 +337,6 @@ const Select: NuiSelect = React.memo(
                         ))}
                     </ul>
                 </div>
-                <div className="NuiSelect__icon" />
             </StyledSelect>
         );
     })
@@ -390,14 +395,18 @@ const StyledSelect = styled(InputContainer)`
         transition: background-color 0.2s, color 0.2s, font-weight 0.2s;
         cursor: pointer;
 
-        &.NuiSelect__options__list__item--selected {
-            ${background.secondary}
-            color: var(--nui-context-primary);
-        }
-
-        &:hover:not(:disabled):not(.NuiSelect__options__list__empty),
+        &:hover:not(:disabled):not(.NuiSelect__options__list__empty):not(.NuiSelect__options__list__item--selected),
         &.NuiSelect__options__list__item--highlighted {
             ${background.dimmed}
+        }
+
+        &.NuiSelect__options__list__item--selected {
+            background-color: var(--nui-context-primaryVLight);
+
+            &:hover,
+            &.NuiSelect__options__list__item--highlighted {
+                background-color: var(--nui-context-primaryLight);
+            }
         }
 
         &:disabled {
@@ -407,9 +416,19 @@ const StyledSelect = styled(InputContainer)`
         }
     }
 
+    & .NuiSelect__container {
+        position: relative;
+        width: 100%;
+    }
+
+    & input.NuiSelect__input {
+        padding-right: 28px;
+    }
+
     & .NuiSelect__icon {
         ${border.primary}
 
+        opacity: 0.5;
         position: absolute;
         transition: transform 0.2s;
         right: 10px;

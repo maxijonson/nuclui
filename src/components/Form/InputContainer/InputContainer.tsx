@@ -146,7 +146,7 @@ const StyledInputContainer = styled(InputContainer)`
         border-style: solid;
         border-width: 1px;
 
-        & > input {
+        & input {
             padding: 8px;
             font-size: 16px;
             line-height: 19px;

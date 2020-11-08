@@ -144,6 +144,7 @@ const NumberInput: NuiNumberInput = React.memo(
             >
                 <input
                     {...restProps}
+                    disabled={disabled}
                     min={min}
                     max={max}
                     step={step}
@@ -164,6 +165,7 @@ const NumberInput: NuiNumberInput = React.memo(
                             !canStepUp && "disabled",
                         ])}
                         onClick={increment}
+                        tabIndex={-1}
                     >
                         {arrowUp}
                     </button>
@@ -175,6 +177,7 @@ const NumberInput: NuiNumberInput = React.memo(
                             !canStepDown && "disabled",
                         ])}
                         onClick={decrement}
+                        tabIndex={-1}
                     >
                         {arrowDown}
                     </button>
