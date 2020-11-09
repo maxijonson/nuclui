@@ -82,6 +82,6 @@ export interface TextInputProps {
  * A text input for entering string data
  */
 export type NuiTextInput = Nui.FRCWC<
-    TextInputProps & StrictOmit<InputContainerProps, "focused" | "touched">,
+    StrictOmit<InputContainerProps, "focused" | "touched"> & TextInputProps,
     typeof MaskedInput
 >;

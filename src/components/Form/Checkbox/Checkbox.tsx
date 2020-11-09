@@ -1,23 +1,18 @@
 import React from "react";
 import styled from "styled-components";
-import clsx from "clsx";
-import _ from "lodash";
-import { border, context, text, background } from "@theme";
+import { border, context, background } from "@theme";
 import { createComponentName } from "@utils";
 import { HTMLInputProps } from "../InputContainer/types";
 import { NuiCheckbox } from "./types";
+import { CheckboxContainer } from "../CheckboxContainer";
 
 const Checkbox: NuiCheckbox = React.memo(
     React.forwardRef((props, ref) => {
         const {
             className,
-            label,
             onFocus,
             onChange,
             onBlur,
-            value,
-            inputValue,
-            labelPosition,
             errors: errorsProp,
             ...restProps
         } = props;
@@ -58,98 +53,33 @@ const Checkbox: NuiCheckbox = React.memo(
             [onBlur]
         );
 
-        const classes = React.useMemo(
-            () =>
-                clsx(
-                    "NuiCheckbox",
-                    [
-                        labelPosition == "top" && "NuiCheckbox--position-top",
-                        labelPosition == "bottom" &&
-                            "NuiCheckbox--position-bottom",
-                        labelPosition == "left" && "NuiCheckbox--position-left",
-                    ],
-                    props.disabled && "NuiCheckbox--disabled",
-                    errors.length && touched && "NuiCheckbox--invalid",
-                    focused && "NuiCheckbox--focused",
-                    className
-                ),
-            [
-                className,
-                errors.length,
-                focused,
-                labelPosition,
-                props.disabled,
-                touched,
-            ]
-        );
-
         return (
-            <label className={classes}>
-                <div className="NuiCheckbox__container">
-                    {label && <div className="NuiCheckbox__label">{label}</div>}
-                    <div className="NuiCheckbox__inputContainer">
-                        <input
-                            {...restProps}
-                            value={inputValue}
-                            checked={value}
-                            onFocus={handleFocus}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            ref={ref}
-                            type="checkbox"
-                            className="NuiCheckbox__input"
-                        />
-                        <div className="NuiCheckbox__customInput" />
-                    </div>
-                </div>
-                {errors.length > 0 && touched && (
-                    <div
-                        className="NuiCheckbox__error"
-                        children={_.first(errors)}
-                    />
-                )}
-            </label>
+            <StyledCheckboxContainer
+                {...restProps}
+                ref={ref}
+                className="NuiCheckbox"
+                focused={focused}
+                touched={touched}
+                errors={errors}
+                onFocus={handleFocus}
+                onChange={handleChange}
+                onBlur={handleBlur}
+            >
+                <div className="NuiCheckbox__customInput" />
+            </StyledCheckboxContainer>
         );
     })
 );
 
-const StyledCheckbox = styled(Checkbox)`
+const StyledCheckboxContainer = styled(CheckboxContainer)`
     ${context}
 
-    position: relative;
-    display: flex;
-    width: fit-content;
-    pointer-events: none;
-    flex-direction: column;
-
-    & .NuiCheckbox__label,
-    & .NuiCheckbox__error {
-        ${text.secondary}
-
-        transition: color 0.2s;
-        font-size: 0.8em;
-        font-weight: 500;
-        text-rendering: optimizeLegibility !important;
-        -webkit-font-smoothing: antialiased !important;
-    }
-
-    & .NuiCheckbox__inputContainer {
-        position: relative;
-        width: 18px;
-        height: 18px;
-    }
-
-    & .NuiCheckbox__input,
-    & .NuiCheckbox__customInput,
-    & .NuiCheckbox__label {
+    & .NuiCheckbox__customInput {
         cursor: pointer;
         pointer-events: all;
     }
 
-    & .NuiCheckbox__input {
-        position: absolute;
-        opacity: 0;
-
+    & .NuiCheckboxContainer__input {
         &:focus-visible ~ .NuiCheckbox__customInput {
             ${background.dimmed}
         }
@@ -217,42 +147,8 @@ const StyledCheckbox = styled(Checkbox)`
         }
     }
 
-    & .NuiCheckbox__container {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex-direction: row-reverse;
-    }
-
-    &.NuiCheckbox--position-top {
-        & .NuiCheckbox__container {
-            gap: 0;
-            flex-direction: column;
-        }
-    }
-
-    &.NuiCheckbox--position-left {
-        & .NuiCheckbox__container {
-            gap: 10px;
-            flex-direction: row;
-        }
-    }
-
-    &.NuiCheckbox--position-bottom {
-        flex-direction: column-reverse;
-
-        & .NuiCheckbox__container {
-            gap: 0;
-            flex-direction: column-reverse;
-        }
-    }
-
-    &.NuiCheckbox--disabled {
-        opacity: 0.5;
-
-        & .NuiCheckbox__input,
-        & .NuiCheckbox__customInput,
-        & .NuiCheckbox__label {
+    &.NuiCheckboxContainer--disabled {
+        & .NuiCheckbox__customInput {
             cursor: default;
             pointer-events: none;
         }
@@ -261,19 +157,12 @@ const StyledCheckbox = styled(Checkbox)`
             border-style: dashed;
         }
 
-        & .NuiCheckbox__input:checked ~ .NuiCheckbox__customInput {
+        & .NuiCheckboxContainer__input:checked ~ .NuiCheckbox__customInput {
             background-color: var(--nui-context-primaryDark);
-        }
-    }
-
-    &.NuiCheckbox--invalid {
-        & .NuiCheckbox__label,
-        & .NuiCheckbox__error {
-            color: var(--nui-context-danger);
         }
     }
 `;
 
-StyledCheckbox.displayName = createComponentName("Checkbox");
+Checkbox.displayName = createComponentName("Checkbox");
 
-export default StyledCheckbox as typeof Checkbox;
+export default Checkbox;

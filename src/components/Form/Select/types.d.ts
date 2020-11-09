@@ -60,7 +60,7 @@ export interface SelectProps {
 }
 
 export type NuiSelect = Nui.FRCWC<
-    SelectProps & StrictOmit<InputContainerProps, "focused" | "touched">,
+    StrictOmit<InputContainerProps, "focused" | "touched"> & SelectProps,
     "input"
 >;
 
