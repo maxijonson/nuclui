@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "start:prod": "node docs/dist-server/server.js",
-    "start:dev": "webpack-dev-server --config=\"webpack.config.ts\" --env.NODE_ENV=development",
+    "start": "webpack-dev-server --config=\"webpack.config.ts\" --env.NODE_ENV=development",
     "clean": "rm -rf dist package docs/public/dist docs/dist-server *.tsbuildinfo coverage",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0",
     "prettier:report": "prettier --check --config .prettierrc.js .",

@@ -50,6 +50,7 @@ const defaultTheme = {
     text: {
         primary: "#202020",
         secondary: "#69777D",
+        contrast: "#F5F5F5",
     },
 };
 

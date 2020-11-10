@@ -65,7 +65,7 @@ const Checkbox: NuiCheckbox = React.memo(
                 onChange={handleChange}
                 onBlur={handleBlur}
             >
-                <div className="NuiCheckbox__customInput" />
+                <div className="NuiCheckbox__container" />
             </StyledCheckboxContainer>
         );
     })
@@ -74,49 +74,51 @@ const Checkbox: NuiCheckbox = React.memo(
 const StyledCheckboxContainer = styled(CheckboxContainer)`
     ${context}
 
-    & .NuiCheckbox__customInput {
+    & .NuiCheckbox__container {
         cursor: pointer;
         pointer-events: all;
     }
 
     & .NuiCheckboxContainer__input {
-        &:focus-visible ~ .NuiCheckbox__customInput {
+        &:focus-visible ~ .NuiCheckbox__container {
             ${background.dimmed}
         }
 
-        &:active ~ .NuiCheckbox__customInput {
+        &:active ~ .NuiCheckbox__container {
             ${background.secondary}
 
             border-color: var(--nui-context-primary);
         }
 
-        &:checked ~ .NuiCheckbox__customInput {
-            background-color: var(--nui-context-primary);
-            transform: scale(1);
-            border-color: transparent;
-        }
+        &:checked {
+            & ~ .NuiCheckbox__container {
+                background-color: var(--nui-context-primary);
+                transform: scale(1);
+                border-color: transparent;
+            }
 
-        &:checked ~ .NuiCheckbox__customInput::after {
-            border-color: white;
-            border-width: 0px;
-            border-style: solid;
-            border-right-width: 2px;
-            border-bottom-width: 2px;
-            transform: translate(-45%, -58%) rotate(40deg) scale(1);
-        }
+            & ~ .NuiCheckbox__container::after {
+                border-color: white;
+                border-width: 0px;
+                border-style: solid;
+                border-right-width: 2px;
+                border-bottom-width: 2px;
+                transform: translate(-45%, -58%) rotate(40deg) scale(1);
+            }
 
-        &:checked:focus-visible ~ .NuiCheckbox__customInput {
-            background-color: var(--nui-context-primaryLight);
-        }
+            &:focus-visible ~ .NuiCheckbox__container {
+                background-color: var(--nui-context-primaryLight);
+            }
 
-        &:checked:active ~ .NuiCheckbox__customInput {
-            ${border.primary}
+            &:active ~ .NuiCheckbox__container {
+                ${border.primary}
 
-            background-color: var(--nui-context-primaryDark);
+                background-color: var(--nui-context-primaryDark);
+            }
         }
     }
 
-    & .NuiCheckbox__customInput {
+    & .NuiCheckbox__container {
         ${border.primary}
 
         position: absolute;
@@ -148,16 +150,16 @@ const StyledCheckboxContainer = styled(CheckboxContainer)`
     }
 
     &.NuiCheckboxContainer--disabled {
-        & .NuiCheckbox__customInput {
+        & .NuiCheckbox__container {
             cursor: default;
             pointer-events: none;
         }
 
-        & .NuiCheckbox__customInput {
+        & .NuiCheckbox__container {
             border-style: dashed;
         }
 
-        & .NuiCheckboxContainer__input:checked ~ .NuiCheckbox__customInput {
+        & .NuiCheckboxContainer__input:checked ~ .NuiCheckbox__container {
             background-color: var(--nui-context-primaryDark);
         }
     }

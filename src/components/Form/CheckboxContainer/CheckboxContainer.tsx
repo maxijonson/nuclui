@@ -95,6 +95,7 @@ const StyledCheckboxContainer = styled(CheckboxContainer)`
     width: fit-content;
     pointer-events: none;
     flex-direction: column;
+    margin: 10px 0;
 
     & .NuiCheckboxContainer__label,
     & .NuiCheckboxContainer__error {

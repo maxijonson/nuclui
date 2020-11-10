@@ -14,6 +14,7 @@ import {
     Checkbox,
     useForm,
     Select,
+    Switch,
 } from "nuclui";
 import { TextInputProps } from "nuclui/components/Form/TextInput/types";
 import { Link } from "react-router-dom";
@@ -87,6 +88,9 @@ const UseFormTest = React.memo(() => {
                 validate: (v) => {
                     if (!v) return ["Must be checked"];
                 },
+            },
+            subscribe: {
+                initial: false,
             },
             gender: {
                 initial: "",
@@ -175,6 +179,40 @@ const UseFormTest = React.memo(() => {
 
     return (
         <form autoComplete="off" onSubmit={onSubmit}>
+            <Switch
+                {...fields.subscribe}
+                size="xs"
+                label="Subscribe to newsletter"
+                onChildren="On"
+                offChildren="Off"
+            />
+            <Switch
+                {...fields.subscribe}
+                label="Subscribe to newsletter"
+                onChildren="On"
+                offChildren="Off"
+            />
+            <Switch
+                {...fields.subscribe}
+                size="md"
+                label="Subscribe to newsletter"
+                onChildren="On"
+                offChildren="Off"
+            />
+            <Switch
+                {...fields.subscribe}
+                size="lg"
+                label="Subscribe to newsletter"
+                onChildren="On"
+                offChildren="Off"
+            />
+            <Switch
+                {...fields.subscribe}
+                size="xl"
+                label="Subscribe to newsletter"
+                onChildren="On"
+                offChildren="Off"
+            />
             <Select
                 {...fields.gender}
                 label="Gender"
