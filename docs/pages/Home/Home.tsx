@@ -210,6 +210,7 @@ const UseFormTest = React.memo(() => {
                 <FlexItem>
                     <Switch
                         {...fields.subscribe}
+                        disabled
                         size="xs"
                         label="Subscribe to newsletter"
                         onChildren="On"
@@ -224,6 +225,7 @@ const UseFormTest = React.memo(() => {
                     />
                     <Switch
                         {...fields.subscribe}
+                        disabled
                         size="md"
                         label="Subscribe to newsletter"
                         onChildren="On"
@@ -238,6 +240,7 @@ const UseFormTest = React.memo(() => {
                     />
                     <Switch
                         {...fields.subscribe}
+                        disabled
                         size="xl"
                         label="Subscribe to newsletter"
                         onChildren="On"

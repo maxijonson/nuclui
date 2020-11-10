@@ -203,6 +203,22 @@ const StyledCheckboxContainer = styled(CheckboxContainer)`
         }
     }
 
+    &.NuiCheckboxContainer--disabled {
+        & .NuiSwitch__container {
+            cursor: default;
+            pointer-events: none;
+        }
+
+        & .NuiSwitch__container {
+            border-style: dashed;
+        }
+
+        & .NuiCheckboxContainer__input:checked ~ .NuiSwitch__container {
+            background-color: var(--nui-context-primaryDark);
+            border-color: var(--nui-context-primaryDark);
+        }
+    }
+
     &.NuiSwitch--size-xs {
         --nui-switch-pad: 1px;
     }
