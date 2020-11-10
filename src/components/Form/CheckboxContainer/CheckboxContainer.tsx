@@ -111,7 +111,7 @@ const StyledCheckboxContainer = styled(CheckboxContainer)`
         ${text.secondary}
 
         transition: color 0.2s;
-        font-size: 0.8em;
+        font-size: calc(var(--nui-checkboxContainer-size) / 1.3);
         font-weight: 500;
         text-rendering: optimizeLegibility !important;
         -webkit-font-smoothing: antialiased !important;
