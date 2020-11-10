@@ -179,40 +179,72 @@ const UseFormTest = React.memo(() => {
 
     return (
         <form autoComplete="off" onSubmit={onSubmit}>
-            <Switch
-                {...fields.subscribe}
-                size="xs"
-                label="Subscribe to newsletter"
-                onChildren="On"
-                offChildren="Off"
-            />
-            <Switch
-                {...fields.subscribe}
-                label="Subscribe to newsletter"
-                onChildren="On"
-                offChildren="Off"
-            />
-            <Switch
-                {...fields.subscribe}
-                size="md"
-                label="Subscribe to newsletter"
-                onChildren="On"
-                offChildren="Off"
-            />
-            <Switch
-                {...fields.subscribe}
-                size="lg"
-                label="Subscribe to newsletter"
-                onChildren="On"
-                offChildren="Off"
-            />
-            <Switch
-                {...fields.subscribe}
-                size="xl"
-                label="Subscribe to newsletter"
-                onChildren="On"
-                offChildren="Off"
-            />
+            <Flex>
+                <FlexItem>
+                    <Switch
+                        {...fields.subscribe}
+                        size="xs"
+                        label="Subscribe to newsletter"
+                        onChildren="On"
+                        offChildren="Off"
+                    />
+                    <Switch
+                        {...fields.subscribe}
+                        size="sm"
+                        label="Subscribe to newsletter"
+                        onChildren="On"
+                        offChildren="Off"
+                    />
+                    <Switch
+                        {...fields.subscribe}
+                        size="md"
+                        label="Subscribe to newsletter"
+                        onChildren="On"
+                        offChildren="Off"
+                    />
+                    <Switch
+                        {...fields.subscribe}
+                        size="lg"
+                        label="Subscribe to newsletter"
+                        onChildren="On"
+                        offChildren="Off"
+                    />
+                    <Switch
+                        {...fields.subscribe}
+                        size="xl"
+                        label="Subscribe to newsletter"
+                        onChildren="On"
+                        offChildren="Off"
+                    />
+                </FlexItem>
+                <FlexItem>
+                    <Checkbox
+                        {...fields.toc}
+                        size="xs"
+                        label="Agree to Terms and Conditions"
+                    />
+                    <Checkbox
+                        {...fields.toc}
+                        size="sm"
+                        label="Agree to Terms and Conditions"
+                    />
+                    <Checkbox
+                        {...fields.toc}
+                        size="md"
+                        label="Agree to Terms and Conditions"
+                    />
+                    <Checkbox
+                        {...fields.toc}
+                        size="lg"
+                        label="Agree to Terms and Conditions"
+                    />
+                    <Checkbox
+                        {...fields.toc}
+                        size="xl"
+                        label="Agree to Terms and Conditions"
+                    />
+                </FlexItem>
+            </Flex>
             <Select
                 {...fields.gender}
                 label="Gender"

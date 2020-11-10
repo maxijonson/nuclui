@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { border, context, background } from "@theme";
 import { createComponentName } from "@utils";
+import clsx from "clsx";
 import { HTMLInputProps } from "../InputContainer/types";
 import { NuiCheckbox } from "./types";
 import { CheckboxContainer } from "../CheckboxContainer";
@@ -14,6 +15,7 @@ const Checkbox: NuiCheckbox = React.memo(
             onChange,
             onBlur,
             errors: errorsProp,
+            size,
             ...restProps
         } = props;
 
@@ -21,6 +23,21 @@ const Checkbox: NuiCheckbox = React.memo(
         const [touched, setTouched] = React.useState(false);
 
         const errors = React.useMemo(() => errorsProp || [], [errorsProp]);
+
+        const classes = React.useMemo(
+            () =>
+                clsx([
+                    "NuiCheckbox",
+                    [
+                        size == "xs" && "NuiCheckbox--size-xs",
+                        size == "md" && "NuiCheckbox--size-md",
+                        size == "lg" && "NuiCheckbox--size-lg",
+                        size == "xl" && "NuiCheckbox--size-xl",
+                    ],
+                    className,
+                ]),
+            [className, size]
+        );
 
         const handleFocus = React.useCallback<HTMLInputProps["onFocus"]>(
             (e) => {
@@ -57,7 +74,7 @@ const Checkbox: NuiCheckbox = React.memo(
             <StyledCheckboxContainer
                 {...restProps}
                 ref={ref}
-                className="NuiCheckbox"
+                className={classes}
                 focused={focused}
                 touched={touched}
                 errors={errors}
@@ -73,6 +90,7 @@ const Checkbox: NuiCheckbox = React.memo(
 
 const StyledCheckboxContainer = styled(CheckboxContainer)`
     ${context}
+    --nui-checkbox-size: 18px;
 
     & .NuiCheckbox__container {
         cursor: pointer;
@@ -101,8 +119,8 @@ const StyledCheckboxContainer = styled(CheckboxContainer)`
                 border-color: white;
                 border-width: 0px;
                 border-style: solid;
-                border-right-width: 2px;
-                border-bottom-width: 2px;
+                border-right-width: calc(var(--nui-checkbox-size) / 9);
+                border-bottom-width: calc(var(--nui-checkbox-size) / 9);
                 transform: translate(-45%, -58%) rotate(40deg) scale(1);
             }
 
@@ -118,14 +136,19 @@ const StyledCheckboxContainer = styled(CheckboxContainer)`
         }
     }
 
+    & .NuiCheckboxContainer__inputContainer {
+        width: var(--nui-checkbox-size);
+        height: var(--nui-checkbox-size);
+    }
+
     & .NuiCheckbox__container {
         ${border.primary}
 
         position: absolute;
         top: 0;
         left: 0;
-        height: 100%;
-        width: 100%;
+        width: var(--nui-checkbox-size);
+        height: var(--nui-checkbox-size);
         background-color: transparent;
         border-radius: 2px;
         border-style: solid;
@@ -141,8 +164,8 @@ const StyledCheckboxContainer = styled(CheckboxContainer)`
             position: absolute;
             left: 50%;
             top: 50%;
-            width: 3px;
-            height: 9px;
+            width: calc(var(--nui-checkbox-size) / 6);
+            height: calc(var(--nui-checkbox-size) / 2);
             transform: translate(-45%, -58%) rotate(40deg) scale(0);
             transition: transform 300ms ease-out;
             content: "";
@@ -162,6 +185,19 @@ const StyledCheckboxContainer = styled(CheckboxContainer)`
         & .NuiCheckboxContainer__input:checked ~ .NuiCheckbox__container {
             background-color: var(--nui-context-primaryDark);
         }
+    }
+
+    &.NuiCheckbox--size-xs {
+        --nui-checkbox-size: 12px;
+    }
+    &.NuiCheckbox--size-md {
+        --nui-checkbox-size: 24px;
+    }
+    &.NuiCheckbox--size-lg {
+        --nui-checkbox-size: 32px;
+    }
+    &.NuiCheckbox--size-xl {
+        --nui-checkbox-size: 42px;
     }
 `;
 

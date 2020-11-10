@@ -105,13 +105,10 @@ const StyledCheckboxContainer = styled(CheckboxContainer)`
     ); /* size - (2 * padding + 2 * toggle-border-width) */
 
     & .NuiSwitch__container {
-        cursor: pointer;
-        pointer-events: all;
-    }
-
-    & .NuiSwitch__container {
         ${border.primary}
 
+        cursor: pointer;
+        pointer-events: all;
         border-radius: var(--nui-switch-size);
         border-style: solid;
         border-width: 1px;

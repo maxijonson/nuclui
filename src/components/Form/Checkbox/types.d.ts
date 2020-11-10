@@ -12,6 +12,11 @@ export interface CheckboxProps {
         v: boolean,
         e: Parameters<HTMLInputProps["onChange"]>[0]
     ) => void;
+
+    /**
+     * The size of the checkbox
+     */
+    size?: Nui.Breakpoint;
 }
 
 /**
