@@ -80,6 +80,7 @@ const Switch: NuiSwitch = React.memo(
                 focused={focused}
                 touched={touched}
                 errors={errors}
+                size={size}
                 onFocus={handleFocus}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -98,10 +99,9 @@ const Switch: NuiSwitch = React.memo(
 
 const StyledCheckboxContainer = styled(CheckboxContainer)`
     ${context}
-    --nui-switch-size: 18px;
     --nui-switch-pad: 2px;
     --nui-switch-toggle: calc(
-        var(--nui-switch-size) - (2 * var(--nui-switch-pad) + 2px)
+        var(--nui-checkboxContainer-size) - (2 * var(--nui-switch-pad) + 2px)
     ); /* size - (2 * padding + 2 * toggle-border-width) */
 
     & .NuiSwitch__container {
@@ -109,12 +109,12 @@ const StyledCheckboxContainer = styled(CheckboxContainer)`
 
         cursor: pointer;
         pointer-events: all;
-        border-radius: var(--nui-switch-size);
+        border-radius: var(--nui-checkboxContainer-size);
         border-style: solid;
         border-width: 1px;
         box-sizing: border-box;
         height: 100%;
-        min-width: calc(var(--nui-switch-size) * 2);
+        min-width: calc(var(--nui-checkboxContainer-size) * 2);
         padding: var(--nui-switch-pad);
         position: relative;
         transition: background-color 0.2s, border-color 0.2s;
@@ -151,7 +151,6 @@ const StyledCheckboxContainer = styled(CheckboxContainer)`
 
     & .NuiCheckboxContainer__inputContainer {
         width: auto;
-        height: var(--nui-switch-size);
     }
 
     & .NuiCheckboxContainer__input {
@@ -205,19 +204,15 @@ const StyledCheckboxContainer = styled(CheckboxContainer)`
     }
 
     &.NuiSwitch--size-xs {
-        --nui-switch-size: 12px;
         --nui-switch-pad: 1px;
     }
     &.NuiSwitch--size-md {
-        --nui-switch-size: 24px;
         --nui-switch-pad: 3px;
     }
     &.NuiSwitch--size-lg {
-        --nui-switch-size: 32px;
         --nui-switch-pad: 4px;
     }
     &.NuiSwitch--size-xl {
-        --nui-switch-size: 42px;
         --nui-switch-pad: 5px;
     }
 `;

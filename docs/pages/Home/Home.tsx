@@ -185,6 +185,33 @@ const UseFormTest = React.memo(() => {
                         {...fields.subscribe}
                         size="xs"
                         label="Subscribe to newsletter"
+                    />
+                    <Switch
+                        {...fields.subscribe}
+                        size="sm"
+                        label="Subscribe to newsletter"
+                    />
+                    <Switch
+                        {...fields.subscribe}
+                        size="md"
+                        label="Subscribe to newsletter"
+                    />
+                    <Switch
+                        {...fields.subscribe}
+                        size="lg"
+                        label="Subscribe to newsletter"
+                    />
+                    <Switch
+                        {...fields.subscribe}
+                        size="xl"
+                        label="Subscribe to newsletter"
+                    />
+                </FlexItem>
+                <FlexItem>
+                    <Switch
+                        {...fields.subscribe}
+                        size="xs"
+                        label="Subscribe to newsletter"
                         onChildren="On"
                         offChildren="Off"
                     />

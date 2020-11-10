@@ -43,6 +43,13 @@ export interface CheckboxContainerProps {
      * @default false
      */
     focused?: boolean;
+
+    /**
+     * The size of the input
+     *
+     * @default "sm"
+     */
+    size?: Nui.Breakpoint;
 }
 
 /**

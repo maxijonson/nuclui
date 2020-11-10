@@ -21,6 +21,7 @@ const CheckboxContainer: NuiCheckboxContainer = React.memo(
             children,
             focused,
             touched,
+            size,
             ...restProps
         } = props;
 
@@ -38,6 +39,12 @@ const CheckboxContainer: NuiCheckboxContainer = React.memo(
                         labelPosition == "left" &&
                             "NuiCheckboxContainer--position-left",
                     ],
+                    [
+                        size == "xs" && "NuiCheckboxContainer--size-xs",
+                        size == "md" && "NuiCheckboxContainer--size-md",
+                        size == "lg" && "NuiCheckboxContainer--size-lg",
+                        size == "xl" && "NuiCheckboxContainer--size-xl",
+                    ],
                     props.disabled && "NuiCheckboxContainer--disabled",
                     errors.length && touched && "NuiCheckboxContainer--invalid",
                     focused && "NuiCheckboxContainer--focused",
@@ -49,6 +56,7 @@ const CheckboxContainer: NuiCheckboxContainer = React.memo(
                 focused,
                 labelPosition,
                 props.disabled,
+                size,
                 touched,
             ]
         );
@@ -89,6 +97,7 @@ const CheckboxContainer: NuiCheckboxContainer = React.memo(
 
 const StyledCheckboxContainer = styled(CheckboxContainer)`
     ${context}
+    --nui-checkboxContainer-size: 18px;
 
     position: relative;
     display: flex;
@@ -110,8 +119,8 @@ const StyledCheckboxContainer = styled(CheckboxContainer)`
 
     & .NuiCheckboxContainer__inputContainer {
         position: relative;
-        width: 18px;
-        height: 18px;
+        width: var(--nui-checkboxContainer-size);
+        height: var(--nui-checkboxContainer-size);
     }
 
     & .NuiCheckboxContainer__input,
@@ -170,6 +179,19 @@ const StyledCheckboxContainer = styled(CheckboxContainer)`
         & .NuiCheckboxContainer__error {
             color: var(--nui-context-danger);
         }
+    }
+
+    &.NuiCheckboxContainer--size-xs {
+        --nui-checkboxContainer-size: 12px;
+    }
+    &.NuiCheckboxContainer--size-md {
+        --nui-checkboxContainer-size: 24px;
+    }
+    &.NuiCheckboxContainer--size-lg {
+        --nui-checkboxContainer-size: 32px;
+    }
+    &.NuiCheckboxContainer--size-xl {
+        --nui-checkboxContainer-size: 42px;
     }
 `;
 
