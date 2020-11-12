@@ -3,6 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import _ from "lodash";
 import { background, border, context, shadow, text } from "@theme";
+import { createComponentName } from "@utils";
 import { InputContainer } from "../InputContainer";
 import { HTMLInputProps } from "../InputContainer/types";
 import { NuiSelect, SelectOption, HTMLButtonProps } from "./types";
@@ -465,5 +466,8 @@ const StyledSelect = styled(InputContainer)`
         cursor: default;
     }
 `;
+
+StyledSelect.displayName = createComponentName("StyledSelect");
+Select.displayName = createComponentName("Select");
 
 export default Select;

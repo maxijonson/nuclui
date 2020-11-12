@@ -55,7 +55,7 @@ const Checkbox: NuiCheckbox = React.memo(
         );
 
         return (
-            <StyledCheckboxContainer
+            <StyledCheckbox
                 {...restProps}
                 ref={ref}
                 className={clsx(["NuiCheckbox", className])}
@@ -67,12 +67,12 @@ const Checkbox: NuiCheckbox = React.memo(
                 onBlur={handleBlur}
             >
                 <div className="NuiCheckbox__container" />
-            </StyledCheckboxContainer>
+            </StyledCheckbox>
         );
     })
 );
 
-const StyledCheckboxContainer = styled(CheckboxContainer)`
+const StyledCheckbox = styled(CheckboxContainer)`
     ${context}
 
     & .NuiCheckbox__container {
@@ -168,6 +168,7 @@ const StyledCheckboxContainer = styled(CheckboxContainer)`
     }
 `;
 
+StyledCheckbox.displayName = createComponentName("StyledCheckbox");
 Checkbox.displayName = createComponentName("Checkbox");
 
 export default Checkbox;

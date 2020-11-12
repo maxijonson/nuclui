@@ -15,6 +15,7 @@ import {
     useForm,
     Select,
     Switch,
+    DatePicker,
 } from "nuclui";
 import { TextInputProps } from "nuclui/components/Form/TextInput/types";
 import { Link } from "react-router-dom";
@@ -94,6 +95,9 @@ const UseFormTest = React.memo(() => {
             },
             gender: {
                 initial: "",
+            },
+            birthday: {
+                initial: Date.now(),
             },
         },
     });
@@ -179,6 +183,7 @@ const UseFormTest = React.memo(() => {
 
     return (
         <form autoComplete="off" onSubmit={onSubmit}>
+            <DatePicker {...fields.birthday} label="Birthday" />
             <Flex>
                 <FlexItem>
                     <Switch
@@ -275,6 +280,22 @@ const UseFormTest = React.memo(() => {
                     />
                 </FlexItem>
             </Flex>
+            <Flex justify="spaceEvenly">
+                <Switch {...fields.toc} label="Default (right)" />
+                <Switch {...fields.toc} label="Top" labelPosition="top" />
+                <Switch {...fields.toc} label="Bottom" labelPosition="bottom" />
+                <Switch {...fields.toc} label="Left" labelPosition="left" />
+            </Flex>
+            <Flex justify="spaceEvenly">
+                <Checkbox {...fields.toc} label="Default (right)" />
+                <Checkbox {...fields.toc} label="Top" labelPosition="top" />
+                <Checkbox
+                    {...fields.toc}
+                    label="Bottom"
+                    labelPosition="bottom"
+                />
+                <Checkbox {...fields.toc} label="Left" labelPosition="left" />
+            </Flex>
             <Select
                 {...fields.gender}
                 label="Gender"
@@ -290,20 +311,6 @@ const UseFormTest = React.memo(() => {
                 creatable
                 onCreate={onCreate}
             />
-            <Flex justify="spaceEvenly">
-                <Checkbox {...fields.toc} label="Default (right)" />
-                <Checkbox {...fields.toc} label="Top" labelPosition="top" />
-                <Checkbox
-                    {...fields.toc}
-                    label="Bottom"
-                    labelPosition="bottom"
-                />
-                <Checkbox {...fields.toc} label="Left" labelPosition="left" />
-            </Flex>
-            <Checkbox {...fields.toc} disabled label="Default (right)" />
-            <Checkbox {...fields.toc} label="Top" labelPosition="top" />
-            <Checkbox {...fields.toc} label="Bottom" labelPosition="bottom" />
-            <Checkbox {...fields.toc} label="Left" labelPosition="left" />
             <NumberInput
                 {...fields.age}
                 label="Age"

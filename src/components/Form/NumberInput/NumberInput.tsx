@@ -239,6 +239,7 @@ const StyledNumberInput = styled(InputContainer)`
     }
 `;
 
+StyledNumberInput.displayName = createComponentName("StyledNumberInput");
 NumberInput.displayName = createComponentName("NumberInput");
 
 export default NumberInput;

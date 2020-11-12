@@ -73,7 +73,7 @@ const Switch: NuiSwitch = React.memo(
         );
 
         return (
-            <StyledCheckboxContainer
+            <StyledSwitch
                 {...restProps}
                 ref={ref}
                 className={classes}
@@ -92,12 +92,12 @@ const Switch: NuiSwitch = React.memo(
                     />
                     <div className="NuiSwitch__toggle" />
                 </div>
-            </StyledCheckboxContainer>
+            </StyledSwitch>
         );
     })
 );
 
-const StyledCheckboxContainer = styled(CheckboxContainer)`
+const StyledSwitch = styled(CheckboxContainer)`
     ${context}
     --nui-switch-pad: 2px;
     --nui-switch-toggle: calc(
@@ -233,6 +233,7 @@ const StyledCheckboxContainer = styled(CheckboxContainer)`
     }
 `;
 
+StyledSwitch.displayName = createComponentName("StyledSwitch");
 Switch.displayName = createComponentName("Switch");
 
 export default Switch;
