@@ -1,5 +1,5 @@
 import { StrictOmit } from "ts-essentials";
-import { HTMLInputProps, InputContainerProps } from "../InputContainer/types";
+import { InputContainerProps } from "../InputContainer/types";
 
 interface SelectOption {
     label: string;
@@ -25,8 +25,8 @@ export interface SelectProps {
     onChange?: (
         v: string,
         e:
-            | Parameters<HTMLButtonProps["onClick"]>[0]
-            | Parameters<HTMLInputProps["onKeyDown"]>[0]
+            | React.KeyboardEvent<HTMLInputElement>
+            | React.MouseEvent<HTMLButtonElement, MouseEvent>
     ) => void;
 
     /**

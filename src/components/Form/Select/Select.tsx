@@ -3,14 +3,15 @@ import React from "react";
 import styled from "styled-components";
 import _ from "lodash";
 import { background, border, context, shadow, text } from "@theme";
-import { createComponentName } from "@utils";
+import { createComponentName, mergeRefs } from "@utils";
 import { InputContainer } from "../InputContainer";
 import { HTMLInputProps } from "../InputContainer/types";
 import { NuiSelect, SelectOption, HTMLButtonProps } from "./types";
 
-// FIXME: Find a better way to know when the input is "focused". Focus is lost when selecting an option, which influenced some "hacks" but has limitations.
 // TODO: Multi select (maybe separate component?)
 // TODO: Make sure the options do not go out of view
+
+const preventFocus = (e: React.MouseEvent) => e.preventDefault();
 
 const Select: NuiSelect = React.memo(
     React.forwardRef((props, ref) => {
@@ -20,7 +21,7 @@ const Select: NuiSelect = React.memo(
             className,
             variant,
             onFocus,
-            onChange,
+            onChange: onChangeProp,
             onBlur,
             onKeyDown,
             append,
@@ -40,10 +41,19 @@ const Select: NuiSelect = React.memo(
         const [search, setSearch] = React.useState<string | null>(null);
         const [created, setCreated] = React.useState<SelectOption[]>([]);
 
-        const timeout = React.useRef<number>(0);
         const containerRef = React.useRef<HTMLDivElement>(null);
+        const inputRef = React.useRef<HTMLInputElement>(null);
+
+        // Used to keep previous options when unfocusing to prevent visual glitches
+        const prevOptions = React.useRef<SelectOption[]>([
+            ...created,
+            ...options,
+        ]);
 
         const errors = React.useMemo(() => props.errors || [], [props.errors]);
+        const mergedInputRef = React.useMemo(() => mergeRefs(inputRef, ref), [
+            ref,
+        ]);
 
         const classes = React.useMemo(
             () =>
@@ -51,6 +61,7 @@ const Select: NuiSelect = React.memo(
             [className, focused]
         );
 
+        /** All possible options: created and provided */
         const mergedOptions = React.useMemo(() => [...created, ...options], [
             created,
             options,
@@ -75,16 +86,19 @@ const Select: NuiSelect = React.memo(
 
         /** Filters `props.options` according to the `search` state */
         const filteredOptions = React.useMemo(() => {
+            if (!focused) return prevOptions.current; // Keeps the previous options when unfocusing
             if (!search) return mergedOptions;
 
             const lowerCaseSearch = search.toLowerCase();
-            return _.filter(mergedOptions, (o) =>
+
+            prevOptions.current = _.filter(mergedOptions, (o) =>
                 _.includes(
                     o.label.toLowerCase() + o.value.toLowerCase(),
                     lowerCaseSearch
                 )
             );
-        }, [mergedOptions, search]);
+            return prevOptions.current;
+        }, [focused, mergedOptions, search]);
 
         /** Whether or not the search query can be created as an option */
         const canCreate = React.useMemo(() => {
@@ -108,6 +122,28 @@ const Select: NuiSelect = React.memo(
             [onFocus]
         );
 
+        /** Generalized onChange when the value is changed */
+        const onChange = React.useCallback(
+            (
+                value: string,
+                e:
+                    | React.KeyboardEvent<HTMLInputElement>
+                    | React.MouseEvent<HTMLButtonElement, MouseEvent>
+            ) => {
+                setFocused(false);
+                setSearch(null);
+                setHighlight(-1);
+                if (inputRef.current) {
+                    inputRef.current.blur();
+                }
+
+                if (onChangeProp) {
+                    onChangeProp(value, e);
+                }
+            },
+            [onChangeProp]
+        );
+
         /** Changes the search query and resets the highlight position */
         const handleChange = React.useCallback<HTMLInputProps["onChange"]>(
             (e) => {
@@ -119,49 +155,36 @@ const Select: NuiSelect = React.memo(
 
         /** Fired when selecting an option from the options list */
         const handleItemSelect = React.useCallback<HTMLButtonProps["onClick"]>(
-            (e) => {
-                setSearch(null);
-                setHighlight(-1);
-
-                window.clearTimeout(timeout.current);
-
-                if (onChange) {
-                    onChange(e.currentTarget.value, e);
-                }
-            },
+            (e) => onChange(e.currentTarget.value, e),
             [onChange]
         );
 
+        /** Adds a new option to the options list */
         const createOption = React.useCallback<HTMLButtonProps["onClick"]>(
             (e) => {
-                if (search) {
-                    let createdOption: SelectOption | null = {
-                        value: search,
-                        label: search,
-                    };
+                if (!search) return;
 
-                    if (onCreate) {
-                        const result = onCreate(search);
-                        if (result == false) {
-                            createdOption = null;
-                        }
-                        if (typeof result === "object") {
-                            createdOption = result;
-                        }
+                let createdOption: SelectOption | null = {
+                    value: search,
+                    label: search,
+                };
+
+                if (onCreate) {
+                    const result = onCreate(search);
+                    if (result == false) {
+                        createdOption = null;
                     }
-
-                    if (createdOption) {
-                        setCreated((current) => [
-                            ...current,
-                            createdOption as SelectOption,
-                        ]);
-                        if (onChange) {
-                            onChange(createdOption.value, e);
-                        }
+                    if (typeof result === "object") {
+                        createdOption = result;
                     }
+                }
 
-                    setHighlight(-1);
-                    setSearch(null);
+                if (createdOption) {
+                    setCreated((current) => [
+                        ...current,
+                        createdOption as SelectOption,
+                    ]);
+                    onChange(createdOption.value, e);
                 }
             },
             [onChange, onCreate, search]
@@ -196,9 +219,7 @@ const Select: NuiSelect = React.memo(
                             e.preventDefault();
                         }
                         option = filteredOptions[highlight];
-                        if (option != null && !option.disabled && onChange) {
-                            setHighlight(-1);
-                            setSearch(null);
+                        if (option != null && !option.disabled) {
                             onChange(option.value, e);
                         }
                         break;
@@ -217,11 +238,7 @@ const Select: NuiSelect = React.memo(
                 setFocused(false);
                 setTouched(true);
                 setHighlight(-1);
-
-                // HACK: Prevent the search to be cleared before handleItemSelect fires
-                timeout.current = window.setTimeout(() => {
-                    setSearch(null);
-                }, 200);
+                setSearch(null);
 
                 if (onBlur) {
                     onBlur(e);
@@ -261,14 +278,6 @@ const Select: NuiSelect = React.memo(
             }
         }, [highlight]);
 
-        /** Cleanup */
-        React.useEffect(
-            () => () => {
-                window.clearTimeout(timeout.current);
-            },
-            []
-        );
-
         return (
             <StyledSelect
                 disabled={disabled}
@@ -289,12 +298,12 @@ const Select: NuiSelect = React.memo(
                         disabled={disabled}
                         value={inputValue}
                         className="NuiSelect__input"
-                        ref={ref}
+                        ref={mergedInputRef}
                         type="text"
-                        onFocus={handleFocus}
-                        onBlur={handleBlur}
                         onChange={handleChange}
                         onKeyDown={handleKeyDown}
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
                     />
                     <div className="NuiSelect__icon" />
                 </div>
@@ -305,6 +314,7 @@ const Select: NuiSelect = React.memo(
                             <div
                                 children="No Option"
                                 className="NuiSelect__options__list__empty"
+                                onMouseDown={preventFocus}
                             />
                         )}
                         {canCreate && (
@@ -313,6 +323,8 @@ const Select: NuiSelect = React.memo(
                                 children={`Create ${search}`}
                                 className="NuiSelect__options__list__create"
                                 onClick={createOption}
+                                tabIndex={-1}
+                                onMouseDown={preventFocus}
                             />
                         )}
                         {_.map(filteredOptions, (option, i) => (
@@ -328,6 +340,7 @@ const Select: NuiSelect = React.memo(
                                 key={`${i}${option.value}`}
                                 value={option.value}
                                 onClick={handleItemSelect}
+                                onMouseDown={preventFocus}
                                 disabled={option.disabled}
                                 tabIndex={-1}
                             >
@@ -444,9 +457,7 @@ const StyledSelect = styled(InputContainer)`
         pointer-events: none;
     }
 
-    &.NuiSelect--focused .NuiSelect__options, 
-    & .NuiSelect__options:focus,
-    & .NuiSelect__options:hover {
+    &.NuiSelect--focused .NuiSelect__options {
         opacity: 1;
         pointer-events: all;
         transform: scaleY(1);
