@@ -349,12 +349,22 @@ const DatePicker: NuiDatePicker = React.memo(
             (e) => {
                 setFocused(false);
                 setTouched(true);
+                setView("days");
+
+                // Reset to current or selected date
+                if (selectedYear && selectedMonth) {
+                    const y = new Date(selectedYear).getFullYear();
+                    setYear(y);
+
+                    const m = new Date(selectedMonth).getMonth();
+                    setMonth(m);
+                }
 
                 if (onBlur) {
                     onBlur(e);
                 }
             },
-            [onBlur]
+            [onBlur, selectedMonth, selectedYear]
         );
 
         return (
