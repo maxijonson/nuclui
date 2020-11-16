@@ -144,6 +144,7 @@ const DatePicker: NuiDatePicker = React.memo(
             return options;
         }, [month, year]);
 
+        /** All months of the year shown when in "months" view */
         const monthsOptions = React.useMemo(() => {
             const current = new Date(year, month);
             current.setHours(0, 0, 0, 0);
@@ -161,10 +162,12 @@ const DatePicker: NuiDatePicker = React.memo(
             return options;
         }, [month, year]);
 
+        /** All years options when in "years" view */
         const yearsOptions = React.useMemo(() => {
             const current = new Date(year, month);
             current.setHours(0, 0, 0, 0);
 
+            // Offset the current year by the `yearsOffset` to display a different "page" of years
             const offsetedYear = year + YEARS_PER_PAGE * yearsOffset;
 
             const options: {
@@ -209,6 +212,16 @@ const DatePicker: NuiDatePicker = React.memo(
             date.setMonth(0, 1);
             return date.getTime();
         }, [props.value]);
+
+        const inputValue = React.useMemo(() => {
+            if (!selectedYear || !selectedMonth || !selectedDay) return "";
+
+            const y = new Date(selectedYear).getFullYear();
+            const m = new Date(selectedMonth).getMonth() + 1;
+            const d = new Date(selectedDay).getDate();
+
+            return `${y}/${m}/${d}`;
+        }, [selectedDay, selectedMonth, selectedYear]);
 
         const errors = React.useMemo(() => props.errors || [], [props.errors]);
 
@@ -362,6 +375,7 @@ const DatePicker: NuiDatePicker = React.memo(
                         {...restProps}
                         className="NuiDatePicker__input"
                         ref={ref}
+                        value={inputValue}
                         onFocus={handleFocus}
                         onChange={handleChange}
                         onBlur={handleBlur}
