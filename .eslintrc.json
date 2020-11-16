@@ -86,6 +86,7 @@
                 "props": false
             }
         ],
+        "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
         "no-restricted-globals": "off",
         "no-restricted-syntax": "off",
         "no-shadow": [

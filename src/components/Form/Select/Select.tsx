@@ -308,13 +308,12 @@ const Select: NuiSelect = React.memo(
                     <div className="NuiSelect__icon" />
                 </div>
 
-                <div className="NuiSelect__options">
+                <div className="NuiSelect__options" onMouseDown={preventFocus}>
                     <ul className="NuiSelect__options__list">
                         {!canCreate && filteredOptions.length == 0 && (
                             <div
                                 children="No Option"
                                 className="NuiSelect__options__list__empty"
-                                onMouseDown={preventFocus}
                             />
                         )}
                         {canCreate && (
@@ -324,7 +323,6 @@ const Select: NuiSelect = React.memo(
                                 className="NuiSelect__options__list__create"
                                 onClick={createOption}
                                 tabIndex={-1}
-                                onMouseDown={preventFocus}
                             />
                         )}
                         {_.map(filteredOptions, (option, i) => (
@@ -340,7 +338,6 @@ const Select: NuiSelect = React.memo(
                                 key={`${i}${option.value}`}
                                 value={option.value}
                                 onClick={handleItemSelect}
-                                onMouseDown={preventFocus}
                                 disabled={option.disabled}
                                 tabIndex={-1}
                             >
@@ -371,6 +368,7 @@ const StyledSelect = styled(InputContainer)`
         box-shadow: 0 2px 3px -1px var(--nui-shadow), 0 1px 1px -1px var(--nui-shadow);
         box-sizing: border-box;
         left: 0;
+        min-width: 100px;
         opacity: 0;
         overflow: hidden;
         pointer-events: none;

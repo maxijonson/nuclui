@@ -1,5 +1,5 @@
 import { StrictOmit } from "ts-essentials";
-import { InputContainerProps, HTMLInputProps } from "../InputContainer/types";
+import { InputContainerProps } from "../InputContainer/types";
 
 export interface DatePickerProps {
     children?: never;
@@ -11,11 +11,11 @@ export interface DatePickerProps {
     value?: number;
 
     /**
-     * Fired when the date is changed.
+     * Fired when the date is changed. The event passed as second parameter is the MouseEvent of the clicked button
      */
     onChange?: (
         v: number,
-        e: Parameters<HTMLInputProps["onChange"]>[0]
+        e: React.MouseEvent<HTMLButtonElement, MouseEvent>
     ) => void;
 }
 
