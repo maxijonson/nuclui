@@ -195,6 +195,7 @@ const StyledCycleSelect = styled(InputContainer)`
         transition: background-color 0.2s;
         cursor: pointer;
         height: 100%;
+        padding: 0 5px;
 
         &:hover:not(:disabled) {
             ${background.secondary}
@@ -211,6 +212,13 @@ const StyledCycleSelect = styled(InputContainer)`
                 ${border.secondary}
             }
         }
+    }
+
+    & .NuiCycleSelect__button--prev {
+        padding-left: 8px;
+    }
+    & .NuiCycleSelect__button--next {
+        padding-right: 8px;
     }
 
     & .NuiCycleSelect__arrow {

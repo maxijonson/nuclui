@@ -198,8 +198,6 @@ const UseFormTest = React.memo(() => {
                 {...fields.experience}
                 options={expOptions}
                 label="Experience"
-                append="Next"
-                prepend="Prev"
                 size="100%"
             />
             <DatePicker {...fields.birthday} label="Birthday" />
