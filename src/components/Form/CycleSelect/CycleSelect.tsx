@@ -225,7 +225,7 @@ const StyledCycleSelect = styled(InputContainer)`
         pointer-events: none;
 
         &.NuiCycleSelect__arrow--left {
-            transform: rotate(-130deg);
+            transform: rotate(-135deg);
         }
         &.NuiCycleSelect__arrow--right {
             transform: rotate(45deg);
