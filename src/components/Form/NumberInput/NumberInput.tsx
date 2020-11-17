@@ -26,7 +26,6 @@ const arrowDown = (
 const NumberInput: NuiNumberInput = React.memo(
     React.forwardRef((props, ref) => {
         const {
-            name,
             label,
             className,
             variant,
@@ -40,6 +39,7 @@ const NumberInput: NuiNumberInput = React.memo(
             min,
             max,
             step,
+            errors,
             ...restProps
         } = props;
 
@@ -49,7 +49,6 @@ const NumberInput: NuiNumberInput = React.memo(
 
         const mergedRefs = React.useMemo(() => mergeRefs(ref, inputRef), [ref]);
 
-        const errors = React.useMemo(() => props.errors || [], [props.errors]);
         const value = React.useMemo(() => {
             if (props.value == undefined) return undefined;
             if (typeof props.value !== "number") return "";
@@ -103,6 +102,7 @@ const NumberInput: NuiNumberInput = React.memo(
         const increment = React.useCallback(() => {
             if (inputRef.current) {
                 inputRef.current.stepUp();
+                setTouched(true);
                 if (onChange) {
                     onChange(inputRef.current.valueAsNumber);
                 }
@@ -112,6 +112,7 @@ const NumberInput: NuiNumberInput = React.memo(
         const decrement = React.useCallback(() => {
             if (inputRef.current) {
                 inputRef.current.stepDown();
+                setTouched(true);
                 if (onChange) {
                     onChange(inputRef.current.valueAsNumber);
                 }

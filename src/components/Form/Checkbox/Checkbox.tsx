@@ -9,19 +9,10 @@ import { CheckboxContainer } from "../CheckboxContainer";
 
 const Checkbox: NuiCheckbox = React.memo(
     React.forwardRef((props, ref) => {
-        const {
-            className,
-            onFocus,
-            onChange,
-            onBlur,
-            errors: errorsProp,
-            ...restProps
-        } = props;
+        const { className, onFocus, onChange, onBlur, ...restProps } = props;
 
         const [focused, setFocused] = React.useState(false);
         const [touched, setTouched] = React.useState(false);
-
-        const errors = React.useMemo(() => errorsProp || [], [errorsProp]);
 
         const handleFocus = React.useCallback<HTMLInputProps["onFocus"]>(
             (e) => {
@@ -35,10 +26,10 @@ const Checkbox: NuiCheckbox = React.memo(
 
         const handleChange = React.useCallback<HTMLInputProps["onChange"]>(
             (e) => {
+                setTouched(true);
                 if (onChange) {
                     onChange(e.currentTarget.checked, e);
                 }
-                setTouched(true);
             },
             [onChange]
         );
@@ -61,7 +52,6 @@ const Checkbox: NuiCheckbox = React.memo(
                 className={clsx(["NuiCheckbox", className])}
                 focused={focused}
                 touched={touched}
-                errors={errors}
                 onFocus={handleFocus}
                 onChange={handleChange}
                 onBlur={handleBlur}

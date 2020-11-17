@@ -16,15 +16,12 @@ const Switch: NuiSwitch = React.memo(
             onBlur,
             onChildren,
             offChildren,
-            errors: errorsProp,
             size,
             ...restProps
         } = props;
 
         const [focused, setFocused] = React.useState(false);
         const [touched, setTouched] = React.useState(false);
-
-        const errors = React.useMemo(() => errorsProp || [], [errorsProp]);
 
         const classes = React.useMemo(
             () =>
@@ -56,7 +53,6 @@ const Switch: NuiSwitch = React.memo(
                 if (onChange) {
                     onChange(e.currentTarget.checked, e);
                 }
-                setTouched(true);
             },
             [onChange]
         );
@@ -79,7 +75,6 @@ const Switch: NuiSwitch = React.memo(
                 className={classes}
                 focused={focused}
                 touched={touched}
-                errors={errors}
                 size={size}
                 onFocus={handleFocus}
                 onChange={handleChange}

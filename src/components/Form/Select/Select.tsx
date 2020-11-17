@@ -16,7 +16,6 @@ const preventFocus = (e: React.MouseEvent) => e.preventDefault();
 const Select: NuiSelect = React.memo(
     React.forwardRef((props, ref) => {
         const {
-            name,
             label,
             className,
             variant,

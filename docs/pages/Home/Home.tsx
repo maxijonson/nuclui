@@ -16,6 +16,7 @@ import {
     Select,
     Switch,
     DatePicker,
+    CycleSelect,
 } from "nuclui";
 import { TextInputProps } from "nuclui/components/Form/TextInput/types";
 import { Link } from "react-router-dom";
@@ -99,6 +100,9 @@ const UseFormTest = React.memo(() => {
             birthday: {
                 initial: Date.now(),
             },
+            experience: {
+                initial: "beginner",
+            },
         },
     });
 
@@ -142,11 +146,18 @@ const UseFormTest = React.memo(() => {
         []
     );
 
-    const options = React.useMemo(
+    const genderOptions = React.useMemo(
         () => [
             { label: "Male", value: "male" },
             { label: "Female", value: "female" },
             { label: "Alien", value: "alien", disabled: true },
+        ],
+        []
+    );
+
+    const genderOptions2 = React.useMemo(
+        () => [
+            ...genderOptions,
             { label: "Other1", value: "other1" },
             { label: "Other2", value: "other2" },
             { label: "Other3", value: "other3" },
@@ -158,14 +169,14 @@ const UseFormTest = React.memo(() => {
             { label: "Other9", value: "other9" },
             { label: "Other10", value: "other10" },
         ],
-        []
+        [genderOptions]
     );
 
-    const options2 = React.useMemo(
+    const expOptions = React.useMemo(
         () => [
-            { label: "Male", value: "male" },
-            { label: "Female", value: "female" },
-            { label: "Alien", value: "alien", disabled: true },
+            { label: "Beginner", value: "beginner" },
+            { label: "Advanced", value: "advanced" },
+            { label: "Expert", value: "expert" },
         ],
         []
     );
@@ -183,6 +194,14 @@ const UseFormTest = React.memo(() => {
 
     return (
         <form autoComplete="off" onSubmit={onSubmit}>
+            <CycleSelect
+                {...fields.experience}
+                options={expOptions}
+                label="Experience"
+                append="Next"
+                prepend="Prev"
+                size="100%"
+            />
             <DatePicker {...fields.birthday} label="Birthday" />
             <Flex>
                 <FlexItem>
@@ -299,7 +318,7 @@ const UseFormTest = React.memo(() => {
             <Select
                 {...fields.gender}
                 label="Gender"
-                options={options2}
+                options={genderOptions}
                 renderOption={renderOption}
                 variant="underline"
                 append="Select"
@@ -307,7 +326,7 @@ const UseFormTest = React.memo(() => {
             <Select
                 {...fields.gender}
                 label="Gender"
-                options={options}
+                options={genderOptions2}
                 creatable
                 onCreate={onCreate}
             />
@@ -323,6 +342,8 @@ const UseFormTest = React.memo(() => {
                 placeholder="Placeholder"
                 label="First Name"
                 size="100%"
+                append="Append"
+                prepend="Prepend"
             />
             <TextInput
                 {...fields.middle}

@@ -10,6 +10,8 @@ import { NuiDatePicker } from "./types";
 import { HTMLButtonProps } from "../Select/types";
 
 // Inspired from: https://medium.com/swlh/build-a-date-picker-in-15mins-using-javascript-react-from-scratch-f6932c77db09
+// TODO: Time picker (check for timezone)
+// TODO: Range picker
 
 const WEEKDAYS = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
 const MONTHS = [
@@ -383,6 +385,7 @@ const DatePicker: NuiDatePicker = React.memo(
                 <div className="NuiDatePicker__container">
                     <input
                         {...restProps}
+                        name={name}
                         className="NuiDatePicker__input"
                         ref={ref}
                         value={inputValue}

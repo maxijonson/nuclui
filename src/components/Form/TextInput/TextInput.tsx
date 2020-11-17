@@ -16,7 +16,6 @@ const TextInput: NuiTextInput = React.memo(
             keepCharPositions = false,
             showMask = false,
             pipe,
-            name,
             label,
             className,
             variant,
@@ -28,13 +27,12 @@ const TextInput: NuiTextInput = React.memo(
             prepend,
             size,
             disabled,
+            errors,
             ...restProps
         } = props;
 
         const [focused, setFocused] = React.useState(false);
         const [touched, setTouched] = React.useState(false);
-
-        const errors = React.useMemo(() => props.errors || [], [props.errors]);
 
         const transformValue = React.useCallback(
             (v: string) => transform?.(v) || v,
