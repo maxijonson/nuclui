@@ -194,6 +194,13 @@ const UseFormTest = React.memo(() => {
 
     return (
         <form autoComplete="off" onSubmit={onSubmit}>
+            <DatePicker {...fields.birthday} label="Birthday" />
+            <CycleSelect
+                {...fields.experience}
+                options={expOptions}
+                label="Experience"
+            />
+            <CycleSelect {...fields.experience} label="No options" />
             <Flex>
                 <FlexItem>
                     <TextInput
@@ -269,13 +276,6 @@ const UseFormTest = React.memo(() => {
                 </FlexItem>
             </Flex>
             <HR />
-            <CycleSelect
-                {...fields.experience}
-                options={expOptions}
-                label="Experience"
-                fluid
-            />
-            <DatePicker {...fields.birthday} label="Birthday" />
             <Flex>
                 <FlexItem>
                     <Switch

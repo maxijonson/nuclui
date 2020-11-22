@@ -8,6 +8,7 @@ import { InputContainer } from "../InputContainer";
 import { HTMLInputProps } from "../InputContainer/types";
 import { NuiDatePicker } from "./types";
 import { HTMLButtonProps } from "../Select/types";
+import { CycleSelect } from "../CycleSelect";
 
 // Inspired from: https://medium.com/swlh/build-a-date-picker-in-15mins-using-javascript-react-from-scratch-f6932c77db09
 // TODO: Time picker (check for timezone)
@@ -286,6 +287,7 @@ const DatePicker: NuiDatePicker = React.memo(
                 }
                 setYear(new Date(v).getFullYear());
                 setView("months");
+                setYearsOffset(0);
             },
             []
         );
@@ -403,95 +405,42 @@ const DatePicker: NuiDatePicker = React.memo(
                         <div className="NuiDatePicker__calendar">
                             <div className="NuiDatePicker__calendar__header">
                                 {view == "days" && (
-                                    <div className="NuiDatePicker__calendar__header__month">
-                                        <div className="NuiDatePicker__arrow-container">
-                                            <button
-                                                tabIndex={-1}
-                                                onClick={handlePrevMonth}
-                                                type="button"
-                                                className="NuiDatePicker__arrow NuiDatePicker__arrow--left"
-                                            />
-                                        </div>
-                                        <div className="NuiDatePicker__calendar__month__label-container">
-                                            <button
-                                                onClick={handleMonthView}
-                                                tabIndex={-1}
-                                                type="button"
-                                                className="NuiDatePicker__calendar__header__month__label"
-                                                children={MONTHS[month]}
-                                            />
-                                        </div>
-                                        <div className="NuiDatePicker__arrow-container">
-                                            <button
-                                                onClick={handleNextMonth}
-                                                tabIndex={-1}
-                                                type="button"
-                                                className="NuiDatePicker__arrow NuiDatePicker__arrow--right"
-                                            />
-                                        </div>
-                                    </div>
+                                    <CycleSelect
+                                        className="NuiDatePicker__calendar__header__month"
+                                        fluid
+                                        value={MONTHS[month]}
+                                        variant="none"
+                                        onPrevious={handlePrevMonth}
+                                        onNext={handleNextMonth}
+                                        onClick={handleMonthView}
+                                        tabIndex={-1}
+                                    />
                                 )}
                                 {view != "years" && (
-                                    <div className="NuiDatePicker__calendar__header__year">
-                                        <div className="NuiDatePicker__arrow-container">
-                                            <button
-                                                onClick={handlePrevYear}
-                                                tabIndex={-1}
-                                                type="button"
-                                                className="NuiDatePicker__arrow NuiDatePicker__arrow--left"
-                                            />
-                                        </div>
-                                        <div className="NuiDatePicker__calendar__year__label-container">
-                                            <button
-                                                onClick={handleYearView}
-                                                tabIndex={-1}
-                                                type="button"
-                                                className="NuiDatePicker__calendar__header__year__label"
-                                                children={year}
-                                            />
-                                        </div>
-                                        <div className="NuiDatePicker__arrow-container">
-                                            <button
-                                                onClick={handleNextYear}
-                                                tabIndex={-1}
-                                                type="button"
-                                                className="NuiDatePicker__arrow NuiDatePicker__arrow--right"
-                                            />
-                                        </div>
-                                    </div>
+                                    <CycleSelect
+                                        className="NuiDatePicker__calendar__header__year"
+                                        fluid
+                                        value={year.toString()}
+                                        variant="none"
+                                        onPrevious={handlePrevYear}
+                                        onNext={handleNextYear}
+                                        onClick={handleYearView}
+                                        size={view == "days" ? "xs" : "sm"}
+                                        tabIndex={-1}
+                                    />
                                 )}
-
                                 {view == "years" && (
-                                    <div className="NuiDatePicker__calendar__header__yearInterval">
-                                        <div className="NuiDatePicker__arrow-container">
-                                            <button
-                                                onClick={handlePrevYearInterval}
-                                                tabIndex={-1}
-                                                type="button"
-                                                className="NuiDatePicker__arrow NuiDatePicker__arrow--left"
-                                            />
-                                        </div>
-                                        <div className="NuiDatePicker__calendar__yearInterval__label-container">
-                                            <button
-                                                tabIndex={-1}
-                                                type="button"
-                                                className="NuiDatePicker__calendar__header__yearInterval__label"
-                                                children={`${
-                                                    _.first(yearsOptions)?.label
-                                                } - ${
-                                                    _.last(yearsOptions)?.label
-                                                }`}
-                                            />
-                                        </div>
-                                        <div className="NuiDatePicker__arrow-container">
-                                            <button
-                                                onClick={handleNextYearInterval}
-                                                tabIndex={-1}
-                                                type="button"
-                                                className="NuiDatePicker__arrow NuiDatePicker__arrow--right"
-                                            />
-                                        </div>
-                                    </div>
+                                    <CycleSelect
+                                        className="NuiDatePicker__calendar__header__yearInterval"
+                                        fluid
+                                        value={`${
+                                            _.first(yearsOptions)?.label
+                                        } - ${_.last(yearsOptions)?.label}`}
+                                        variant="none"
+                                        onPrevious={handlePrevYearInterval}
+                                        onNext={handleNextYearInterval}
+                                        tabIndex={-1}
+                                    />
                                 )}
                             </div>
 
@@ -617,73 +566,16 @@ const StyledDatePicker = styled(InputContainer)`
         flex-direction: column;
     }
 
-    & .NuiDatePicker__calendar__header__month,
-    & .NuiDatePicker__calendar__header__year,
-    & .NuiDatePicker__calendar__header__yearInterval {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-    }
-
-    & .NuiDatePicker__calendar__header__month__label,
-    & .NuiDatePicker__calendar__header__year__label,
-    & .NuiDatePicker__calendar__header__yearInterval__label {
-        background: transparent;
-        outline: none;
-        border: none;
+    & .NuiCycleSelect {
         margin: 0;
-        padding: 0;
+    }
+
+    & .NuiCycleSelect:not(.NuiDatePicker__calendar__header__yearInterval) .NuiCycleSelect__input {
         cursor: pointer;
-    }
-
-    & .NuiDatePicker__calendar__header__yearInterval__label {
-        cursor: default;
-    }
-
-    & .NuiDatePicker__arrow-container,
-    & .NuiDatePicker__calendar__month__label-container,
-    & .NuiDatePicker__calendar__year__label-container,
-    & .NuiDatePicker__calendar__yearInterval__label-container {
-        padding: 5px;
-        border-radius: 3px;
         transition: background-color 0.2s;
 
-        &:hover:not(.NuiDatePicker__calendar__yearInterval__label-container) {
+        &:hover {
             ${background.secondary}
-        }
-        &:active:not(.NuiDatePicker__calendar__yearInterval__label-container) {
-            ${background.dimmed}
-        }
-    }
-
-    & .NuiDatePicker__calendar__month__label-container,
-    & .NuiDatePicker__calendar__year__label-container,
-    & .NuiDatePicker__calendar__yearInterval__label-container {
-        padding: 2px;
-    }
-
-    & .NuiDatePicker__arrow {
-        ${border.primary}
-
-        box-sizing: border-box;
-        display: block;
-        background: transparent;
-        border-style: solid;
-        border-width: 0;
-        border-bottom-width: 2px;
-        border-right-width: 2px;
-        width: 7px;
-        height: 7px;
-        padding: 0;
-        margin: 0;
-        cursor: pointer;
-
-        &.NuiDatePicker__arrow--left {
-            transform: rotate(130deg);
-        }
-        &.NuiDatePicker__arrow--right {
-            transform: rotate(-45deg);
         }
     }
 

@@ -24,6 +24,24 @@ export interface CycleSelectProps {
             | React.KeyboardEvent<HTMLInputElement>
             | React.MouseEvent<HTMLButtonElement, MouseEvent>
     ) => void;
+
+    /**
+     * Called when the next button is clicked
+     */
+    onNext?: (
+        e:
+            | React.KeyboardEvent<HTMLInputElement>
+            | React.MouseEvent<HTMLButtonElement, MouseEvent>
+    ) => void;
+
+    /**
+     * Called when the previous button is clicked
+     */
+    onPrevious?: (
+        e:
+            | React.KeyboardEvent<HTMLInputElement>
+            | React.MouseEvent<HTMLButtonElement, MouseEvent>
+    ) => void;
 }
 
 /**

@@ -16,6 +16,8 @@ const CycleSelect: NuiCycleSelect = React.memo(
             variant,
             onFocus,
             onChange,
+            onPrevious,
+            onNext,
             onBlur,
             onKeyDown,
             append,
@@ -61,10 +63,10 @@ const CycleSelect: NuiCycleSelect = React.memo(
         }, [options, selectedOption]);
 
         const inputValue = React.useMemo(() => {
-            if (_.size(options) == 0) return "No Options";
-            if (!options?.[selectedOption]) return "";
+            if (_.size(options) == 0 && !value) return "No Options";
+            if (!options?.[selectedOption]) return value;
             return options[selectedOption].label;
-        }, [options, selectedOption]);
+        }, [options, selectedOption, value]);
 
         const handleFocus = React.useCallback<HTMLInputProps["onFocus"]>(
             (e) => {
@@ -83,8 +85,14 @@ const CycleSelect: NuiCycleSelect = React.memo(
                 if (onChange && e.currentTarget.value) {
                     onChange(e.currentTarget.value, e);
                 }
+                if (e.currentTarget.dataset.cycle == "prev" && onPrevious) {
+                    onPrevious(e);
+                }
+                if (e.currentTarget.dataset.cycle == "next" && onNext) {
+                    onNext(e);
+                }
             },
-            [onChange]
+            [onChange, onNext, onPrevious]
         );
 
         /** Provides a way to navigate through the options with the keyboard arrows */
@@ -95,10 +103,16 @@ const CycleSelect: NuiCycleSelect = React.memo(
                         if (onChange && prevOption) {
                             onChange(prevOption.value, e);
                         }
+                        if (onPrevious) {
+                            onPrevious(e);
+                        }
                         break;
                     case "ArrowRight": // Next
                         if (onChange && nextOption) {
                             onChange(nextOption.value, e);
+                        }
+                        if (onNext) {
+                            onNext(e);
                         }
                         break;
                     default:
@@ -108,7 +122,7 @@ const CycleSelect: NuiCycleSelect = React.memo(
                     onKeyDown(e);
                 }
             },
-            [nextOption, onChange, onKeyDown, prevOption]
+            [nextOption, onChange, onKeyDown, onNext, onPrevious, prevOption]
         );
 
         const handleBlur = React.useCallback<HTMLInputProps["onBlur"]>(
@@ -139,9 +153,10 @@ const CycleSelect: NuiCycleSelect = React.memo(
                 <div className="NuiCycleSelect__container">
                     <button
                         type="button"
+                        data-cycle="prev"
                         tabIndex={-1}
                         value={prevOption?.value}
-                        disabled={!prevOption}
+                        disabled={!prevOption && !onPrevious}
                         onClick={handleCycle}
                         className="NuiCycleSelect__button NuiCycleSelect__button--prev"
                     >
@@ -156,14 +171,15 @@ const CycleSelect: NuiCycleSelect = React.memo(
                         onFocus={handleFocus}
                         onKeyDown={handleKeyDown}
                         onBlur={handleBlur}
-                        disabled={_.size(options) == 0}
+                        disabled={_.size(options) == 0 && !value}
                         value={inputValue}
                     />
                     <button
                         type="button"
+                        data-cycle="next"
                         tabIndex={-1}
                         value={nextOption?.value}
-                        disabled={!nextOption}
+                        disabled={!nextOption && !onNext}
                         onClick={handleCycle}
                         className="NuiCycleSelect__button NuiCycleSelect__button--next"
                     >
