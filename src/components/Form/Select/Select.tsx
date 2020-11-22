@@ -26,6 +26,7 @@ const Select: NuiSelect = React.memo(
             append,
             prepend,
             size,
+            fluid,
             disabled,
             options,
             renderOption,
@@ -284,6 +285,7 @@ const Select: NuiSelect = React.memo(
                 touched={touched}
                 errors={errors}
                 size={size}
+                fluid={fluid}
                 prepend={prepend}
                 append={append}
                 label={label}

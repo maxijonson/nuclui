@@ -69,6 +69,7 @@ const DatePicker: NuiDatePicker = React.memo(
             append,
             prepend,
             size,
+            fluid,
             disabled,
             ...restProps
         } = props;
@@ -376,6 +377,7 @@ const DatePicker: NuiDatePicker = React.memo(
                 touched={touched}
                 errors={errors}
                 size={size}
+                fluid={fluid}
                 prepend={prepend}
                 append={append}
                 label={label}

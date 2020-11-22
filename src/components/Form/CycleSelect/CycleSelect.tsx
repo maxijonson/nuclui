@@ -21,11 +21,12 @@ const CycleSelect: NuiCycleSelect = React.memo(
             append,
             prepend,
             size,
+            fluid,
             disabled,
             options,
             value,
             errors,
-            ...restProp
+            ...restProps
         } = props;
 
         const [focused, setFocused] = React.useState(false);
@@ -128,6 +129,7 @@ const CycleSelect: NuiCycleSelect = React.memo(
                 prepend={prepend}
                 append={append}
                 size={size}
+                fluid={fluid}
                 errors={errors}
                 touched={touched}
                 focused={focused}
@@ -146,7 +148,7 @@ const CycleSelect: NuiCycleSelect = React.memo(
                         <div className="NuiCycleSelect__arrow NuiCycleSelect__arrow--left" />
                     </button>
                     <input
-                        {...restProp}
+                        {...restProps}
                         readOnly
                         className="NuiCycleSelect__input"
                         ref={ref}

@@ -35,6 +35,7 @@ const NumberInput: NuiNumberInput = React.memo(
             append,
             prepend,
             size,
+            fluid,
             disabled,
             min,
             max,
@@ -137,6 +138,7 @@ const NumberInput: NuiNumberInput = React.memo(
                 touched={touched}
                 errors={errors}
                 size={size}
+                fluid={fluid}
                 prepend={prepend}
                 append={append}
                 label={label}

@@ -35,8 +35,17 @@ export interface InputContainerProps {
 
     /**
      * Size of the input (number in ch or string for custom size type)
+     *
+     * @default "sm"
      */
-    size?: number | string;
+    size?: Nui.Breakpoint;
+
+    /**
+     * Specifies if the input should take 100% of its parent width
+     *
+     * @default false
+     */
+    fluid?: boolean;
 
     /**
      * The errors associated with the field. Only the first one is shown.

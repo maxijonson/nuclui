@@ -194,11 +194,86 @@ const UseFormTest = React.memo(() => {
 
     return (
         <form autoComplete="off" onSubmit={onSubmit}>
+            <Flex>
+                <FlexItem>
+                    <TextInput
+                        {...fields.first}
+                        placeholder="Placeholder"
+                        label="First Name"
+                        size="xs"
+                        prepend="Prepend"
+                        append="Append"
+                    />
+                    <TextInput
+                        {...fields.first}
+                        placeholder="Placeholder"
+                        label="First Name"
+                        prepend="Prepend"
+                        append="Append"
+                    />
+                    <TextInput
+                        {...fields.first}
+                        placeholder="Placeholder"
+                        label="First Name"
+                        size="md"
+                        prepend="Prepend"
+                        append="Append"
+                    />
+                    <TextInput
+                        {...fields.first}
+                        placeholder="Placeholder"
+                        label="First Name"
+                        size="lg"
+                        prepend="Prepend"
+                        append="Append"
+                    />
+                    <TextInput
+                        {...fields.first}
+                        placeholder="Placeholder"
+                        label="First Name"
+                        size="xl"
+                        prepend="Prepend"
+                        append="Append"
+                    />
+                </FlexItem>
+                <FlexItem>
+                    <TextInput
+                        {...fields.first}
+                        placeholder="Placeholder"
+                        label="First Name"
+                        size="xs"
+                    />
+                    <TextInput
+                        {...fields.first}
+                        placeholder="Placeholder"
+                        label="First Name"
+                    />
+                    <TextInput
+                        {...fields.first}
+                        placeholder="Placeholder"
+                        label="First Name"
+                        size="md"
+                    />
+                    <TextInput
+                        {...fields.first}
+                        placeholder="Placeholder"
+                        label="First Name"
+                        size="lg"
+                    />
+                    <TextInput
+                        {...fields.first}
+                        placeholder="Placeholder"
+                        label="First Name"
+                        size="xl"
+                    />
+                </FlexItem>
+            </Flex>
+            <HR />
             <CycleSelect
                 {...fields.experience}
                 options={expOptions}
                 label="Experience"
-                size="100%"
+                fluid
             />
             <DatePicker {...fields.birthday} label="Birthday" />
             <Flex>
@@ -339,7 +414,6 @@ const UseFormTest = React.memo(() => {
                 {...fields.first}
                 placeholder="Placeholder"
                 label="First Name"
-                size="100%"
                 append="Append"
                 prepend="Prepend"
             />
@@ -373,46 +447,7 @@ const UseFormTest = React.memo(() => {
                 prepend="Search"
             />
             <TextInput
-                placeholder="Placeholder"
-                label="Contact Phone Test"
-                prepend={Icon}
-                value={fields.contact.value.phone}
-                onChange={onContactChange("phone")}
-            />
-            <Flex
-                justify="spaceBetween"
-                itemBasis={5}
-                itemSpacing="none"
-                gap="sm"
-            >
-                <FlexItem>
-                    <TextInput
-                        size="100%"
-                        label="Contact Phone"
-                        prepend={Icon}
-                        value={fields.contact.value.phone}
-                        onChange={onContactChange("phone")}
-                    />
-                </FlexItem>
-                <FlexItem>
-                    <TextInput
-                        size="100%"
-                        label="Contact Phone"
-                        prepend="Search"
-                        value={fields.contact.value.phone}
-                        onChange={onContactChange("phone")}
-                    />
-                </FlexItem>
-                <FlexItem>
-                    <TextInput
-                        size="100%"
-                        label="Contact Phone"
-                        value={fields.contact.value.phone}
-                        onChange={onContactChange("phone")}
-                    />
-                </FlexItem>
-            </Flex>
-            <TextInput
+                {...fields.contact}
                 label="Contact Phone"
                 prepend={Icon}
                 value={fields.contact.value.phone}

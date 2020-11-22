@@ -26,6 +26,7 @@ const TextInput: NuiTextInput = React.memo(
             append,
             prepend,
             size,
+            fluid,
             disabled,
             errors,
             ...restProps
@@ -97,6 +98,7 @@ const TextInput: NuiTextInput = React.memo(
                 touched={touched}
                 errors={errors}
                 size={size}
+                fluid={fluid}
                 prepend={prepend}
                 append={append}
                 label={label}
