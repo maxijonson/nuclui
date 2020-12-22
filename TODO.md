@@ -6,6 +6,8 @@
     -   Some components use default text in English. Find a way to customize these default messages for localization.
         -   Input errors
         -   Select "No Options"
+-   CycleSelect
+    -   Readonly: disable arrows
 
 ### Components Roadmap
 

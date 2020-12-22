@@ -97,10 +97,22 @@ const UseFormTest = React.memo(() => {
             gender: {
                 initial: "",
             },
-            birthday: {
+            dateTime: {
                 initial: Date.now(),
             },
-            birthday2: {
+            dateTime2: {
+                initial: undefined as number | undefined,
+            },
+            date: {
+                initial: Date.now(),
+            },
+            date2: {
+                initial: undefined as number | undefined,
+            },
+            time: {
+                initial: Date.now(),
+            },
+            time2: {
                 initial: undefined as number | undefined,
             },
             experience: {
@@ -197,8 +209,20 @@ const UseFormTest = React.memo(() => {
 
     return (
         <form autoComplete="off" onSubmit={onSubmit}>
-            <DatePicker {...fields.birthday} label="Birthday" />
-            <DatePicker {...fields.birthday2} label="Birthday2" />
+            <DatePicker
+                {...fields.dateTime}
+                label="Date Time"
+                type="datetime"
+            />
+            <DatePicker
+                {...fields.dateTime2}
+                label="Date Time 2"
+                type="datetime"
+            />
+            <DatePicker {...fields.date} label="Date" />
+            <DatePicker {...fields.date2} label="Date 2" />
+            <DatePicker {...fields.time} label="Time" type="time" />
+            <DatePicker {...fields.time2} label="Time 2" type="time" />
             <CycleSelect
                 {...fields.experience}
                 options={expOptions}

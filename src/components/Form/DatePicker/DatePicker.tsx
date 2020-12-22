@@ -6,13 +6,14 @@ import { createComponentName, nuiLog, isBetween } from "@utils";
 import { background, border, context, shadow, text } from "@theme";
 import { InputContainer } from "../InputContainer";
 import { HTMLInputProps } from "../InputContainer/types";
-import { NuiDatePicker } from "./types";
+import { DatePickerProps, NuiDatePicker } from "./types";
 import { HTMLButtonProps } from "../Select/types";
 import { CycleSelect } from "../CycleSelect";
 
 // Inspired from: https://medium.com/swlh/build-a-date-picker-in-15mins-using-javascript-react-from-scratch-f6932c77db09
 // TODO: Time picker (check for timezone)
 // TODO: Range picker
+// FIXME: Very complex. Can be separated in many different components: Calendar, Popover...
 
 const WEEKDAYS = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
 const MONTHS = [
@@ -57,6 +58,10 @@ const getPrevMonth = (year: number, month: number) => {
 /** Prevents an element to gain focus */
 const preventFocus = (e: React.MouseEvent) => e.preventDefault();
 
+const getInitialView = (type: DatePickerProps["type"]): "days" | "time" => {
+    return type == "date" || type == "datetime" ? "days" : "time";
+};
+
 const DatePicker: NuiDatePicker = React.memo(
     React.forwardRef((props, ref) => {
         const {
@@ -73,6 +78,7 @@ const DatePicker: NuiDatePicker = React.memo(
             size,
             fluid,
             disabled,
+            type = "date",
             ...restProps
         } = props;
 
@@ -82,7 +88,7 @@ const DatePicker: NuiDatePicker = React.memo(
         /** View type */
         const [view, setView] = React.useState<
             "days" | "months" | "years" | "time"
-        >("days");
+        >(getInitialView(type));
 
         /** Zero-based month in view. */
         const [month, setMonth] = React.useState(
@@ -287,8 +293,15 @@ const DatePicker: NuiDatePicker = React.memo(
                 return "";
             }
 
+            if (type == "date") {
+                return dateStr;
+            }
+            if (type == "time") {
+                return timeStr;
+            }
+
             return `${dateStr} ${timeStr}`;
-        }, [dateStr, timeStr]);
+        }, [dateStr, timeStr, type]);
 
         const timeToggleText = React.useMemo(() => {
             if (!dateStr || !timeStr) {
@@ -510,7 +523,7 @@ const DatePicker: NuiDatePicker = React.memo(
             (e) => {
                 setFocused(false);
                 setTouched(true);
-                setView("days");
+                setView(getInitialView(type));
 
                 // Reset to current or selected date
                 if (selectedYear && selectedMonth) {
@@ -525,7 +538,7 @@ const DatePicker: NuiDatePicker = React.memo(
                     onBlur(e);
                 }
             },
-            [onBlur, selectedMonth, selectedYear]
+            [onBlur, selectedMonth, selectedYear, type]
         );
 
         return (
@@ -690,13 +703,15 @@ const DatePicker: NuiDatePicker = React.memo(
                                 )}
                             </div>
                         )}
-                        <button
-                            type="button"
-                            onClick={handleToggleTimeView}
-                            className="NuiDatePicker__time-toggle"
-                        >
-                            {timeToggleText}
-                        </button>
+                        {type == "datetime" && (
+                            <button
+                                type="button"
+                                onClick={handleToggleTimeView}
+                                className="NuiDatePicker__time-toggle"
+                            >
+                                {timeToggleText}
+                            </button>
+                        )}
                         {view == "time" && (
                             <div className="NuiDatePicker__clock">
                                 <div className="NuiDatePicker__dials">

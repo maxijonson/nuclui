@@ -3,7 +3,21 @@ import { InputContainerProps } from "../InputContainer/types";
 
 export interface DatePickerProps {
     children?: never;
-    type?: "text";
+
+    /**
+     * The type of the DatePicker.
+     *
+     * - `date` for date-only selection
+     * - `time` for time-only selection
+     * - `datetime` for both date and time selection
+     *
+     * Note: In order to produce a valid date number:
+     * - When using `date`, the time is the one provided by the `value` prop or the current time if none is initially specified.
+     * - When using `time`, the date is the one provided by the `value` prop or the current date if none is initially specified.
+     *
+     * @default "date"
+     */
+    type?: "datetime" | "date" | "time";
 
     /**
      * The current date
