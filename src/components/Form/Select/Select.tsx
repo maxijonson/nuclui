@@ -4,6 +4,7 @@ import styled from "styled-components";
 import _ from "lodash";
 import { background, border, context, shadow, text } from "@theme";
 import { createComponentName, mergeRefs } from "@utils";
+import { scrollbar } from "@styles";
 import { InputContainer } from "../InputContainer";
 import { HTMLInputProps } from "../InputContainer/types";
 import { NuiSelect, SelectOption, HTMLButtonProps } from "./types";
@@ -383,6 +384,8 @@ const StyledSelect = styled(InputContainer)`
     }
 
     & .NuiSelect__options__list {
+        ${scrollbar}
+
         margin: 0;
         padding: 0;
         max-height: 150px;

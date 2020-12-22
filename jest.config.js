@@ -18,6 +18,7 @@ module.exports = {
         "^@theme((?=/).*|(?!/))$": "<rootDir>/src/theme$1",
         "^@fonts((?=/).*|(?!/))$": "<rootDir>/src/fonts$1",
         "^@hooks((?=/).*|(?!/))$": "<rootDir>/src/hooks$1",
+        "^@styles((?=/).*|(?!/))$": "<rootDir>/src/styles$1",
     },
     collectCoverageFrom: [
         "src/**/*.{js,jsx,ts,tsx}",

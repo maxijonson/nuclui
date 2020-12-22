@@ -4,6 +4,7 @@ import styled from "styled-components";
 import _ from "lodash";
 import { createComponentName, nuiLog, isBetween } from "@utils";
 import { background, border, context, shadow, text } from "@theme";
+import { scrollbar } from "@styles";
 import { InputContainer } from "../InputContainer";
 import { HTMLInputProps } from "../InputContainer/types";
 import { DatePickerProps, NuiDatePicker } from "./types";
@@ -714,6 +715,17 @@ const DatePicker: NuiDatePicker = React.memo(
                         )}
                         {view == "time" && (
                             <div className="NuiDatePicker__clock">
+                                <div className="NuiDatePicker__dials-header">
+                                    <div className="NuiDatePicker__dial-header">
+                                        H
+                                    </div>
+                                    <div className="NuiDatePicker__dial-header">
+                                        M
+                                    </div>
+                                    <div className="NuiDatePicker__dial-header">
+                                        S
+                                    </div>
+                                </div>
                                 <div className="NuiDatePicker__dials">
                                     <div className="NuiDatePicker__dial">
                                         {_.times(24, (hour) => (
@@ -895,12 +907,21 @@ const StyledDatePicker = styled(InputContainer)`
         transform-origin: top center;
     }
 
+    & .NuiDatePicker__dials-header,
     & .NuiDatePicker__dials {
         display: flex;
         justify-content: space-between;
     }
 
+    & .NuiDatePicker__dial-header {
+        flex: 1;
+        text-align: center;
+        padding-right: 5px;
+    }
+
     & .NuiDatePicker__dial {
+        ${scrollbar}
+
         display: flex;
         flex: 1;
         flex-direction: column;
