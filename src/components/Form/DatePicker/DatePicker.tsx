@@ -2,7 +2,7 @@ import clsx from "clsx";
 import React from "react";
 import styled from "styled-components";
 import _ from "lodash";
-import { createComponentName, nuiLog } from "@utils";
+import { createComponentName, nuiLog, isBetween } from "@utils";
 import { background, border, context, shadow, text } from "@theme";
 import { InputContainer } from "../InputContainer";
 import { HTMLInputProps } from "../InputContainer/types";
@@ -31,6 +31,7 @@ const MONTHS = [
 ];
 
 const YEARS_PER_PAGE = 16;
+const DAY_MS = 86400000;
 
 /** Gets the amount of days in a month */
 const getDays = (year: number, month: number) => {
@@ -79,9 +80,10 @@ const DatePicker: NuiDatePicker = React.memo(
         const [touched, setTouched] = React.useState(false);
 
         /** View type */
-        const [view, setView] = React.useState<"days" | "months" | "years">(
-            "days"
-        );
+        const [view, setView] = React.useState<
+            "days" | "months" | "years" | "time"
+        >("days");
+
         /** Zero-based month in view. */
         const [month, setMonth] = React.useState(
             props.value
@@ -96,6 +98,44 @@ const DatePicker: NuiDatePicker = React.memo(
         );
         /** Offset pages in the years view */
         const [yearsOffset, setYearsOffset] = React.useState(0);
+
+        const selectedDay = React.useMemo(() => {
+            if (props.value == null) return null;
+            const date = new Date(props.value);
+            date.setHours(0, 0, 0, 0);
+            return date.getTime();
+        }, [props.value]);
+
+        const selectedMonth = React.useMemo(() => {
+            if (props.value == null) return null;
+            const date = new Date(props.value);
+            date.setHours(0, 0, 0, 0);
+            date.setDate(1);
+            return date.getTime();
+        }, [props.value]);
+
+        const selectedYear = React.useMemo(() => {
+            if (props.value == null) return null;
+            const date = new Date(props.value);
+            date.setHours(0, 0, 0, 0);
+            date.setMonth(0, 1);
+            return date.getTime();
+        }, [props.value]);
+
+        const selectedHour = React.useMemo(() => {
+            if (props.value == null) return null;
+            return new Date(props.value).getHours();
+        }, [props.value]);
+
+        const selectedMinute = React.useMemo(() => {
+            if (props.value == null) return null;
+            return new Date(props.value).getMinutes();
+        }, [props.value]);
+
+        const selectedSecond = React.useMemo(() => {
+            if (props.value == null) return null;
+            return new Date(props.value).getSeconds();
+        }, [props.value]);
 
         /** The days shown in the 'days' view. The number of days returned will always be a multiple of 7. The rest of the days are filled from the previous and next month's days */
         const daysOptions = React.useMemo(() => {
@@ -115,32 +155,40 @@ const DatePicker: NuiDatePicker = React.memo(
             }[] = [];
 
             // Previous days
+            const date = new Date(prevYear, prevMonth, 1);
             for (
                 let i = prevDaysAmount - prevDaysShown + 1;
                 i <= prevDaysAmount;
                 ++i
             ) {
+                date.setDate(i);
                 options.push({
                     label: `${i}`,
-                    value: new Date(prevYear, prevMonth, i).getTime(),
+                    value: date.getTime(),
                     outOfMonth: true,
                 });
             }
 
             // Current days
+            date.setFullYear(year);
+            date.setMonth(month);
             for (let i = 1; i <= daysAmount; ++i) {
+                date.setDate(i);
                 options.push({
                     label: `${i}`,
-                    value: new Date(year, month, i).getTime(),
+                    value: date.getTime(),
                     outOfMonth: false,
                 });
             }
 
             // Next days
+            date.setFullYear(nextYear);
+            date.setMonth(nextMonth);
             for (let i = 1; i <= nextDaysShown; ++i) {
+                date.setDate(i);
                 options.push({
                     label: `${i}`,
-                    value: new Date(nextYear, nextMonth, i).getTime(),
+                    value: date.getTime(),
                     outOfMonth: true,
                 });
             }
@@ -194,38 +242,61 @@ const DatePicker: NuiDatePicker = React.memo(
             return options;
         }, [month, year, yearsOffset]);
 
-        const selectedDay = React.useMemo(() => {
-            if (!props.value) return null;
-            const date = new Date(props.value);
-            date.setHours(0, 0, 0, 0);
-            return date.getTime();
-        }, [props.value]);
+        const dateStr = React.useMemo(() => {
+            if (
+                selectedYear == null ||
+                selectedMonth == null ||
+                selectedDay == null
+            ) {
+                return "";
+            }
 
-        const selectedMonth = React.useMemo(() => {
-            if (!props.value) return null;
-            const date = new Date(props.value);
-            date.setHours(0, 0, 0, 0);
-            date.setDate(1);
-            return date.getTime();
-        }, [props.value]);
-
-        const selectedYear = React.useMemo(() => {
-            if (!props.value) return null;
-            const date = new Date(props.value);
-            date.setHours(0, 0, 0, 0);
-            date.setMonth(0, 1);
-            return date.getTime();
-        }, [props.value]);
-
-        const inputValue = React.useMemo(() => {
-            if (!selectedYear || !selectedMonth || !selectedDay) return "";
-
-            const y = new Date(selectedYear).getFullYear();
-            const m = new Date(selectedMonth).getMonth() + 1;
-            const d = new Date(selectedDay).getDate();
+            const y = _.padStart(
+                `${new Date(selectedYear).getFullYear()}`,
+                4,
+                "0"
+            );
+            const m = _.padStart(
+                `${new Date(selectedMonth).getMonth() + 1}`,
+                2,
+                "0"
+            );
+            const d = _.padStart(`${new Date(selectedDay).getDate()}`, 2, "0");
 
             return `${y}/${m}/${d}`;
         }, [selectedDay, selectedMonth, selectedYear]);
+
+        const timeStr = React.useMemo(() => {
+            if (
+                selectedHour == null ||
+                selectedMinute == null ||
+                selectedSecond == null
+            ) {
+                return "";
+            }
+
+            const h = _.padStart(`${selectedHour}`, 2, "0");
+            const m = _.padStart(`${selectedMinute}`, 2, "0");
+            const s = _.padStart(`${selectedSecond}`, 2, "0");
+
+            return `${h}:${m}:${s}`;
+        }, [selectedHour, selectedMinute, selectedSecond]);
+
+        const inputValue = React.useMemo(() => {
+            if (!dateStr || !timeStr) {
+                return "";
+            }
+
+            return `${dateStr} ${timeStr}`;
+        }, [dateStr, timeStr]);
+
+        const timeToggleText = React.useMemo(() => {
+            if (!dateStr || !timeStr) {
+                return view == "time" ? "Calendar" : "Clock";
+            }
+
+            return view == "time" ? dateStr : timeStr;
+        }, [dateStr, timeStr, view]);
 
         const errors = React.useMemo(() => props.errors || [], [props.errors]);
 
@@ -234,9 +305,13 @@ const DatePicker: NuiDatePicker = React.memo(
                 clsx([
                     "NuiDatePicker",
                     focused && "NuiDatePicker--focused",
+                    [
+                        view != "time" && "NuiDatePicker--view-calendar",
+                        view != "time" && "NuiDatePicker--view-time",
+                    ],
                     className,
                 ]),
-            [className, focused]
+            [className, focused, view]
         );
 
         /** Fired when selecting a day from the calendar */
@@ -246,22 +321,30 @@ const DatePicker: NuiDatePicker = React.memo(
                     const v = Number(e.currentTarget.value);
                     const { ofm } = e.currentTarget.dataset;
                     const outOfMonth = ofm == "true";
+
                     if (isNaN(v)) {
                         return nuiLog.error(
                             `DatePicker (handleDaySelect): ${e.currentTarget.value} is not a number`
                         );
                     }
-                    onChange(v, e);
+
+                    const date = new Date(v);
+                    date.setHours(
+                        selectedHour ?? 0,
+                        selectedMinute ?? 0,
+                        selectedSecond ?? 0
+                    );
+                    onChange(date.getTime(), e);
 
                     if (outOfMonth) {
-                        const date = new Date(v);
                         setMonth(date.getMonth());
                         setYear(date.getFullYear());
                     }
                 }
             },
-            [onChange]
+            [onChange, selectedHour, selectedMinute, selectedSecond]
         );
+
         /** Fired when selecting a month from the calendar */
         const handleMonthSelect = React.useCallback<HTMLButtonProps["onClick"]>(
             (e) => {
@@ -276,6 +359,7 @@ const DatePicker: NuiDatePicker = React.memo(
             },
             []
         );
+
         /** Fired when selecting a year from the calendar */
         const handleYearSelect = React.useCallback<HTMLButtonProps["onClick"]>(
             (e) => {
@@ -290,6 +374,73 @@ const DatePicker: NuiDatePicker = React.memo(
                 setYearsOffset(0);
             },
             []
+        );
+
+        /** Fired when selecting an hour from the clock */
+        const handleHourSelect = React.useCallback<HTMLButtonProps["onClick"]>(
+            (e) => {
+                const v = Number(e.currentTarget.value);
+
+                if (isNaN(v)) {
+                    return nuiLog.error(
+                        `DatePicker (handleHourSelect): ${e.currentTarget.value} is not a number`
+                    );
+                }
+
+                const date = props.value ? new Date(props.value) : new Date();
+                date.setHours(v);
+
+                if (onChange) {
+                    onChange(date.getTime(), e);
+                }
+            },
+            [onChange, props.value]
+        );
+
+        /** Fired when selecting a minute from the clock */
+        const handleMinuteSelect = React.useCallback<
+            HTMLButtonProps["onClick"]
+        >(
+            (e) => {
+                const v = Number(e.currentTarget.value);
+
+                if (isNaN(v)) {
+                    return nuiLog.error(
+                        `DatePicker (handleMinuteSelect): ${e.currentTarget.value} is not a number`
+                    );
+                }
+
+                const date = props.value ? new Date(props.value) : new Date();
+                date.setMinutes(v);
+
+                if (onChange) {
+                    onChange(date.getTime(), e);
+                }
+            },
+            [onChange, props.value]
+        );
+
+        /** Fired when selecting a second from the clock */
+        const handleSecondSelect = React.useCallback<
+            HTMLButtonProps["onClick"]
+        >(
+            (e) => {
+                const v = Number(e.currentTarget.value);
+
+                if (isNaN(v)) {
+                    return nuiLog.error(
+                        `DatePicker (handleSecondSelect): ${e.currentTarget.value} is not a number`
+                    );
+                }
+
+                const date = props.value ? new Date(props.value) : new Date();
+                date.setSeconds(v);
+
+                if (onChange) {
+                    onChange(date.getTime(), e);
+                }
+            },
+            [onChange, props.value]
         );
 
         /** Switches to the months view */
@@ -331,6 +482,11 @@ const DatePicker: NuiDatePicker = React.memo(
         /** Decrements the years offset */
         const handlePrevYearInterval = React.useCallback(() => {
             setYearsOffset((c) => c - 1);
+        }, []);
+
+        /** Toggles between the calendar view and the time view */
+        const handleToggleTimeView = React.useCallback(() => {
+            setView((v) => (v != "time" ? "time" : "days"));
         }, []);
 
         const handleFocus = React.useCallback<HTMLInputProps["onFocus"]>(
@@ -402,129 +558,202 @@ const DatePicker: NuiDatePicker = React.memo(
                         className="NuiDatePicker__popover"
                         onMouseDown={preventFocus}
                     >
-                        <div className="NuiDatePicker__calendar">
-                            <div className="NuiDatePicker__calendar__header">
+                        {view != "time" && (
+                            <div className="NuiDatePicker__calendar">
+                                <div className="NuiDatePicker__calendar__header">
+                                    {view == "days" && (
+                                        <CycleSelect
+                                            className="NuiDatePicker__calendar__header__month"
+                                            fluid
+                                            value={MONTHS[month]}
+                                            variant="none"
+                                            onPrevious={handlePrevMonth}
+                                            onNext={handleNextMonth}
+                                            onClick={handleMonthView}
+                                            tabIndex={-1}
+                                        />
+                                    )}
+                                    {view != "years" && (
+                                        <CycleSelect
+                                            className="NuiDatePicker__calendar__header__year"
+                                            fluid
+                                            value={year.toString()}
+                                            variant="none"
+                                            onPrevious={handlePrevYear}
+                                            onNext={handleNextYear}
+                                            onClick={handleYearView}
+                                            size={view == "days" ? "xs" : "sm"}
+                                            tabIndex={-1}
+                                        />
+                                    )}
+                                    {view == "years" && (
+                                        <CycleSelect
+                                            className="NuiDatePicker__calendar__header__yearInterval"
+                                            fluid
+                                            value={`${
+                                                _.first(yearsOptions)?.label
+                                            } - ${_.last(yearsOptions)?.label}`}
+                                            variant="none"
+                                            onPrevious={handlePrevYearInterval}
+                                            onNext={handleNextYearInterval}
+                                            tabIndex={-1}
+                                        />
+                                    )}
+                                </div>
+
+                                <div className="NuiDatePicker__calendar__sep" />
+
                                 {view == "days" && (
-                                    <CycleSelect
-                                        className="NuiDatePicker__calendar__header__month"
-                                        fluid
-                                        value={MONTHS[month]}
-                                        variant="none"
-                                        onPrevious={handlePrevMonth}
-                                        onNext={handleNextMonth}
-                                        onClick={handleMonthView}
-                                        tabIndex={-1}
-                                    />
+                                    <div className="NuiDatePicker__calendar__view--days">
+                                        <div className="NuiDatePicker__calendar__weekdays">
+                                            {_.map(WEEKDAYS, (wd) => (
+                                                <div
+                                                    key={wd}
+                                                    children={wd}
+                                                    className="NuiDatePicker__calendar__weekday"
+                                                />
+                                            ))}
+                                        </div>
+                                        <div className="NuiDatePicker__calendar__days">
+                                            {_.map(daysOptions, (day) => (
+                                                <button
+                                                    key={day.value}
+                                                    type="button"
+                                                    children={day.label}
+                                                    value={day.value}
+                                                    data-ofm={day.outOfMonth}
+                                                    tabIndex={-1}
+                                                    onClick={handleDaySelect}
+                                                    className={clsx([
+                                                        "NuiDatePicker__calendar__days__day",
+                                                        day.outOfMonth &&
+                                                            "NuiDatePicker__calendar__days__day--outOfMonth",
+                                                        props.value &&
+                                                            isBetween(
+                                                                props.value,
+                                                                day.value - 1,
+                                                                day.value +
+                                                                    DAY_MS
+                                                            ) &&
+                                                            "NuiDatePicker__calendar__days__day--selected",
+                                                    ])}
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
                                 )}
-                                {view != "years" && (
-                                    <CycleSelect
-                                        className="NuiDatePicker__calendar__header__year"
-                                        fluid
-                                        value={year.toString()}
-                                        variant="none"
-                                        onPrevious={handlePrevYear}
-                                        onNext={handleNextYear}
-                                        onClick={handleYearView}
-                                        size={view == "days" ? "xs" : "sm"}
-                                        tabIndex={-1}
-                                    />
+
+                                {view == "months" && (
+                                    <div className="NuiDatePicker__calendar__view--months">
+                                        <div className="NuiDatePicker__calendar__months">
+                                            {_.map(monthsOptions, (m) => (
+                                                <button
+                                                    key={m.value}
+                                                    type="button"
+                                                    children={m.label}
+                                                    value={m.value}
+                                                    tabIndex={-1}
+                                                    onClick={handleMonthSelect}
+                                                    className={clsx([
+                                                        "NuiDatePicker__calendar__months__month",
+                                                        selectedMonth ==
+                                                            m.value &&
+                                                            "NuiDatePicker__calendar__months__month--selected",
+                                                    ])}
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
                                 )}
+
                                 {view == "years" && (
-                                    <CycleSelect
-                                        className="NuiDatePicker__calendar__header__yearInterval"
-                                        fluid
-                                        value={`${
-                                            _.first(yearsOptions)?.label
-                                        } - ${_.last(yearsOptions)?.label}`}
-                                        variant="none"
-                                        onPrevious={handlePrevYearInterval}
-                                        onNext={handleNextYearInterval}
-                                        tabIndex={-1}
-                                    />
+                                    <div className="NuiDatePicker__calendar__view--years">
+                                        <div className="NuiDatePicker__calendar__years">
+                                            {_.map(yearsOptions, (y) => (
+                                                <button
+                                                    key={y.value}
+                                                    type="button"
+                                                    children={y.label}
+                                                    value={y.value}
+                                                    tabIndex={-1}
+                                                    onClick={handleYearSelect}
+                                                    className={clsx([
+                                                        "NuiDatePicker__calendar__years__year",
+                                                        selectedYear ==
+                                                            y.value &&
+                                                            "NuiDatePicker__calendar__years__year--selected",
+                                                    ])}
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
                                 )}
                             </div>
-
-                            <div className="NuiDatePicker__calendar__sep" />
-
-                            {view == "days" && (
-                                <div className="NuiDatePicker__calendar__view--days">
-                                    <div className="NuiDatePicker__calendar__weekdays">
-                                        {_.map(WEEKDAYS, (wd) => (
-                                            <div
-                                                key={wd}
-                                                children={wd}
-                                                className="NuiDatePicker__calendar__weekday"
+                        )}
+                        <button
+                            type="button"
+                            onClick={handleToggleTimeView}
+                            className="NuiDatePicker__time-toggle"
+                        >
+                            {timeToggleText}
+                        </button>
+                        {view == "time" && (
+                            <div className="NuiDatePicker__clock">
+                                <div className="NuiDatePicker__dials">
+                                    <div className="NuiDatePicker__dial">
+                                        {_.times(24, (hour) => (
+                                            <button
+                                                key={hour}
+                                                type="button"
+                                                children={hour}
+                                                value={hour}
+                                                tabIndex={-1}
+                                                onClick={handleHourSelect}
+                                                className={clsx([
+                                                    "NuiDatePicker__dial__hour",
+                                                    selectedHour == hour &&
+                                                        "NuiDatePicker__dial__hour--selected",
+                                                ])}
                                             />
                                         ))}
                                     </div>
-                                    <div className="NuiDatePicker__calendar__days">
-                                        {_.map(daysOptions, (day) => (
+                                    <div className="NuiDatePicker__dial">
+                                        {_.times(60, (minute) => (
                                             <button
-                                                key={day.value}
+                                                key={minute}
                                                 type="button"
-                                                children={day.label}
-                                                value={day.value}
-                                                data-ofm={day.outOfMonth}
+                                                children={minute}
+                                                value={minute}
                                                 tabIndex={-1}
-                                                onClick={handleDaySelect}
+                                                onClick={handleMinuteSelect}
                                                 className={clsx([
-                                                    "NuiDatePicker__calendar__days__day",
-                                                    day.outOfMonth &&
-                                                        "NuiDatePicker__calendar__days__day--outOfMonth",
-                                                    day.value == selectedDay &&
-                                                        "NuiDatePicker__calendar__days__day--selected",
+                                                    "NuiDatePicker__dial__minute",
+                                                    selectedMinute == minute &&
+                                                        "NuiDatePicker__dial__minute--selected",
+                                                ])}
+                                            />
+                                        ))}
+                                    </div>
+                                    <div className="NuiDatePicker__dial">
+                                        {_.times(60, (second) => (
+                                            <button
+                                                key={second}
+                                                type="button"
+                                                children={second}
+                                                value={second}
+                                                tabIndex={-1}
+                                                onClick={handleSecondSelect}
+                                                className={clsx([
+                                                    "NuiDatePicker__dial__second",
+                                                    selectedSecond == second &&
+                                                        "NuiDatePicker__dial__second--selected",
                                                 ])}
                                             />
                                         ))}
                                     </div>
                                 </div>
-                            )}
-
-                            {view == "months" && (
-                                <div className="NuiDatePicker__calendar__view--months">
-                                    <div className="NuiDatePicker__calendar__months">
-                                        {_.map(monthsOptions, (m) => (
-                                            <button
-                                                key={m.value}
-                                                type="button"
-                                                children={m.label}
-                                                value={m.value}
-                                                tabIndex={-1}
-                                                onClick={handleMonthSelect}
-                                                className={clsx([
-                                                    "NuiDatePicker__calendar__months__month",
-                                                    selectedMonth == m.value &&
-                                                        "NuiDatePicker__calendar__months__month--selected",
-                                                ])}
-                                            />
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
-                            {view == "years" && (
-                                <div className="NuiDatePicker__calendar__view--years">
-                                    <div className="NuiDatePicker__calendar__years">
-                                        {_.map(yearsOptions, (y) => (
-                                            <button
-                                                key={y.value}
-                                                type="button"
-                                                children={y.label}
-                                                value={y.value}
-                                                tabIndex={-1}
-                                                onClick={handleYearSelect}
-                                                className={clsx([
-                                                    "NuiDatePicker__calendar__years__year",
-                                                    selectedYear == y.value &&
-                                                        "NuiDatePicker__calendar__years__year--selected",
-                                                ])}
-                                            />
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                        <div className="NuiDatePicker__clock" />
+                            </div>
+                        )}
                     </div>
                 </div>
             </StyledDatePicker>
@@ -534,6 +763,10 @@ const DatePicker: NuiDatePicker = React.memo(
 
 const StyledDatePicker = styled(InputContainer)`
     ${context}
+
+    & .NuiDatePicker__container {
+        width: 100%;
+    }
 
     & .NuiDatePicker__popover {
         ${background.primary}
@@ -549,13 +782,13 @@ const StyledDatePicker = styled(InputContainer)`
         box-sizing: border-box;
         left: 0;
         min-width: 250px;
-        opacity: 0;
         overflow: hidden;
-        pointer-events: none;
         position: absolute;
         right: 0;
         top: calc(100% + 1px);
         transform-origin: top center;
+        pointer-events: none;
+        opacity: 0;
         transform: scaleY(0);
         transition: opacity 0.2s, transform 0.2s;
         z-index: 10;
@@ -600,8 +833,10 @@ const StyledDatePicker = styled(InputContainer)`
         text-align: center;
     }
 
-    & .NuiDatePicker__calendar {
-        padding: 10px;
+    & .NuiDatePicker__calendar__view--days,
+    & .NuiDatePicker__calendar__months,
+    & .NuiDatePicker__calendar__years {
+        padding: 0 5px;
     }
 
     & .NuiDatePicker__calendar__days,
@@ -612,9 +847,59 @@ const StyledDatePicker = styled(InputContainer)`
         flex-wrap: wrap;
     }
 
+    & .NuiDatePicker__calendar__days__day {
+        flex: 1 0 calc(100% / 7);
+    }
+
+    & .NuiDatePicker__calendar__months__month {
+        flex: 1 0 calc(100% / 3);
+    }
+
+    & .NuiDatePicker__calendar__years__year {
+        flex: 1 0 calc(100% / ${Math.sqrt(YEARS_PER_PAGE)});
+    }
+
+    & .NuiDatePicker__time-toggle {
+        width: 100%;
+        border: none;
+        margin: none;
+        outline: none;
+        background-color: transparent;
+        transition: background-color 0.2s;
+        cursor: pointer;
+
+        &:hover {
+            ${background.secondary}
+        }
+        &:active {
+            ${background.dimmed}
+        }
+    }
+
+    & .NuiDatePicker__clock {
+        transform-origin: top center;
+    }
+
+    & .NuiDatePicker__dials {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    & .NuiDatePicker__dial {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        text-align: center;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
     & .NuiDatePicker__calendar__days__day,
     & .NuiDatePicker__calendar__months__month,
-    & .NuiDatePicker__calendar__years__year {
+    & .NuiDatePicker__calendar__years__year,
+    & .NuiDatePicker__dial__hour,
+    & .NuiDatePicker__dial__minute,
+    & .NuiDatePicker__dial__second {
         ${background.primary}
 
         box-sizing: border-box;
@@ -633,7 +918,10 @@ const StyledDatePicker = styled(InputContainer)`
 
             &.NuiDatePicker__calendar__days__day--selected,
             &.NuiDatePicker__calendar__months__month--selected,
-            &.NuiDatePicker__calendar__years__year--selected {
+            &.NuiDatePicker__calendar__years__year--selected,
+            &.NuiDatePicker__dial__hour--selected,
+            &.NuiDatePicker__dial__minute--selected,
+            &.NuiDatePicker__dial__second--selected {
                 background-color: var(--nui-context-primaryDark);
             }
         }
@@ -644,24 +932,15 @@ const StyledDatePicker = styled(InputContainer)`
 
         &.NuiDatePicker__calendar__days__day--selected,
         &.NuiDatePicker__calendar__months__month--selected,
-        &.NuiDatePicker__calendar__years__year--selected {
+        &.NuiDatePicker__calendar__years__year--selected,
+        &.NuiDatePicker__dial__hour--selected,
+        &.NuiDatePicker__dial__minute--selected,
+        &.NuiDatePicker__dial__second--selected {
             ${text.contrast}
 
             background-color: var(--nui-context-primary);
             font-weight: 600;
         }
-    }
-
-    & .NuiDatePicker__calendar__days__day {
-        flex: 1 0 calc(100% / 7);
-    }
-
-    & .NuiDatePicker__calendar__months__month {
-        flex: 1 0 calc(100% / 3);
-    }
-
-    & .NuiDatePicker__calendar__years__year {
-        flex: 1 0 calc(100% / ${Math.sqrt(YEARS_PER_PAGE)});
     }
 
     &.NuiDatePicker--focused {

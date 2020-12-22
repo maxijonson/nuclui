@@ -4,3 +4,4 @@ export * from "./createBreakpoints";
 export * from "./nuiLog";
 export * from "./mergeRefs";
 export * from "./isBreakpoint";
+export * from "./isBetween";
