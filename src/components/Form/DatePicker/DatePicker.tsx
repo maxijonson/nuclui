@@ -15,6 +15,7 @@ import { CycleSelect } from "../CycleSelect";
 // Inspired from: https://medium.com/swlh/build-a-date-picker-in-15mins-using-javascript-react-from-scratch-f6932c77db09
 // TODO: Time picker (check for timezone)
 // TODO: Range picker
+// TODO: onChange
 // FIXME: Very complex. Can be separated in many different components: Calendar, Popover...
 
 const WEEKDAYS = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
@@ -514,13 +515,6 @@ const DatePicker: NuiDatePicker = React.memo(
             [onFocus]
         );
 
-        /** Changes the search query and resets the highlight position */
-        const handleChange = React.useCallback<
-            HTMLInputProps["onChange"]
-        >(() => {
-            nuiLog.warn("handleChange not implemented", { once: true });
-        }, []);
-
         const handleBlur = React.useCallback<HTMLInputProps["onBlur"]>(
             (e) => {
                 setFocused(false);
@@ -565,7 +559,7 @@ const DatePicker: NuiDatePicker = React.memo(
                         ref={ref}
                         value={inputValue}
                         onFocus={handleFocus}
-                        onChange={handleChange}
+                        readOnly
                         onBlur={handleBlur}
                         type="text"
                     />
