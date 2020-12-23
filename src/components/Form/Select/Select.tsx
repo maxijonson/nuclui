@@ -2,9 +2,10 @@ import clsx from "clsx";
 import React from "react";
 import styled from "styled-components";
 import _ from "lodash";
-import { background, border, context, shadow, text } from "@theme";
+import { background, border, context, text } from "@theme";
 import { createComponentName, mergeRefs } from "@utils";
 import { scrollbar } from "@styles";
+import { Popover } from "@components/Layout/Popover";
 import { InputContainer } from "../InputContainer";
 import { HTMLInputProps } from "../InputContainer/types";
 import { NuiSelect, SelectOption, HTMLButtonProps } from "./types";
@@ -310,7 +311,13 @@ const Select: NuiSelect = React.memo(
                     <div className="NuiSelect__icon" />
                 </div>
 
-                <div className="NuiSelect__options" onMouseDown={preventFocus}>
+                <Popover
+                    className="NuiSelect__popover"
+                    open={focused}
+                    onMouseDown={preventFocus}
+                    spacing="none"
+                    position="bottom"
+                >
                     <ul className="NuiSelect__options__list">
                         {!canCreate && filteredOptions.length == 0 && (
                             <div
@@ -349,7 +356,7 @@ const Select: NuiSelect = React.memo(
                             </button>
                         ))}
                     </ul>
-                </div>
+                </Popover>
             </StyledSelect>
         );
     })
@@ -358,29 +365,8 @@ const Select: NuiSelect = React.memo(
 const StyledSelect = styled(InputContainer)`
     ${context}
 
-    & .NuiSelect__options {
-        ${background.primary}
-        ${shadow.primary}
-        ${border.primary}
-
-        border-radius: 0 0 4px 4px;
-        border-style: solid;
-        border-top-width: 0;
-        border-width: 1px;
-        box-shadow: 0 2px 3px -1px var(--nui-shadow), 0 1px 1px -1px var(--nui-shadow);
-        box-sizing: border-box;
-        left: 0;
-        min-width: 100px;
-        opacity: 0;
-        overflow: hidden;
-        pointer-events: none;
-        position: absolute;
-        right: 0;
-        top: calc(100% + 1px);
-        transform-origin: top center;
-        transform: scaleY(0);
-        transition: opacity 0.2s, transform 0.2s;
-        z-index: 10;
+    & .NuiSelect__popover {
+        width: 100%;
     }
 
     & .NuiSelect__options__list {
@@ -406,7 +392,7 @@ const StyledSelect = styled(InputContainer)`
     & .NuiSelect__options__list__empty,
     & .NuiSelect__options__list__create {
         ${background.primary}
-        
+
         padding: 5px 10px;
         transition: background-color 0.2s, color 0.2s, font-weight 0.2s;
         cursor: pointer;
@@ -427,7 +413,7 @@ const StyledSelect = styled(InputContainer)`
 
         &:disabled {
             ${text.secondary}
-            
+
             cursor: default;
         }
     }
@@ -457,12 +443,6 @@ const StyledSelect = styled(InputContainer)`
         border-left-width: 0;
         border-bottom-width: 0;
         pointer-events: none;
-    }
-
-    &.NuiSelect--focused .NuiSelect__options {
-        opacity: 1;
-        pointer-events: all;
-        transform: scaleY(1);
     }
 
     &.NuiSelect--focused .NuiSelect__icon {

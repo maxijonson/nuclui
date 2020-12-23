@@ -3,7 +3,8 @@ import React from "react";
 import styled from "styled-components";
 import _ from "lodash";
 import { createComponentName, nuiLog, isBetween } from "@utils";
-import { background, border, context, shadow, text } from "@theme";
+import { background, border, context, text } from "@theme";
+import { Popover } from "@components/Layout/Popover";
 import { scrollbar } from "@styles";
 import { InputContainer } from "../InputContainer";
 import { HTMLInputProps } from "../InputContainer/types";
@@ -568,9 +569,12 @@ const DatePicker: NuiDatePicker = React.memo(
                         onBlur={handleBlur}
                         type="text"
                     />
-                    <div
+                    <Popover
                         className="NuiDatePicker__popover"
+                        open={focused}
                         onMouseDown={preventFocus}
+                        spacing="none"
+                        position="bottom"
                     >
                         {view != "time" && (
                             <div className="NuiDatePicker__calendar">
@@ -708,6 +712,7 @@ const DatePicker: NuiDatePicker = React.memo(
                             <button
                                 type="button"
                                 onClick={handleToggleTimeView}
+                                tabIndex={-1}
                                 className="NuiDatePicker__time-toggle"
                             >
                                 {timeToggleText}
@@ -781,7 +786,7 @@ const DatePicker: NuiDatePicker = React.memo(
                                 </div>
                             </div>
                         )}
-                    </div>
+                    </Popover>
                 </div>
             </StyledDatePicker>
         );
@@ -796,29 +801,8 @@ const StyledDatePicker = styled(InputContainer)`
     }
 
     & .NuiDatePicker__popover {
-        ${background.primary}
-        ${shadow.primary}
-        ${border.primary}
-        ${text.primary}
-
-        border-radius: 0 0 4px 4px;
-        border-style: solid;
-        border-top-width: 0;
-        border-width: 1px;
-        box-shadow: 0 2px 3px -1px var(--nui-shadow), 0 1px 1px -1px var(--nui-shadow);
-        box-sizing: border-box;
-        left: 0;
         min-width: 250px;
-        overflow: hidden;
-        position: absolute;
-        right: 0;
-        top: calc(100% + 1px);
-        transform-origin: top center;
-        pointer-events: none;
-        opacity: 0;
-        transform: scaleY(0);
-        transition: opacity 0.2s, transform 0.2s;
-        z-index: 10;
+        width: 100%;
     }
 
     & .NuiDatePicker__calendar__header {
@@ -830,7 +814,9 @@ const StyledDatePicker = styled(InputContainer)`
         margin: 0;
     }
 
-    & .NuiCycleSelect:not(.NuiDatePicker__calendar__header__yearInterval) .NuiCycleSelect__input {
+    &
+        .NuiCycleSelect:not(.NuiDatePicker__calendar__header__yearInterval)
+        .NuiCycleSelect__input {
         cursor: pointer;
         transition: background-color 0.2s;
 
@@ -976,14 +962,6 @@ const StyledDatePicker = styled(InputContainer)`
 
             background-color: var(--nui-context-primary);
             font-weight: 600;
-        }
-    }
-
-    &.NuiDatePicker--focused {
-        & .NuiDatePicker__popover {
-            opacity: 1;
-            transform: scaleY(1);
-            pointer-events: all;
         }
     }
 `;

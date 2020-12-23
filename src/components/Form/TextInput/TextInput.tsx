@@ -29,6 +29,7 @@ const TextInput: NuiTextInput = React.memo(
             fluid,
             disabled,
             errors,
+            name,
             ...restProps
         } = props;
 
