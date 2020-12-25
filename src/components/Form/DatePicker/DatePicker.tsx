@@ -15,10 +15,9 @@ import { HTMLButtonProps } from "../Select/types";
 import { CycleSelect } from "../CycleSelect";
 
 // Inspired from: https://medium.com/swlh/build-a-date-picker-in-15mins-using-javascript-react-from-scratch-f6932c77db09
-// TODO: Time picker (check for timezone)
 // TODO: Range picker
 // TODO: onChange
-// FIXME: Very complex. Can be separated in many different components: Calendar, Popover...
+// TODO: Better clock design
 
 const MONTHS = [
     "January",
@@ -529,7 +528,7 @@ const DatePicker: NuiDatePicker = React.memo(
                         className="NuiDatePicker__popover"
                         open={focused}
                         onMouseDown={preventFocus}
-                        spacing="none"
+                        spacing="xs"
                         position="bottom"
                     >
                         {view != "time" && (
@@ -633,16 +632,17 @@ const DatePicker: NuiDatePicker = React.memo(
                                 )}
                             </div>
                         )}
-                        {type == "datetime" && (
-                            <button
-                                type="button"
-                                onClick={handleToggleTimeView}
-                                tabIndex={-1}
-                                className="NuiDatePicker__time-toggle"
-                            >
-                                {timeToggleText}
-                            </button>
-                        )}
+                        {type == "datetime" &&
+                            (view == "days" || view == "time") && (
+                                <button
+                                    type="button"
+                                    onClick={handleToggleTimeView}
+                                    tabIndex={-1}
+                                    className="NuiDatePicker__time-toggle"
+                                >
+                                    {timeToggleText}
+                                </button>
+                            )}
                         {view == "time" && (
                             <div className="NuiDatePicker__clock">
                                 <div className="NuiDatePicker__dials-header">
@@ -761,6 +761,10 @@ const StyledDatePicker = styled(InputContainer)`
 
     & .NuiDatePicker__calendar__day {
         width: 100%;
+    }
+
+    & .NuiCalendar__day {
+        padding: 0;
     }
 
     & .NuiDatePicker__calendar__months,
