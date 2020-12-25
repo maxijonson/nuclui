@@ -4,6 +4,8 @@ import styled from "styled-components";
 import _ from "lodash";
 import { createComponentName, nuiLog, isBetween } from "@utils";
 import { background, border, context, text } from "@theme";
+import { Calendar } from "@components/Display/Calendar";
+import { CalendarDay } from "@components/Display/Calendar/types";
 import { Popover } from "@components/Layout/Popover";
 import { scrollbar } from "@styles";
 import { InputContainer } from "../InputContainer";
@@ -18,7 +20,6 @@ import { CycleSelect } from "../CycleSelect";
 // TODO: onChange
 // FIXME: Very complex. Can be separated in many different components: Calendar, Popover...
 
-const WEEKDAYS = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
 const MONTHS = [
     "January",
     "February",
@@ -36,11 +37,6 @@ const MONTHS = [
 
 const YEARS_PER_PAGE = 16;
 const DAY_MS = 86400000;
-
-/** Gets the amount of days in a month */
-const getDays = (year: number, month: number) => {
-    return 40 - new Date(year, month, 40).getDate();
-};
 
 /** Gets the next month from a given month in the [year, month] format */
 const getNextMonth = (year: number, month: number) => {
@@ -145,65 +141,6 @@ const DatePicker: NuiDatePicker = React.memo(
             if (props.value == null) return null;
             return new Date(props.value).getSeconds();
         }, [props.value]);
-
-        /** The days shown in the 'days' view. The number of days returned will always be a multiple of 7. The rest of the days are filled from the previous and next month's days */
-        const daysOptions = React.useMemo(() => {
-            const daysAmount = getDays(year, month);
-
-            const [prevYear, prevMonth] = getPrevMonth(year, month);
-            const prevDaysAmount = getDays(prevYear, prevMonth);
-            const prevDaysShown = new Date(year, month).getDay();
-
-            const [nextYear, nextMonth] = getNextMonth(year, month);
-            const nextDaysShown = 7 - ((prevDaysShown + daysAmount) % 7);
-
-            const options: {
-                label: string;
-                value: number;
-                outOfMonth: boolean;
-            }[] = [];
-
-            // Previous days
-            const date = new Date(prevYear, prevMonth, 1);
-            for (
-                let i = prevDaysAmount - prevDaysShown + 1;
-                i <= prevDaysAmount;
-                ++i
-            ) {
-                date.setDate(i);
-                options.push({
-                    label: `${i}`,
-                    value: date.getTime(),
-                    outOfMonth: true,
-                });
-            }
-
-            // Current days
-            date.setFullYear(year);
-            date.setMonth(month);
-            for (let i = 1; i <= daysAmount; ++i) {
-                date.setDate(i);
-                options.push({
-                    label: `${i}`,
-                    value: date.getTime(),
-                    outOfMonth: false,
-                });
-            }
-
-            // Next days
-            date.setFullYear(nextYear);
-            date.setMonth(nextMonth);
-            for (let i = 1; i <= nextDaysShown; ++i) {
-                date.setDate(i);
-                options.push({
-                    label: `${i}`,
-                    value: date.getTime(),
-                    outOfMonth: true,
-                });
-            }
-
-            return options;
-        }, [month, year]);
 
         /** All months of the year shown when in "months" view */
         const monthsOptions = React.useMemo(() => {
@@ -537,6 +474,31 @@ const DatePicker: NuiDatePicker = React.memo(
             [onBlur, selectedMonth, selectedYear, type]
         );
 
+        const renderDay = React.useCallback(
+            (day: CalendarDay) => (
+                <button
+                    key={day.value}
+                    type="button"
+                    children={day.label}
+                    value={day.value}
+                    data-ofm={day.outOfMonth}
+                    tabIndex={-1}
+                    onClick={handleDaySelect}
+                    className={clsx([
+                        "NuiDatePicker__calendar__day",
+                        props.value &&
+                            isBetween(
+                                props.value,
+                                day.value - 1,
+                                day.value + DAY_MS
+                            ) &&
+                            "NuiDatePicker__calendar__day--selected",
+                    ])}
+                />
+            ),
+            [handleDaySelect, props.value]
+        );
+
         return (
             <StyledDatePicker
                 disabled={disabled}
@@ -616,43 +578,12 @@ const DatePicker: NuiDatePicker = React.memo(
                                 <div className="NuiDatePicker__calendar__sep" />
 
                                 {view == "days" && (
-                                    <div className="NuiDatePicker__calendar__view--days">
-                                        <div className="NuiDatePicker__calendar__weekdays">
-                                            {_.map(WEEKDAYS, (wd) => (
-                                                <div
-                                                    key={wd}
-                                                    children={wd}
-                                                    className="NuiDatePicker__calendar__weekday"
-                                                />
-                                            ))}
-                                        </div>
-                                        <div className="NuiDatePicker__calendar__days">
-                                            {_.map(daysOptions, (day) => (
-                                                <button
-                                                    key={day.value}
-                                                    type="button"
-                                                    children={day.label}
-                                                    value={day.value}
-                                                    data-ofm={day.outOfMonth}
-                                                    tabIndex={-1}
-                                                    onClick={handleDaySelect}
-                                                    className={clsx([
-                                                        "NuiDatePicker__calendar__days__day",
-                                                        day.outOfMonth &&
-                                                            "NuiDatePicker__calendar__days__day--outOfMonth",
-                                                        props.value &&
-                                                            isBetween(
-                                                                props.value,
-                                                                day.value - 1,
-                                                                day.value +
-                                                                    DAY_MS
-                                                            ) &&
-                                                            "NuiDatePicker__calendar__days__day--selected",
-                                                    ])}
-                                                />
-                                            ))}
-                                        </div>
-                                    </div>
+                                    <Calendar
+                                        year={year}
+                                        month={month}
+                                        renderDay={renderDay}
+                                        className="NuiDatePicker__calendar"
+                                    />
                                 )}
 
                                 {view == "months" && (
@@ -828,34 +759,20 @@ const StyledDatePicker = styled(InputContainer)`
         margin: 2px 0;
     }
 
-    & .NuiDatePicker__calendar__weekdays {
-        ${text.secondary}
-
-        display: flex;
-        justify-content: space-between;
-    }
-
-    & .NuiDatePicker__calendar__weekday {
+    & .NuiDatePicker__calendar__day {
         width: 100%;
-        text-align: center;
     }
 
-    & .NuiDatePicker__calendar__view--days,
     & .NuiDatePicker__calendar__months,
     & .NuiDatePicker__calendar__years {
         padding: 0 5px;
     }
 
-    & .NuiDatePicker__calendar__days,
     & .NuiDatePicker__calendar__months,
     & .NuiDatePicker__calendar__years {
         position: relative;
         display: flex;
         flex-wrap: wrap;
-    }
-
-    & .NuiDatePicker__calendar__days__day {
-        flex: 1 0 calc(100% / 7);
     }
 
     & .NuiDatePicker__calendar__months__month {
@@ -910,7 +827,7 @@ const StyledDatePicker = styled(InputContainer)`
         overflow-y: auto;
     }
 
-    & .NuiDatePicker__calendar__days__day,
+    & .NuiDatePicker__calendar__day,
     & .NuiDatePicker__calendar__months__month,
     & .NuiDatePicker__calendar__years__year,
     & .NuiDatePicker__dial__hour,
@@ -932,7 +849,7 @@ const StyledDatePicker = styled(InputContainer)`
         &:active {
             ${background.dimmed}
 
-            &.NuiDatePicker__calendar__days__day--selected,
+            &.NuiDatePicker__calendar__day--selected,
             &.NuiDatePicker__calendar__months__month--selected,
             &.NuiDatePicker__calendar__years__year--selected,
             &.NuiDatePicker__dial__hour--selected,
@@ -942,11 +859,7 @@ const StyledDatePicker = styled(InputContainer)`
             }
         }
 
-        &.NuiDatePicker__calendar__days__day--outOfMonth {
-            opacity: 0.6;
-        }
-
-        &.NuiDatePicker__calendar__days__day--selected,
+        &.NuiDatePicker__calendar__day--selected,
         &.NuiDatePicker__calendar__months__month--selected,
         &.NuiDatePicker__calendar__years__year--selected,
         &.NuiDatePicker__dial__hour--selected,

@@ -21,4 +21,7 @@ export interface PopoverProps {
     spacing?: "none" | Nui.Breakpoint;
 }
 
+/**
+ * A container that pops over or around a relative parent element when opened.
+ */
 export type NuiPopover = Nui.FRCWC<PopoverProps, "div">;

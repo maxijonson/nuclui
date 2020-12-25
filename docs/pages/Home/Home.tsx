@@ -17,6 +17,7 @@ import {
     Switch,
     DatePicker,
     CycleSelect,
+    Calendar,
 } from "nuclui";
 import { TextInputProps } from "nuclui/components/Form/TextInput/types";
 import { Link } from "react-router-dom";
@@ -517,6 +518,18 @@ const Home = React.memo(() => {
     return (
         <Container maxWidth="lg">
             <Link to="/benchmark">Benchmark</Link>
+            <Calendar />
+            <Flex itemBasis={4}>
+                <FlexItem>
+                    <Calendar />
+                </FlexItem>
+                <FlexItem>
+                    <Calendar />
+                </FlexItem>
+                <FlexItem>
+                    <Calendar />
+                </FlexItem>
+            </Flex>
             <div>useForm Test</div>
             <UseFormTest />
             Nuclui is under developement! For now, The docs website is only a
