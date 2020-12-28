@@ -12,11 +12,8 @@
 ### Components Roadmap
 
 -   Forms
-    -   Switch
-    -   RadioButton
     -   Button
     -   Slider
-    -   Date picker
     -   Textarea
     -   FilePicker
 -   Data

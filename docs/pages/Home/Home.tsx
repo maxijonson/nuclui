@@ -18,6 +18,8 @@ import {
     DatePicker,
     CycleSelect,
     Calendar,
+    RadioGroup,
+    RadioButton,
 } from "nuclui";
 import { TextInputProps } from "nuclui/components/Form/TextInput/types";
 import { Link } from "react-router-dom";
@@ -210,6 +212,34 @@ const UseFormTest = React.memo(() => {
 
     return (
         <form autoComplete="off" onSubmit={onSubmit}>
+            {_.map(genderOptions, (option) => (
+                <RadioButton
+                    key={option.value}
+                    name="gender2"
+                    label={option.label}
+                    value={option.value}
+                    disabled={option.disabled}
+                    onChange={fields.gender.onChange}
+                    checked={option.value == fields.gender.value}
+                />
+            ))}
+            <RadioGroup {...fields.gender} label="Gender">
+                {_.map(genderOptions, (option) => (
+                    <RadioButton
+                        key={option.value}
+                        label={option.label}
+                        value={option.value}
+                        disabled={option.disabled}
+                    />
+                ))}
+            </RadioGroup>
+            <RadioGroup label="Radio Group" name="group" direction="column">
+                <RadioButton label="Radio 1" size="xs" />
+                <RadioButton label="Radio 2" size="sm" />
+                <RadioButton label="Radio 3" size="md" />
+                <RadioButton label="Radio 4" size="lg" />
+                <RadioButton label="Radio 5" size="xl" />
+            </RadioGroup>
             <DatePicker
                 {...fields.dateTime}
                 label="Date Time"

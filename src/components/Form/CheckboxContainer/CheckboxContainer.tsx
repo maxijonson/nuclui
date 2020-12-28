@@ -22,6 +22,7 @@ const CheckboxContainer: NuiCheckboxContainer = React.memo(
             focused,
             touched,
             size,
+            type = "checkbox",
             ...restProps
         } = props;
 
@@ -78,7 +79,7 @@ const CheckboxContainer: NuiCheckboxContainer = React.memo(
                             onChange={onChange}
                             onBlur={onBlur}
                             ref={ref}
-                            type="checkbox"
+                            type={type}
                             className="NuiCheckboxContainer__input"
                         />
                         {children}

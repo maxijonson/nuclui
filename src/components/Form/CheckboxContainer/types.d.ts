@@ -50,6 +50,13 @@ export interface CheckboxContainerProps {
      * @default "sm"
      */
     size?: Nui.Breakpoint;
+
+    /**
+     * The type of the input
+     *
+     * @default "checkbox"
+     */
+    type?: "checkbox" | "radio";
 }
 
 /**
