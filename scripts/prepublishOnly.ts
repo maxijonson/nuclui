@@ -13,7 +13,14 @@ const pkg = require(PKG_PATH);
 // Create a restore file of package.json
 fs.copyFileSync(PKG_PATH, PKG_RESTORE_PATH);
 
-const deps = ["express", "express-sslify", "ts-node", "react-router-dom"];
+// Packages to exclude from the NPM package
+const deps = [
+    "express",
+    "express-sslify",
+    "ts-node",
+    "react-router-dom",
+    "react-icons",
+];
 
 deps.forEach((dep) => delete pkg.dependencies[dep]);
 

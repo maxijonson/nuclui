@@ -101,6 +101,17 @@ declare namespace Nui {
         O = {},
         A = never
     > = import("styled-components").StyledComponent<C, T, O, A>;
+
+    /**
+     * Represents the context of a component (or "state")
+     */
+    type Context =
+        | "primary"
+        | "secondary"
+        | "warn"
+        | "danger"
+        | "success"
+        | "info";
 }
 
 export = Nui;

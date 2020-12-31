@@ -6,6 +6,7 @@ const defaultTheme = {
         primary: "#FFFFFF",
         secondary: "#F3F6F9",
         dimmed: "#E9EBEF",
+        dark: "#A0A1A3",
     },
     border: {
         primary: "#777E85",
@@ -37,7 +38,7 @@ const defaultTheme = {
         dangerLight: "#F67D7D",
         dangerDark: "#AC1414",
         dangerVDark: "#710606",
-        warn: "#E0B925",
+        warn: "#F2C312",
         warnVLight: "#FAEAAF",
         warnLight: "#F7DC74",
         warnDark: "#AA8A11",

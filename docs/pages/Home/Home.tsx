@@ -20,7 +20,9 @@ import {
     Calendar,
     RadioGroup,
     RadioButton,
+    Button,
 } from "nuclui";
+import { RiAccountCircleFill } from "react-icons/ri";
 import { TextInputProps } from "nuclui/components/Form/TextInput/types";
 import { Link } from "react-router-dom";
 
@@ -212,6 +214,135 @@ const UseFormTest = React.memo(() => {
 
     return (
         <form autoComplete="off" onSubmit={onSubmit}>
+            Disabled
+            <Flex>
+                {_.map(
+                    [
+                        "default",
+                        "primary",
+                        "secondary",
+                        "warn",
+                        "danger",
+                        "success",
+                        "info",
+                    ] as (Nui.Context | "default")[],
+                    (color) => (
+                        <FlexItem key={color}>
+                            <Button
+                                color={color}
+                                icon={<RiAccountCircleFill />}
+                                children={_.capitalize(color)}
+                                onClick={() => console.info("Clicked!")}
+                                disabled
+                            />
+                        </FlexItem>
+                    )
+                )}
+            </Flex>
+            With icon
+            <Flex>
+                {_.map(
+                    [
+                        "default",
+                        "primary",
+                        "secondary",
+                        "warn",
+                        "danger",
+                        "success",
+                        "info",
+                    ] as (Nui.Context | "default")[],
+                    (color) => (
+                        <FlexItem key={color}>
+                            <Button
+                                color={color}
+                                icon={<RiAccountCircleFill />}
+                                children={_.capitalize(color)}
+                                onClick={() => console.info("Clicked!")}
+                            />
+                        </FlexItem>
+                    )
+                )}
+            </Flex>
+            {_.map(["filled", "outline", "empty"] as const, (variant) => (
+                <div key={variant}>
+                    {variant}
+                    <Flex>
+                        {_.map(
+                            [
+                                "default",
+                                "primary",
+                                "secondary",
+                                "warn",
+                                "danger",
+                                "success",
+                                "info",
+                            ] as (Nui.Context | "default")[],
+                            (color) => (
+                                <FlexItem key={color}>
+                                    <Button
+                                        color={color}
+                                        variant={variant}
+                                        children={_.capitalize(color)}
+                                    />
+                                </FlexItem>
+                            )
+                        )}
+                    </Flex>
+                </div>
+            ))}
+            {_.map(
+                ["round", "round-outline", "round-empty"] as const,
+                (variant) => (
+                    <div key={variant}>
+                        {variant}
+                        <Flex>
+                            {_.map(
+                                [
+                                    "default",
+                                    "primary",
+                                    "secondary",
+                                    "warn",
+                                    "danger",
+                                    "success",
+                                    "info",
+                                ] as (Nui.Context | "default")[],
+                                (color) => (
+                                    <FlexItem key={color}>
+                                        <Button
+                                            color={color}
+                                            variant={variant}
+                                            icon={<RiAccountCircleFill />}
+                                        />
+                                    </FlexItem>
+                                )
+                            )}
+                        </Flex>
+                    </div>
+                )
+            )}
+            disableShadow
+            <Flex>
+                {_.map(
+                    [
+                        "default",
+                        "primary",
+                        "secondary",
+                        "warn",
+                        "danger",
+                        "success",
+                        "info",
+                    ] as (Nui.Context | "default")[],
+                    (color) => (
+                        <FlexItem key={color}>
+                            <Button
+                                color={color}
+                                disableShadow
+                                children={_.capitalize(color)}
+                            />
+                        </FlexItem>
+                    )
+                )}
+            </Flex>
             {_.map(genderOptions, (option) => (
                 <RadioButton
                     key={option.value}
@@ -232,13 +363,6 @@ const UseFormTest = React.memo(() => {
                         disabled={option.disabled}
                     />
                 ))}
-            </RadioGroup>
-            <RadioGroup label="Radio Group" name="group" direction="column">
-                <RadioButton label="Radio 1" size="xs" />
-                <RadioButton label="Radio 2" size="sm" />
-                <RadioButton label="Radio 3" size="md" />
-                <RadioButton label="Radio 4" size="lg" />
-                <RadioButton label="Radio 5" size="xl" />
             </RadioGroup>
             <DatePicker
                 {...fields.dateTime}
@@ -335,7 +459,7 @@ const UseFormTest = React.memo(() => {
                 </FlexItem>
             </Flex>
             <HR />
-            <Flex>
+            <Flex itemBasis={6}>
                 <FlexItem>
                     <Switch
                         {...fields.subscribe}
@@ -430,7 +554,34 @@ const UseFormTest = React.memo(() => {
                         label="Agree to Terms and Conditions"
                     />
                 </FlexItem>
+                <RadioGroup
+                    name="group"
+                    direction="column"
+                    component={FlexItem}
+                >
+                    <RadioButton label="Radio 1" size="xs" />
+                    <RadioButton label="Radio 2" size="sm" />
+                    <RadioButton label="Radio 3" size="md" />
+                    <RadioButton label="Radio 4" size="lg" />
+                    <RadioButton label="Radio 5" size="xl" />
+                </RadioGroup>
             </Flex>
+            <RadioGroup name="test">
+                <Flex justify="spaceEvenly">
+                    <RadioButton value="right" label="Default (right)" />
+                    <RadioButton value="top" label="Top" labelPosition="top" />
+                    <RadioButton
+                        value="bottom"
+                        label="Bottom"
+                        labelPosition="bottom"
+                    />
+                    <RadioButton
+                        value="left"
+                        label="Left"
+                        labelPosition="left"
+                    />
+                </Flex>
+            </RadioGroup>
             <Flex justify="spaceEvenly">
                 <Switch {...fields.toc} label="Default (right)" />
                 <Switch {...fields.toc} label="Top" labelPosition="top" />

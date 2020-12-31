@@ -72,4 +72,4 @@ export interface RadioGroupContextValue {
 /**
  * A group to handle multiple RadioButtons and their behaviour
  */
-export type NuiRadioGroup = Nui.FRCWC<RadioGroupProps, "div">;
+export type NuiRadioGroup = Nui.FRC<RadioGroupProps, "div">;

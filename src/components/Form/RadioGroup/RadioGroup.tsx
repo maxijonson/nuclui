@@ -21,8 +21,11 @@ const RadioGroup: NuiRadioGroup = React.memo(
             direction,
             className,
             children,
+            component,
             ...restProps
         } = props;
+
+        const Component = component || "div";
 
         const classes = React.useMemo(
             () =>
@@ -48,7 +51,7 @@ const RadioGroup: NuiRadioGroup = React.memo(
         );
 
         return (
-            <div className={classes} ref={ref} {...restProps}>
+            <Component className={classes} ref={ref} {...restProps}>
                 {label && (
                     <label className="NuiRadioGroup__label">{label}</label>
                 )}
@@ -59,7 +62,7 @@ const RadioGroup: NuiRadioGroup = React.memo(
                         {children}
                     </RadioGroupContext.Provider>
                 </div>
-            </div>
+            </Component>
         );
     })
 );
