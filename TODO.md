@@ -12,7 +12,6 @@
 ### Components Roadmap
 
 -   Forms
-    -   Button
     -   Slider
     -   Textarea
     -   FilePicker

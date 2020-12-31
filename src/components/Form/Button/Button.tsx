@@ -5,7 +5,7 @@ import { createComponentName } from "@utils";
 import { shadow, text, context, background } from "@theme";
 import { NuiButton } from "./types";
 
-// FIXME: weird glitch happens when the button is pressed (often but not always)
+// FIXME: weird glitch happens when the button is pressed (Chrome only)
 
 const Button: NuiButton = React.forwardRef((props, ref) => {
     const {
@@ -80,17 +80,21 @@ const StyledButton = styled(Button)`
     --nui-button-outline-hover: var(--nui-text-primary);
     --nui-button-outline-background: var(--nui-background-dimmed);
 
+    --nui-button-size: 18px;
+    --nui-button-pad: 4px;
+
     outline: none;
     border: 2px solid var(--nui-button-color);
     padding: 0;
     border-radius: 4px;
-    box-shadow: 0 2px 3px var(--nui-shadow);
+    box-shadow: 0 calc(var(--nui-button-pad) / 2) var(--nui-button-pad) var(--nui-shadow);
     margin: 5px;
     font-weight: 600;
     background-color: var(--nui-button-color);
-    transform: translateY(0) translateZ(0);
+    transform: translateY(0);
     transition: background-color 0.2s, box-shadow 0.2s, transform 0.2s, border-color 0.2s, color 0.2s;
     user-select: none;
+    box-sizing: border-box;
     cursor: pointer;
 
     &:hover, &:focus-visible {
@@ -110,7 +114,8 @@ const StyledButton = styled(Button)`
 
     & .NuiButton__content {
         box-sizing: border-box;
-        padding: 8px;
+        padding: var(--nui-button-pad);
+        font-size: var(--nui-button-size);
         display: flex;
         gap: 5px;
         flex-direction: row;
@@ -127,8 +132,8 @@ const StyledButton = styled(Button)`
         align-items: center;
 
         & > svg {
-            width: 1em;
-            height: 1em;
+            width: 1.25em;
+            height: 1.25em;
         }
     }
 
@@ -183,6 +188,23 @@ const StyledButton = styled(Button)`
         --nui-button-outline: var(--nui-context-info);
         --nui-button-outline-hover: var(--nui-context-infoDark);
         --nui-button-outline-background: var(--nui-context-infoVLight);
+    }
+
+    &.NuiButton--size-xs {
+        --nui-button-size: 12px;
+        --nui-button-pad: 2px;
+    }
+    &.NuiButton--size-md {
+        --nui-button-size: 26px;
+        --nui-button-pad: 4px;
+    }
+    &.NuiButton--size-lg {
+        --nui-button-size: 36px;
+        --nui-button-pad: 6px;
+    }
+    &.NuiButton--size-xl {
+        --nui-button-size: 46px;
+        --nui-button-pad: 6px;
     }
 
     &.NuiButton--disableshadow {

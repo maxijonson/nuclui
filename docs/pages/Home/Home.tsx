@@ -214,6 +214,62 @@ const UseFormTest = React.memo(() => {
 
     return (
         <form autoComplete="off" onSubmit={onSubmit}>
+            <Flex itemBasis={12}>
+                <FlexItem>
+                    {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size) => (
+                        <Button
+                            size={size}
+                            color="primary"
+                            children={`Button ${size}`}
+                            key={size}
+                        />
+                    ))}
+                </FlexItem>
+                <FlexItem>
+                    {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size) => (
+                        <Button
+                            size={size}
+                            color="primary"
+                            icon={<RiAccountCircleFill />}
+                            key={size}
+                        />
+                    ))}
+                </FlexItem>
+                <FlexItem>
+                    {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size) => (
+                        <Button
+                            size={size}
+                            color="primary"
+                            icon={<RiAccountCircleFill />}
+                            key={size}
+                            variant="round"
+                        />
+                    ))}
+                </FlexItem>
+                <FlexItem>
+                    {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size) => (
+                        <Button
+                            size={size}
+                            color="primary"
+                            children={`Button ${size}`}
+                            icon={<RiAccountCircleFill />}
+                            key={size}
+                        />
+                    ))}
+                </FlexItem>
+                <FlexItem>
+                    {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size) => (
+                        <Button
+                            size={size}
+                            color="primary"
+                            children={`Button ${size}`}
+                            icon={<RiAccountCircleFill />}
+                            iconPosition="right"
+                            key={size}
+                        />
+                    ))}
+                </FlexItem>
+            </Flex>
             Disabled
             <Flex>
                 {_.map(
