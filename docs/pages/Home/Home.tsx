@@ -214,6 +214,57 @@ const UseFormTest = React.memo(() => {
 
     return (
         <form autoComplete="off" onSubmit={onSubmit}>
+            Confirm Buttons
+            <Flex>
+                <Button
+                    color="primary"
+                    confirmDuration={1000}
+                    onClick={() => console.info("Confirmed click!")}
+                >
+                    Confirm
+                </Button>
+                <Button
+                    onClick={() => console.info("Confirmed click!")}
+                    confirmDuration={1000}
+                    icon={<RiAccountCircleFill />}
+                />
+                <Button
+                    onClick={() => console.info("Confirmed click!")}
+                    confirmDuration={1000}
+                    variant="round"
+                    icon={<RiAccountCircleFill />}
+                />
+                <Button
+                    color="danger"
+                    variant="outline"
+                    confirmDuration={1000}
+                    icon={<RiAccountCircleFill />}
+                    onClick={() => console.info("Confirmed click!")}
+                >
+                    Confirm
+                </Button>
+                <Button
+                    color="primary"
+                    variant="empty"
+                    confirmDuration={1000}
+                    icon={<RiAccountCircleFill />}
+                    onClick={() => console.info("Confirmed click!")}
+                >
+                    Confirm
+                </Button>
+                <Button
+                    color="primary"
+                    confirmDuration={1000}
+                    onClick={() => console.info("Confirmed click!")}
+                    icon={<RiAccountCircleFill />}
+                >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Culpa facere facilis animi ex obcaecati delectus eos libero
+                    tempora recusandae, sit, officia dignissimos quibusdam nisi
+                    alias! Numquam fugiat quasi quo maxime.
+                </Button>
+            </Flex>
+            Button sizes
             <Flex itemBasis={12}>
                 <FlexItem>
                     {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size) => (

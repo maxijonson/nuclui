@@ -46,6 +46,21 @@ export interface ButtonProps {
      * @default false
      */
     disableShadow?: boolean;
+
+    /**
+     * The time the button must be held for the click event to fire (in ms). The user still needs to release the button after this, but the event won't fire until the button was held for the duration specified.
+     *
+     * @default 0 (no confirm)
+     */
+    confirmDuration?: number;
+
+    /**
+     * The click event fired when the button is pressed
+     */
+    onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
+/**
+ * A button that can perform actions when clicked
+ */
 export type NuiButton = Nui.FRCWC<ButtonProps, "button">;

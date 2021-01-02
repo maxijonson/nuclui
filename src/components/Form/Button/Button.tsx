@@ -1,24 +1,31 @@
 import clsx from "clsx";
 import React from "react";
 import styled from "styled-components";
-import { createComponentName } from "@utils";
+import { createComponentName, isBetween, mergeRefs } from "@utils";
 import { shadow, text, context, background } from "@theme";
 import { NuiButton } from "./types";
 
 // FIXME: weird glitch happens when the button is pressed (Chrome only)
+// TODO: Better confirm animation for round variants (scale from center)
 
 const Button: NuiButton = React.forwardRef((props, ref) => {
     const {
         icon,
         className,
         children,
+        onClick,
         iconPosition = "left",
         size = "sm",
         variant = "filled",
         color = "default",
         disableShadow = false,
+        confirmDuration = 0,
         ...restProps
     } = props;
+
+    const buttonRef = React.useRef<HTMLButtonElement>(null);
+
+    const mergedRefs = React.useMemo(() => mergeRefs(ref, buttonRef), [ref]);
 
     const classes = React.useMemo(
         () =>
@@ -48,14 +55,50 @@ const Button: NuiButton = React.forwardRef((props, ref) => {
                     variant == "round-empty" &&
                         "NuiButton--variant-round-empty",
                 ],
+                confirmDuration != 0 && "NuiButton--confirm",
                 disableShadow && "NuiButton--disableshadow",
                 className,
             ]),
-        [className, color, disableShadow, iconPosition, size, variant]
+        [
+            className,
+            color,
+            confirmDuration,
+            disableShadow,
+            iconPosition,
+            size,
+            variant,
+        ]
+    );
+
+    const handleClick = React.useCallback(
+        (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            if (!onClick) return;
+            if (confirmDuration == 0 || !buttonRef.current) return onClick(e);
+
+            const beforeStyle = window.getComputedStyle(
+                buttonRef.current,
+                ":before"
+            );
+            const widthPx = beforeStyle.width;
+            const [widthStr] = widthPx.split("px");
+            const width = Number(widthStr);
+            const buttonWidth = buttonRef.current.clientWidth;
+
+            if (isBetween(width, buttonWidth - 1, buttonWidth + 1, true)) {
+                return onClick(e);
+            }
+        },
+        [confirmDuration, onClick]
     );
 
     return (
-        <button className={classes} type="button" ref={ref} {...restProps}>
+        <button
+            {...restProps}
+            className={classes}
+            type="button"
+            ref={mergedRefs}
+            onClick={handleClick}
+        >
             <div className="NuiButton__content">
                 {icon && <div className="NuiButton__icon" children={icon} />}
                 {children && (
@@ -83,6 +126,13 @@ const StyledButton = styled(Button)`
     --nui-button-size: 18px;
     --nui-button-pad: 4px;
 
+    --nui-button-confirm-duration: ${({ confirmDuration }) => {
+        if (!confirmDuration || confirmDuration == 0) return "0ms";
+        return `${confirmDuration}ms`;
+    }};
+    --nui-button-confirm-color: black;
+
+    position: relative;
     outline: none;
     border: 2px solid var(--nui-button-color);
     padding: 0;
@@ -96,16 +146,33 @@ const StyledButton = styled(Button)`
     box-sizing: border-box;
     cursor: pointer;
 
-    &::after {
+    &.NuiButton--confirm::before {
         content: "";
         position: absolute;
         top: 0;
         left: 0;
-        width: 100%;
+        width: 0%;
+        height: 100%;
+        background-color: var(--nui-button-confirm-color);
+        box-sizing: border-box;
+        opacity: 0.2;
+        transition: width var(--nui-button-confirm-duration) linear;
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: 1px;
+        left: -2px;
+        width: calc(100% + 3px);
         height: 100%;
         opacity: 1;
         box-shadow: 0 calc(var(--nui-button-pad) / 1.75) var(--nui-button-pad) var(--nui-shadow);
         transition: opacity 0.2s;
+    }
+
+    &::after, &::before {
         border-radius: 4px;
     }
 
@@ -118,6 +185,9 @@ const StyledButton = styled(Button)`
 
         &::after {
             opacity: 0;
+        }
+        &::before {
+            width: 100%;
         }
     }
     &:disabled {
@@ -230,6 +300,7 @@ const StyledButton = styled(Button)`
     }
 
     &.NuiButton--variant-outline, &.NuiButton--variant-round-outline, &.NuiButton--variant-empty, &.NuiButton--variant-round-empty {
+        --nui-button-confirm-color: var(--nui-button-color-hover);
         background-color: transparent;
         color: var(--nui-button-outline);
         &:hover {
@@ -247,10 +318,10 @@ const StyledButton = styled(Button)`
     &.NuiButton--variant-round, &.NuiButton--variant-round-outline, &.NuiButton--variant-round-empty {
         border-radius: 50%;
 
-        &::after {
+        &::after, &::before {
             border-radius: 50%;
         }
-    } 
+    }
 `;
 
 Button.displayName = createComponentName("Button");
