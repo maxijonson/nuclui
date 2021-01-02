@@ -87,29 +87,47 @@ const StyledButton = styled(Button)`
     border: 2px solid var(--nui-button-color);
     padding: 0;
     border-radius: 4px;
-    box-shadow: 0 calc(var(--nui-button-pad) / 2) var(--nui-button-pad) var(--nui-shadow);
     margin: 5px;
     font-weight: 600;
     background-color: var(--nui-button-color);
     transform: translateY(0);
-    transition: background-color 0.2s, box-shadow 0.2s, transform 0.2s, border-color 0.2s, color 0.2s;
+    transition: background-color 0.2s, transform 0.2s, border-color 0.2s, color 0.2s;
     user-select: none;
     box-sizing: border-box;
     cursor: pointer;
+
+    &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 1;
+        box-shadow: 0 calc(var(--nui-button-pad) / 1.75) var(--nui-button-pad) var(--nui-shadow);
+        transition: opacity 0.2s;
+        border-radius: 4px;
+    }
 
     &:hover, &:focus-visible {
         background-color: var(--nui-button-color-hover);
         border-color: var(--nui-button-color-hover);
     }
     &:active {
-        box-shadow: 0 0 0 var(--nui-shadow);
         transform: translateY(2px) translateZ(0);
+
+        &::after {
+            opacity: 0;
+        }
     }
     &:disabled {
         cursor: default;
         pointer-events: none;
         opacity: 0.7;
-        box-shadow: none;
+        
+        &::after {
+            box-shadow: none;
+        }
     }
 
     & .NuiButton__content {
@@ -207,17 +225,20 @@ const StyledButton = styled(Button)`
         --nui-button-pad: 6px;
     }
 
-    &.NuiButton--disableshadow {
+    &.NuiButton--disableshadow::after {
         box-shadow: none;
     }
 
     &.NuiButton--variant-outline, &.NuiButton--variant-round-outline, &.NuiButton--variant-empty, &.NuiButton--variant-round-empty {
         background-color: transparent;
-        box-shadow: none;
         color: var(--nui-button-outline);
         &:hover {
             color: var(--nui-button-outline-hover);
             background-color: var(--nui-button-outline-background);
+        }
+
+        &::after {
+            box-shadow: none;
         }
     }
     &.NuiButton--variant-empty, &.NuiButton--variant-round-empty {
@@ -225,6 +246,10 @@ const StyledButton = styled(Button)`
     }
     &.NuiButton--variant-round, &.NuiButton--variant-round-outline, &.NuiButton--variant-round-empty {
         border-radius: 50%;
+
+        &::after {
+            border-radius: 50%;
+        }
     } 
 `;
 
