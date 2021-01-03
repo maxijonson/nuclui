@@ -120,6 +120,7 @@ const StyledCheckboxContainer = styled(CheckboxContainer)`
 
     & .NuiCheckboxContainer__inputContainer {
         position: relative;
+        flex-shrink: 0;
         width: var(--nui-checkboxContainer-size);
         height: var(--nui-checkboxContainer-size);
     }
