@@ -163,6 +163,7 @@ const StyledInputContainer = styled(InputContainer)`
             width: 100%;
             background: transparent;
             border: none;
+            min-width: 0;
 
             &:focus {
                 outline: none;
