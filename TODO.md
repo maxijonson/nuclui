@@ -12,6 +12,8 @@
 ### Bugs
 
 -   InputContainer append is not appearing right on Firefox
+-   scrollbar is not appearing right on Firefox
+-   Radio circle is not appearing right on Firefox
 
 ### Components Roadmap
 

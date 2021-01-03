@@ -177,13 +177,22 @@ const StyledButton = styled(Button)`
         border-radius: 4px;
     }
 
-    &:hover, &:focus-visible {
+    /* HACK: Firefox seems to ignore these styling rules when "focus-visible" is specified, so they are separated but the same. */
+    &:hover {
         background-color: var(--nui-button-color-hover);
         border-color: var(--nui-button-color-hover);
         &::before {
             background-color: var(--nui-button-color-hover);
         }
     }
+    &:focus-visible {
+        background-color: var(--nui-button-color-hover);
+        border-color: var(--nui-button-color-hover);
+        &::before {
+            background-color: var(--nui-button-color-hover);
+        }
+    }
+
     &:active {
         transform: translateY(2px) translateZ(0);
 
