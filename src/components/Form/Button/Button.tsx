@@ -146,7 +146,7 @@ const StyledButton = styled(Button)`
     box-sizing: border-box;
     cursor: pointer;
 
-    &.NuiButton--confirm::before {
+    &.NuiButton--confirm::after {
         content: "";
         position: absolute;
         top: 0;
@@ -159,7 +159,7 @@ const StyledButton = styled(Button)`
         transition: width var(--nui-button-confirm-duration) linear;
     }
 
-    &::after {
+    &::before {
         content: "";
         position: absolute;
         z-index: -1;
@@ -183,10 +183,10 @@ const StyledButton = styled(Button)`
     &:active {
         transform: translateY(2px) translateZ(0);
 
-        &::after {
+        &::before {
             opacity: 0;
         }
-        &::before {
+        &::after {
             width: 100%;
         }
     }
@@ -195,7 +195,7 @@ const StyledButton = styled(Button)`
         pointer-events: none;
         opacity: 0.7;
         
-        &::after {
+        &::before {
             box-shadow: none;
         }
     }
@@ -295,7 +295,7 @@ const StyledButton = styled(Button)`
         --nui-button-pad: 6px;
     }
 
-    &.NuiButton--disableshadow::after {
+    &.NuiButton--disableshadow::before {
         box-shadow: none;
     }
 
@@ -308,7 +308,7 @@ const StyledButton = styled(Button)`
             background-color: var(--nui-button-outline-background);
         }
 
-        &::after {
+        &::before {
             box-shadow: none;
         }
     }
