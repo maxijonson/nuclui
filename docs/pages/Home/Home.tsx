@@ -216,53 +216,196 @@ const UseFormTest = React.memo(() => {
         <form autoComplete="off" onSubmit={onSubmit}>
             Confirm Buttons
             <Flex>
-                <Button
-                    color="primary"
-                    confirmDuration={1000}
-                    onClick={() => console.info("Confirmed click!")}
-                >
-                    Confirm
-                </Button>
-                <Button
-                    onClick={() => console.info("Confirmed click!")}
-                    confirmDuration={1000}
-                    icon={<RiAccountCircleFill />}
-                />
-                <Button
-                    onClick={() => console.info("Confirmed click!")}
-                    confirmDuration={1000}
-                    variant="round"
-                    icon={<RiAccountCircleFill />}
-                />
-                <Button
-                    color="danger"
-                    variant="outline"
-                    confirmDuration={1000}
-                    icon={<RiAccountCircleFill />}
-                    onClick={() => console.info("Confirmed click!")}
-                >
-                    Confirm
-                </Button>
-                <Button
-                    color="primary"
-                    variant="empty"
-                    confirmDuration={1000}
-                    icon={<RiAccountCircleFill />}
-                    onClick={() => console.info("Confirmed click!")}
-                >
-                    Confirm
-                </Button>
-                <Button
-                    color="primary"
-                    confirmDuration={1000}
-                    onClick={() => console.info("Confirmed click!")}
-                    icon={<RiAccountCircleFill />}
-                >
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Culpa facere facilis animi ex obcaecati delectus eos libero
-                    tempora recusandae, sit, officia dignissimos quibusdam nisi
-                    alias! Numquam fugiat quasi quo maxime.
-                </Button>
+                <FlexItem basis={12}>
+                    <Button
+                        children="Button"
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        size="xs"
+                        icon={<RiAccountCircleFill />}
+                    />
+                    <Button
+                        children="Button"
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        size="sm"
+                        icon={<RiAccountCircleFill />}
+                    />
+                    <Button
+                        children="Button"
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        size="md"
+                        icon={<RiAccountCircleFill />}
+                    />
+                    <Button
+                        children="Button"
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        size="lg"
+                        icon={<RiAccountCircleFill />}
+                    />
+                    <Button
+                        children="Button"
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        size="xl"
+                        icon={<RiAccountCircleFill />}
+                    />
+                </FlexItem>
+                <FlexItem basis={12}>
+                    <Button
+                        variant="outline"
+                        children="Button"
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        size="xs"
+                        icon={<RiAccountCircleFill />}
+                    />
+                    <Button
+                        variant="outline"
+                        children="Button"
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        size="sm"
+                        icon={<RiAccountCircleFill />}
+                    />
+                    <Button
+                        variant="outline"
+                        children="Button"
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        size="md"
+                        icon={<RiAccountCircleFill />}
+                    />
+                    <Button
+                        variant="outline"
+                        children="Button"
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        size="lg"
+                        icon={<RiAccountCircleFill />}
+                    />
+                    <Button
+                        variant="outline"
+                        children="Button"
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        size="xl"
+                        icon={<RiAccountCircleFill />}
+                    />
+                </FlexItem>
+                <FlexItem basis={12}>
+                    <Button
+                        variant="empty"
+                        children="Button"
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        size="xs"
+                        icon={<RiAccountCircleFill />}
+                    />
+                    <Button
+                        variant="empty"
+                        children="Button"
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        size="sm"
+                        icon={<RiAccountCircleFill />}
+                    />
+                    <Button
+                        variant="empty"
+                        children="Button"
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        size="md"
+                        icon={<RiAccountCircleFill />}
+                    />
+                    <Button
+                        variant="empty"
+                        children="Button"
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        size="lg"
+                        icon={<RiAccountCircleFill />}
+                    />
+                    <Button
+                        variant="empty"
+                        children="Button"
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        size="xl"
+                        icon={<RiAccountCircleFill />}
+                    />
+                </FlexItem>
+                <FlexItem>
+                    <Button
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        variant="round"
+                        size="xs"
+                        icon={<RiAccountCircleFill />}
+                    />
+                    <Button
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        variant="round"
+                        size="sm"
+                        icon={<RiAccountCircleFill />}
+                    />
+                    <Button
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        variant="round"
+                        size="md"
+                        icon={<RiAccountCircleFill />}
+                    />
+                    <Button
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        variant="round"
+                        size="lg"
+                        icon={<RiAccountCircleFill />}
+                    />
+                    <Button
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        variant="round"
+                        size="xl"
+                        icon={<RiAccountCircleFill />}
+                    />
+                </FlexItem>
+                <FlexItem>
+                    <Button
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        size="xs"
+                        icon={<RiAccountCircleFill />}
+                    />
+                    <Button
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        size="sm"
+                        icon={<RiAccountCircleFill />}
+                    />
+                    <Button
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        size="md"
+                        icon={<RiAccountCircleFill />}
+                    />
+                    <Button
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        size="lg"
+                        icon={<RiAccountCircleFill />}
+                    />
+                    <Button
+                        onClick={() => console.info("Confirmed click!")}
+                        confirmDuration={1000}
+                        size="xl"
+                        icon={<RiAccountCircleFill />}
+                    />
+                </FlexItem>
             </Flex>
             Button sizes
             <Flex itemBasis={12}>
@@ -270,6 +413,7 @@ const UseFormTest = React.memo(() => {
                     {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size) => (
                         <Button
                             size={size}
+                            onClick={() => console.info("Confirmed click!")}
                             color="primary"
                             children={`Button ${size}`}
                             key={size}
@@ -280,6 +424,7 @@ const UseFormTest = React.memo(() => {
                     {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size) => (
                         <Button
                             size={size}
+                            onClick={() => console.info("Confirmed click!")}
                             color="primary"
                             icon={<RiAccountCircleFill />}
                             key={size}
@@ -290,6 +435,7 @@ const UseFormTest = React.memo(() => {
                     {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size) => (
                         <Button
                             size={size}
+                            onClick={() => console.info("Confirmed click!")}
                             color="primary"
                             icon={<RiAccountCircleFill />}
                             key={size}
@@ -301,6 +447,7 @@ const UseFormTest = React.memo(() => {
                     {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size) => (
                         <Button
                             size={size}
+                            onClick={() => console.info("Confirmed click!")}
                             color="primary"
                             children={`Button ${size}`}
                             icon={<RiAccountCircleFill />}
@@ -312,6 +459,7 @@ const UseFormTest = React.memo(() => {
                     {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size) => (
                         <Button
                             size={size}
+                            onClick={() => console.info("Confirmed click!")}
                             color="primary"
                             children={`Button ${size}`}
                             icon={<RiAccountCircleFill />}

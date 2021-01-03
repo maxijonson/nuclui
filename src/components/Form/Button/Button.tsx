@@ -77,7 +77,7 @@ const Button: NuiButton = React.forwardRef((props, ref) => {
 
             const beforeStyle = window.getComputedStyle(
                 buttonRef.current,
-                ":before"
+                "::after"
             );
             const widthPx = beforeStyle.width;
             const [widthStr] = widthPx.split("px");
@@ -155,21 +155,22 @@ const StyledButton = styled(Button)`
         height: 100%;
         background-color: var(--nui-button-confirm-color);
         box-sizing: border-box;
-        opacity: 0.2;
-        transition: width var(--nui-button-confirm-duration) linear;
+        opacity: 0.25;
+        transition: width var(--nui-button-confirm-duration) linear, height var(--nui-button-confirm-duration) linear;
     }
 
     &::before {
         content: "";
         position: absolute;
         z-index: -1;
-        top: 1px;
+        top: -2px;
         left: -2px;
-        width: calc(100% + 3px);
-        height: 100%;
+        width: calc(100% + 4px);
+        height: calc(100% + 4px);
         opacity: 1;
         box-shadow: 0 calc(var(--nui-button-pad) / 1.75) var(--nui-button-pad) var(--nui-shadow);
-        transition: opacity 0.2s;
+        transition: opacity 0.2s, background-color 0.2s;
+        background-color: var(--nui-button-color);
     }
 
     &::after, &::before {
@@ -179,6 +180,9 @@ const StyledButton = styled(Button)`
     &:hover, &:focus-visible {
         background-color: var(--nui-button-color-hover);
         border-color: var(--nui-button-color-hover);
+        &::before {
+            background-color: var(--nui-button-color-hover);
+        }
     }
     &:active {
         transform: translateY(2px) translateZ(0);
@@ -310,6 +314,7 @@ const StyledButton = styled(Button)`
 
         &::before {
             box-shadow: none;
+            background-color: transparent;
         }
     }
     &.NuiButton--variant-empty, &.NuiButton--variant-round-empty {
@@ -320,6 +325,15 @@ const StyledButton = styled(Button)`
 
         &::after, &::before {
             border-radius: 50%;
+        }
+        &::after {
+            height: 0%;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        &:active::after {
+            height: 100%;
         }
     }
 `;

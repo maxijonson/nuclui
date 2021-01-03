@@ -9,6 +9,10 @@
 -   CycleSelect
     -   Readonly: disable arrows
 
+### Bugs
+
+-   InputContainer append is not appearing right on Firefox
+
 ### Components Roadmap
 
 -   Forms
