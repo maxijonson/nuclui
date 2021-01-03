@@ -160,8 +160,8 @@ const StyledRadioButton = styled(CheckboxContainer)`
             top: 50%;
             transform: translate(-50%, -50%) scale(0);
             transition: transform 300ms ease-out;
-            width: calc(var(--nui-checkboxContainer-size) / 2);
-            height: calc(var(--nui-checkboxContainer-size) / 2);
+            width: 50%;
+            height: 50%;
             border-radius: 50%;
             background-color: white;
             content: "";

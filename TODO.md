@@ -9,11 +9,6 @@
 -   CycleSelect
     -   Readonly: disable arrows
 
-### Bugs
-
--   scrollbar is not appearing right on Firefox
--   Radio circle is not appearing right on Firefox
-
 ### Components Roadmap
 
 -   Forms
