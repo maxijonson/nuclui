@@ -1,6 +1,9 @@
 import MaskedInput, { MaskedInputProps } from "react-text-mask";
 import { StrictOmit } from "ts-essentials";
-import { InputContainerProps, HTMLInputProps } from "../InputContainer/types";
+import {
+    InputContainerPropsWithBase,
+    HTMLInputProps,
+} from "../InputContainer/types";
 
 export interface TextInputProps {
     children?: never;
@@ -83,6 +86,7 @@ export interface TextInputProps {
  * A text input for entering string data
  */
 export type NuiTextInput = Nui.FRCWC<
-    StrictOmit<InputContainerProps, "focused" | "touched"> & TextInputProps,
+    StrictOmit<InputContainerPropsWithBase, "focused" | "touched"> &
+        TextInputProps,
     typeof MaskedInput
 >;

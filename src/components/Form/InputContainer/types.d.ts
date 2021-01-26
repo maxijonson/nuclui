@@ -1,9 +1,6 @@
-export interface InputContainerProps {
-    /**
-     * Label to be shown over the InputContainer
-     */
-    label?: string;
+import { InputBaseProps, NuiInputBase } from "../InputBase/types";
 
+export interface InputContainerProps {
     /**
      * The style variant of the input \
      * **outline** - the input is surrounded by a border \
@@ -32,47 +29,14 @@ export interface InputContainerProps {
      * Append a component in the InputContainer (after the input)
      */
     append?: React.ReactNode;
-
-    /**
-     * Size of the input (number in ch or string for custom size type)
-     *
-     * @default "sm"
-     */
-    size?: Nui.Breakpoint;
-
-    /**
-     * Specifies if the input should take 100% of its parent width
-     *
-     * @default false
-     */
-    fluid?: boolean;
-
-    /**
-     * The errors associated with the field. Only the first one is shown.
-     */
-    errors?: string[];
-
-    /**
-     * If the input has been touched (interacted with at least once). When false, prevents displaying errors (for example: on the initial input)
-     *
-     * @default true
-     */
-    touched?: boolean;
-
-    /**
-     * If the input is being focused at the moment. When true, the style of the input is changed to reflect this state.
-     *
-     * @default false
-     */
-    focused?: boolean;
-
-    /**
-     * If the input is disabled. When true, the style of the input is changed to reflect this state.
-     */
-    disabled?: boolean;
 }
 
-export type NuiInputContainer = Nui.FRCWC<InputContainerProps, "div">;
+export type InputContainerPropsWithBase = InputBaseProps & InputContainerProps;
+
+export type NuiInputContainer = Nui.FRCWC<
+    InputContainerPropsWithBase,
+    NuiInputBase
+>;
 
 export type HTMLInputProps = Required<
     React.InputHTMLAttributes<HTMLInputElement>

@@ -1,5 +1,8 @@
 import { StrictOmit } from "ts-essentials";
-import { InputContainerProps, HTMLInputProps } from "../InputContainer/types";
+import {
+    InputContainerPropsWithBase,
+    HTMLInputProps,
+} from "../InputContainer/types";
 
 interface NumberInputProps {
     children?: never;
@@ -44,6 +47,7 @@ interface NumberInputProps {
  * A number input for entering string data
  */
 export type NuiNumberInput = Nui.FRCWC<
-    StrictOmit<InputContainerProps, "focused" | "touched"> & NumberInputProps,
+    StrictOmit<InputContainerPropsWithBase, "focused" | "touched"> &
+        NumberInputProps,
     "input"
 >;

@@ -1,5 +1,5 @@
 import { StrictOmit } from "ts-essentials";
-import { InputContainerProps } from "../InputContainer/types";
+import { InputContainerPropsWithBase } from "../InputContainer/types";
 
 interface SelectOption {
     label: string;
@@ -60,7 +60,8 @@ export interface SelectProps {
 }
 
 export type NuiSelect = Nui.FRCWC<
-    StrictOmit<InputContainerProps, "focused" | "touched"> & SelectProps,
+    StrictOmit<InputContainerPropsWithBase, "focused" | "touched"> &
+        SelectProps,
     "input"
 >;
 

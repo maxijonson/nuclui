@@ -65,6 +65,7 @@ const DatePicker: NuiDatePicker = React.memo(
         const {
             name,
             label,
+            labelPosition,
             className,
             variant,
             onFocus,
@@ -509,6 +510,7 @@ const DatePicker: NuiDatePicker = React.memo(
                 prepend={prepend}
                 append={append}
                 label={label}
+                labelPosition={labelPosition}
                 variant={variant}
                 className={classes}
             >

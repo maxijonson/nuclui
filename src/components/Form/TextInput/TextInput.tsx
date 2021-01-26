@@ -17,6 +17,7 @@ const TextInput: NuiTextInput = React.memo(
             showMask = false,
             pipe,
             label,
+            labelPosition,
             className,
             variant,
             onFocus,
@@ -103,6 +104,7 @@ const TextInput: NuiTextInput = React.memo(
                 prepend={prepend}
                 append={append}
                 label={label}
+                labelPosition={labelPosition}
                 variant={variant}
                 className={clsx(["NuiTextInput", className])}
             >

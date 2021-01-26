@@ -1,7 +1,8 @@
-export * from "./InputContainer";
+// export * from "./InputBase";
+// export * from "./InputContainer";
+// export * from "./CheckboxContainer";
 export * from "./TextInput";
 export * from "./NumberInput";
-export * from "./CheckboxContainer";
 export * from "./Checkbox";
 export * from "./Switch";
 export * from "./Select";
@@ -10,3 +11,4 @@ export * from "./DatePicker";
 export * from "./RadioGroup";
 export * from "./RadioButton";
 export * from "./Button";
+export * from "./Slider";

@@ -27,6 +27,7 @@ const NumberInput: NuiNumberInput = React.memo(
     React.forwardRef((props, ref) => {
         const {
             label,
+            labelPosition,
             className,
             variant,
             onFocus,
@@ -142,6 +143,7 @@ const NumberInput: NuiNumberInput = React.memo(
                 prepend={prepend}
                 append={append}
                 label={label}
+                labelPosition={labelPosition}
                 variant={variant}
                 className={clsx(["NuiNumberInput", className])}
             >

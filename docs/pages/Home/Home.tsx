@@ -17,10 +17,10 @@ import {
     Switch,
     DatePicker,
     CycleSelect,
-    Calendar,
     RadioGroup,
     RadioButton,
     Button,
+    Slider,
 } from "nuclui";
 import { RiAccountCircleFill } from "react-icons/ri";
 import { TextInputProps } from "nuclui/components/Form/TextInput/types";
@@ -954,18 +954,6 @@ const Home = React.memo(() => {
     return (
         <Container maxWidth="lg">
             <Link to="/benchmark">Benchmark</Link>
-            <Calendar />
-            <Flex itemBasis={4}>
-                <FlexItem>
-                    <Calendar />
-                </FlexItem>
-                <FlexItem>
-                    <Calendar />
-                </FlexItem>
-                <FlexItem>
-                    <Calendar />
-                </FlexItem>
-            </Flex>
             <div>useForm Test</div>
             <UseFormTest />
             Nuclui is under developement! For now, The docs website is only a

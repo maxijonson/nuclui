@@ -1,5 +1,5 @@
 import { StrictOmit } from "ts-essentials";
-import { InputContainerProps } from "../InputContainer/types";
+import { InputContainerPropsWithBase } from "../InputContainer/types";
 
 export interface DatePickerProps {
     children?: never;
@@ -37,6 +37,7 @@ export interface DatePickerProps {
  * A date input to pick a date
  */
 export type NuiDatePicker = Nui.FRCWC<
-    StrictOmit<InputContainerProps, "focused" | "touched"> & DatePickerProps,
+    StrictOmit<InputContainerPropsWithBase, "focused" | "touched"> &
+        DatePickerProps,
     "input"
 >;

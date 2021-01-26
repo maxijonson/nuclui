@@ -8,6 +8,8 @@
         -   Select "No Options"
 -   CycleSelect
     -   Readonly: disable arrows
+-   Flex or FlexItem
+    -   Every Flex or FlexItem instance re-renders when something in the page re-renders...
 
 ### Components Roadmap
 

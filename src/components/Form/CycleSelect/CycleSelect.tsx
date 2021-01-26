@@ -12,6 +12,7 @@ const CycleSelect: NuiCycleSelect = React.memo(
     React.forwardRef((props, ref) => {
         const {
             label,
+            labelPosition,
             className,
             variant,
             onFocus,
@@ -139,6 +140,7 @@ const CycleSelect: NuiCycleSelect = React.memo(
         return (
             <StyledCycleSelect
                 label={label}
+                labelPosition={labelPosition}
                 variant={variant}
                 prepend={prepend}
                 append={append}
@@ -151,17 +153,6 @@ const CycleSelect: NuiCycleSelect = React.memo(
                 className={classes}
             >
                 <div className="NuiCycleSelect__container">
-                    <button
-                        type="button"
-                        data-cycle="prev"
-                        tabIndex={-1}
-                        value={prevOption?.value}
-                        disabled={!prevOption && !onPrevious}
-                        onClick={handleCycle}
-                        className="NuiCycleSelect__button NuiCycleSelect__button--prev"
-                    >
-                        <div className="NuiCycleSelect__arrow NuiCycleSelect__arrow--left" />
-                    </button>
                     <input
                         {...restProps}
                         readOnly
@@ -174,6 +165,17 @@ const CycleSelect: NuiCycleSelect = React.memo(
                         disabled={_.size(options) == 0 && !value}
                         value={inputValue}
                     />
+                    <button
+                        type="button"
+                        data-cycle="prev"
+                        tabIndex={-1}
+                        value={prevOption?.value}
+                        disabled={!prevOption && !onPrevious}
+                        onClick={handleCycle}
+                        className="NuiCycleSelect__button NuiCycleSelect__button--prev"
+                    >
+                        <div className="NuiCycleSelect__arrow NuiCycleSelect__arrow--left" />
+                    </button>
                     <button
                         type="button"
                         data-cycle="next"
@@ -199,6 +201,7 @@ const StyledCycleSelect = styled(InputContainer)`
     }
 
     & .NuiCycleSelect__input {
+        order: 2;
         text-align: center;
 
         &:disabled {
@@ -233,9 +236,11 @@ const StyledCycleSelect = styled(InputContainer)`
     }
 
     & .NuiCycleSelect__button--prev {
+        order: 1;
         padding-left: 8px;
     }
     & .NuiCycleSelect__button--next {
+        order: 3;
         padding-right: 8px;
     }
 

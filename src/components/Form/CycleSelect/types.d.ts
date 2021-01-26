@@ -1,5 +1,5 @@
 import { StrictOmit } from "ts-essentials";
-import { InputContainerProps } from "../InputContainer/types";
+import { InputContainerPropsWithBase } from "../InputContainer/types";
 
 export interface CycleSelectProps {
     children?: never;
@@ -48,6 +48,7 @@ export interface CycleSelectProps {
  * Selects a value by cycling through a defined array of options
  */
 export type NuiCycleSelect = Nui.FRCWC<
-    StrictOmit<InputContainerProps, "focused" | "touched"> & CycleSelectProps,
+    StrictOmit<InputContainerPropsWithBase, "focused" | "touched"> &
+        CycleSelectProps,
     "input"
 >;

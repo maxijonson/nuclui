@@ -19,6 +19,7 @@ const Select: NuiSelect = React.memo(
     React.forwardRef((props, ref) => {
         const {
             label,
+            labelPosition,
             className,
             variant,
             onFocus,
@@ -291,6 +292,7 @@ const Select: NuiSelect = React.memo(
                 prepend={prepend}
                 append={append}
                 label={label}
+                labelPosition={labelPosition}
                 variant={variant}
                 className={classes}
                 ref={containerRef}
