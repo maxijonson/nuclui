@@ -23,20 +23,9 @@ const Switch: NuiSwitch = React.memo(
         const [focused, setFocused] = React.useState(false);
         const [touched, setTouched] = React.useState(false);
 
-        const classes = React.useMemo(
-            () =>
-                clsx([
-                    "NuiSwitch",
-                    [
-                        size == "xs" && "NuiSwitch--size-xs",
-                        size == "md" && "NuiSwitch--size-md",
-                        size == "lg" && "NuiSwitch--size-lg",
-                        size == "xl" && "NuiSwitch--size-xl",
-                    ],
-                    className,
-                ]),
-            [className, size]
-        );
+        const classes = React.useMemo(() => clsx(["NuiSwitch", className]), [
+            className,
+        ]);
 
         const handleFocus = React.useCallback<HTMLInputProps["onFocus"]>(
             (e) => {
@@ -96,7 +85,7 @@ const StyledSwitch = styled(CheckboxContainer)`
     ${context}
     --nui-switch-pad: 2px;
     --nui-switch-toggle: calc(
-        var(--nui-checkboxContainer-size) - (2 * var(--nui-switch-pad) + 2px)
+        var(--nui-inputBase-size) - (2 * var(--nui-switch-pad) + 2px)
     ); /* size - (2 * padding + 2 * toggle-border-width) */
 
     & .NuiSwitch__container {
@@ -104,12 +93,13 @@ const StyledSwitch = styled(CheckboxContainer)`
 
         cursor: pointer;
         pointer-events: all;
-        border-radius: var(--nui-checkboxContainer-size);
+        border-radius: var(--nui-inputBase-size);
         border-style: solid;
         border-width: 1px;
         box-sizing: border-box;
         height: 100%;
-        min-width: calc(var(--nui-checkboxContainer-size) * 2);
+        min-width: calc(var(--nui-inputBase-size) * 2);
+        width: fit-content;
         padding: var(--nui-switch-pad);
         position: relative;
         transition: background-color 0.2s, border-color 0.2s;
@@ -144,7 +134,7 @@ const StyledSwitch = styled(CheckboxContainer)`
         width: var(--nui-switch-toggle);
     }
 
-    & .NuiCheckboxContainer__inputContainer {
+    & .NuiInputBase__container {
         width: auto;
     }
 
@@ -198,7 +188,7 @@ const StyledSwitch = styled(CheckboxContainer)`
         }
     }
 
-    &.NuiCheckboxContainer--disabled {
+    &.NuiInputBase--disabled {
         & .NuiSwitch__container {
             cursor: default;
             pointer-events: none;
@@ -214,16 +204,16 @@ const StyledSwitch = styled(CheckboxContainer)`
         }
     }
 
-    &.NuiSwitch--size-xs {
+    &.NuiInputBase--size-xs {
         --nui-switch-pad: 1px;
     }
-    &.NuiSwitch--size-md {
+    &.NuiInputBase--size-md {
         --nui-switch-pad: 3px;
     }
-    &.NuiSwitch--size-lg {
+    &.NuiInputBase--size-lg {
         --nui-switch-pad: 4px;
     }
-    &.NuiSwitch--size-xl {
+    &.NuiInputBase--size-xl {
         --nui-switch-pad: 5px;
     }
 `;

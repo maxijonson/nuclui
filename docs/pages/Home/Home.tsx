@@ -809,17 +809,17 @@ const UseFormTest = React.memo(() => {
                         label="Agree to Terms and Conditions"
                     />
                 </FlexItem>
-                <RadioGroup
+                <FlexItem
                     name="group"
                     direction="column"
-                    component={FlexItem}
+                    component={RadioGroup}
                 >
                     <RadioButton label="Radio 1" size="xs" />
                     <RadioButton label="Radio 2" size="sm" />
                     <RadioButton label="Radio 3" size="md" />
                     <RadioButton label="Radio 4" size="lg" />
                     <RadioButton label="Radio 5" size="xl" />
-                </RadioGroup>
+                </FlexItem>
             </Flex>
             <RadioGroup name="test">
                 <Flex justify="spaceEvenly">

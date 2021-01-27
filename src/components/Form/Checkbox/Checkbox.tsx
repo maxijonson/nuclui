@@ -92,10 +92,8 @@ const StyledCheckbox = styled(CheckboxContainer)`
                 border-color: white;
                 border-width: 0px;
                 border-style: solid;
-                border-right-width: calc(var(--nui-checkboxContainer-size) / 9);
-                border-bottom-width: calc(
-                    var(--nui-checkboxContainer-size) / 9
-                );
+                border-right-width: calc(var(--nui-inputBase-size) / 9);
+                border-bottom-width: calc(var(--nui-inputBase-size) / 9);
                 transform: translate(-45%, -58%) rotate(40deg) scale(1);
             }
 
@@ -134,15 +132,15 @@ const StyledCheckbox = styled(CheckboxContainer)`
             position: absolute;
             left: 50%;
             top: 50%;
-            width: calc(var(--nui-checkboxContainer-size) / 6);
-            height: calc(var(--nui-checkboxContainer-size) / 2);
+            width: calc(var(--nui-inputBase-size) / 6);
+            height: calc(var(--nui-inputBase-size) / 2);
             transform: translate(-45%, -58%) rotate(40deg) scale(0);
             transition: transform 300ms ease-out;
             content: "";
         }
     }
 
-    &.NuiCheckboxContainer--disabled {
+    &.NuiInputBase--disabled {
         & .NuiCheckbox__container {
             cursor: default;
             pointer-events: none;

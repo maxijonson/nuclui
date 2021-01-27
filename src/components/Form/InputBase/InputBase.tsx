@@ -101,11 +101,19 @@ const StyledInputBase = styled(InputBase)`
     & .NuiInputBase__label-container {
         display: flex;
         flex-direction: column;
+        pointer-events: none;
     }
 
-    & .NuiInputBase__label, & .NuiInputBase__error {
+    & .NuiInputBase__label,
+    & .NuiInputBase__container {
+        pointer-events: all;
+    }
+
+    & .NuiInputBase__label,
+    & .NuiInputBase__error {
         ${text.secondary}
 
+        width: fit-content;
         transition: color ${TRANSITION_TIME}s;
         font-size: calc(var(--nui-inputBase-font) / 1.25);
         font-weight: 500;
@@ -120,7 +128,7 @@ const StyledInputBase = styled(InputBase)`
     }
 
     &.NuiInputBase--invalid {
-        & .NuiInputBase__error, 
+        & .NuiInputBase__error,
         & .NuiInputBase__label {
             color: var(--nui-context-danger);
         }

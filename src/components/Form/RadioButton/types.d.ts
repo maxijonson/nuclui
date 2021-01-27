@@ -1,5 +1,5 @@
 import { StrictOmit } from "ts-essentials";
-import { CheckboxContainerProps } from "../CheckboxContainer/types";
+import { CheckboxContainerPropsWithBase } from "../CheckboxContainer/types";
 import { HTMLInputProps } from "../InputContainer/types";
 
 export interface RadioButtonProps {
@@ -31,7 +31,7 @@ export interface RadioButtonProps {
  */
 export type NuiRadioButton = Nui.FRCWC<
     StrictOmit<
-        CheckboxContainerProps,
+        CheckboxContainerPropsWithBase,
         "focused" | "touched" | "value" | "inputValue"
     > &
         RadioButtonProps,

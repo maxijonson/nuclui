@@ -168,7 +168,7 @@ const StyledRadioButton = styled(CheckboxContainer)`
         }
     }
 
-    &.NuiCheckboxContainer--disabled {
+    &.NuiInputBase--disabled {
         & .NuiRadioButton__container {
             cursor: default;
             pointer-events: none;

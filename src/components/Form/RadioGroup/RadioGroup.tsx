@@ -51,7 +51,7 @@ const RadioGroup: NuiRadioGroup = React.memo(
         );
 
         return (
-            <Component className={classes} ref={ref} {...restProps}>
+            <Component {...restProps} className={classes} ref={ref}>
                 {label && (
                     <label className="NuiRadioGroup__label">{label}</label>
                 )}

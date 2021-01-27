@@ -1,5 +1,5 @@
 import { StrictOmit } from "ts-essentials";
-import { CheckboxContainerProps } from "../CheckboxContainer/types";
+import { CheckboxContainerPropsWithBase } from "../CheckboxContainer/types";
 import { HTMLInputProps } from "../InputContainer/types";
 
 export interface CheckboxProps {
@@ -23,6 +23,7 @@ export interface CheckboxProps {
  * A form checkbox control for a boolean value
  */
 export type NuiCheckbox = Nui.FRCWC<
-    StrictOmit<CheckboxContainerProps, "focused" | "touched"> & CheckboxProps,
+    StrictOmit<CheckboxContainerPropsWithBase, "focused" | "touched"> &
+        CheckboxProps,
     "input"
 >;

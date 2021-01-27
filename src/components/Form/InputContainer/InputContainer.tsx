@@ -21,25 +21,14 @@ const InputContainer: NuiInputContainer = React.memo(
             fluid = false,
             focused = false,
             touched = true,
-            errors: errorsProp,
+            errors,
             ...restProps
         } = props;
-
-        const errors = React.useMemo(() => errorsProp || [], [errorsProp]);
 
         const classes = React.useMemo(
             () =>
                 clsx([
                     "NuiInputContainer",
-                    focused && "NuiInputContainer--focused",
-                    errors.length && touched && "NuiInputContainer--invalid",
-                    disabled && "NuiInputContainer--disabled",
-                    [
-                        size == "xs" && "NuiInputContainer--size-xs",
-                        size == "md" && "NuiInputContainer--size-md",
-                        size == "lg" && "NuiInputContainer--size-lg",
-                        size == "xl" && "NuiInputContainer--size-xl",
-                    ],
                     [
                         variant == "underline" &&
                             "NuiInputContainer--variant-underline",
@@ -53,15 +42,7 @@ const InputContainer: NuiInputContainer = React.memo(
                     ],
                     className,
                 ]),
-            [
-                className,
-                disabled,
-                errors.length,
-                focused,
-                size,
-                touched,
-                variant,
-            ]
+            [className, variant]
         );
 
         return (
@@ -256,11 +237,7 @@ const StyledInputContainer = styled(InputContainer)`
         }
     }
 
-    &.NuiInputContainer--focused {
-        & .NuiInputContainer__label {
-            color: var(--nui-context-primary);
-        }
-
+    &.NuiInputBase--focused {
         & .NuiInputBase__container {
             border-color: var(--nui-context-primary);
         }
@@ -270,12 +247,7 @@ const StyledInputContainer = styled(InputContainer)`
         }
     }
 
-    &.NuiInputContainer--invalid {
-        & .NuiInputContainer__error,
-        & .NuiInputContainer__label {
-            color: var(--nui-context-danger);
-        }
-
+    &.NuiInputBase--invalid {
         & .NuiInputBase__container {
             border-color: var(--nui-context-danger);
         }
@@ -285,28 +257,19 @@ const StyledInputContainer = styled(InputContainer)`
         }
     }
 
-    &.NuiInputContainer--disabled {
-        opacity: 0.5;
-        pointer-events: none;
-    }
-
-    &.NuiInputContainer--fluid {
-        width: 100%;
-    }
-
-    &.NuiInputContainer--size-xs {
+    &.NuiInputBase--size-xs {
         --nui-inputContainer-underline: 1px;
         --nui-inputContainer-pad: 4px;
     }
-    &.NuiInputContainer--size-md {
+    &.NuiInputBase--size-md {
         --nui-inputContainer-underline: 1px;
         --nui-inputContainer-pad: 10px;
     }
-    &.NuiInputContainer--size-lg {
+    &.NuiInputBase--size-lg {
         --nui-inputContainer-underline: 2px;
         --nui-inputContainer-pad: 12px;
     }
-    &.NuiInputContainer--size-xl {
+    &.NuiInputBase--size-xl {
         --nui-inputContainer-underline: 2px;
         --nui-inputContainer-pad: 14px;
     }

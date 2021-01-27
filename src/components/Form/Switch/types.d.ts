@@ -1,5 +1,5 @@
 import { StrictOmit } from "ts-essentials";
-import { CheckboxContainerProps } from "../CheckboxContainer/types";
+import { CheckboxContainerPropsWithBase } from "../CheckboxContainer/types";
 import { HTMLInputProps } from "../InputContainer/types";
 
 export interface SwitchProps {
@@ -35,6 +35,7 @@ export interface SwitchProps {
  * Similar to `Checkbox`, but in the form of a switch (aka toggle)
  */
 export type NuiSwitch = Nui.FRCWC<
-    StrictOmit<CheckboxContainerProps, "focused" | "touched"> & SwitchProps,
+    StrictOmit<CheckboxContainerPropsWithBase, "focused" | "touched"> &
+        SwitchProps,
     "input"
 >;
