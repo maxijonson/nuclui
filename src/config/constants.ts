@@ -13,3 +13,8 @@ export const PROJECT_SHORT = "NUI" as const;
  */
 export const COMPONENT_PREFIX =
     PROJECT_SHORT[0] + PROJECT_SHORT.slice(1).toLocaleLowerCase();
+
+/**
+ * Every breakpoint sizes, in order
+ */
+export const BREAKPOINTS: Nui.Breakpoint[] = ["xs", "sm", "md", "lg", "xl"];

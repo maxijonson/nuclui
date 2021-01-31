@@ -4,6 +4,7 @@ import styled from "styled-components";
 import _ from "lodash";
 import { createComponentName, nuiLog, isBetween } from "@utils";
 import { background, border, context, text } from "@theme";
+import { BREAKPOINTS } from "@config";
 import { Calendar } from "@components/Display/Calendar";
 import { CalendarDay } from "@components/Display/Calendar/types";
 import { Popover } from "@components/Layout/Popover";
@@ -250,6 +251,12 @@ const DatePicker: NuiDatePicker = React.memo(
 
             return view == "time" ? dateStr : timeStr;
         }, [dateStr, timeStr, view]);
+
+        const daysViewYearSize = React.useMemo(() => {
+            const currentSize = _.indexOf(BREAKPOINTS, size);
+            const undersize = _.clamp(currentSize - 1, 0, currentSize);
+            return BREAKPOINTS[undersize];
+        }, [size]);
 
         const errors = React.useMemo(() => props.errors || [], [props.errors]);
 
@@ -538,6 +545,7 @@ const DatePicker: NuiDatePicker = React.memo(
                                 <div className="NuiDatePicker__calendar__header">
                                     {view == "days" && (
                                         <CycleSelect
+                                            size={size}
                                             className="NuiDatePicker__calendar__header__month"
                                             fluid
                                             value={MONTHS[month]}
@@ -557,12 +565,17 @@ const DatePicker: NuiDatePicker = React.memo(
                                             onPrevious={handlePrevYear}
                                             onNext={handleNextYear}
                                             onClick={handleYearView}
-                                            size={view == "days" ? "xs" : "sm"}
+                                            size={
+                                                view == "days"
+                                                    ? daysViewYearSize
+                                                    : size
+                                            }
                                             tabIndex={-1}
                                         />
                                     )}
                                     {view == "years" && (
                                         <CycleSelect
+                                            size={size}
                                             className="NuiDatePicker__calendar__header__yearInterval"
                                             fluid
                                             value={`${

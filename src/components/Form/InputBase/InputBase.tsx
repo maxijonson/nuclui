@@ -101,12 +101,6 @@ const StyledInputBase = styled(InputBase)`
     & .NuiInputBase__label-container {
         display: flex;
         flex-direction: column;
-        pointer-events: none;
-    }
-
-    & .NuiInputBase__label,
-    & .NuiInputBase__container {
-        pointer-events: all;
     }
 
     & .NuiInputBase__label,
