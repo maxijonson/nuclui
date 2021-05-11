@@ -63,7 +63,7 @@
     "express-sslify": "1.2.0",
     "react-helmet": "6.1.0",
     "styled-components": "5.1.1",
-    "lodash": "4.17.19"
+    "lodash": "4.17.21"
   },
   "devDependencies": {
     "@babel/core": "7.10.2",
