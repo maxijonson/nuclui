@@ -14,7 +14,7 @@ const getDays = (year: number, month: number) => {
 };
 
 /** Gets the next month from a given month in the [year, month] format */
-const getNextMonth = (year: number, month: number) => {
+export const getNextMonth = (year: number, month: number) => {
     if (month == 11) {
         return [year + 1, 0] as const;
     }
@@ -22,7 +22,7 @@ const getNextMonth = (year: number, month: number) => {
 };
 
 /** Gets the previous month from a given month in the [year, month] format */
-const getPrevMonth = (year: number, month: number) => {
+export const getPrevMonth = (year: number, month: number) => {
     if (month == 0) {
         return [year - 1, 11] as const;
     }
@@ -122,7 +122,7 @@ const Calendar: NuiCalendar = React.forwardRef((props, ref) => {
             <div className="NuiCalendar__days">
                 {_.map(days, (day) => (
                     <div
-                        key={day.value}
+                        key={`${day.value}${day.outOfMonth && "-ofm"}`}
                         className={clsx([
                             "NuiCalendar__day",
                             day.outOfMonth && "NuiCalendar__day--out-of-month",
