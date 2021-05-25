@@ -6,6 +6,10 @@ import { createComponentName, nuiLog, isBetween } from "@utils";
 import { background, border, context, text } from "@theme";
 import { BREAKPOINTS } from "@config";
 import { Calendar } from "@components/Display/Calendar";
+import {
+    getNextMonth,
+    getPrevMonth,
+} from "@components/Display/Calendar/Calendar";
 import { CalendarDay } from "@components/Display/Calendar/types";
 import { Popover } from "@components/Layout/Popover";
 import { scrollbar } from "@styles";
@@ -37,22 +41,6 @@ const MONTHS = [
 
 const YEARS_PER_PAGE = 16;
 const DAY_MS = 86400000;
-
-/** Gets the next month from a given month in the [year, month] format */
-const getNextMonth = (year: number, month: number) => {
-    if (month == 11) {
-        return [year + 1, 0] as const;
-    }
-    return [year, month + 1] as const;
-};
-
-/** Gets the previous month from a given month in the [year, month] format */
-const getPrevMonth = (year: number, month: number) => {
-    if (month == 0) {
-        return [year - 1, 11] as const;
-    }
-    return [year, month - 1] as const;
-};
 
 /** Prevents an element to gain focus */
 const preventFocus = (e: React.MouseEvent) => e.preventDefault();
