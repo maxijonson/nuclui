@@ -8,6 +8,8 @@ import { NuiCycleSelect } from "./types";
 import { InputContainer } from "../InputContainer";
 import { HTMLInputProps } from "../InputContainer/types";
 
+// FIXME: Can't prev-button, input and next-button cannot be placed in a normal order because of a weird styling bug that would affect the prev-button when hovering/activating the input or the next-button
+
 const CycleSelect: NuiCycleSelect = React.memo(
     React.forwardRef((props, ref) => {
         const {
