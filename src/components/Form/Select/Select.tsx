@@ -9,6 +9,7 @@ import { Popover } from "@components/Layout/Popover";
 import { InputContainer } from "../InputContainer";
 import { HTMLInputProps } from "../InputContainer/types";
 import { NuiSelect, SelectOption, HTMLButtonProps } from "./types";
+import { extractInputContainerProps } from "../InputContainer/InputContainer";
 
 // TODO: Multi select (maybe separate component?)
 // TODO: Make sure the options do not go out of view
@@ -18,25 +19,20 @@ const preventFocus = (e: React.MouseEvent) => e.preventDefault();
 const Select: NuiSelect = React.memo(
     React.forwardRef((props, ref) => {
         const {
-            label,
-            labelPosition,
-            className,
-            variant,
-            onFocus,
-            onChange: onChangeProp,
-            onBlur,
-            onKeyDown,
-            append,
-            prepend,
-            size,
-            fluid,
-            disabled,
-            options,
-            renderOption,
-            creatable = false,
-            onCreate,
-            ...restProps
-        } = props;
+            restProps: {
+                options,
+                value,
+                onChange: onChangeProp,
+                renderOption,
+                creatable = false,
+                onCreate,
+                className,
+                ...inputProps
+            },
+            ...inputContainerProps
+        } = extractInputContainerProps(props);
+        const { onFocus, onBlur, onKeyDown } = inputProps;
+        const { disabled } = inputContainerProps;
 
         const [focused, setFocused] = React.useState(false);
         const [touched, setTouched] = React.useState(false);
@@ -53,7 +49,6 @@ const Select: NuiSelect = React.memo(
             ...options,
         ]);
 
-        const errors = React.useMemo(() => props.errors || [], [props.errors]);
         const mergedInputRef = React.useMemo(() => mergeRefs(inputRef, ref), [
             ref,
         ]);
@@ -76,16 +71,13 @@ const Select: NuiSelect = React.memo(
             if (search != null) return search;
 
             // Show the selected option label
-            const selected = _.find(
-                mergedOptions,
-                (o) => o.value == props.value
-            );
+            const selected = _.find(mergedOptions, (o) => o.value == value);
             if (selected) return selected.label;
 
             // Fallback value
-            if (props.value == null || props.value == undefined) return "";
-            return props.value;
-        }, [mergedOptions, props.value, search]);
+            if (value == null || value == undefined) return "";
+            return value;
+        }, [mergedOptions, value, search]);
 
         /** Filters `props.options` according to the `search` state */
         const filteredOptions = React.useMemo(() => {
@@ -128,7 +120,7 @@ const Select: NuiSelect = React.memo(
         /** Generalized onChange when the value is changed */
         const onChange = React.useCallback(
             (
-                value: string,
+                v: string,
                 e:
                     | React.KeyboardEvent<HTMLInputElement>
                     | React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -141,7 +133,7 @@ const Select: NuiSelect = React.memo(
                 }
 
                 if (onChangeProp) {
-                    onChangeProp(value, e);
+                    onChangeProp(v, e);
                 }
             },
             [onChangeProp]
@@ -283,23 +275,15 @@ const Select: NuiSelect = React.memo(
 
         return (
             <StyledSelect
-                disabled={disabled}
+                {...inputContainerProps}
                 focused={focused}
                 touched={touched}
-                errors={errors}
-                size={size}
-                fluid={fluid}
-                prepend={prepend}
-                append={append}
-                label={label}
-                labelPosition={labelPosition}
-                variant={variant}
                 className={classes}
                 ref={containerRef}
             >
                 <div className="NuiSelect__container">
                     <input
-                        {...restProps}
+                        {...inputProps}
                         disabled={disabled}
                         value={inputValue}
                         className="NuiSelect__input"

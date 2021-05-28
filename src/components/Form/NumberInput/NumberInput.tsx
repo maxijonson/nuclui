@@ -6,6 +6,7 @@ import { text } from "@theme";
 import { InputContainer } from "../InputContainer";
 import { HTMLInputProps } from "../InputContainer/types";
 import { NuiNumberInput } from "./types";
+import { extractInputContainerProps } from "../InputContainer/InputContainer";
 
 // FIXME: NumberInput looks almost the same as TextInput. Maybe move some code in a reusable component.
 
@@ -26,24 +27,19 @@ const arrowDown = (
 const NumberInput: NuiNumberInput = React.memo(
     React.forwardRef((props, ref) => {
         const {
-            label,
-            labelPosition,
-            className,
-            variant,
-            onFocus,
-            onChange,
-            onBlur,
-            append,
-            prepend,
-            size,
-            fluid,
-            disabled,
-            min,
-            max,
-            step,
-            errors,
-            ...restProps
-        } = props;
+            restProps: {
+                type,
+                onChange,
+                min,
+                max,
+                step,
+                className,
+                ...inputProps
+            },
+            ...inputContainerProps
+        } = extractInputContainerProps(props);
+        const { onFocus, onBlur } = inputProps;
+        const { disabled } = inputContainerProps;
 
         const [focused, setFocused] = React.useState(false);
         const [touched, setTouched] = React.useState(false);
@@ -80,6 +76,9 @@ const NumberInput: NuiNumberInput = React.memo(
 
             return -s >= min;
         }, [min, step, value]);
+
+        const stepUpDisabled = disabled || !canStepUp;
+        const stepDownDisabled = disabled || !canStepDown;
 
         const handleFocus = React.useCallback<HTMLInputProps["onFocus"]>(
             (e) => {
@@ -134,21 +133,13 @@ const NumberInput: NuiNumberInput = React.memo(
 
         return (
             <StyledNumberInput
-                disabled={disabled}
+                {...inputContainerProps}
                 focused={focused}
                 touched={touched}
-                errors={errors}
-                size={size}
-                fluid={fluid}
-                prepend={prepend}
-                append={append}
-                label={label}
-                labelPosition={labelPosition}
-                variant={variant}
                 className={clsx(["NuiNumberInput", className])}
             >
                 <input
-                    {...restProps}
+                    {...inputProps}
                     disabled={disabled}
                     min={min}
                     max={max}
@@ -164,10 +155,10 @@ const NumberInput: NuiNumberInput = React.memo(
                 <div className="NuiNumberInput__arrows">
                     <button
                         type="button"
-                        disabled={!canStepUp}
+                        disabled={stepUpDisabled}
                         className={clsx([
                             "NuiNumberInput__arrows__up",
-                            !canStepUp && "disabled",
+                            stepUpDisabled && "disabled",
                         ])}
                         onClick={increment}
                         tabIndex={-1}
@@ -176,10 +167,10 @@ const NumberInput: NuiNumberInput = React.memo(
                     </button>
                     <button
                         type="button"
-                        disabled={!canStepDown}
+                        disabled={stepDownDisabled}
                         className={clsx([
                             "NuiNumberInput__arrows__down",
-                            !canStepDown && "disabled",
+                            stepDownDisabled && "disabled",
                         ])}
                         onClick={decrement}
                         tabIndex={-1}

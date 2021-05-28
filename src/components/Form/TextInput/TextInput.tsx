@@ -5,34 +5,29 @@ import { createComponentName, nuiLog } from "@utils";
 import { NuiTextInput } from "./types";
 import { InputContainer } from "../InputContainer";
 import { HTMLInputProps } from "../InputContainer/types";
+import { extractInputContainerProps } from "../InputContainer/InputContainer";
 
 const TextInput: NuiTextInput = React.memo(
     React.forwardRef((props, ref) => {
         const {
-            type = "text",
-            mask = false,
-            guide = true,
-            placeholderChar = "_",
-            keepCharPositions = false,
-            showMask = false,
-            pipe,
-            label,
-            labelPosition,
-            className,
-            variant,
-            onFocus,
-            onChange,
-            onBlur,
-            transform,
-            append,
-            prepend,
-            size,
-            fluid,
-            disabled,
-            errors,
-            name,
-            ...restProps
-        } = props;
+            restProps: {
+                type = "text",
+                value,
+                onChange,
+                mask = false,
+                guide = true,
+                placeholderChar = "_",
+                keepCharPositions = false,
+                pipe,
+                showMask = false,
+                transform,
+                className,
+                ...inputProps
+            },
+            ...inputContainerProps
+        } = extractInputContainerProps(props);
+        const { onFocus, onBlur } = inputProps;
+        const { disabled } = inputContainerProps;
 
         const [focused, setFocused] = React.useState(false);
         const [touched, setTouched] = React.useState(false);
@@ -95,23 +90,14 @@ const TextInput: NuiTextInput = React.memo(
 
         return (
             <InputContainer
-                disabled={disabled}
+                {...inputContainerProps}
                 focused={focused}
                 touched={touched}
-                errors={errors}
-                size={size}
-                fluid={fluid}
-                prepend={prepend}
-                append={append}
-                label={label}
-                labelPosition={labelPosition}
-                variant={variant}
                 className={clsx(["NuiTextInput", className])}
             >
                 <MaskedInput
-                    {...restProps}
+                    {...inputProps}
                     disabled={disabled}
-                    name={name}
                     className="NuiTextInput__input"
                     ref={ref}
                     type={type}

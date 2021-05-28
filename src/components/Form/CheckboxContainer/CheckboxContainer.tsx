@@ -3,49 +3,45 @@ import styled from "styled-components";
 import clsx from "clsx";
 import { context } from "@theme";
 import { createComponentName } from "@utils";
-import { NuiCheckboxContainer } from "./types";
+import {
+    CheckboxContainerProps,
+    CheckboxContainerPropsWithBase,
+    NuiCheckboxContainer,
+} from "./types";
 import { InputBase } from "../InputBase";
+import { InputBaseProps } from "../InputBase/types";
+import { extractInputBaseProps } from "../InputBase/InputBase";
 
 const CheckboxContainer: NuiCheckboxContainer = React.memo(
     React.forwardRef((props, ref) => {
         const {
-            className,
-            label,
-            onFocus,
-            onChange,
-            onBlur,
-            value,
-            inputValue,
-            errors,
-            children,
-            focused,
-            touched,
-            size,
-            fluid,
-            labelPosition = "right",
-            type = "checkbox",
-            ...restProps
-        } = props;
+            restProps: {
+                value,
+                inputValue,
+                type = "checkbox",
+                inputBaseElementProps = {},
+                children,
+                className,
+                ...inputProps
+            },
+            ...inputBaseProps
+        } = extractInputBaseProps(props);
+        const { disabled } = inputBaseProps;
+
+        const labelPosition = props.labelPosition ?? "right";
 
         return (
             <InputBase
-                className={clsx(["NuiCheckboxContainer", className])}
-                label={label}
+                {...inputBaseElementProps}
+                {...inputBaseProps}
                 labelPosition={labelPosition}
-                size={size}
-                fluid={fluid}
-                errors={errors}
-                touched={touched}
-                focused={focused}
-                disabled={props.disabled}
+                className={clsx(["NuiCheckboxContainer", className])}
             >
                 <input
-                    {...restProps}
+                    {...inputProps}
+                    disabled={disabled}
                     value={inputValue}
                     checked={value}
-                    onFocus={onFocus}
-                    onChange={onChange}
-                    onBlur={onBlur}
                     ref={ref}
                     type={type}
                     className="NuiCheckboxContainer__input"
@@ -80,5 +76,39 @@ const StyledCheckboxContainer = styled(CheckboxContainer)`
 `;
 
 StyledCheckboxContainer.displayName = createComponentName("CheckboxContainer");
+
+/**
+ * Extracts all relevant props for the CheckboxContainer and gives them a default value, if needed. The excess is placed in the `restProps` property.
+ */
+export const extractCheckboxContainerProps = <
+    T extends CheckboxContainerPropsWithBase
+>(
+    props: T
+): Required<CheckboxContainerPropsWithBase> & {
+    restProps: Omit<
+        Omit<T, keyof InputBaseProps>,
+        keyof CheckboxContainerProps
+    >;
+} => {
+    const { restProps: restBaseProps, ...baseProps } = extractInputBaseProps(
+        props
+    );
+    const {
+        value = false,
+        inputValue = "",
+        type = "checkbox",
+        inputBaseElementProps = {},
+        ...restProps
+    } = restBaseProps;
+
+    return {
+        ...baseProps,
+        value,
+        inputValue,
+        type,
+        inputBaseElementProps,
+        restProps,
+    };
+};
 
 export default StyledCheckboxContainer as typeof CheckboxContainer;
