@@ -4,7 +4,7 @@ import styled from "styled-components";
 import _ from "lodash";
 import { context, text } from "@theme";
 import { createComponentName } from "@utils";
-import { NuiInputBase } from "./types";
+import { InputBaseProps, NuiInputBase } from "./types";
 
 const InputBase: NuiInputBase = React.memo(
     React.forwardRef((props, ref) => {
@@ -181,5 +181,36 @@ const StyledInputBase = styled(InputBase)`
 `;
 
 StyledInputBase.displayName = createComponentName("InputBase");
+
+/**
+ * Extracts all relevant props for the InputBase and gives them a default value, if needed. The excess is placed in the `restProps` property.
+ */
+export const extractInputBaseProps = <T extends InputBaseProps>(
+    props: T
+): Required<InputBaseProps> & { restProps: Omit<T, keyof InputBaseProps> } => {
+    const {
+        disabled = false,
+        errors = [],
+        fluid = false,
+        focused = false,
+        label = "",
+        labelPosition = "top",
+        size = "sm",
+        touched = true,
+        ...restProps
+    } = props;
+
+    return {
+        disabled,
+        errors,
+        fluid,
+        focused,
+        label,
+        labelPosition,
+        size,
+        touched,
+        restProps,
+    };
+};
 
 export default StyledInputBase as typeof InputBase;

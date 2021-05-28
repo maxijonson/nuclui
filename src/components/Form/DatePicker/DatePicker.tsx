@@ -18,6 +18,7 @@ import { HTMLInputProps } from "../InputContainer/types";
 import { DatePickerProps, NuiDatePicker } from "./types";
 import { HTMLButtonProps } from "../Select/types";
 import { CycleSelect } from "../CycleSelect";
+import { extractInputContainerProps } from "../InputContainer/InputContainer";
 
 // Inspired from: https://medium.com/swlh/build-a-date-picker-in-15mins-using-javascript-react-from-scratch-f6932c77db09
 // TODO: Range picker
@@ -52,23 +53,11 @@ const getInitialView = (type: DatePickerProps["type"]): "days" | "time" => {
 const DatePicker: NuiDatePicker = React.memo(
     React.forwardRef((props, ref) => {
         const {
-            name,
-            label,
-            labelPosition,
-            className,
-            variant,
-            onFocus,
-            onChange,
-            onBlur,
-            onKeyDown,
-            append,
-            prepend,
-            size,
-            fluid,
-            disabled,
-            type = "date",
-            ...restProps
-        } = props;
+            restProps: { type, value, onChange, className, ...inputProps },
+            ...inputContainerProps
+        } = extractInputContainerProps(props);
+        const { onFocus, onBlur } = inputProps;
+        const { size, disabled } = inputContainerProps;
 
         const [focused, setFocused] = React.useState(false);
         const [touched, setTouched] = React.useState(false);
@@ -496,25 +485,18 @@ const DatePicker: NuiDatePicker = React.memo(
 
         return (
             <StyledDatePicker
-                disabled={disabled}
+                {...inputContainerProps}
                 focused={focused}
                 touched={touched}
                 errors={errors}
-                size={size}
-                fluid={fluid}
-                prepend={prepend}
-                append={append}
-                label={label}
-                labelPosition={labelPosition}
-                variant={variant}
                 className={classes}
             >
                 <div className="NuiDatePicker__container">
                     <input
-                        {...restProps}
-                        name={name}
+                        {...inputProps}
                         className="NuiDatePicker__input"
                         ref={ref}
+                        disabled={disabled}
                         value={inputValue}
                         onFocus={handleFocus}
                         readOnly

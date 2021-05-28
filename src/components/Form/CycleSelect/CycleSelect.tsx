@@ -7,32 +7,25 @@ import { background, border } from "@theme";
 import { NuiCycleSelect } from "./types";
 import { InputContainer } from "../InputContainer";
 import { HTMLInputProps } from "../InputContainer/types";
+import { extractInputContainerProps } from "../InputContainer/InputContainer";
 
 // FIXME: Can't prev-button, input and next-button cannot be placed in a normal order because of a weird styling bug that would affect the prev-button when hovering/activating the input or the next-button
 
 const CycleSelect: NuiCycleSelect = React.memo(
     React.forwardRef((props, ref) => {
         const {
-            label,
-            labelPosition,
-            className,
-            variant,
-            onFocus,
-            onChange,
-            onPrevious,
-            onNext,
-            onBlur,
-            onKeyDown,
-            append,
-            prepend,
-            size,
-            fluid,
-            disabled,
-            options,
-            value,
-            errors,
-            ...restProps
-        } = props;
+            restProps: {
+                options,
+                onChange,
+                onPrevious,
+                onNext,
+                value,
+                className,
+                ...inputProps
+            },
+            ...inputContainerProps
+        } = extractInputContainerProps(props);
+        const { onFocus, onBlur, onKeyDown } = inputProps;
 
         const [focused, setFocused] = React.useState(false);
         const [touched, setTouched] = React.useState(false);
@@ -64,6 +57,10 @@ const CycleSelect: NuiCycleSelect = React.memo(
                 ? options?.[selectedOption + 1] // Index after
                 : _.first(options); // First index
         }, [options, selectedOption]);
+
+        const disabled = props.disabled || (!prevOption && !nextOption);
+        const prevDisabled = disabled || (!prevOption && !onPrevious);
+        const nextDisabled = disabled || (!nextOption && !onNext);
 
         const inputValue = React.useMemo(() => {
             if (_.size(options) == 0 && !value) return "No Options";
@@ -141,22 +138,15 @@ const CycleSelect: NuiCycleSelect = React.memo(
 
         return (
             <StyledCycleSelect
-                label={label}
-                labelPosition={labelPosition}
-                variant={variant}
-                prepend={prepend}
-                append={append}
-                size={size}
-                fluid={fluid}
-                errors={errors}
-                touched={touched}
-                focused={focused}
+                {...inputContainerProps}
                 disabled={disabled}
+                focused={focused}
+                touched={touched}
                 className={classes}
             >
                 <div className="NuiCycleSelect__container">
                     <input
-                        {...restProps}
+                        {...inputProps}
                         readOnly
                         className="NuiCycleSelect__input"
                         ref={ref}
@@ -164,7 +154,7 @@ const CycleSelect: NuiCycleSelect = React.memo(
                         onFocus={handleFocus}
                         onKeyDown={handleKeyDown}
                         onBlur={handleBlur}
-                        disabled={_.size(options) == 0 && !value}
+                        disabled={disabled}
                         value={inputValue}
                     />
                     <button
@@ -172,7 +162,7 @@ const CycleSelect: NuiCycleSelect = React.memo(
                         data-cycle="prev"
                         tabIndex={-1}
                         value={prevOption?.value}
-                        disabled={!prevOption && !onPrevious}
+                        disabled={prevDisabled}
                         onClick={handleCycle}
                         className="NuiCycleSelect__button NuiCycleSelect__button--prev"
                     >
@@ -183,7 +173,7 @@ const CycleSelect: NuiCycleSelect = React.memo(
                         data-cycle="next"
                         tabIndex={-1}
                         value={nextOption?.value}
-                        disabled={!nextOption && !onNext}
+                        disabled={nextDisabled}
                         onClick={handleCycle}
                         className="NuiCycleSelect__button NuiCycleSelect__button--next"
                     >

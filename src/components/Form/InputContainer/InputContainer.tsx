@@ -3,27 +3,22 @@ import React from "react";
 import styled from "styled-components";
 import { background, border, context, shadow } from "@theme";
 import { createComponentName } from "@utils";
-import { NuiInputContainer } from "./types";
-import InputBase from "../InputBase/InputBase";
+import { quicksand } from "@fonts";
+import {
+    InputContainerProps,
+    InputContainerPropsWithBase,
+    NuiInputContainer,
+} from "./types";
+import InputBase, { extractInputBaseProps } from "../InputBase/InputBase";
+import { InputBaseProps } from "../InputBase/types";
 
 const InputContainer: NuiInputContainer = React.memo(
     React.forwardRef((props, ref) => {
         const {
-            label,
-            labelPosition,
-            className,
-            variant,
-            append,
-            prepend,
-            size,
-            children,
-            disabled,
-            fluid = false,
-            focused = false,
-            touched = true,
-            errors,
-            ...restProps
-        } = props;
+            restProps: { variant, prepend, append, ...inputBaseElementProps },
+            ...inputBaseProps
+        } = extractInputBaseProps(props);
+        const { className, children } = inputBaseElementProps;
 
         const classes = React.useMemo(
             () =>
@@ -47,15 +42,8 @@ const InputContainer: NuiInputContainer = React.memo(
 
         return (
             <InputBase
-                {...restProps}
-                label={label}
-                labelPosition={labelPosition}
-                size={size}
-                fluid={fluid}
-                errors={errors}
-                touched={touched}
-                focused={focused}
-                disabled={disabled}
+                {...inputBaseElementProps}
+                {...inputBaseProps}
                 ref={ref}
                 className={classes}
             >
@@ -81,6 +69,7 @@ const InputContainer: NuiInputContainer = React.memo(
 const TRANSITION_TIME = 0.2;
 
 const StyledInputContainer = styled(InputContainer)`
+    ${quicksand}
     ${context}
     --nui-inputContainer-underline: 1px;
     --nui-inputContainer-pad: 8px;
@@ -276,5 +265,34 @@ const StyledInputContainer = styled(InputContainer)`
 `;
 
 StyledInputContainer.displayName = createComponentName("InputContainer");
+
+/**
+ * Extracts all relevant props for the InputContainer and gives them a default value, if needed. The excess is placed in the `restProps` property.
+ */
+export const extractInputContainerProps = <
+    T extends InputContainerPropsWithBase
+>(
+    props: T
+): Required<InputContainerPropsWithBase> & {
+    restProps: Omit<Omit<T, keyof InputBaseProps>, keyof InputContainerProps>;
+} => {
+    const { restProps: restBaseProps, ...baseProps } = extractInputBaseProps(
+        props
+    );
+    const {
+        append = null,
+        prepend = null,
+        variant = "outline",
+        ...restProps
+    } = restBaseProps;
+
+    return {
+        ...baseProps,
+        append,
+        prepend,
+        variant,
+        restProps,
+    };
+};
 
 export default StyledInputContainer as typeof InputContainer;

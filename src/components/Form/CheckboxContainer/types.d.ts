@@ -1,3 +1,4 @@
+import React from "react";
 import { InputBaseProps } from "../InputBase/types";
 import { HTMLInputProps } from "../InputContainer/types";
 
@@ -20,6 +21,11 @@ export interface CheckboxContainerProps {
      * @default "checkbox"
      */
     type?: "checkbox" | "radio";
+
+    /**
+     * Props to give to the container HTML element of InputBase
+     */
+    inputBaseElementProps?: React.ComponentPropsWithoutRef<"div">;
 }
 
 export type CheckboxContainerPropsWithBase = InputBaseProps &
