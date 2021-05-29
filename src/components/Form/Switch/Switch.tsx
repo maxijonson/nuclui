@@ -6,19 +6,24 @@ import { background, border, context, text } from "@theme";
 import { HTMLInputProps } from "../InputContainer/types";
 import { NuiSwitch } from "./types";
 import { CheckboxContainer } from "../CheckboxContainer";
+import { extractCheckboxContainerProps } from "../CheckboxContainer/CheckboxContainer";
 
 const Switch: NuiSwitch = React.memo(
     React.forwardRef((props, ref) => {
         const {
-            className,
-            onFocus,
-            onChange,
-            onBlur,
-            onChildren,
-            offChildren,
-            size,
-            ...restProps
-        } = props;
+            restProps: {
+                onChange,
+                value,
+                inputValue,
+                onChildren,
+                offChildren,
+                className,
+                ...inputProps
+            },
+            ...checkboxContainerProps
+        } = extractCheckboxContainerProps(props);
+        const { onFocus, onBlur } = inputProps;
+        const { disabled } = checkboxContainerProps;
 
         const [focused, setFocused] = React.useState(false);
         const [touched, setTouched] = React.useState(false);
@@ -59,16 +64,23 @@ const Switch: NuiSwitch = React.memo(
 
         return (
             <StyledSwitch
-                {...restProps}
-                ref={ref}
+                {...checkboxContainerProps}
                 className={classes}
                 focused={focused}
                 touched={touched}
-                size={size}
-                onFocus={handleFocus}
-                onChange={handleChange}
-                onBlur={handleBlur}
             >
+                <input
+                    {...inputProps}
+                    ref={ref}
+                    disabled={disabled}
+                    value={inputValue}
+                    checked={value}
+                    onFocus={handleFocus}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    type="checkbox"
+                    className="NuiSwitch__input"
+                />
                 <div className="NuiSwitch__container">
                     <div
                         className="NuiSwitch__text"
@@ -138,7 +150,15 @@ const StyledSwitch = styled(CheckboxContainer)`
         width: auto;
     }
 
-    & .NuiCheckboxContainer__input {
+    & .NuiSwitch__input {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        width: 0;
+        height: 0;
+        opacity: 0;
+
         &:focus-visible ~ .NuiSwitch__container {
             ${background.dimmed}
         }
@@ -198,7 +218,7 @@ const StyledSwitch = styled(CheckboxContainer)`
             border-style: dashed;
         }
 
-        & .NuiCheckboxContainer__input:checked ~ .NuiSwitch__container {
+        & .NuiSwitch__input:checked ~ .NuiSwitch__container {
             background-color: var(--nui-context-primaryDark);
             border-color: var(--nui-context-primaryDark);
         }

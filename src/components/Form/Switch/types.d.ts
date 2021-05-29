@@ -14,6 +14,18 @@ export interface SwitchProps {
     ) => void;
 
     /**
+     * Checked state of the checkbox input.
+     *
+     * Note: For convenience with `useForm`, this is actually the `checked` prop of the input. Use `inputValue` to set the actual `input` prop of the input.
+     */
+    value?: boolean;
+
+    /**
+     * The prop that will be assigned to the actual input element `value` prop
+     */
+    inputValue?: HTMLInputProps["value"];
+
+    /**
      * Text inside the switch when the toggle is on
      */
     onChildren?: React.ReactNode;
@@ -22,13 +34,6 @@ export interface SwitchProps {
      * Text inside the switch when the toggle is off
      */
     offChildren?: React.ReactNode;
-
-    /**
-     * The size of the switch
-     *
-     * @default "sm"
-     */
-    size?: Nui.Breakpoint;
 }
 
 /**

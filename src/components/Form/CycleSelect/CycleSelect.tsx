@@ -58,9 +58,9 @@ const CycleSelect: NuiCycleSelect = React.memo(
                 : _.first(options); // First index
         }, [options, selectedOption]);
 
-        const disabled = props.disabled || (!prevOption && !nextOption);
-        const prevDisabled = disabled || (!prevOption && !onPrevious);
-        const nextDisabled = disabled || (!nextOption && !onNext);
+        const prevDisabled = props.disabled || (!prevOption && !onPrevious);
+        const nextDisabled = props.disabled || (!nextOption && !onNext);
+        const disabled = props.disabled || (prevDisabled && nextDisabled);
 
         const inputValue = React.useMemo(() => {
             if (_.size(options) == 0 && !value) return "No Options";

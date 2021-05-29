@@ -235,8 +235,6 @@ const DatePicker: NuiDatePicker = React.memo(
             return BREAKPOINTS[undersize];
         }, [size]);
 
-        const errors = React.useMemo(() => props.errors || [], [props.errors]);
-
         const classes = React.useMemo(
             () =>
                 clsx([
@@ -488,7 +486,6 @@ const DatePicker: NuiDatePicker = React.memo(
                 {...inputContainerProps}
                 focused={focused}
                 touched={touched}
-                errors={errors}
                 className={classes}
             >
                 <div className="NuiDatePicker__container">
