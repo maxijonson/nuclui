@@ -15,10 +15,16 @@ import { InputBaseProps } from "../InputBase/types";
 const InputContainer: NuiInputContainer = React.memo(
     React.forwardRef((props, ref) => {
         const {
-            restProps: { variant, prepend, append, ...inputBaseElementProps },
+            restProps: {
+                variant,
+                prepend,
+                append,
+                className,
+                children,
+                ...inputBaseElementProps
+            },
             ...inputBaseProps
         } = extractInputBaseProps(props);
-        const { className, children } = inputBaseElementProps;
 
         const classes = React.useMemo(
             () =>

@@ -15,37 +15,17 @@ import { extractInputBaseProps } from "../InputBase/InputBase";
 const CheckboxContainer: NuiCheckboxContainer = React.memo(
     React.forwardRef((props, ref) => {
         const {
-            restProps: {
-                value,
-                inputValue,
-                type = "checkbox",
-                inputBaseElementProps = {},
-                children,
-                className,
-                ...inputProps
-            },
+            restProps: { children, className, ...inputBaseElementProps },
             ...inputBaseProps
         } = extractInputBaseProps(props);
-        const { disabled } = inputBaseProps;
-
-        const labelPosition = props.labelPosition ?? "right";
 
         return (
             <InputBase
                 {...inputBaseElementProps}
                 {...inputBaseProps}
-                labelPosition={labelPosition}
+                ref={ref}
                 className={clsx(["NuiCheckboxContainer", className])}
             >
-                <input
-                    {...inputProps}
-                    disabled={disabled}
-                    value={inputValue}
-                    checked={value}
-                    ref={ref}
-                    type={type}
-                    className="NuiCheckboxContainer__input"
-                />
                 {children}
             </InputBase>
         );
@@ -68,11 +48,6 @@ const StyledCheckboxContainer = styled(CheckboxContainer)`
     & .NuiInputBase__label-container {
         align-items: center;
     }
-
-    & .NuiCheckboxContainer__input {
-        position: absolute;
-        opacity: 0;
-    }
 `;
 
 StyledCheckboxContainer.displayName = createComponentName("CheckboxContainer");
@@ -90,23 +65,13 @@ export const extractCheckboxContainerProps = <
         keyof CheckboxContainerProps
     >;
 } => {
-    const { restProps: restBaseProps, ...baseProps } = extractInputBaseProps(
-        props
-    );
-    const {
-        value = false,
-        inputValue = "",
-        type = "checkbox",
-        inputBaseElementProps = {},
-        ...restProps
-    } = restBaseProps;
+    const { restProps, ...baseProps } = extractInputBaseProps({
+        labelPosition: "right",
+        ...props,
+    });
 
     return {
         ...baseProps,
-        value,
-        inputValue,
-        type,
-        inputBaseElementProps,
         restProps,
     };
 };

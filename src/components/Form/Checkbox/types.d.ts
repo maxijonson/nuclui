@@ -12,6 +12,18 @@ export interface CheckboxProps {
         v: boolean,
         e: Parameters<HTMLInputProps["onChange"]>[0]
     ) => void;
+
+    /**
+     * Checked state of the checkbox input.
+     *
+     * Note: For convenience with `useForm`, this is actually the `checked` prop of the input. Use `inputValue` to set the actual `input` prop of the input.
+     */
+    value?: boolean;
+
+    /**
+     * The prop that will be assigned to the actual input element `value` prop
+     */
+    inputValue?: HTMLInputProps["value"];
 }
 
 /**

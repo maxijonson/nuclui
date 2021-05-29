@@ -1,32 +1,7 @@
-import React from "react";
-import { InputBaseProps } from "../InputBase/types";
-import { HTMLInputProps } from "../InputContainer/types";
+import { InputBaseProps, NuiInputBase } from "../InputBase/types";
 
-export interface CheckboxContainerProps {
-    /**
-     * Checked state of the checkbox input.
-     *
-     * Note: For convenience with `useForm`, this is actually the `checked` prop of the input. Use `inputValue` to set the actual `input` prop of the input.
-     */
-    value?: boolean;
-
-    /**
-     * The prop that will be assigned to the input `value` prop
-     */
-    inputValue?: HTMLInputProps["value"];
-
-    /**
-     * The type of the input
-     *
-     * @default "checkbox"
-     */
-    type?: "checkbox" | "radio";
-
-    /**
-     * Props to give to the container HTML element of InputBase
-     */
-    inputBaseElementProps?: React.ComponentPropsWithoutRef<"div">;
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface CheckboxContainerProps {}
 
 export type CheckboxContainerPropsWithBase = InputBaseProps &
     CheckboxContainerProps;
@@ -36,5 +11,5 @@ export type CheckboxContainerPropsWithBase = InputBaseProps &
  */
 export type NuiCheckboxContainer = Nui.FRCWC<
     CheckboxContainerPropsWithBase,
-    "input"
+    NuiInputBase
 >;

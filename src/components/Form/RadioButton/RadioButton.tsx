@@ -7,31 +7,22 @@ import { HTMLInputProps } from "../InputContainer/types";
 import { NuiRadioButton } from "./types";
 import { CheckboxContainer } from "../CheckboxContainer";
 import { RadioGroupContext } from "../RadioGroup/RadioGroup";
+import { extractCheckboxContainerProps } from "../CheckboxContainer/CheckboxContainer";
 
 const RadioButton: NuiRadioButton = React.memo(
     React.forwardRef((props, ref) => {
         const {
-            className,
-            onFocus,
-            onChange,
-            onBlur,
-            value,
-            ...restProps
-        } = props;
+            restProps: { onChange, value, className, ...inputProps },
+            ...checkboxContainerProps
+        } = extractCheckboxContainerProps(props);
+        const { onFocus, onBlur } = inputProps;
+        const { disabled } = checkboxContainerProps;
 
         const [focused, setFocused] = React.useState(false);
         const [touched, setTouched] = React.useState(false);
 
         const ctx = React.useContext(RadioGroupContext);
 
-        const name = React.useMemo(() => props.name ?? ctx.name, [
-            ctx.name,
-            props.name,
-        ]);
-        const size = React.useMemo(() => props.size ?? ctx.size, [
-            ctx.size,
-            props.size,
-        ]);
         const checked = React.useMemo(() => {
             if (ctx.value != undefined) return value == ctx.value;
             if (props.checked != undefined) return props.checked;
@@ -73,20 +64,25 @@ const RadioButton: NuiRadioButton = React.memo(
 
         return (
             <StyledRadioButton
-                {...restProps}
-                value={checked}
-                inputValue={value}
-                ref={ref}
+                {...checkboxContainerProps}
                 className={clsx(["NuiRadioButton", className])}
                 focused={focused}
                 touched={touched}
-                onFocus={handleFocus}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                type="radio"
-                name={name}
-                size={size}
+                size={props.size ?? ctx.size}
             >
+                <input
+                    {...inputProps}
+                    ref={ref}
+                    disabled={disabled}
+                    name={props.name ?? ctx.name}
+                    value={value}
+                    checked={checked}
+                    onFocus={handleFocus}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    type="radio"
+                    className="NuiRadioButton__input"
+                />
                 <div className="NuiRadioButton__container" />
             </StyledRadioButton>
         );
@@ -101,7 +97,15 @@ const StyledRadioButton = styled(CheckboxContainer)`
         pointer-events: all;
     }
 
-    & .NuiCheckboxContainer__input {
+    & .NuiRadioButton__input {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        width: 0;
+        height: 0;
+        opacity: 0;
+
         &:focus-visible ~ .NuiRadioButton__container {
             ${background.dimmed}
         }
@@ -178,7 +182,7 @@ const StyledRadioButton = styled(CheckboxContainer)`
             border-style: dashed;
         }
 
-        & .NuiCheckboxContainer__input:checked ~ .NuiRadioButton__container {
+        & .NuiRadioButton__input:checked ~ .NuiRadioButton__container {
             background-color: var(--nui-context-primaryDark);
         }
     }

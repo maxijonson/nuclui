@@ -6,10 +6,22 @@ import clsx from "clsx";
 import { HTMLInputProps } from "../InputContainer/types";
 import { NuiCheckbox } from "./types";
 import { CheckboxContainer } from "../CheckboxContainer";
+import { extractCheckboxContainerProps } from "../CheckboxContainer/CheckboxContainer";
 
 const Checkbox: NuiCheckbox = React.memo(
     React.forwardRef((props, ref) => {
-        const { className, onFocus, onChange, onBlur, ...restProps } = props;
+        const {
+            restProps: {
+                onChange,
+                className,
+                value,
+                inputValue,
+                ...inputProps
+            },
+            ...checkboxContainerProps
+        } = extractCheckboxContainerProps(props);
+        const { onFocus, onBlur } = inputProps;
+        const { disabled } = checkboxContainerProps;
 
         const [focused, setFocused] = React.useState(false);
         const [touched, setTouched] = React.useState(false);
@@ -47,15 +59,23 @@ const Checkbox: NuiCheckbox = React.memo(
 
         return (
             <StyledCheckbox
-                {...restProps}
-                ref={ref}
+                {...checkboxContainerProps}
                 className={clsx(["NuiCheckbox", className])}
                 focused={focused}
                 touched={touched}
-                onFocus={handleFocus}
-                onChange={handleChange}
-                onBlur={handleBlur}
             >
+                <input
+                    {...inputProps}
+                    ref={ref}
+                    disabled={disabled}
+                    value={inputValue}
+                    checked={value}
+                    onFocus={handleFocus}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    type="checkbox"
+                    className="NuiCheckbox__input"
+                />
                 <div className="NuiCheckbox__container" />
             </StyledCheckbox>
         );
@@ -65,12 +85,12 @@ const Checkbox: NuiCheckbox = React.memo(
 const StyledCheckbox = styled(CheckboxContainer)`
     ${context}
 
-    & .NuiCheckbox__container {
-        cursor: pointer;
-        pointer-events: all;
-    }
+    & .NuiCheckbox__input {
+        position: absolute;
+        width: 0;
+        height: 0;
+        opacity: 0;
 
-    & .NuiCheckboxContainer__input {
         &:focus-visible ~ .NuiCheckbox__container {
             ${background.dimmed}
         }
@@ -112,6 +132,8 @@ const StyledCheckbox = styled(CheckboxContainer)`
     & .NuiCheckbox__container {
         ${border.primary}
 
+        cursor: pointer;
+        pointer-events: all;
         position: absolute;
         top: 0;
         left: 0;
@@ -150,7 +172,7 @@ const StyledCheckbox = styled(CheckboxContainer)`
             border-style: dashed;
         }
 
-        & .NuiCheckboxContainer__input:checked ~ .NuiCheckbox__container {
+        & .NuiCheckbox__input:checked ~ .NuiCheckbox__container {
             background-color: var(--nui-context-primaryDark);
         }
     }

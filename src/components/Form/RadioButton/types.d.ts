@@ -14,11 +14,6 @@ export interface RadioButtonProps {
     ) => void;
 
     /**
-     * The size of the radio
-     */
-    size?: Nui.Breakpoint;
-
-    /**
      * The unique value associated with the RadioButton.
      *
      * Note: unlike the `Checkbox` component, this represents the actual `value` of the underlying input, **not** the `checked` prop. If `RadioButton` is used without `RadioGroup`, then the `checked` prop should be specified. It is recommended to wrap `RadioButton`s in a `RadioGroup` to handle this behaviour automatically.
@@ -30,10 +25,7 @@ export interface RadioButtonProps {
  * A form radio control for selecting a value
  */
 export type NuiRadioButton = Nui.FRCWC<
-    StrictOmit<
-        CheckboxContainerPropsWithBase,
-        "focused" | "touched" | "value" | "inputValue"
-    > &
+    StrictOmit<CheckboxContainerPropsWithBase, "focused" | "touched"> &
         RadioButtonProps,
     "input"
 >;
