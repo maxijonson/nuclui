@@ -97,6 +97,7 @@ const TextInput: NuiTextInput = React.memo(
             >
                 <MaskedInput
                     {...inputProps}
+                    value={value}
                     disabled={disabled}
                     className="NuiTextInput__input"
                     ref={ref}

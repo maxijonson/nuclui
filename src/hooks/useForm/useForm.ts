@@ -67,7 +67,7 @@ const useForm = <T extends {}>(options: UseFormOptions<T>) => {
             {} as FormErrors<T>
         )
     );
-    const formErrorsRef = React.useRef(formErrors);
+    const formErrorsRef = React.useRef({ ...formErrors });
     const formErrorsChanges = React.useRef<N[]>([]);
 
     const fieldProps = React.useRef(
