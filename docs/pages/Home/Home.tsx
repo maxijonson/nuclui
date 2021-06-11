@@ -84,11 +84,14 @@ const UseFormTest = React.memo(() => {
                 initial: { type: "", phone: "" },
             },
             age: {
-                initial: 0,
+                initial: 50,
                 validate: (v) => {
                     if (v == null) return ["Field cannot be empty"];
                     if (v < 18) return ["Must be over 18"];
                 },
+            },
+            range: {
+                initial: [100, 50] as [number, number],
             },
             toc: {
                 initial: true,
@@ -214,6 +217,38 @@ const UseFormTest = React.memo(() => {
 
     return (
         <form autoComplete="off" onSubmit={onSubmit}>
+            {fields.range.value[0]}, {fields.range.value[1]}
+            {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size, key) => (
+                <Slider
+                    {...fields.range}
+                    size={size}
+                    key={key}
+                    label={`Range (${size})`}
+                    step={5}
+                    min={5}
+                    max={100}
+                />
+            ))}
+            <NumberInput {...fields.age} label="Age" />
+            {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size, key) => (
+                <Slider
+                    {...fields.age}
+                    size={size}
+                    key={key}
+                    label={`Age Slider (${size})`}
+                    step={5}
+                    min={5}
+                    max={100}
+                />
+            ))}
+            {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size, key) => (
+                <TextInput
+                    {...fields.first}
+                    size={size}
+                    key={key}
+                    label={`First name (${size})`}
+                />
+            ))}
             Confirm Buttons
             <Flex>
                 <FlexItem basis={12}>
