@@ -47,6 +47,9 @@ const getHandlePosition = (
     return axis == "x" ? { x: pos, y: 0 } : { x: 0, y: pos };
 };
 
+const sortArray = <T extends number[]>(arr: T) =>
+    arr.slice(0).sort((a, b) => a - b) as T;
+
 /** Gets the offseted position by which the handle should move */
 const getHandlePositionOffset = (handleWidth: number, axis: "x" | "y" = "x") =>
     axis == "x"
@@ -77,6 +80,7 @@ const Slider: NuiSlider = React.memo(
 
         const [focused, setFocused] = React.useState(false);
         const [touched, setTouched] = React.useState(false);
+        const [swap, setSwap] = React.useState(false);
         const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
         const trackRef = React.useRef<HTMLDivElement>(null);
@@ -108,13 +112,19 @@ const Slider: NuiSlider = React.memo(
         const value = React.useMemo(() => propsValue ?? min, [min, propsValue]);
 
         const firstValue = React.useMemo(() => {
-            if (_.isArray(value)) return _.first(value) ?? min;
+            if (_.isArray(value)) {
+                if (swap) return _.last(value) ?? max;
+                return _.first(value) ?? min;
+            }
             return value;
-        }, [value, min]);
+        }, [value, swap, max, min]);
         const secondValue = React.useMemo(() => {
-            if (_.isArray(value)) return _.last(value) ?? max;
+            if (_.isArray(value)) {
+                if (swap) return _.first(value) ?? min;
+                return _.last(value) ?? max;
+            }
             return undefined;
-        }, [value, max]);
+        }, [value, swap, min, max]);
 
         const grid = React.useMemo<[number, number]>(() => {
             const trackSteps = (max - min) / step;
@@ -167,12 +177,30 @@ const Slider: NuiSlider = React.memo(
                         ];
                         const handle = Number(data.node.dataset.handle);
                         valueArr[handle] = next;
+                        const nextSwap =
+                            valueArr[Handle.FIRST] > valueArr[Handle.SECOND];
 
-                        (onChange as SliderOnChangeRange)(valueArr, e, data);
+                        if (nextSwap != swap) {
+                            setSwap(nextSwap);
+                        }
+                        (onChange as SliderOnChangeRange)(
+                            sortArray(valueArr),
+                            e,
+                            data
+                        );
                     }
                 }
             },
-            [onChange, max, min, step, trackWidth, secondValue, firstValue]
+            [
+                onChange,
+                max,
+                min,
+                step,
+                trackWidth,
+                secondValue,
+                firstValue,
+                swap,
+            ]
         );
 
         const handleDragStop = React.useCallback(() => {
