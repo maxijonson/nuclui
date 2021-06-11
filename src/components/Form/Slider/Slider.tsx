@@ -15,6 +15,7 @@ import { extractInputBaseProps } from "../InputBase/InputBase";
 // TODO: Fix handle staying in position when resizing (not just the window resizing? The element could resize without the window resizing)
 // TODO: Move forceUpdate to separate hook
 // TODO: Make track clickable to set value
+// TODO: [Feature] Vertical Slider
 // TODO: [Feature] Support multiple handles
 
 /** Adjusts the `value` to a divisible of `step` */
@@ -222,6 +223,15 @@ const Slider: NuiSlider = React.memo(
         const classes = React.useMemo(() => clsx(["NuiSlider", className]), [
             className,
         ]);
+        const trackFillerStyle = React.useMemo<React.CSSProperties>(() => {
+            const start = _.min([firstPosition.x, secondPosition.x]) ?? 0;
+            const end = _.max([firstPosition.x, secondPosition.x]) ?? 0;
+
+            return {
+                transform: `translateX(${start}px)`,
+                width: `${end - start}px`,
+            };
+        }, [firstPosition.x, secondPosition.x]);
 
         // Initizalize the element refs on first render
         React.useEffect(() => {
@@ -239,6 +249,10 @@ const Slider: NuiSlider = React.memo(
             >
                 <div className="NuiSlider__container">
                     <div className="NuiSlider__track" ref={trackRef}>
+                        <div
+                            className="NuiSlider__track__filler"
+                            style={trackFillerStyle}
+                        />
                         <Draggable
                             axis="x"
                             bounds={bounds}
@@ -332,6 +346,12 @@ const StyledSlider = styled(Slider)`
         background: var(--nui-context-primaryVLight);
         height: var(--nui-slider-tracksize);
         border-radius: var(--nui-slider-trackradius);
+        overflow: hidden;
+    }
+
+    & .NuiSlider__track__filler {
+        height: 100%;
+        background: var(--nui-context-primary);
     }
 
     & .NuiSlider__handle {
@@ -345,10 +365,6 @@ const StyledSlider = styled(Slider)`
         border-radius: 50%;
         cursor: pointer;
         box-sizing: border-box;
-
-        &.NuiSlider__handle-2 {
-            background: #f0f;
-        }
     }
 
     & .NuiSlider__input {
