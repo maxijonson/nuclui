@@ -91,7 +91,7 @@ const UseFormTest = React.memo(() => {
                 },
             },
             range: {
-                initial: [100, 50] as [number, number],
+                initial: [25, 75] as [number, number],
             },
             toc: {
                 initial: true,
