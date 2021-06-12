@@ -1,19 +1,38 @@
 import webpack from "webpack";
 import "webpack-dev-server";
-import dotenv from "dotenv";
 import path from "path";
 import CircularDependencyPlugin from "circular-dependency-plugin";
+import chalk from "chalk";
+import _ from "lodash";
 
-process.env.NODE_ENV = process.env.NODE_ENV || "development";
-
-if (process.env.NODE_ENV === "test") {
-    dotenv.config({ path: ".env.test" });
-} else if (process.env.NODE_ENV === "development") {
-    dotenv.config({ path: ".env.development" });
+enum Env {
+    LOCAL = "local",
+    TEST = "test",
+    DEV = "development",
+    STAGING = "staging",
+    PRODUCTION = "production",
 }
 
-const config = (env: NodeJS.ProcessEnv): webpack.Configuration => {
-    const isProduction = env.NODE_ENV === "production";
+interface ConfigEnv {
+    NODE_ENV?: Env;
+}
+
+const config = (env: ConfigEnv = {}): webpack.Configuration => {
+    env.NODE_ENV = env.NODE_ENV ?? Env.LOCAL;
+    const webpackEnv: { [key: string]: string } = {};
+
+    console.info(chalk.bold.cyan("- NUCLUI -"));
+    _.forEach(env, (v, k) => {
+        if (v) {
+            console.info(`${chalk.blue(k)}: ${chalk.bold.blue(v)}`);
+            webpackEnv[`process.env.${k}`] = JSON.stringify(v);
+        }
+    });
+    console.info("");
+
+    const isProduction = env.NODE_ENV === Env.PRODUCTION;
+    const isStaging = env.NODE_ENV === Env.STAGING;
+
     const CircularDependency = new CircularDependencyPlugin({
         exclude: /a\.js|node_modules/,
         failOnError: true,
@@ -41,7 +60,8 @@ const config = (env: NodeJS.ProcessEnv): webpack.Configuration => {
                             loader: "ts-loader",
                             options: {
                                 configFile: "docs/tsconfig.json",
-                                logLevel: isProduction ? "warn" : "info",
+                                logLevel:
+                                    isProduction || isStaging ? "warn" : "info",
                             },
                         },
                         "eslint-loader",
@@ -64,9 +84,9 @@ const config = (env: NodeJS.ProcessEnv): webpack.Configuration => {
                 "@styles": path.resolve(__dirname, "src/styles/"),
             },
         },
-        plugins: [CircularDependency],
-        mode: isProduction ? "production" : "development",
-        devtool: isProduction ? "source-map" : "eval-source-map",
+        plugins: [CircularDependency, new webpack.DefinePlugin(webpackEnv)],
+        mode: isProduction || isStaging ? "production" : "development",
+        devtool: isProduction || isStaging ? "source-map" : "eval-source-map",
         devServer: {
             port: 3000,
             historyApiFallback: true,
