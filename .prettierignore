@@ -8,3 +8,4 @@ tsconfig.json
 scripts/compiled
 coverage
 CHANGELOG.md
+.heroku
