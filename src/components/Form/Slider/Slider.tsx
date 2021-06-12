@@ -12,9 +12,8 @@ import { NuiSlider, SliderOnChangeRange, SliderOnChangeSingle } from "./types";
 import { InputBase } from "../InputBase";
 import { extractInputBaseProps } from "../InputBase/InputBase";
 
-// TODO: Fix handle staying in position when resizing (not just the window resizing? The element could resize without the window resizing)
-// TODO: Move forceUpdate to separate hook
-// TODO: Make track clickable to set value
+// TODO: [Refactor] Move forceUpdate to separate hook
+// TODO: [Feature] Make track clickable to set value
 // TODO: [Feature] Vertical Slider
 // TODO: [Feature] Support multiple handles
 
@@ -57,6 +56,9 @@ const getHandlePositionOffset = (handleWidth: number, axis: "x" | "y" = "x") =>
         ? { x: -(handleWidth / 2), y: 0 }
         : { x: 0, y: -(handleWidth / 2) };
 
+const getElementSize = (trackRef: React.RefObject<HTMLDivElement>) =>
+    trackRef.current?.clientWidth ?? 0;
+
 enum Handle {
     FIRST = 0,
     SECOND = 1,
@@ -88,10 +90,9 @@ const Slider: NuiSlider = React.memo(
         const firstHandleRef = React.useRef<HTMLDivElement>(null);
         const secondHandleRef = React.useRef<HTMLDivElement>(null);
 
-        const trackWidth = trackRef.current?.clientWidth ?? 0;
-
-        const firstHandleWidth = firstHandleRef.current?.clientWidth ?? 0;
-        const secondHandleWidth = secondHandleRef.current?.clientWidth ?? 0;
+        const trackWidth = getElementSize(trackRef);
+        const firstHandleWidth = getElementSize(firstHandleRef);
+        const secondHandleWidth = getElementSize(secondHandleRef);
 
         const firstPositionOffset = React.useMemo(
             () => getHandlePositionOffset(firstHandleWidth),
@@ -237,6 +238,22 @@ const Slider: NuiSlider = React.memo(
         React.useEffect(() => {
             forceUpdate();
         }, [trackRef, firstHandleRef, secondHandleRef]);
+
+        // Re-calculate component when the window is resized
+        React.useEffect(() => {
+            let prevTrackSize = getElementSize(trackRef);
+            const onWindowResize = () => {
+                const currentTrackSize = getElementSize(trackRef);
+                if (prevTrackSize != currentTrackSize) {
+                    prevTrackSize = currentTrackSize;
+                    forceUpdate();
+                }
+            };
+            window.addEventListener("resize", onWindowResize);
+            return () => {
+                window.removeEventListener("resize", onWindowResize);
+            };
+        }, []);
 
         return (
             <InputBase
