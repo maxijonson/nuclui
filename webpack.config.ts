@@ -18,7 +18,7 @@ interface ConfigEnv {
 }
 
 const config = (env: ConfigEnv = {}): webpack.Configuration => {
-    env.NODE_ENV = env.NODE_ENV ?? Env.LOCAL;
+    env.NODE_ENV = env.NODE_ENV ?? (process.env.NODE_ENV as Env) ?? Env.LOCAL;
     const webpackEnv: { [key: string]: string } = {};
 
     console.info(chalk.bold.cyan("- NUCLUI -"));
