@@ -55,7 +55,8 @@ const StyledPopover = styled(Popover)`
     border-radius: 4px;
     border-style: solid;
     border-width: 1px;
-    box-shadow: 0 2px 3px -1px var(--nui-shadow), 0 1px 1px -1px var(--nui-shadow);
+    box-shadow: 0 2px 3px -1px var(--nui-shadow),
+        0 1px 1px -1px var(--nui-shadow);
     box-sizing: border-box;
     position: absolute;
     pointer-events: none;
@@ -66,7 +67,8 @@ const StyledPopover = styled(Popover)`
     left: 50%;
     top: 0;
     transform-origin: left top;
-    transform: scale(var(--nui-popover-initialscale)) translateX(-50%) translateY(-100%);
+    transform: scale(var(--nui-popover-initialscale)) translateX(-50%)
+        translateY(-100%);
     margin-top: 0;
     margin-right: 0;
     margin-left: 0;
@@ -96,7 +98,8 @@ const StyledPopover = styled(Popover)`
         left: 0;
         top: 50%;
         transform-origin: left top;
-        transform: scale(var(--nui-popover-initialscale)) translateY(-50%) translateX(-100%);
+        transform: scale(var(--nui-popover-initialscale)) translateY(-50%)
+            translateX(-100%);
         margin-top: 0;
         margin-right: var(--nui-popover-spacing);
         margin-left: 0;
@@ -106,7 +109,8 @@ const StyledPopover = styled(Popover)`
         left: 50%;
         top: 50%;
         transform-origin: left top;
-        transform: scale(var(--nui-popover-initialscale)) translateY(-50%) translateX(-50%);
+        transform: scale(var(--nui-popover-initialscale)) translateY(-50%)
+            translateX(-50%);
         margin-top: 0;
         margin-right: 0;
         margin-left: 0;

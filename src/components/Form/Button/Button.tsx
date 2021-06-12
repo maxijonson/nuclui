@@ -141,7 +141,8 @@ const StyledButton = styled(Button)`
     font-weight: 600;
     background-color: var(--nui-button-color);
     transform: translateY(0);
-    transition: background-color 0.2s, transform 0.2s, border-color 0.2s, color 0.2s;
+    transition: background-color 0.2s, transform 0.2s, border-color 0.2s,
+        color 0.2s;
     user-select: none;
     box-sizing: border-box;
     cursor: pointer;
@@ -156,7 +157,8 @@ const StyledButton = styled(Button)`
         background-color: var(--nui-button-confirm-color);
         box-sizing: border-box;
         opacity: 0.25;
-        transition: width var(--nui-button-confirm-duration) linear, height var(--nui-button-confirm-duration) linear;
+        transition: width var(--nui-button-confirm-duration) linear,
+            height var(--nui-button-confirm-duration) linear;
     }
 
     &::before {
@@ -168,12 +170,14 @@ const StyledButton = styled(Button)`
         width: calc(100% + 4px);
         height: calc(100% + 4px);
         opacity: 1;
-        box-shadow: 0 calc(var(--nui-button-pad) / 1.75) var(--nui-button-pad) var(--nui-shadow);
+        box-shadow: 0 calc(var(--nui-button-pad) / 1.75) var(--nui-button-pad)
+            var(--nui-shadow);
         transition: opacity 0.2s, background-color 0.2s;
         background-color: var(--nui-button-color);
     }
 
-    &::after, &::before {
+    &::after,
+    &::before {
         border-radius: 4px;
     }
 
@@ -207,7 +211,7 @@ const StyledButton = styled(Button)`
         cursor: default;
         pointer-events: none;
         opacity: 0.7;
-        
+
         &::before {
             box-shadow: none;
         }
@@ -224,7 +228,8 @@ const StyledButton = styled(Button)`
         align-items: center;
     }
 
-    & .NuiButton__icon, & .NuiButton__main {
+    & .NuiButton__icon,
+    & .NuiButton__main {
         position: relative;
     }
 
@@ -312,7 +317,10 @@ const StyledButton = styled(Button)`
         box-shadow: none;
     }
 
-    &.NuiButton--variant-outline, &.NuiButton--variant-round-outline, &.NuiButton--variant-empty, &.NuiButton--variant-round-empty {
+    &.NuiButton--variant-outline,
+    &.NuiButton--variant-round-outline,
+    &.NuiButton--variant-empty,
+    &.NuiButton--variant-round-empty {
         --nui-button-confirm-color: var(--nui-button-color-hover);
         background-color: transparent;
         color: var(--nui-button-outline);
@@ -326,13 +334,17 @@ const StyledButton = styled(Button)`
             background-color: transparent;
         }
     }
-    &.NuiButton--variant-empty, &.NuiButton--variant-round-empty {
+    &.NuiButton--variant-empty,
+    &.NuiButton--variant-round-empty {
         border-color: transparent;
     }
-    &.NuiButton--variant-round, &.NuiButton--variant-round-outline, &.NuiButton--variant-round-empty {
+    &.NuiButton--variant-round,
+    &.NuiButton--variant-round-outline,
+    &.NuiButton--variant-round-empty {
         border-radius: 50%;
 
-        &::after, &::before {
+        &::after,
+        &::before {
             border-radius: 50%;
         }
         &::after {

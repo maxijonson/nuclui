@@ -28,9 +28,10 @@ const Switch: NuiSwitch = React.memo(
         const [focused, setFocused] = React.useState(false);
         const [touched, setTouched] = React.useState(false);
 
-        const classes = React.useMemo(() => clsx(["NuiSwitch", className]), [
-            className,
-        ]);
+        const classes = React.useMemo(
+            () => clsx(["NuiSwitch", className]),
+            [className]
+        );
 
         const handleFocus = React.useCallback<HTMLInputProps["onFocus"]>(
             (e) => {

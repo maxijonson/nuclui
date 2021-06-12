@@ -103,14 +103,14 @@ const Slider: NuiSlider = React.memo(
             [secondHandleWidth]
         );
 
-        const min = React.useMemo(() => _.min([propsMin, propsMax]) as number, [
-            propsMax,
-            propsMin,
-        ]);
-        const max = React.useMemo(() => _.max([propsMin, propsMax]) as number, [
-            propsMax,
-            propsMin,
-        ]);
+        const min = React.useMemo(
+            () => _.min([propsMin, propsMax]) as number,
+            [propsMax, propsMin]
+        );
+        const max = React.useMemo(
+            () => _.max([propsMin, propsMax]) as number,
+            [propsMax, propsMin]
+        );
         const value = React.useMemo(() => propsValue ?? min, [min, propsValue]);
 
         const firstValue = React.useMemo(() => {
@@ -221,9 +221,10 @@ const Slider: NuiSlider = React.memo(
             return `_${name}`;
         }, [name]);
 
-        const classes = React.useMemo(() => clsx(["NuiSlider", className]), [
-            className,
-        ]);
+        const classes = React.useMemo(
+            () => clsx(["NuiSlider", className]),
+            [className]
+        );
         const trackFillerStyle = React.useMemo<React.CSSProperties>(() => {
             const start = _.min([firstPosition.x, secondPosition.x]) ?? 0;
             const end = _.max([firstPosition.x, secondPosition.x]) ?? 0;

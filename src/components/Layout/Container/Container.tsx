@@ -10,14 +10,8 @@ const bp = createBreakpoints({ sm: 620, md: 980, lg: 1280, xl: 1920 });
 const padding = createBreakpoints({ xs: 16, sm: 25, md: 38, lg: 50, xl: 62 });
 
 const Container: NuiContainer = React.forwardRef((props, ref) => {
-    const {
-        component,
-        className,
-        fixed,
-        maxPadding,
-        maxWidth,
-        ...restProps
-    } = props;
+    const { component, className, fixed, maxPadding, maxWidth, ...restProps } =
+        props;
 
     const Component = component || "div";
 
@@ -88,7 +82,7 @@ const StyledContainer = styled(Container)`
         &.NuiContainer--maxWidth-sm {
             max-width: ${bp.sm}px;
         }
-        
+
         &:not(.NuiContainer--maxPadding-xs):not(.NuiContainer--maxPadding-none) {
             padding-left: ${padding.sm}px;
             padding-right: ${padding.sm}px;
@@ -127,7 +121,7 @@ const StyledContainer = styled(Container)`
         &.NuiContainer--maxWidth-xl {
             max-width: ${bp.xl}px;
         }
-        
+
         &:not(.NuiContainer--maxPadding-xs):not(.NuiContainer--maxPadding-sm):not(.NuiContainer--maxPadding-md):not(.NuiContainer--maxPadding-lg):not(.NuiContainer--maxPadding-none) {
             padding-left: ${padding.xl}px;
             padding-right: ${padding.xl}px;

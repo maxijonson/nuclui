@@ -282,9 +282,8 @@ export const extractInputContainerProps = <
 ): Required<InputContainerPropsWithBase> & {
     restProps: Omit<Omit<T, keyof InputBaseProps>, keyof InputContainerProps>;
 } => {
-    const { restProps: restBaseProps, ...baseProps } = extractInputBaseProps(
-        props
-    );
+    const { restProps: restBaseProps, ...baseProps } =
+        extractInputBaseProps(props);
     const {
         append = null,
         prepend = null,

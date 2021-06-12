@@ -15,8 +15,10 @@ export interface Params {
 
 const main = async () => {
     const branch = (await simpleGit().branch()).current;
-    const currentVersion: string = require(path.resolve(DIR, "../package.json"))
-        .version;
+    const currentVersion: string = require(path.resolve(
+        DIR,
+        "../package.json"
+    )).version;
 
     const argv = yargs
         .version(false)
@@ -133,9 +135,10 @@ const main = async () => {
             message: (ans) => {
                 const version = argv.version ?? ans.version;
                 const severity = argv.severity ?? ans.severity;
-                const next = versions[version].severities[
-                    severity
-                ].getNextVersion(currentVersion);
+                const next =
+                    versions[version].severities[severity].getNextVersion(
+                        currentVersion
+                    );
                 return `Is this correct? ${currentVersion} -> ${next}`;
             },
             type: "confirm",

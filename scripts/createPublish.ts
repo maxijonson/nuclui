@@ -6,8 +6,10 @@ import { execSync } from "child_process";
 import simpleGit from "simple-git";
 
 const main = async () => {
-    const currentVersion: string = require(path.resolve(DIR, "../package.json"))
-        .version;
+    const currentVersion: string = require(path.resolve(
+        DIR,
+        "../package.json"
+    )).version;
     const branch = (await simpleGit().branch()).current;
     const version = (() => {
         const matches = _.filter(versions, (v) =>

@@ -44,9 +44,10 @@ const Calendar: NuiCalendar = React.forwardRef((props, ref) => {
         ...restProps
     } = props;
 
-    const classes = React.useMemo(() => clsx(["NuiCalendar", className]), [
-        className,
-    ]);
+    const classes = React.useMemo(
+        () => clsx(["NuiCalendar", className]),
+        [className]
+    );
 
     const days = React.useMemo(() => {
         const daysAmount = getDays(year, month);

@@ -49,9 +49,10 @@ const Select: NuiSelect = React.memo(
             ...options,
         ]);
 
-        const mergedInputRef = React.useMemo(() => mergeRefs(inputRef, ref), [
-            ref,
-        ]);
+        const mergedInputRef = React.useMemo(
+            () => mergeRefs(inputRef, ref),
+            [ref]
+        );
 
         const classes = React.useMemo(
             () =>
@@ -60,10 +61,10 @@ const Select: NuiSelect = React.memo(
         );
 
         /** All possible options: created and provided */
-        const mergedOptions = React.useMemo(() => [...created, ...options], [
-            created,
-            options,
-        ]);
+        const mergedOptions = React.useMemo(
+            () => [...created, ...options],
+            [created, options]
+        );
 
         /** The value displayed inside the text input */
         const inputValue = React.useMemo(() => {

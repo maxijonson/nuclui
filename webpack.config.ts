@@ -1,4 +1,4 @@
-import webpack from "webpack";
+import webpack, { WebpackPluginInstance } from "webpack";
 import "webpack-dev-server";
 import path from "path";
 import CircularDependencyPlugin from "circular-dependency-plugin";
@@ -14,11 +14,12 @@ enum Env {
 }
 
 interface ConfigEnv {
-    NODE_ENV?: Env;
+    ENVIRONMENT?: Env;
 }
 
 const config = (env: ConfigEnv = {}): webpack.Configuration => {
-    env.NODE_ENV = env.NODE_ENV ?? (process.env.NODE_ENV as Env) ?? Env.LOCAL;
+    env.ENVIRONMENT =
+        env.ENVIRONMENT ?? (process.env.NODE_ENV as Env) ?? Env.LOCAL;
     const webpackEnv: { [key: string]: string } = {};
 
     console.info(chalk.bold.cyan("- NUCLUI -"));
@@ -30,8 +31,8 @@ const config = (env: ConfigEnv = {}): webpack.Configuration => {
     });
     console.info("");
 
-    const isProduction = env.NODE_ENV === Env.PRODUCTION;
-    const isStaging = env.NODE_ENV === Env.STAGING;
+    const isProduction = env.ENVIRONMENT === Env.PRODUCTION;
+    const isStaging = env.ENVIRONMENT === Env.STAGING;
 
     const CircularDependency = new CircularDependencyPlugin({
         exclude: /a\.js|node_modules/,
@@ -84,11 +85,15 @@ const config = (env: ConfigEnv = {}): webpack.Configuration => {
                 "@styles": path.resolve(__dirname, "src/styles/"),
             },
         },
-        plugins: [CircularDependency, new webpack.DefinePlugin(webpackEnv)],
+        plugins: [
+            CircularDependency as unknown as WebpackPluginInstance,
+            new webpack.DefinePlugin(webpackEnv),
+        ],
         mode: isProduction || isStaging ? "production" : "development",
         devtool: isProduction || isStaging ? "source-map" : "eval-source-map",
         devServer: {
             port: 3000,
+            host: "0.0.0.0",
             historyApiFallback: true,
             contentBase: path.join(__dirname, "docs/public"),
             publicPath: "/dist/",
