@@ -181,6 +181,7 @@ const StyledFlexItem = styled(FlexItem)`
     flex-shrink: 1;
     align-self: auto;
     padding: 10px;
+    max-width: 100%;
 
     &.NuiFlexItem--align-fstart {
         align-self: flex-start;

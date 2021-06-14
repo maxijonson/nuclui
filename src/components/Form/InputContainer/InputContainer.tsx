@@ -93,6 +93,14 @@ const StyledInputContainer = styled(InputContainer)`
         box-shadow: 0 1px 2px -1px var(--nui-shadow);
         border-style: solid;
         border-width: 1px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
 
         & input {
             padding: var(--nui-inputContainer-pad);

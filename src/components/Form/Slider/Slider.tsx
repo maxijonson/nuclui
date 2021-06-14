@@ -343,9 +343,9 @@ const StyledSlider = styled(Slider)`
     ${context}
     --nui-slider-size: 20px;
     --nui-slider-pad: 8px;
-    --nui-slider-tracksize: 5px;
+    --nui-slider-tracksize: 4px;
     --nui-slider-trackradius: 2px;
-    --nui-slider-handlesize: 16px;
+    --nui-slider-handlesize: 12px;
 
     & .NuiSlider__container {
         position: relative;
@@ -354,6 +354,7 @@ const StyledSlider = styled(Slider)`
         height: var(--nui-slider-size);
         padding: var(--nui-slider-pad) 0;
         margin-top: 1px;
+        user-select: none;
     }
 
     & .NuiSlider__track {
@@ -398,30 +399,30 @@ const StyledSlider = styled(Slider)`
     &.NuiInputBase--size-xs {
         --nui-slider-size: 14px;
         --nui-slider-pad: 4px;
-        --nui-slider-tracksize: 3px;
+        --nui-slider-tracksize: 2px;
         --nui-slider-trackradius: 3px;
-        --nui-slider-handlesize: 10px;
+        --nui-slider-handlesize: 8px;
     }
     &.NuiInputBase--size-md {
         --nui-slider-size: 23px;
         --nui-slider-pad: 12px;
-        --nui-slider-tracksize: 6px;
+        --nui-slider-tracksize: 5px;
         --nui-slider-trackradius: 3px;
-        --nui-slider-handlesize: 20px;
+        --nui-slider-handlesize: 16px;
     }
     &.NuiInputBase--size-lg {
         --nui-slider-size: 27px;
         --nui-slider-pad: 16px;
-        --nui-slider-tracksize: 7px;
+        --nui-slider-tracksize: 6px;
         --nui-slider-trackradius: 3px;
-        --nui-slider-handlesize: 24px;
+        --nui-slider-handlesize: 20px;
     }
     &.NuiInputBase--size-xl {
         --nui-slider-size: 35px;
         --nui-slider-pad: 20px;
-        --nui-slider-tracksize: 8px;
+        --nui-slider-tracksize: 7px;
         --nui-slider-trackradius: 4px;
-        --nui-slider-handlesize: 28px;
+        --nui-slider-handlesize: 24px;
     }
 `;
 
