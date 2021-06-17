@@ -3,6 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import { createComponentName, isBetween, mergeRefs } from "@utils";
 import { shadow, text, context, background } from "@theme";
+import { quicksand } from "@fonts";
 import { NuiButton } from "./types";
 
 // FIXME: weird glitch happens when the button is pressed (Chrome only)
@@ -22,6 +23,8 @@ const Button: NuiButton = React.forwardRef((props, ref) => {
         confirmDuration = 0,
         ...restProps
     } = props;
+
+    const [isMouse, setIsMouse] = React.useState(true);
 
     const buttonRef = React.useRef<HTMLButtonElement>(null);
 
@@ -57,6 +60,7 @@ const Button: NuiButton = React.forwardRef((props, ref) => {
                 ],
                 confirmDuration != 0 && "NuiButton--confirm",
                 disableShadow && "NuiButton--disableshadow",
+                !isMouse && "NuiButton--isTouch",
                 className,
             ]),
         [
@@ -65,15 +69,29 @@ const Button: NuiButton = React.forwardRef((props, ref) => {
             confirmDuration,
             disableShadow,
             iconPosition,
+            isMouse,
             size,
             variant,
         ]
     );
 
-    const handleClick = React.useCallback(
-        (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const handlePointerDown = React.useCallback(
+        (e: React.PointerEvent<HTMLButtonElement>) => {
+            setIsMouse(e.pointerType === "mouse");
+        },
+        []
+    );
+
+    const onButtonClick = React.useCallback(
+        (
+            e:
+                | React.MouseEvent<HTMLButtonElement>
+                | React.TouchEvent<HTMLButtonElement>
+        ) => {
             if (!onClick) return;
-            if (confirmDuration == 0 || !buttonRef.current) return onClick(e);
+            if (confirmDuration == 0 || !buttonRef.current) {
+                return onClick(e);
+            }
 
             const beforeStyle = window.getComputedStyle(
                 buttonRef.current,
@@ -97,7 +115,13 @@ const Button: NuiButton = React.forwardRef((props, ref) => {
             className={classes}
             type="button"
             ref={mergedRefs}
-            onClick={handleClick}
+            onPointerDown={handlePointerDown}
+            onClick={
+                isMouse || confirmDuration == 0 ? onButtonClick : undefined
+            }
+            onTouchEnd={
+                isMouse || confirmDuration == 0 ? undefined : onButtonClick
+            }
         >
             <div className="NuiButton__content">
                 {icon && <div className="NuiButton__icon" children={icon} />}
@@ -115,7 +139,8 @@ const StyledButton = styled(Button)`
     ${background.dimmed}
     ${background.dark}
     ${context}
-
+    ${quicksand}
+    
     --nui-button-color: var(--nui-background-dimmed);
     --nui-button-color-hover: var(--nui-background-dark);
 
@@ -181,8 +206,12 @@ const StyledButton = styled(Button)`
         border-radius: 4px;
     }
 
-    /* HACK: Firefox seems to ignore these styling rules when "focus-visible" is specified, so they are separated but the same. */
-    &:hover {
+    /* 
+     * HACK: Some browsers seems to ignore these styling rules when "focus-visible" is specified with the other rules, so they are separated but the same. 
+     * This will be a recurring bug in the styles to come below, so it will simply be labeled as the "focus-visible bug". For these styles, make sure both blocks match!
+     */
+    &:hover:not(.NuiButton--isTouch),
+    &.NuiButton--isTouch:active {
         background-color: var(--nui-button-color-hover);
         border-color: var(--nui-button-color-hover);
         &::before {
@@ -197,7 +226,8 @@ const StyledButton = styled(Button)`
         }
     }
 
-    &:active {
+    /* HACK: focus-visible bug */
+    &:active:is(:hover, .NuiButton--isTouch) {
         transform: translateY(2px) translateZ(0);
 
         &::before {
@@ -207,6 +237,17 @@ const StyledButton = styled(Button)`
             width: 100%;
         }
     }
+    &:active:focus-visible {
+        transform: translateY(2px) translateZ(0);
+
+        &::before {
+            opacity: 0;
+        }
+        &::after {
+            width: 100%;
+        }
+    }
+
     &:disabled {
         cursor: default;
         pointer-events: none;
@@ -324,9 +365,15 @@ const StyledButton = styled(Button)`
         --nui-button-confirm-color: var(--nui-button-color-hover);
         background-color: transparent;
         color: var(--nui-button-outline);
+
         &:hover {
             color: var(--nui-button-outline-hover);
             background-color: var(--nui-button-outline-background);
+            text-transform: none;
+
+            &::before {
+                background-color: transparent;
+            }
         }
 
         &::before {
@@ -353,7 +400,12 @@ const StyledButton = styled(Button)`
             top: 50%;
             transform: translate(-50%, -50%);
         }
-        &:active::after {
+
+        /* HACK: focus-visible bug */
+        &:active:is(:hover, .NuiButton--isTouch)::after {
+            height: 100%;
+        }
+        &:active:focus-visible::after {
             height: 100%;
         }
     }

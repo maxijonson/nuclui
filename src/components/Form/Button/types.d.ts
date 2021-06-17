@@ -57,7 +57,11 @@ export interface ButtonProps {
     /**
      * The click event fired when the button is pressed
      */
-    onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    onClick?: (
+        event:
+            | React.MouseEvent<HTMLButtonElement>
+            | React.TouchEvent<HTMLButtonElement>
+    ) => void;
 }
 
 /**
