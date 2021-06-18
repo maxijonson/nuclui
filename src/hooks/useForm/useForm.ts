@@ -13,6 +13,14 @@ import { UseFormOptions, FieldProps, FormErrors } from "./types";
  * - Make it extensible for others to make their own inputs
  */
 
+/**
+ * For the given form options, useForm creates typed fields with input-ready props that you can spread in various inputs, including your own.
+ * useForm manages the form state, validation and errors based on the options you give each field.
+ * Every form component of Nuclui is designed to be compatible with useForm, so creating **simple** forms is quick and easy.
+ * Note that the options passed to the hook is only used on the first render and never again, so changes to the parameter after the first render will have no effect.
+ * @param options the form's configuration. Each key is the `fields` object becomes the `name` prop for the inputs as well as the form data keys.
+ * @returns an array with 2 elements. The first is your form fields, which contains all necessary props to pass to inputs. The second is your form data keyed by their field name.
+ */
 const useForm = <T extends {}>(options: UseFormOptions<T>) => {
     // Shortcut for keyof T, since some places (lodash) require it to be typed every time (annoying)
     type N = keyof T;
@@ -93,9 +101,9 @@ const useForm = <T extends {}>(options: UseFormOptions<T>) => {
 
                         // Update field errors
                         if (errors != currentErrors) {
-                            setFormErrors(
-                                produce((e) => {
-                                    e[name] = errors;
+                            setFormErrors((state) =>
+                                produce(state, (e: FormErrors<T>) => {
+                                    e[name as N] = errors;
                                     formErrorsRef.current[name as N] = errors;
                                     formErrorsChanges.current.push(name as N);
                                 })
@@ -103,10 +111,10 @@ const useForm = <T extends {}>(options: UseFormOptions<T>) => {
                         }
 
                         // Update the value if it changed
-                        setFormData(
-                            produce((data) => {
-                                if (next != data[name]) {
-                                    data[name] = next;
+                        setFormData((state) =>
+                            produce(state, (data: T) => {
+                                if (next != data[name as N]) {
+                                    data[name as N] = next;
                                     formDataRef.current[name as N] = next;
                                     formDataChanges.current.push(name as N);
                                 }
