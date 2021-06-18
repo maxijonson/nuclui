@@ -8,6 +8,7 @@ import Draggable, {
 } from "react-draggable";
 import { quicksand } from "@fonts";
 import { context, shadow } from "@theme";
+import { useForceUpdate } from "@hooks";
 import { NuiSlider, SliderOnChangeRange, SliderOnChangeSingle } from "./types";
 import { InputBase } from "../InputBase";
 import { extractInputBaseProps } from "../InputBase/InputBase";
@@ -81,10 +82,11 @@ const Slider: NuiSlider = React.memo(
         } = extractInputBaseProps(props);
         const { disabled } = inputBaseProps;
 
+        const forceUpdate = useForceUpdate();
+
         const [focused, setFocused] = React.useState(false);
         const [touched, setTouched] = React.useState(false);
         const [swap, setSwap] = React.useState(false);
-        const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
         const trackRef = React.useRef<HTMLDivElement>(null);
         const firstHandleRef = React.useRef<HTMLDivElement>(null);
@@ -238,7 +240,7 @@ const Slider: NuiSlider = React.memo(
         // Initizalize the element refs on first render
         React.useEffect(() => {
             forceUpdate();
-        }, [trackRef, firstHandleRef, secondHandleRef]);
+        }, [trackRef, firstHandleRef, secondHandleRef, forceUpdate]);
 
         // Re-calculate component when the window is resized
         React.useEffect(() => {
@@ -254,7 +256,7 @@ const Slider: NuiSlider = React.memo(
             return () => {
                 window.removeEventListener("resize", onWindowResize);
             };
-        }, []);
+        }, [forceUpdate]);
 
         return (
             <InputBase
