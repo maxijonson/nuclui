@@ -4,6 +4,8 @@ import _ from "lodash";
 import clsx from "clsx";
 import Draggable, {
     DraggableBounds,
+    DraggableData,
+    DraggableEvent,
     DraggableEventHandler,
 } from "react-draggable";
 import { quicksand } from "@fonts";
@@ -13,10 +15,11 @@ import { NuiSlider, SliderOnChangeRange, SliderOnChangeSingle } from "./types";
 import { InputBase } from "../InputBase";
 import { extractInputBaseProps } from "../InputBase/InputBase";
 
-// TODO: [Refactor] Move forceUpdate to separate hook
-// TODO: [Feature] Make track clickable to set value
+// TODO: [Feature] Use keyboard arrows to change value
 // TODO: [Feature] Vertical Slider
 // TODO: [Feature] Support multiple handles
+// TODO: [Feature] Show track ticks
+// TODO: [Feature] Track tick labels
 
 /** Adjusts the `value` to a divisible of `step` */
 const adjustImprecision = (value: number, step: number) => {
@@ -59,6 +62,19 @@ const getHandlePositionOffset = (handleWidth: number, axis: "x" | "y" = "x") =>
 
 const getElementSize = (trackRef: React.RefObject<HTMLDivElement>) =>
     trackRef.current?.clientWidth ?? 0;
+
+const findClosestIndex = <T extends number[]>(origin: number, targets: T) => {
+    return _.reduce(
+        targets,
+        (closest, target, index) => {
+            const distance = Math.abs(origin - target);
+            if (closest.index === -1) return { distance, index };
+            if (distance < closest.distance) return { distance, index };
+            return closest;
+        },
+        { distance: 0, index: -1 }
+    ).index;
+};
 
 enum Handle {
     FIRST = 0,
@@ -157,61 +173,6 @@ const Slider: NuiSlider = React.memo(
             return getHandlePosition(secondValue, min, max, step, trackWidth);
         }, [secondValue, max, min, step, trackWidth]);
 
-        const handleDragStart = React.useCallback(() => {
-            setFocused(true);
-        }, []);
-
-        const handleChange = React.useCallback<DraggableEventHandler>(
-            (e, data) => {
-                if (onChange) {
-                    const trackSteps = (max - min) / step;
-                    const unit = trackWidth / trackSteps;
-                    const next = _.clamp(
-                        min + adjustImprecision(data.x / unit, step),
-                        min,
-                        max
-                    );
-
-                    if (secondValue == undefined) {
-                        (onChange as SliderOnChangeSingle)(next, e, data);
-                    } else {
-                        const valueArr = [firstValue, secondValue] as [
-                            number,
-                            number
-                        ];
-                        const handle = Number(data.node.dataset.handle);
-                        valueArr[handle] = next;
-                        const nextSwap =
-                            valueArr[Handle.FIRST] > valueArr[Handle.SECOND];
-
-                        if (nextSwap != swap) {
-                            setSwap(nextSwap);
-                        }
-                        (onChange as SliderOnChangeRange)(
-                            sortArray(valueArr),
-                            e,
-                            data
-                        );
-                    }
-                }
-            },
-            [
-                onChange,
-                max,
-                min,
-                step,
-                trackWidth,
-                secondValue,
-                firstValue,
-                swap,
-            ]
-        );
-
-        const handleDragStop = React.useCallback(() => {
-            setFocused(false);
-            setTouched(true);
-        }, []);
-
         const firstName = React.useMemo(() => {
             if (!name) return undefined;
             if (_.isArray(name)) return _.first(name);
@@ -236,6 +197,96 @@ const Slider: NuiSlider = React.memo(
                 width: `${end - start}px`,
             };
         }, [firstPosition.x, secondPosition.x]);
+
+        const handleChange = React.useCallback(
+            (
+                relativePos: number,
+                handle: Handle,
+                e: DraggableEvent | React.PointerEvent<HTMLDivElement>,
+                data?: DraggableData
+            ) => {
+                if (onChange) {
+                    const trackSteps = (max - min) / step;
+                    const unit = trackWidth / trackSteps;
+                    const next = _.clamp(
+                        min + adjustImprecision(relativePos / unit, step),
+                        min,
+                        max
+                    );
+
+                    if (secondValue == undefined) {
+                        (onChange as SliderOnChangeSingle)(next, e, data);
+                    } else {
+                        const valueArr = [firstValue, secondValue] as [
+                            number,
+                            number
+                        ];
+                        valueArr[handle] = next;
+                        const nextSwap =
+                            valueArr[Handle.FIRST] > valueArr[Handle.SECOND];
+
+                        if (nextSwap != swap) {
+                            setSwap(nextSwap);
+                        }
+                        (onChange as SliderOnChangeRange)(
+                            sortArray(valueArr),
+                            e,
+                            data
+                        );
+                    }
+                }
+            },
+            [
+                firstValue,
+                max,
+                min,
+                onChange,
+                secondValue,
+                step,
+                swap,
+                trackWidth,
+            ]
+        );
+
+        const handleDragStart = React.useCallback<DraggableEventHandler>(() => {
+            setFocused(true);
+        }, []);
+
+        const handleDrag = React.useCallback<DraggableEventHandler>(
+            (e, data) => {
+                return handleChange(
+                    data.x,
+                    Number(data.node.dataset.handle) as Handle,
+                    e,
+                    data
+                );
+            },
+            [handleChange]
+        );
+
+        const handleDragStop = React.useCallback<DraggableEventHandler>(() => {
+            setFocused(false);
+            setTouched(true);
+        }, []);
+
+        const onTrackClick = React.useCallback(
+            (e: React.PointerEvent<HTMLDivElement>) => {
+                if (!trackRef.current) {
+                    forceUpdate();
+                    return;
+                }
+                if (e.target !== trackRef.current) return;
+                const { x } = trackRef.current.getBoundingClientRect();
+                const { clientX: pX } = e;
+                const relativePos = Math.abs(pX - x);
+                const handle = findClosestIndex(relativePos, [
+                    firstPosition.x,
+                    secondPosition.x,
+                ]) as Handle;
+                return handleChange(relativePos, handle, e);
+            },
+            [firstPosition.x, forceUpdate, handleChange, secondPosition.x]
+        );
 
         // Initizalize the element refs on first render
         React.useEffect(() => {
@@ -268,7 +319,11 @@ const Slider: NuiSlider = React.memo(
                 className={classes}
             >
                 <div className="NuiSlider__container">
-                    <div className="NuiSlider__track" ref={trackRef}>
+                    <div
+                        className="NuiSlider__track"
+                        ref={trackRef}
+                        onClick={onTrackClick}
+                    >
                         <div
                             className="NuiSlider__track__filler"
                             style={trackFillerStyle}
@@ -281,7 +336,7 @@ const Slider: NuiSlider = React.memo(
                             positionOffset={firstPositionOffset}
                             grid={grid}
                             onStart={handleDragStart}
-                            onDrag={handleChange}
+                            onDrag={handleDrag}
                             onStop={handleDragStop}
                             defaultClassName="NuiSlider__handle NuiSlider__handle-1"
                             defaultClassNameDragged="NuiSlider__handle--dragged"
@@ -302,7 +357,7 @@ const Slider: NuiSlider = React.memo(
                                 positionOffset={secondPositionOffset}
                                 grid={grid}
                                 onStart={handleDragStart}
-                                onDrag={handleChange}
+                                onDrag={handleDrag}
                                 onStop={handleDragStop}
                                 defaultClassName="NuiSlider__handle NuiSlider__handle-2"
                                 defaultClassNameDragged="NuiSlider__handle--dragged"
@@ -368,11 +423,13 @@ const StyledSlider = styled(Slider)`
         height: var(--nui-slider-tracksize);
         border-radius: var(--nui-slider-trackradius);
         overflow: hidden;
+        cursor: pointer;
     }
 
     & .NuiSlider__track__filler {
         height: 100%;
         background: var(--nui-context-primary);
+        pointer-events: none;
     }
 
     & .NuiSlider__handle {

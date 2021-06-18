@@ -1,3 +1,4 @@
+import React from "react";
 import { DraggableData, DraggableEvent } from "react-draggable";
 import { InputBaseProps, NuiInputBase } from "../InputBase/types";
 
@@ -10,12 +11,13 @@ export interface GridData {
 
 export type SliderOnChangeSingle = (
     v: number,
-    e: DraggableEvent,
-    data: DraggableData
+    e: DraggableEvent | React.PointerEvent<HTMLDivElement>,
+    data?: DraggableData
 ) => void;
 export interface SliderPropsSingle extends SliderProps {
     /**
-     * Fired when the value is changed. The event passed as second and third parameter is the DraggableEvent and DraggableData of the Draggable component provided by react-draggable
+     * Fired when the value is changed. The event passed as second and third parameter is the DraggableEvent and DraggableData of the Draggable component provided by react-draggable.
+     * When the user clicks on the track to change the value, the event is then a PointerEvent and there will be no DraggableData.
      */
     onChange?: SliderOnChangeSingle;
 
@@ -28,12 +30,13 @@ export interface SliderPropsSingle extends SliderProps {
 }
 export type SliderOnChangeRange = (
     v: [number, number],
-    e: DraggableEvent,
-    data: DraggableData
+    e: DraggableEvent | React.PointerEvent<HTMLDivElement>,
+    data?: DraggableData
 ) => void;
 export interface SliderPropsRange extends SliderProps {
     /**
-     * Fired when the value is changed. The event passed as second and third parameter is the DraggableEventHandler event and data of the Draggable component provided by react-draggable
+     * Fired when the value is changed. The event passed as second and third parameter is the DraggableEvent and DraggableData of the Draggable component provided by react-draggable.
+     * When the user clicks on the track to change the value, the event is then a PointerEvent and there will be no DraggableData.
      */
     onChange?: SliderOnChangeRange;
 
