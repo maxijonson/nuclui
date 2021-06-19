@@ -63,58 +63,34 @@ const StyledPopover = styled(Popover)`
     opacity: 0;
     transition: opacity 0.2s, transform 0.2s;
     z-index: 10;
-
     left: 50%;
-    top: 0;
     transform-origin: left top;
+    top: 0;
     transform: scale(var(--nui-popover-initialscale)) translateX(-50%)
-        translateY(-100%);
-    margin-top: 0;
-    margin-right: 0;
-    margin-left: 0;
-    margin-bottom: var(--nui-popover-spacing);
+        translateY(calc(-100% - var(--nui-popover-spacing)));
+    margin: 0;
 
     &.NuiPopover--position-right {
-        left: 100%;
+        left: calc(100% + var(--nui-popover-spacing));
         top: 50%;
-        transform-origin: left top;
         transform: scale(var(--nui-popover-initialscale)) translateY(-50%);
-        margin-top: 0;
-        margin-right: 0;
-        margin-left: var(--nui-popover-spacing);
-        margin-bottom: 0;
     }
     &.NuiPopover--position-bottom {
         left: 50%;
-        top: 100%;
-        transform-origin: left top;
+        top: calc(100% + var(--nui-popover-spacing));
         transform: scale(var(--nui-popover-initialscale)) translateX(-50%);
-        margin-top: var(--nui-popover-spacing);
-        margin-right: 0;
-        margin-left: 0;
-        margin-bottom: 0;
     }
     &.NuiPopover--position-left {
         left: 0;
         top: 50%;
-        transform-origin: left top;
         transform: scale(var(--nui-popover-initialscale)) translateY(-50%)
-            translateX(-100%);
-        margin-top: 0;
-        margin-right: var(--nui-popover-spacing);
-        margin-left: 0;
-        margin-bottom: 0;
+            translateX(calc(-100% - var(--nui-popover-spacing)));
     }
     &.NuiPopover--position-center {
         left: 50%;
         top: 50%;
-        transform-origin: left top;
         transform: scale(var(--nui-popover-initialscale)) translateY(-50%)
             translateX(-50%);
-        margin-top: 0;
-        margin-right: 0;
-        margin-left: 0;
-        margin-bottom: 0;
     }
 
     &.NuiPopover--spacing-none {
@@ -136,7 +112,8 @@ const StyledPopover = styled(Popover)`
     &.NuiPopover--open {
         opacity: 1;
         pointer-events: all;
-        transform: scale(1) translateX(-50%) translateY(-100%);
+        transform: scale(1) translateX(-50%)
+            translateY(calc(-100% - var(--nui-popover-spacing)));
 
         &.NuiPopover--position-right {
             transform: scale(1) translateY(-50%);
@@ -145,7 +122,8 @@ const StyledPopover = styled(Popover)`
             transform: scale(1) translateX(-50%);
         }
         &.NuiPopover--position-left {
-            transform: scale(1) translateY(-50%) translateX(-100%);
+            transform: scale(1) translateY(-50%)
+                translateX(calc(-100% - var(--nui-popover-spacing)));
         }
         &.NuiPopover--position-center {
             transform: scale(1) translateY(-50%) translateX(-50%);
