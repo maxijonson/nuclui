@@ -5,7 +5,7 @@ import CircularDependencyPlugin from "circular-dependency-plugin";
 import chalk from "chalk";
 import _ from "lodash";
 
-enum Env {
+enum Environment {
     LOCAL = "local",
     TEST = "test",
     DEV = "development",
@@ -14,12 +14,14 @@ enum Env {
 }
 
 interface ConfigEnv {
-    ENVIRONMENT?: Env;
+    ENVIRONMENT?: Environment;
 }
 
 const config = (env: ConfigEnv = {}): webpack.Configuration => {
     env.ENVIRONMENT =
-        env.ENVIRONMENT ?? (process.env.NODE_ENV as Env) ?? Env.LOCAL;
+        env.ENVIRONMENT ??
+        (process.env.NODE_ENV as Environment) ??
+        Environment.LOCAL;
     const webpackEnv: { [key: string]: string } = {};
 
     console.info(chalk.bold.cyan("- NUCLUI -"));
@@ -31,8 +33,8 @@ const config = (env: ConfigEnv = {}): webpack.Configuration => {
     });
     console.info("");
 
-    const isProduction = env.ENVIRONMENT === Env.PRODUCTION;
-    const isStaging = env.ENVIRONMENT === Env.STAGING;
+    const isProduction = env.ENVIRONMENT === Environment.PRODUCTION;
+    const isStaging = env.ENVIRONMENT === Environment.STAGING;
 
     const CircularDependency = new CircularDependencyPlugin({
         exclude: /a\.js|node_modules/,
