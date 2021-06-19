@@ -269,7 +269,7 @@ const Slider: NuiSlider = React.memo(
             setTouched(true);
         }, []);
 
-        const onTrackClick = React.useCallback(
+        const handleTrackPointerDown = React.useCallback(
             (e: React.PointerEvent<HTMLDivElement>) => {
                 if (!trackRef.current) {
                     forceUpdate();
@@ -322,7 +322,7 @@ const Slider: NuiSlider = React.memo(
                     <div
                         className="NuiSlider__track"
                         ref={trackRef}
-                        onClick={onTrackClick}
+                        onPointerDown={handleTrackPointerDown}
                     >
                         <div
                             className="NuiSlider__track__filler"
