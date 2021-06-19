@@ -171,6 +171,7 @@ const StyledButton = styled(Button)`
     user-select: none;
     box-sizing: border-box;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 
     &.NuiButton--confirm::after {
         content: "";

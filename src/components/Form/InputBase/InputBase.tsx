@@ -101,6 +101,7 @@ const StyledInputBase = styled(InputBase)`
     & .NuiInputBase__label-container {
         display: flex;
         flex-direction: column;
+        -webkit-tap-highlight-color: transparent;
     }
 
     & .NuiInputBase__label,
