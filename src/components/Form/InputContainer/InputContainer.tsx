@@ -93,14 +93,6 @@ const StyledInputContainer = styled(InputContainer)`
         box-shadow: 0 1px 2px -1px var(--nui-shadow);
         border-style: solid;
         border-width: 1px;
-        overflow-x: auto;
-        overflow-y: hidden;
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-
-        &::-webkit-scrollbar {
-            display: none;
-        }
 
         & input {
             padding: var(--nui-inputContainer-pad);
@@ -109,7 +101,8 @@ const StyledInputContainer = styled(InputContainer)`
             width: 100%;
             background: transparent;
             border: none;
-            min-width: 0;
+            min-width: 30%;
+            flex-shrink: 1000; /** HACK: Prevents the input from pushing the prepend/append too far, even when there's enough space */
 
             &:focus {
                 outline: none;
@@ -134,6 +127,8 @@ const StyledInputContainer = styled(InputContainer)`
         margin-bottom: 0px;
         padding: var(--nui-inputContainer-pad);
         font-size: calc(var(--nui-inputContainer-font) / 1.2);
+        min-width: 0;
+        overflow: hidden;
 
         & svg {
             fill: currentColor;
