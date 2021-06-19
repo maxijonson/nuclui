@@ -9,6 +9,8 @@ import { NuiButton } from "./types";
 // FIXME: weird glitch happens when the button is pressed (Chrome only)
 // TODO: Better confirm animation for round variants (scale from center)
 
+const PRESSED_ANIMATION_DURATION = 100;
+
 const Button: NuiButton = React.forwardRef((props, ref) => {
     const {
         icon,
@@ -21,12 +23,15 @@ const Button: NuiButton = React.forwardRef((props, ref) => {
         color = "default",
         disableShadow = false,
         confirmDuration = 0,
+        disableFullAnimation = false,
         ...restProps
     } = props;
 
     const [isMouse, setIsMouse] = React.useState(true);
+    const [recentlyPressed, setRecentlyPressed] = React.useState(false);
 
     const buttonRef = React.useRef<HTMLButtonElement>(null);
+    const recentlyPressedTimeout = React.useRef<number>();
 
     const mergedRefs = React.useMemo(() => mergeRefs(ref, buttonRef), [ref]);
 
@@ -61,6 +66,7 @@ const Button: NuiButton = React.forwardRef((props, ref) => {
                 confirmDuration != 0 && "NuiButton--confirm",
                 disableShadow && "NuiButton--disableshadow",
                 !isMouse && "NuiButton--isTouch",
+                recentlyPressed && "NuiButton--recentlyPressed",
                 className,
             ]),
         [
@@ -70,19 +76,31 @@ const Button: NuiButton = React.forwardRef((props, ref) => {
             disableShadow,
             iconPosition,
             isMouse,
+            recentlyPressed,
             size,
             variant,
         ]
     );
 
+    // Temporarily adds the class to simulate a full button click, no matter the click speed
+    const onRecentlyPressed = React.useCallback(() => {
+        if (disableFullAnimation) return;
+        setRecentlyPressed(true);
+        window.clearTimeout(recentlyPressedTimeout.current);
+        recentlyPressedTimeout.current = window.setTimeout(() => {
+            setRecentlyPressed(false);
+        }, PRESSED_ANIMATION_DURATION);
+    }, [disableFullAnimation]);
+
     const handlePointerDown = React.useCallback(
         (e: React.PointerEvent<HTMLButtonElement>) => {
             setIsMouse(e.pointerType === "mouse");
+            onRecentlyPressed();
         },
-        []
+        [onRecentlyPressed]
     );
 
-    const onButtonClick = React.useCallback(
+    const handleButtonClick = React.useCallback(
         (
             e:
                 | React.MouseEvent<HTMLButtonElement>
@@ -109,6 +127,20 @@ const Button: NuiButton = React.forwardRef((props, ref) => {
         [confirmDuration, onClick]
     );
 
+    const handleDoubleClick = React.useCallback(
+        (e: React.MouseEvent<HTMLButtonElement>) => {
+            e.preventDefault();
+        },
+        []
+    );
+
+    React.useEffect(
+        () => () => {
+            window.clearTimeout(recentlyPressedTimeout.current);
+        },
+        []
+    );
+
     return (
         <button
             {...restProps}
@@ -117,10 +149,11 @@ const Button: NuiButton = React.forwardRef((props, ref) => {
             ref={mergedRefs}
             onPointerDown={handlePointerDown}
             onClick={
-                isMouse || confirmDuration == 0 ? onButtonClick : undefined
+                isMouse || confirmDuration == 0 ? handleButtonClick : undefined
             }
+            onDoubleClick={handleDoubleClick}
             onTouchEnd={
-                isMouse || confirmDuration == 0 ? undefined : onButtonClick
+                isMouse || confirmDuration == 0 ? undefined : handleButtonClick
             }
         >
             <div className="NuiButton__content">
@@ -166,8 +199,8 @@ const StyledButton = styled(Button)`
     font-weight: 600;
     background-color: var(--nui-button-color);
     transform: translateY(0);
-    transition: background-color 0.2s, transform 0.2s, border-color 0.2s,
-        color 0.2s;
+    transition: background-color 0.2s, transform ${PRESSED_ANIMATION_DURATION}ms,
+        border-color 0.2s, color 0.2s;
     user-select: none;
     box-sizing: border-box;
     cursor: pointer;
@@ -246,6 +279,13 @@ const StyledButton = styled(Button)`
         }
         &::after {
             width: 100%;
+        }
+    }
+    &.NuiButton--recentlyPressed {
+        transform: translateY(2px) translateZ(0);
+
+        &::before {
+            opacity: 0;
         }
     }
 

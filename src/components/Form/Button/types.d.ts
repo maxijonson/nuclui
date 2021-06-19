@@ -62,6 +62,14 @@ export interface ButtonProps {
             | React.MouseEvent<HTMLButtonElement>
             | React.TouchEvent<HTMLButtonElement>
     ) => void;
+
+    /**
+     * When `false`, ensures that the button press animation is played fully, even if the user releases the button before it completes.
+     * Setting it to `true` will cancel the animation if the user releases the button early.
+     *
+     * @default false
+     */
+    disableFullAnimation?: boolean;
 }
 
 /**

@@ -257,6 +257,7 @@ const UseFormTest = React.memo(() => {
                         onClick={() => console.info("Confirmed click!")}
                         confirmDuration={1000}
                         size="xs"
+                        disableFullAnimation
                         icon={<RiAccountCircleFill />}
                     />
                     <Button
