@@ -407,10 +407,10 @@ const StyledButton = styled(Button)`
         background-color: transparent;
         color: var(--nui-button-outline);
 
-        &:hover {
+        &:hover:not(.NuiButton--isTouch),
+        &.NuiButton--isTouch:active {
             color: var(--nui-button-outline-hover);
             background-color: var(--nui-button-outline-background);
-            text-transform: none;
 
             &::before {
                 background-color: transparent;
@@ -425,6 +425,11 @@ const StyledButton = styled(Button)`
     &.NuiButton--variant-empty,
     &.NuiButton--variant-round-empty {
         border-color: transparent;
+
+        &:hover:not(.NuiButton--isTouch),
+        &.NuiButton--isTouch:active {
+            border-color: transparent;
+        }
     }
     &.NuiButton--variant-round,
     &.NuiButton--variant-round-outline,
