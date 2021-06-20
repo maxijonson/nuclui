@@ -8,6 +8,7 @@ import Draggable, {
     DraggableEvent,
     DraggableEventHandler,
 } from "react-draggable";
+import { Popover } from "@components/Layout/Popover";
 import { quicksand } from "@fonts";
 import { context, shadow } from "@theme";
 import { useForceUpdate } from "@hooks";
@@ -103,6 +104,7 @@ const Slider: NuiSlider = React.memo(
         const [focused, setFocused] = React.useState(false);
         const [touched, setTouched] = React.useState(false);
         const [swap, setSwap] = React.useState(false);
+        const [activeIndex, setActiveIndex] = React.useState(-1);
 
         const trackRef = React.useRef<HTMLDivElement>(null);
         const firstHandleRef = React.useRef<HTMLDivElement>(null);
@@ -248,9 +250,13 @@ const Slider: NuiSlider = React.memo(
             ]
         );
 
-        const handleDragStart = React.useCallback<DraggableEventHandler>(() => {
-            setFocused(true);
-        }, []);
+        const handleDragStart = React.useCallback<DraggableEventHandler>(
+            (_e, data) => {
+                setFocused(true);
+                setActiveIndex(Number(data.node.dataset.handle));
+            },
+            []
+        );
 
         const handleDrag = React.useCallback<DraggableEventHandler>(
             (e, data) => {
@@ -267,6 +273,7 @@ const Slider: NuiSlider = React.memo(
         const handleDragStop = React.useCallback<DraggableEventHandler>(() => {
             setFocused(false);
             setTouched(true);
+            setActiveIndex(-1);
         }, []);
 
         const handleTrackPointerDown = React.useCallback(
@@ -345,7 +352,12 @@ const Slider: NuiSlider = React.memo(
                                 <div
                                     ref={firstHandleRef}
                                     data-handle={Handle.FIRST}
-                                />
+                                >
+                                    <Popover
+                                        children={firstValue}
+                                        open={activeIndex === Handle.FIRST}
+                                    />
+                                </div>
                             }
                         />
                         {secondValue && (
@@ -366,7 +378,12 @@ const Slider: NuiSlider = React.memo(
                                     <div
                                         ref={secondHandleRef}
                                         data-handle={Handle.SECOND}
-                                    />
+                                    >
+                                        <Popover
+                                            children={secondValue}
+                                            open={activeIndex === Handle.SECOND}
+                                        />
+                                    </div>
                                 }
                             />
                         )}
@@ -403,6 +420,7 @@ const StyledSlider = styled(Slider)`
     --nui-slider-tracksize: 4px;
     --nui-slider-trackradius: 2px;
     --nui-slider-handlesize: 12px;
+    --nui-slider-labelpad: 2px;
 
     & .NuiSlider__container {
         position: relative;
@@ -445,6 +463,14 @@ const StyledSlider = styled(Slider)`
         box-sizing: border-box;
     }
 
+    & .NuiPopover {
+        cursor: default;
+        user-select: none;
+        pointer-events: none;
+        font-size: 0.675em;
+        padding: var(--nui-slider-labelpad);
+    }
+
     & .NuiSlider__input {
         position: absolute;
         top: 0;
@@ -461,6 +487,7 @@ const StyledSlider = styled(Slider)`
         --nui-slider-tracksize: 2px;
         --nui-slider-trackradius: 3px;
         --nui-slider-handlesize: 8px;
+        --nui-slider-labelpad: 2px;
     }
     &.NuiInputBase--size-md {
         --nui-slider-size: 23px;
@@ -468,6 +495,7 @@ const StyledSlider = styled(Slider)`
         --nui-slider-tracksize: 5px;
         --nui-slider-trackradius: 3px;
         --nui-slider-handlesize: 16px;
+        --nui-slider-labelpad: 3px;
     }
     &.NuiInputBase--size-lg {
         --nui-slider-size: 27px;
@@ -475,6 +503,7 @@ const StyledSlider = styled(Slider)`
         --nui-slider-tracksize: 6px;
         --nui-slider-trackradius: 3px;
         --nui-slider-handlesize: 20px;
+        --nui-slider-labelpad: 4px;
     }
     &.NuiInputBase--size-xl {
         --nui-slider-size: 35px;
@@ -482,6 +511,7 @@ const StyledSlider = styled(Slider)`
         --nui-slider-tracksize: 7px;
         --nui-slider-trackradius: 4px;
         --nui-slider-handlesize: 24px;
+        --nui-slider-labelpad: 5px;
     }
 `;
 
