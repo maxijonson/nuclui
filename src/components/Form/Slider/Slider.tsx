@@ -103,6 +103,7 @@ const Slider: NuiSlider = React.memo(
                 name,
                 step = 1,
                 shiftStep = 10,
+                hideHandlePopover = false,
                 className,
                 ...inputBaseElementProps
             },
@@ -432,7 +433,10 @@ const Slider: NuiSlider = React.memo(
                                 >
                                     <Popover
                                         children={firstValue}
-                                        open={activeIndex === Handle.FIRST}
+                                        open={
+                                            !hideHandlePopover &&
+                                            activeIndex === Handle.FIRST
+                                        }
                                     />
                                 </div>
                             }
@@ -466,7 +470,10 @@ const Slider: NuiSlider = React.memo(
                                     >
                                         <Popover
                                             children={secondValue}
-                                            open={activeIndex === Handle.SECOND}
+                                            open={
+                                                !hideHandlePopover &&
+                                                activeIndex === Handle.SECOND
+                                            }
                                         />
                                     </div>
                                 }

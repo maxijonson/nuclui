@@ -90,6 +90,13 @@ export interface SliderProps {
      * @default 10
      */
     shiftStep?: number;
+
+    /**
+     * When `true`, prevents the Popover from appearing while dragging the handles
+     *
+     * @default false
+     */
+    hideHandlePopover?: boolean;
 }
 
 export type SliderPropsWithBase = InputBaseProps &
