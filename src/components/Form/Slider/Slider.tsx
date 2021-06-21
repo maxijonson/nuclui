@@ -5,18 +5,21 @@ import clsx from "clsx";
 import Draggable, {
     DraggableBounds,
     DraggableData,
-    DraggableEvent,
     DraggableEventHandler,
 } from "react-draggable";
 import { Popover } from "@components/Layout/Popover";
 import { quicksand } from "@fonts";
 import { context, shadow } from "@theme";
 import { useForceUpdate } from "@hooks";
-import { NuiSlider, SliderOnChangeRange, SliderOnChangeSingle } from "./types";
+import {
+    NuiSlider,
+    SliderChangeEvent,
+    SliderOnChangeRange,
+    SliderOnChangeSingle,
+} from "./types";
 import { InputBase } from "../InputBase";
 import { extractInputBaseProps } from "../InputBase/InputBase";
 
-// TODO: [Feature] Use keyboard arrows to change value
 // TODO: [Feature] Vertical Slider
 // TODO: [Feature] Support multiple handles
 // TODO: [Feature] Show track ticks
@@ -82,6 +85,13 @@ enum Handle {
     SECOND = 1,
 }
 
+enum Key {
+    UP = "ArrowUp",
+    RIGHT = "ArrowRight",
+    DOWN = "ArrowDown",
+    LEFT = "ArrowLeft",
+}
+
 const Slider: NuiSlider = React.memo(
     React.forwardRef((props, ref) => {
         const {
@@ -92,11 +102,13 @@ const Slider: NuiSlider = React.memo(
                 value: propsValue,
                 name,
                 step = 1,
+                shiftStep = 10,
                 className,
                 ...inputBaseElementProps
             },
             ...inputBaseProps
         } = extractInputBaseProps(props);
+        const { onFocus, onBlur } = inputBaseElementProps;
         const { disabled } = inputBaseProps;
 
         const forceUpdate = useForceUpdate();
@@ -204,7 +216,7 @@ const Slider: NuiSlider = React.memo(
             (
                 relativePos: number,
                 handle: Handle,
-                e: DraggableEvent | React.PointerEvent<HTMLDivElement>,
+                e: SliderChangeEvent,
                 data?: DraggableData
             ) => {
                 if (onChange) {
@@ -250,10 +262,19 @@ const Slider: NuiSlider = React.memo(
             ]
         );
 
+        const handleFocus = React.useCallback(
+            (e: React.FocusEvent<HTMLDivElement>) => {
+                setFocused(true);
+                if (onFocus) {
+                    onFocus(e);
+                }
+            },
+            [onFocus]
+        );
+
         const handleDragStart = React.useCallback<DraggableEventHandler>(
             (_e, data) => {
-                setFocused(true);
-                setActiveIndex(Number(data.node.dataset.handle));
+                setActiveIndex(Number(data.node.dataset.handleindex));
             },
             []
         );
@@ -262,7 +283,7 @@ const Slider: NuiSlider = React.memo(
             (e, data) => {
                 return handleChange(
                     data.x,
-                    Number(data.node.dataset.handle) as Handle,
+                    Number(data.node.dataset.handleindex) as Handle,
                     e,
                     data
                 );
@@ -271,8 +292,6 @@ const Slider: NuiSlider = React.memo(
         );
 
         const handleDragStop = React.useCallback<DraggableEventHandler>(() => {
-            setFocused(false);
-            setTouched(true);
             setActiveIndex(-1);
         }, []);
 
@@ -283,9 +302,9 @@ const Slider: NuiSlider = React.memo(
                     return;
                 }
                 if (e.target !== trackRef.current) return;
-                const { x } = trackRef.current.getBoundingClientRect();
+                const { x: tX } = trackRef.current.getBoundingClientRect();
                 const { clientX: pX } = e;
-                const relativePos = Math.abs(pX - x);
+                const relativePos = Math.abs(pX - tX);
                 const handle = findClosestIndex(relativePos, [
                     firstPosition.x,
                     secondPosition.x,
@@ -293,6 +312,56 @@ const Slider: NuiSlider = React.memo(
                 return handleChange(relativePos, handle, e);
             },
             [firstPosition.x, forceUpdate, handleChange, secondPosition.x]
+        );
+
+        const handleKeydown = React.useCallback(
+            (e: React.KeyboardEvent<HTMLDivElement>) => {
+                if (!trackRef.current) {
+                    forceUpdate();
+                    return;
+                }
+                const { x: tX } = trackRef.current.getBoundingClientRect();
+                const { x: hX, width: hW } =
+                    e.currentTarget.getBoundingClientRect();
+                const currentPos = Math.abs(hX + hW / 2 - tX);
+
+                const stepAmount = e.shiftKey ? shiftStep : step;
+                const trackSteps = (max - min) / stepAmount;
+                const unit = trackWidth / trackSteps;
+
+                const handle = Number(
+                    e.currentTarget.dataset.handleindex
+                ) as Handle;
+
+                if (e.key === Key.DOWN || e.key === Key.UP) {
+                    e.preventDefault();
+                }
+
+                switch (e.key) {
+                    case Key.RIGHT:
+                    case Key.UP:
+                        handleChange(currentPos + unit, handle, e);
+                        break;
+                    case Key.LEFT:
+                    case Key.DOWN:
+                        handleChange(currentPos - unit, handle, e);
+                        break;
+                    default:
+                        break;
+                }
+            },
+            [forceUpdate, handleChange, max, min, shiftStep, step, trackWidth]
+        );
+
+        const handleBlur = React.useCallback(
+            (e: React.FocusEvent<HTMLDivElement>) => {
+                setFocused(false);
+                setTouched(true);
+                if (onBlur) {
+                    onBlur(e);
+                }
+            },
+            [onBlur]
         );
 
         // Initizalize the element refs on first render
@@ -351,7 +420,15 @@ const Slider: NuiSlider = React.memo(
                             children={
                                 <div
                                     ref={firstHandleRef}
-                                    data-handle={Handle.FIRST}
+                                    data-handleindex={Handle.FIRST}
+                                    onKeyDown={handleKeydown}
+                                    onFocus={handleFocus}
+                                    onBlur={handleBlur}
+                                    role="slider"
+                                    aria-valuenow={firstValue}
+                                    aria-valuemin={min}
+                                    aria-valuemax={max}
+                                    tabIndex={0}
                                 >
                                     <Popover
                                         children={firstValue}
@@ -377,7 +454,15 @@ const Slider: NuiSlider = React.memo(
                                 children={
                                     <div
                                         ref={secondHandleRef}
-                                        data-handle={Handle.SECOND}
+                                        data-handleindex={Handle.SECOND}
+                                        onKeyDown={handleKeydown}
+                                        onFocus={handleFocus}
+                                        onBlur={handleBlur}
+                                        role="slider"
+                                        aria-valuenow={secondValue}
+                                        aria-valuemin={min}
+                                        aria-valuemax={max}
+                                        tabIndex={0}
                                     >
                                         <Popover
                                             children={secondValue}
@@ -456,11 +541,37 @@ const StyledSlider = styled(Slider)`
         position: absolute;
         width: var(--nui-slider-handlesize);
         height: var(--nui-slider-handlesize);
-        background: var(--nui-context-primary);
+        background: transparent;
         box-shadow: 0 2px 3px -1px var(--nui-shadow);
         border-radius: 50%;
         cursor: pointer;
         box-sizing: border-box;
+
+        &::before,
+        &::after {
+            content: "";
+            position: absolute;
+            background: var(--nui-context-primary);
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        &::before {
+            background: var(--nui-context-primaryLight);
+            opacity: 0;
+            transform: scale(0.75);
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        &:focus-visible {
+            outline: none;
+
+            &::before {
+                opacity: 0.5;
+                transform: scale(2);
+            }
+        }
     }
 
     & .NuiPopover {

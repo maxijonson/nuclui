@@ -28,7 +28,6 @@
     -   Loading (or Progress)
     -   Drawer
     -   Tooltip
-    -   Popover
     -   Modal
     -   Toast
     -   Placeholder (Skeleton)

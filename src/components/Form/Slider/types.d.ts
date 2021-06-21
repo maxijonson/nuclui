@@ -9,15 +9,21 @@ export interface GridData {
     };
 }
 
+export type SliderChangeEvent =
+    | DraggableEvent
+    | React.PointerEvent<HTMLDivElement>
+    | React.KeyboardEvent<HTMLDivElement>;
+
 export type SliderOnChangeSingle = (
     v: number,
-    e: DraggableEvent | React.PointerEvent<HTMLDivElement>,
+    e: SliderChangeEvent,
     data?: DraggableData
 ) => void;
 export interface SliderPropsSingle extends SliderProps {
     /**
      * Fired when the value is changed. The event passed as second and third parameter is the DraggableEvent and DraggableData of the Draggable component provided by react-draggable.
      * When the user clicks on the track to change the value, the event is then a PointerEvent and there will be no DraggableData.
+     * When the user uses the keyboard arrows to change the value, the event is then a KeyboardEvent and there will be no DraggableData.
      */
     onChange?: SliderOnChangeSingle;
 
@@ -30,13 +36,14 @@ export interface SliderPropsSingle extends SliderProps {
 }
 export type SliderOnChangeRange = (
     v: [number, number],
-    e: DraggableEvent | React.PointerEvent<HTMLDivElement>,
+    e: SliderChangeEvent,
     data?: DraggableData
 ) => void;
 export interface SliderPropsRange extends SliderProps {
     /**
      * Fired when the value is changed. The event passed as second and third parameter is the DraggableEvent and DraggableData of the Draggable component provided by react-draggable.
      * When the user clicks on the track to change the value, the event is then a PointerEvent and there will be no DraggableData.
+     * When the user uses the keyboard arrows to change the value, the event is then a KeyboardEvent and there will be no DraggableData.
      */
     onChange?: SliderOnChangeRange;
 
@@ -71,11 +78,18 @@ export interface SliderProps {
     name?: string | [string, string];
 
     /**
-     * The delta by which the value is allowed to change
+     * The amount by which the value is allowed to change
      *
      * @default 1
      */
     step?: number;
+
+    /**
+     * The amount by which the value is allowed to change while holding the shift key and using the keyboard arrows
+     *
+     * @default 10
+     */
+    shiftStep?: number;
 }
 
 export type SliderPropsWithBase = InputBaseProps &
