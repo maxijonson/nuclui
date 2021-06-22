@@ -24,6 +24,7 @@ import { extractInputBaseProps } from "../InputBase/InputBase";
 // TODO: [Feature] Support multiple handles
 // TODO: [Feature] Show track ticks
 // TODO: [Feature] Track tick labels
+// TODO: [Bug] Support decimal steps
 
 /** Adjusts the `value` to a divisible of `step` */
 const adjustImprecision = (value: number, step: number) => {

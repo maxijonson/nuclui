@@ -224,7 +224,7 @@ const UseFormTest = React.memo(() => {
                     size={size}
                     key={key}
                     label={`Range (${size})`}
-                    step={5}
+                    step={1}
                     min={5}
                     max={100}
                 />

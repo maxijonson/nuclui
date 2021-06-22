@@ -78,7 +78,9 @@ export interface SliderProps {
     name?: string | [string, string];
 
     /**
-     * The amount by which the value is allowed to change
+     * The amount by which the value is allowed to change.
+     * Because of floating point imprecision, it is not recommended to provide a decimal `step`.
+     * Proper support for decimal `step` may come in a future release.
      *
      * @default 1
      */
