@@ -21,6 +21,7 @@ import {
     RadioButton,
     Button,
     Slider,
+    Textarea,
 } from "nuclui";
 import { RiAccountCircleFill } from "react-icons/ri";
 import { TextInputProps } from "nuclui/components/Form/TextInput/types";
@@ -126,6 +127,9 @@ const UseFormTest = React.memo(() => {
             experience: {
                 initial: "beginner",
             },
+            description: {
+                initial: "1\n2\n3\n4\n5\n6\n7\n8\n9\n10",
+            },
         },
     });
 
@@ -217,6 +221,16 @@ const UseFormTest = React.memo(() => {
 
     return (
         <form autoComplete="off" onSubmit={onSubmit}>
+            {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size, key) => (
+                <Textarea
+                    {...fields.description}
+                    minRows={2}
+                    maxRows={6}
+                    size={size}
+                    key={key}
+                    label={`Textarea (${size})`}
+                />
+            ))}
             {fields.range.value[0]}, {fields.range.value[1]}
             {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size, key) => (
                 <Slider

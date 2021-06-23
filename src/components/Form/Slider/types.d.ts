@@ -104,4 +104,7 @@ export interface SliderProps {
 export type SliderPropsWithBase = InputBaseProps &
     (SliderPropsSingle | SliderPropsRange);
 
+/**
+ * A range slider for selecting a bounded value or range of values
+ */
 export type NuiSlider = Nui.FRCWC<SliderPropsWithBase, NuiInputBase>;

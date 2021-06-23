@@ -14,8 +14,6 @@
 ### Components Roadmap
 
 -   Forms
-    -   Slider
-    -   Textarea
     -   FilePicker
 -   Data
     -   Table

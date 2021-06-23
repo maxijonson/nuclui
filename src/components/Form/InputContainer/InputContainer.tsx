@@ -94,7 +94,8 @@ const StyledInputContainer = styled(InputContainer)`
         border-style: solid;
         border-width: 1px;
 
-        & input {
+        & input,
+        & textarea {
             padding: var(--nui-inputContainer-pad);
             font-size: var(--nui-inputContainer-font);
             box-sizing: border-box;

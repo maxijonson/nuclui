@@ -1,6 +1,3 @@
-// export * from "./InputBase";
-// export * from "./InputContainer";
-// export * from "./CheckboxContainer";
 export * from "./TextInput";
 export * from "./NumberInput";
 export * from "./Checkbox";
@@ -12,3 +9,4 @@ export * from "./RadioGroup";
 export * from "./RadioButton";
 export * from "./Button";
 export * from "./Slider";
+export * from "./Textarea";
