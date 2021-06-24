@@ -407,6 +407,7 @@ const StyledSelect = styled(InputContainer)`
 
     & .NuiSelect__container {
         position: relative;
+        display: flex;
         width: 100%;
     }
 

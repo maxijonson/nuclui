@@ -224,11 +224,21 @@ const UseFormTest = React.memo(() => {
             {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size, key) => (
                 <Textarea
                     {...fields.description}
-                    minRows={2}
                     maxRows={6}
                     size={size}
                     key={key}
                     label={`Textarea (${size})`}
+                />
+            ))}
+            {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size, key) => (
+                <Textarea
+                    {...fields.description}
+                    maxRows={6}
+                    size={size}
+                    key={key}
+                    label={`Textarea (${size})`}
+                    prepend="Textarea"
+                    append="Textarea"
                 />
             ))}
             {fields.range.value[0]}, {fields.range.value[1]}

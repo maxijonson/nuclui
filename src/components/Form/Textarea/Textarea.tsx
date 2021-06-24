@@ -214,15 +214,15 @@ const StyledTextarea = styled(Textarea)`
         resize: vertical;
     }
 
-    & .NuiTextarea__hidden {
-        position: absolute;
-        visibility: hidden;
-        height: 0;
-        min-height: 0;
-        overflow: hidden;
-        top: 0;
-        right: 0;
-        pointer-events: none;
+    & .NuiTextarea__hidden.NuiTextarea__hidden {
+        position: absolute !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+        top: 0 !important;
+        right: 0 !important;
+        pointer-events: none !important;
     }
 `;
 

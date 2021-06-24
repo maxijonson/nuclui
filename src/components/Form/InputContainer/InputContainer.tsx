@@ -59,7 +59,7 @@ const InputContainer: NuiInputContainer = React.memo(
                         children={prepend}
                     />
                 )}
-                {children}
+                <div className="NuiInputContainer__main" children={children} />
                 {append && (
                     <div
                         className="NuiInputContainer__append"
@@ -103,7 +103,6 @@ const StyledInputContainer = styled(InputContainer)`
             background: transparent;
             border: none;
             min-width: 30%;
-            flex-shrink: 1000; /** HACK: Prevents the input from pushing the prepend/append too far, even when there's enough space */
 
             &:focus {
                 outline: none;
@@ -119,6 +118,12 @@ const StyledInputContainer = styled(InputContainer)`
         }
     }
 
+    & .NuiInputContainer__main {
+        position: relative;
+        display: flex;
+        flex: 1 1 0px;
+    }
+
     & .NuiInputContainer__prepend,
     & .NuiInputContainer__append {
         ${background.secondary}
@@ -126,7 +131,7 @@ const StyledInputContainer = styled(InputContainer)`
         display: flex;
         align-items: center;
         margin-bottom: 0px;
-        padding: var(--nui-inputContainer-pad);
+        padding: 0 var(--nui-inputContainer-pad);
         font-size: calc(var(--nui-inputContainer-font) / 1.2);
         min-width: 0;
         overflow: hidden;
