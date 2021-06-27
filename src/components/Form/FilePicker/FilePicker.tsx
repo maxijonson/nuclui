@@ -4,6 +4,7 @@ import clsx from "clsx";
 import _ from "lodash";
 import { BsBoxArrowInDown } from "react-icons/bs";
 import { GrFormClose } from "react-icons/gr";
+import { IoMdCloseCircleOutline } from "react-icons/io";
 import { createComponentName, mergeRefs } from "@utils";
 import { background, context, text } from "@theme";
 import { InputContainer } from "../InputContainer";
@@ -263,11 +264,11 @@ const FilePicker: NuiFilePicker = React.memo(
                 switch (code) {
                     case FileInputError.TOO_FEW_FILES:
                         message = `Too few files`;
-                        subMessage = `${minFiles} minimum`;
+                        subMessage = `${minFiles} files minimum`;
                         break;
                     case FileInputError.TOO_MANY_FILES:
                         message = `Too many files`;
-                        subMessage = `${maxFiles} maximum`;
+                        subMessage = `${maxFiles} files maximum`;
                         break;
                     case FileInputError.FILE_TOO_SMALL:
                         message = `File too small`;
@@ -301,6 +302,12 @@ const FilePicker: NuiFilePicker = React.memo(
             [maxFileSize, maxFiles, minFileSize, minFiles, onError]
         );
 
+        const clearInputFiles = React.useCallback(() => {
+            if (inputRef.current) {
+                inputRef.current.files = new DataTransfer().files;
+            }
+        }, []);
+
         const handleChange = React.useCallback<HTMLInputProps["onChange"]>(
             async (e) => {
                 try {
@@ -330,9 +337,7 @@ const FilePicker: NuiFilePicker = React.memo(
                         onChange(next, e);
                     }
                 } catch (err) {
-                    if (inputRef.current) {
-                        inputRef.current.files = new DataTransfer().files;
-                    }
+                    clearInputFiles();
                     if (typeof err === "number") {
                         return raiseError(err, e);
                     }
@@ -341,6 +346,7 @@ const FilePicker: NuiFilePicker = React.memo(
             },
             [
                 accept,
+                clearInputFiles,
                 contentType,
                 maxFileSize,
                 maxFiles,
@@ -374,14 +380,12 @@ const FilePicker: NuiFilePicker = React.memo(
             (e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                if (inputRef.current) {
-                    inputRef.current.files = new DataTransfer().files;
-                }
+                clearInputFiles();
                 if (onChange) {
                     onChange([], e);
                 }
             },
-            [onChange]
+            [clearInputFiles, onChange]
         );
 
         React.useEffect(
@@ -414,7 +418,11 @@ const FilePicker: NuiFilePicker = React.memo(
                     onBlur={handleBlur}
                 />
                 <div className="NuiFilePicker__overlay">
-                    <BsBoxArrowInDown className="NuiFilePicker__drop-icon" />
+                    {error ? (
+                        <IoMdCloseCircleOutline className="NuiFilePicker__drop-icon NuiFilePicker__drop-icon--normal" />
+                    ) : (
+                        <BsBoxArrowInDown className="NuiFilePicker__drop-icon NuiFilePicker__drop-icon--error" />
+                    )}
                     <div
                         className="NuiFilePicker__action-tip"
                         children={mainText}
