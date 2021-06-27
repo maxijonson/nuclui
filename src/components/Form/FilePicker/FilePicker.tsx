@@ -5,7 +5,7 @@ import _ from "lodash";
 import { BsBoxArrowInDown } from "react-icons/bs";
 import { GrFormClose } from "react-icons/gr";
 import { createComponentName, mergeRefs } from "@utils";
-import { background, text } from "@theme";
+import { background, context, text } from "@theme";
 import { InputContainer } from "../InputContainer";
 import { FileContentType, FileObject, NuiFilePicker } from "./types";
 import { extractInputContainerProps } from "../InputContainer/InputContainer";
@@ -111,6 +111,7 @@ const FilePicker: NuiFilePicker = React.memo(
                 accept: propsAccept = [],
                 contentType = "text",
                 hideConfigText = false,
+                hideErrors = false,
                 className,
                 ...inputProps
             },
@@ -126,6 +127,10 @@ const FilePicker: NuiFilePicker = React.memo(
 
         const [focused, setFocused] = React.useState(false);
         const [touched, setTouched] = React.useState(false);
+        const [error, setError] = React.useState<string | null>(null);
+        const [subError, setSubError] = React.useState<string | null>(null);
+
+        const errorTimeout = React.useRef<number>();
 
         const minFiles = React.useMemo(() => {
             if (propsMinFiles < 1) return 1;
@@ -161,6 +166,9 @@ const FilePicker: NuiFilePicker = React.memo(
         }, [propsMaxFileSize, propsMinFileSize]);
 
         const mainText = React.useMemo(() => {
+            if (error && !hideErrors) {
+                return error;
+            }
             if (!value || _.isEmpty(value)) {
                 return "Click or drag files here";
             }
@@ -172,8 +180,11 @@ const FilePicker: NuiFilePicker = React.memo(
                 return value[0].name;
             }
             return `${value.length} files selected`;
-        }, [value]);
+        }, [error, hideErrors, value]);
         const configText = React.useMemo(() => {
+            if (error && !hideErrors) {
+                return subError;
+            }
             if (!value || _.isEmpty(value)) {
                 return clsx([
                     minFiles == maxFiles &&
@@ -196,7 +207,16 @@ const FilePicker: NuiFilePicker = React.memo(
                 0
             );
             return formatBytes(totalSize);
-        }, [maxFileSize, maxFiles, minFileSize, minFiles, value]);
+        }, [
+            error,
+            hideErrors,
+            maxFileSize,
+            maxFiles,
+            minFileSize,
+            minFiles,
+            subError,
+            value,
+        ]);
 
         const classes = React.useMemo(
             () =>
@@ -210,9 +230,10 @@ const FilePicker: NuiFilePicker = React.memo(
                     ],
                     isDragging && "NuiFilePicker--isDragging",
                     value && value.length > 0 && "NuiFilePicker--clearable",
+                    error && !hideErrors && "NuiFilePicker--hasError",
                     className,
                 ]),
-            [className, isDragging, size, value]
+            [className, error, hideErrors, isDragging, size, value]
         );
 
         const handleFocus = React.useCallback<HTMLInputProps["onFocus"]>(
@@ -230,6 +251,55 @@ const FilePicker: NuiFilePicker = React.memo(
         >(() => {
             setIsDragging(true);
         }, []);
+
+        const raiseError = React.useCallback(
+            (
+                code: FileInputError,
+                event: React.ChangeEvent<HTMLInputElement>
+            ) => {
+                let message: string | null = null;
+                let subMessage: string | null = null;
+
+                switch (code) {
+                    case FileInputError.TOO_FEW_FILES:
+                        message = `Too few files`;
+                        subMessage = `${minFiles} minimum`;
+                        break;
+                    case FileInputError.TOO_MANY_FILES:
+                        message = `Too many files`;
+                        subMessage = `${maxFiles} maximum`;
+                        break;
+                    case FileInputError.FILE_TOO_SMALL:
+                        message = `File too small`;
+                        subMessage = `${formatBytes(minFileSize ?? 0)} minimum`;
+                        break;
+                    case FileInputError.FILE_TOO_LARGE:
+                        message = `File too large`;
+                        subMessage = `${formatBytes(maxFileSize ?? 0)} maximum`;
+                        break;
+                    case FileInputError.INVALID_FILE_TYPE:
+                        message = "Invalid file type";
+                        break;
+                    case FileInputError.NO_FILES:
+                        message = "No files detected";
+                        break;
+                    case FileInputError.UNKNOWN:
+                    default:
+                        message = "An unknown error occured";
+                        break;
+                }
+
+                window.clearTimeout(errorTimeout.current);
+                setError(message);
+                setSubError(subMessage);
+                errorTimeout.current = window.setTimeout(() => {
+                    setError(null);
+                    setSubError(null);
+                }, 2000);
+                return onError?.(code, event);
+            },
+            [maxFileSize, maxFiles, minFileSize, minFiles, onError]
+        );
 
         const handleChange = React.useCallback<HTMLInputProps["onChange"]>(
             async (e) => {
@@ -264,9 +334,9 @@ const FilePicker: NuiFilePicker = React.memo(
                         inputRef.current.files = new DataTransfer().files;
                     }
                     if (typeof err === "number") {
-                        return onError?.(err, e);
+                        return raiseError(err, e);
                     }
-                    return onError?.(FileInputError.UNKNOWN, e);
+                    return raiseError(FileInputError.UNKNOWN, e);
                 }
             },
             [
@@ -277,7 +347,7 @@ const FilePicker: NuiFilePicker = React.memo(
                 minFileSize,
                 minFiles,
                 onChange,
-                onError,
+                raiseError,
             ]
         );
 
@@ -312,6 +382,13 @@ const FilePicker: NuiFilePicker = React.memo(
                 }
             },
             [onChange]
+        );
+
+        React.useEffect(
+            () => () => {
+                window.clearTimeout(errorTimeout.current);
+            },
+            []
         );
 
         return (
@@ -359,6 +436,8 @@ const FilePicker: NuiFilePicker = React.memo(
 );
 
 const StyledFilePicker = styled(InputContainer)`
+    ${context}
+
     --nui-filepicker-height: 120px;
     --nui-filepicker-configsize: 0.6em;
 
@@ -407,6 +486,14 @@ const StyledFilePicker = styled(InputContainer)`
     &.NuiFilePicker--clearable {
         & .NuiFilePicker__clear {
             display: block;
+        }
+    }
+
+    &.NuiFilePicker--hasError {
+        color: var(--nui-context-danger);
+
+        & .NuiFilePicker__config {
+            color: var(--nui-context-dangerLight);
         }
     }
 

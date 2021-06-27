@@ -13,8 +13,6 @@
 
 ### Components Roadmap
 
--   Forms
-    -   FilePicker
 -   Data
     -   Table
     -   Avatar

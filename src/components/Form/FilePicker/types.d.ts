@@ -102,6 +102,13 @@ interface FilePickerProps {
      * @default false
      */
     hideConfigText?: boolean;
+
+    /**
+     * Hides the errors shown in the FilePicker when they occur
+     *
+     * @default false
+     */
+    hideErrors?: boolean;
 }
 
 /**

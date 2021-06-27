@@ -232,7 +232,7 @@ const UseFormTest = React.memo(() => {
                     contentType="dataURL"
                     minFileSize={1000000}
                     maxFileSize={1000000000}
-                    minFiles={1}
+                    minFiles={2}
                     maxFiles={5}
                     accept={["image/*"]}
                     onError={(code) => console.error(code)}
