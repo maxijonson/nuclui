@@ -31,19 +31,21 @@ interface FilePickerProps {
     type?: "file";
 
     /**
-     * This prop serves no purpose other than maintaining compatibility with the `useForm` hook when spreading props.
-     * It is not used in any way, since an input of type `file` cannot be given a value.
+     * The current files assigned on the input.
+     * This prop is mostly used to display information to the user inside the FilePicker.
      */
-    value?: any;
+    value?: FileObject[];
 
     /**
      * Called when files are selected.
      * Those file are converted into an array of `FileObject` (even if one file is selected).
-     * The second parameter is the input "onChange" event.
+     * The second parameter is the input "onChange" event or the clear click event.
      */
     onChange?: (
         v: FileObject[],
-        e: Parameters<HTMLInputProps["onChange"]>[0]
+        e:
+            | Parameters<HTMLInputProps["onChange"]>[0]
+            | React.MouseEvent<SVGElement, MouseEvent>
     ) => void;
 
     /**
@@ -93,6 +95,13 @@ interface FilePickerProps {
      * @default "text"
      */
     contentType?: FileContentType;
+
+    /**
+     * Hides the sub-text that shows the FilePicker constraints.
+     *
+     * @default false
+     */
+    hideConfigText?: boolean;
 }
 
 /**

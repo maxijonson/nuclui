@@ -2,7 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import clsx from "clsx";
 import _ from "lodash";
-import { createComponentName } from "@utils";
+import { BsBoxArrowInDown } from "react-icons/bs";
+import { GrFormClose } from "react-icons/gr";
+import { createComponentName, mergeRefs } from "@utils";
+import { background, text } from "@theme";
 import { InputContainer } from "../InputContainer";
 import { FileContentType, FileObject, NuiFilePicker } from "./types";
 import { extractInputContainerProps } from "../InputContainer/InputContainer";
@@ -11,6 +14,8 @@ import FileInputError from "./FileInputError";
 import * as fileReaders from "./fileReaders";
 
 // TODO: Dynamically type the content type based on "contentType" prop
+
+const MAX_DISPLAYED_LENGTH = 30;
 
 /** Returns nothing when it is valid and throws an error when it doesn't */
 const validateFile = (
@@ -78,6 +83,19 @@ const extractFileObject = async (
     };
 };
 
+/** https://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript */
+const formatBytes = (bytes: number, decimals = 2) => {
+    if (bytes === 0) return "0 Bytes";
+
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return `${parseFloat((bytes / k ** i).toFixed(dm))} ${sizes[i]}`;
+};
+
 const FilePicker: NuiFilePicker = React.memo(
     React.forwardRef((props, ref) => {
         const {
@@ -88,17 +106,23 @@ const FilePicker: NuiFilePicker = React.memo(
                 onError,
                 minFiles: propsMinFiles = 1,
                 maxFiles: propsMaxFiles = 1,
-                minFileSize,
-                maxFileSize,
+                minFileSize: propsMinFileSize,
+                maxFileSize: propsMaxFileSize,
                 accept: propsAccept = [],
                 contentType = "text",
+                hideConfigText = false,
                 className,
                 ...inputProps
             },
             ...inputContainerProps
         } = extractInputContainerProps(props);
         const { onFocus, onBlur } = inputProps;
-        const { disabled } = inputContainerProps;
+        const { disabled, size } = inputContainerProps;
+
+        const inputRef = React.useRef<HTMLInputElement>(null);
+        const mergedRefs = React.useMemo(() => mergeRefs(ref, inputRef), [ref]);
+
+        const [isDragging, setIsDragging] = React.useState(false);
 
         const [focused, setFocused] = React.useState(false);
         const [touched, setTouched] = React.useState(false);
@@ -125,6 +149,72 @@ const FilePicker: NuiFilePicker = React.memo(
             [accept]
         );
 
+        const minFileSize = React.useMemo(() => {
+            if (!propsMinFileSize && !propsMaxFileSize) return undefined;
+            if (!propsMinFileSize && propsMaxFileSize) return propsMaxFileSize;
+            if (!propsMaxFileSize) return propsMinFileSize;
+            return _.min([propsMinFileSize, propsMaxFileSize]);
+        }, [propsMaxFileSize, propsMinFileSize]);
+        const maxFileSize = React.useMemo(() => {
+            if (!propsMaxFileSize) return undefined;
+            return _.max([propsMinFileSize, propsMaxFileSize]);
+        }, [propsMaxFileSize, propsMinFileSize]);
+
+        const mainText = React.useMemo(() => {
+            if (!value || _.isEmpty(value)) {
+                return "Click or drag files here";
+            }
+            if (value.length === 1) {
+                const file = value[0];
+                if (file.name.length > MAX_DISPLAYED_LENGTH) {
+                    return `${file.name.slice(0, MAX_DISPLAYED_LENGTH)}...`;
+                }
+                return value[0].name;
+            }
+            return `${value.length} files selected`;
+        }, [value]);
+        const configText = React.useMemo(() => {
+            if (!value || _.isEmpty(value)) {
+                return clsx([
+                    minFiles == maxFiles &&
+                        `Choose ${minFiles} file${minFiles > 1 && "s"}. `,
+                    minFiles == 1 &&
+                        maxFiles != 1 &&
+                        `Choose up to ${maxFiles} files. `,
+                    minFiles != 1 &&
+                        maxFiles != minFiles &&
+                        `Choose between ${minFiles} and ${maxFiles} files. `,
+                    minFileSize && `${formatBytes(minFileSize)} minimum. `,
+                    maxFileSize && `${formatBytes(maxFileSize)} maximum. `,
+                ]);
+            }
+            const totalSize = _.reduce(
+                value,
+                (acc, file) => {
+                    return acc + file.size;
+                },
+                0
+            );
+            return formatBytes(totalSize);
+        }, [maxFileSize, maxFiles, minFileSize, minFiles, value]);
+
+        const classes = React.useMemo(
+            () =>
+                clsx([
+                    "NuiFilePicker",
+                    [
+                        size == "xs" && "NuiFilePicker--size-xs",
+                        size == "md" && "NuiFilePicker--size-md",
+                        size == "lg" && "NuiFilePicker--size-lg",
+                        size == "xl" && "NuiFilePicker--size-xl",
+                    ],
+                    isDragging && "NuiFilePicker--isDragging",
+                    value && value.length > 0 && "NuiFilePicker--clearable",
+                    className,
+                ]),
+            [className, isDragging, size, value]
+        );
+
         const handleFocus = React.useCallback<HTMLInputProps["onFocus"]>(
             (e) => {
                 setFocused(true);
@@ -134,6 +224,12 @@ const FilePicker: NuiFilePicker = React.memo(
             },
             [onFocus]
         );
+
+        const handleDragEnter = React.useCallback<
+            React.DragEventHandler<HTMLInputElement>
+        >(() => {
+            setIsDragging(true);
+        }, []);
 
         const handleChange = React.useCallback<HTMLInputProps["onChange"]>(
             async (e) => {
@@ -149,8 +245,8 @@ const FilePicker: NuiFilePicker = React.memo(
                     if (files.length > maxFiles) {
                         throw FileInputError.TOO_MANY_FILES;
                     }
-                    console.info(
-                        await Promise.all(
+                    if (onChange) {
+                        const next = await Promise.all(
                             _.map(files, (file) =>
                                 extractFileObject(
                                     file,
@@ -160,9 +256,13 @@ const FilePicker: NuiFilePicker = React.memo(
                                     maxFileSize
                                 )
                             )
-                        )
-                    );
+                        );
+                        onChange(next, e);
+                    }
                 } catch (err) {
+                    if (inputRef.current) {
+                        inputRef.current.files = new DataTransfer().files;
+                    }
                     if (typeof err === "number") {
                         return onError?.(err, e);
                     }
@@ -176,9 +276,16 @@ const FilePicker: NuiFilePicker = React.memo(
                 maxFiles,
                 minFileSize,
                 minFiles,
+                onChange,
                 onError,
             ]
         );
+
+        const handleDragLeave = React.useCallback<
+            React.DragEventHandler<HTMLInputElement>
+        >(() => {
+            setIsDragging(false);
+        }, []);
 
         const handleBlur = React.useCallback<HTMLInputProps["onBlur"]>(
             (e) => {
@@ -191,31 +298,132 @@ const FilePicker: NuiFilePicker = React.memo(
             [onBlur]
         );
 
+        const clearFiles = React.useCallback<
+            React.MouseEventHandler<SVGElement>
+        >(
+            (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                if (inputRef.current) {
+                    inputRef.current.files = new DataTransfer().files;
+                }
+                if (onChange) {
+                    onChange([], e);
+                }
+            },
+            [onChange]
+        );
+
         return (
             <StyledFilePicker
                 {...inputContainerProps}
-                focused={focused}
+                focused={focused || isDragging}
                 touched={touched}
-                className={clsx(["NuiFilePicker", className])}
+                className={classes}
             >
                 <input
                     {...inputProps}
-                    ref={ref}
+                    ref={mergedRefs}
                     className="NuiFilePicker__input"
                     disabled={disabled}
                     type="file"
                     multiple={maxFiles > 1}
                     accept={acceptStr}
                     onFocus={handleFocus}
+                    onDragEnter={handleDragEnter}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDragLeave}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                />
+                <div className="NuiFilePicker__overlay">
+                    <BsBoxArrowInDown className="NuiFilePicker__drop-icon" />
+                    <div
+                        className="NuiFilePicker__action-tip"
+                        children={mainText}
+                    />
+                    {!hideConfigText && (
+                        <div
+                            className="NuiFilePicker__config"
+                            children={configText}
+                        />
+                    )}
+                </div>
+                <GrFormClose
+                    className="NuiFilePicker__clear"
+                    onClick={clearFiles}
                 />
             </StyledFilePicker>
         );
     })
 );
 
-const StyledFilePicker = styled(InputContainer)``;
+const StyledFilePicker = styled(InputContainer)`
+    --nui-filepicker-height: 120px;
+    --nui-filepicker-configsize: 0.6em;
+
+    & .NuiFilePicker__input {
+        height: var(--nui-filepicker-height);
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    & .NuiFilePicker__overlay {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        right: 0;
+        pointer-events: none;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    & .NuiFilePicker__config {
+        ${text.secondary}
+
+        font-size: var(--nui-filepicker-configsize);
+        max-width: 80%;
+    }
+
+    & .NuiFilePicker__clear {
+        display: none;
+        cursor: pointer;
+        position: absolute;
+        top: 4px;
+        right: 4px;
+    }
+
+    &.NuiFilePicker--isDragging {
+        & .NuiFilePicker__overlay {
+            ${background.secondary}
+        }
+    }
+
+    &.NuiFilePicker--clearable {
+        & .NuiFilePicker__clear {
+            display: block;
+        }
+    }
+
+    &.NuiFilePicker--size-xs {
+        --nui-filepicker-height: 80px;
+        --nui-filepicker-configsize: 0.8em;
+    }
+    &.NuiFilePicker--size-md {
+        --nui-filepicker-height: 160px;
+    }
+    &.NuiFilePicker--size-lg {
+        --nui-filepicker-height: 200px;
+    }
+    &.NuiFilePicker--size-xl {
+        --nui-filepicker-height: 240px;
+    }
+`;
 
 StyledFilePicker.displayName = createComponentName("StyledFilePicker");
 FilePicker.displayName = createComponentName("FilePicker");

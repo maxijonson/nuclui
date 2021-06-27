@@ -226,12 +226,14 @@ const UseFormTest = React.memo(() => {
 
     return (
         <form autoComplete="off" onSubmit={onSubmit}>
-            File: {fields.file.value}
             {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size, key) => (
                 <FilePicker
                     {...fields.file}
-                    contentType="arrayBuffer"
-                    minFiles={2}
+                    contentType="dataURL"
+                    minFileSize={1000000}
+                    maxFileSize={1000000000}
+                    minFiles={1}
+                    maxFiles={5}
                     accept={["image/*"]}
                     onError={(code) => console.error(code)}
                     size={size}
