@@ -10,3 +10,4 @@ export * from "./RadioButton";
 export * from "./Button";
 export * from "./Slider";
 export * from "./Textarea";
+export * from "./FilePicker";

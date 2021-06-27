@@ -29,6 +29,7 @@ const NumberInput: NuiNumberInput = React.memo(
         const {
             restProps: {
                 type,
+                value: propsValue,
                 onChange,
                 min,
                 max,
@@ -48,10 +49,10 @@ const NumberInput: NuiNumberInput = React.memo(
         const mergedRefs = React.useMemo(() => mergeRefs(ref, inputRef), [ref]);
 
         const value = React.useMemo(() => {
-            if (props.value == undefined) return undefined;
-            if (typeof props.value !== "number") return "";
-            return props.value;
-        }, [props.value]);
+            if (propsValue == undefined) return undefined;
+            if (typeof propsValue !== "number") return "";
+            return propsValue;
+        }, [propsValue]);
 
         const canStepUp = React.useMemo(() => {
             if (max == undefined) return true;

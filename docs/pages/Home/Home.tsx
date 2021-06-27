@@ -22,6 +22,8 @@ import {
     Button,
     Slider,
     Textarea,
+    FilePicker,
+    FileObject,
 } from "nuclui";
 import { RiAccountCircleFill } from "react-icons/ri";
 import { TextInputProps } from "nuclui/components/Form/TextInput/types";
@@ -130,6 +132,9 @@ const UseFormTest = React.memo(() => {
             description: {
                 initial: "1\n2\n3\n4\n5\n6\n7\n8\n9\n10",
             },
+            file: {
+                initial: [] as FileObject[],
+            },
         },
     });
 
@@ -221,6 +226,19 @@ const UseFormTest = React.memo(() => {
 
     return (
         <form autoComplete="off" onSubmit={onSubmit}>
+            File: {fields.file.value}
+            {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size, key) => (
+                <FilePicker
+                    {...fields.file}
+                    contentType="arrayBuffer"
+                    minFiles={2}
+                    accept={["image/*"]}
+                    onError={(code) => console.error(code)}
+                    size={size}
+                    key={key}
+                    label={`FilePicker (${size})`}
+                />
+            ))}
             {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size, key) => (
                 <Textarea
                     {...fields.description}
