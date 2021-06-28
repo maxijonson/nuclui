@@ -112,6 +112,16 @@ declare namespace Nui {
         | "danger"
         | "success"
         | "info";
+
+    /**
+     * A collection of typing utilities
+     */
+    namespace Utils {
+        /**
+         * A pretty verbose type. If `T` extends `Extends`, then use `True`, else, use `False`
+         */
+        type If<T, Extends, True, False> = T extends Extends ? True : False;
+    }
 }
 
 export = Nui;

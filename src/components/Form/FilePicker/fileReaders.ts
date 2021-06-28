@@ -1,10 +1,10 @@
-import { ContentType } from "./types";
+import { ContentTypeName, FileObjectFor } from "./types";
 
-interface FileReaderFunction<C extends ContentType> {
-    (file: File): Promise<C>;
+interface FileReaderFunction<CTN extends ContentTypeName> {
+    (file: File): Promise<FileObjectFor<CTN>["content"]>;
 }
 
-export const base64: FileReaderFunction<string> = async (file) => {
+export const base64: FileReaderFunction<"base64"> = async (file) => {
     const buffer = await file.arrayBuffer();
     const bytes = new Uint8Array(buffer);
     let binary = "";
@@ -14,7 +14,7 @@ export const base64: FileReaderFunction<string> = async (file) => {
     return window.btoa(binary);
 };
 
-export const dataUrl: FileReaderFunction<string> = async (file) =>
+export const dataUrl: FileReaderFunction<"dataURL"> = async (file) =>
     new Promise<string>((resolve, reject) => {
         const fileReader = new FileReader();
         fileReader.onload = function load() {
@@ -26,11 +26,11 @@ export const dataUrl: FileReaderFunction<string> = async (file) =>
         fileReader.readAsDataURL(file);
     });
 
-export const text: FileReaderFunction<string> = async (file) => {
+export const text: FileReaderFunction<"text"> = async (file) => {
     return file.text();
 };
 
-export const binaryString: FileReaderFunction<string> = async (file) =>
+export const binaryString: FileReaderFunction<"binaryString"> = async (file) =>
     new Promise<string>((resolve, reject) => {
         const fileReader = new FileReader();
         fileReader.onload = function load() {
@@ -42,6 +42,6 @@ export const binaryString: FileReaderFunction<string> = async (file) =>
         fileReader.readAsBinaryString(file);
     });
 
-export const arrayBuffer: FileReaderFunction<ArrayBuffer> = async (file) => {
+export const arrayBuffer: FileReaderFunction<"arrayBuffer"> = async (file) => {
     return file.arrayBuffer();
 };

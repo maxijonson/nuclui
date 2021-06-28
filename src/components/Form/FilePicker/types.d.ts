@@ -5,16 +5,25 @@ import {
 } from "../InputContainer/types";
 import FileInputError from "./FileInputError";
 
-export type FileContentType =
+/**
+ * Content type names
+ */
+export type ContentTypeName =
     | "text"
     | "base64"
     | "dataURL"
     | "binaryString"
     | "arrayBuffer";
 
+/**
+ * Potential data type in the `content` attribute of the `FileObject` generated when choosing files
+ */
 export type ContentType = string | ArrayBuffer;
 
-export interface FileObject {
+/**
+ * Object generated for each chosen file
+ */
+export interface FileObject<CT extends ContentType> {
     name: string;
     type: string;
     lastModified: number;
@@ -23,30 +32,28 @@ export interface FileObject {
     sizeInKb: number;
     sizeInMb: number;
     sizeInGb: number;
-    content: ContentType;
+    content: CT;
 }
 
-interface FilePickerProps {
+/**
+ * If `CTN` extends `CTNV`, then the `FileObject` will have a `content` of type `CT`.
+ */
+type FileObjectIf<
+    CTN extends ContentTypeName,
+    CTNV extends ContentTypeName,
+    CT extends ContentType
+> = Nui.Utils.If<CTN, CTNV, FileObject<CT>, never>;
+
+export type FileObjectFor<CTN extends ContentTypeName> =
+    | FileObjectIf<CTN, "text" | "base64" | "dataURL" | "binaryString", string>
+    | FileObjectIf<CTN, "arrayBuffer", ArrayBuffer>;
+
+/**
+ * Props that do not vary in typings
+ */
+interface FilePickerBaseProps {
     children?: never;
     type?: "file";
-
-    /**
-     * The current files assigned on the input.
-     * This prop is mostly used to display information to the user inside the FilePicker.
-     */
-    value?: FileObject[];
-
-    /**
-     * Called when files are selected.
-     * Those file are converted into an array of `FileObject` (even if one file is selected).
-     * The second parameter is the input "onChange" event or the clear click event.
-     */
-    onChange?: (
-        v: FileObject[],
-        e:
-            | Parameters<HTMLInputProps["onChange"]>[0]
-            | React.MouseEvent<SVGElement, MouseEvent>
-    ) => void;
 
     /**
      * Called when an occurs after selecting files.
@@ -86,17 +93,6 @@ interface FilePickerProps {
     accept?: string[];
 
     /**
-     * The type of the contents in the extracted FileObject.
-     *
-     * `text`: plain text data
-     * `base64`: base64 encoded file
-     * `dataURL`: same as `base64`, but with the data declaration prepended to it
-     *
-     * @default "text"
-     */
-    contentType?: FileContentType;
-
-    /**
      * Hides the sub-text that shows the FilePicker constraints.
      *
      * @default false
@@ -110,6 +106,70 @@ interface FilePickerProps {
      */
     hideErrors?: boolean;
 }
+
+/**
+ * Props that vary in typings based on the `contentType` prop. `CTN` represents the `contentType` name and `CT` represents the type of the FileObject's `content`.
+ */
+interface FilePickerDynamicProps<
+    CTN extends ContentTypeName,
+    CT extends ContentType
+> extends FilePickerBaseProps {
+    /**
+     * The type of the contents in the extracted FileObject.
+     *
+     * `text`: plain text data
+     * `base64`: base64 encoded file
+     * `dataURL`: same as `base64`, but with the data declaration prepended to it
+     * `binaryString`: similar to `text
+     * `arrayBuffer`: content of type `ArrayBuffer`
+     *
+     * @default "text"
+     */
+    contentType: CTN;
+
+    /**
+     * The current files assigned on the input.
+     * This prop is mostly used to display information to the user inside the FilePicker.
+     */
+    value?: FileObject<CT>[];
+
+    /**
+     * Called when files are selected.
+     * Those file are converted into an array of `FileObject` (even if one file is selected).
+     * The second parameter is the input "onChange" event or the clear click event.
+     */
+    onChange?: (
+        v: FileObject<CT>[],
+        e:
+            | Parameters<HTMLInputProps["onChange"]>[0]
+            | React.MouseEvent<SVGElement, MouseEvent>
+    ) => void;
+}
+
+/**
+ * Default types for the dynamic props when `contentType` is `undefined`
+ */
+interface FilePickerDefaultDynamicProps extends FilePickerBaseProps {
+    contentType?: undefined;
+    value?: FileObject<string>[];
+    onChange?: (
+        v: FileObject<string>[],
+        e:
+            | Parameters<HTMLInputProps["onChange"]>[0]
+            | React.MouseEvent<SVGElement, MouseEvent>
+    ) => void;
+}
+
+/**
+ * All possible combination of content types with their FileObject `content` type associated.
+ */
+type FilePickerProps =
+    | FilePickerDynamicProps<
+          "text" | "base64" | "dataURL" | "binaryString",
+          string
+      >
+    | FilePickerDynamicProps<"arrayBuffer", ArrayBuffer>
+    | FilePickerDefaultDynamicProps;
 
 /**
  * A file input for letting users choose one or multiple files

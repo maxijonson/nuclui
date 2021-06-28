@@ -8,7 +8,12 @@ import { IoMdCloseCircleOutline } from "react-icons/io";
 import { createComponentName, mergeRefs } from "@utils";
 import { background, context, text } from "@theme";
 import { InputContainer } from "../InputContainer";
-import { FileContentType, FileObject, NuiFilePicker } from "./types";
+import {
+    ContentTypeName,
+    FileObject,
+    FileObjectFor,
+    NuiFilePicker,
+} from "./types";
 import { extractInputContainerProps } from "../InputContainer/InputContainer";
 import { HTMLInputProps } from "../InputContainer/types";
 import FileInputError from "./FileInputError";
@@ -46,42 +51,52 @@ const validateFile = (
     if (maxSize && file.size > maxSize) throw FileInputError.FILE_TOO_LARGE;
 };
 
-const getFileContents = (file: File, type: FileContentType) => {
+const getFileContents = <
+    CTN extends ContentTypeName,
+    R extends Promise<FileObjectFor<CTN>["content"]>
+>(
+    file: File,
+    type: CTN
+): R => {
     switch (type) {
-        case "base64":
-            return fileReaders.base64(file);
-        case "dataURL":
-            return fileReaders.dataUrl(file);
-        case "binaryString":
-            return fileReaders.binaryString(file);
         case "arrayBuffer":
-            return fileReaders.arrayBuffer(file);
-        case "text":
+            return fileReaders.arrayBuffer(file) as R;
+        case "base64":
+            return fileReaders.base64(file) as R;
+        case "binaryString":
+            return fileReaders.binaryString(file) as R;
+        case "dataURL":
+            return fileReaders.dataUrl(file) as R;
         default:
-            return fileReaders.text(file);
+        case "text":
+            return fileReaders.text(file) as R;
     }
 };
 
-const extractFileObject = async (
+const extractFileObject = async <
+    CTN extends ContentTypeName,
+    FO extends FileObjectFor<CTN>
+>(
     file: File,
     accept: string[],
-    type: FileContentType,
+    type: CTN,
     minSize?: number,
     maxSize?: number
-): Promise<FileObject> => {
+): Promise<FO> => {
     validateFile(file, accept, minSize, maxSize);
+    const content = (await getFileContents(file, type)) as FO["content"];
 
     return {
         name: file.name,
         type: file.type,
         lastModified: file.lastModified,
         lastModifiedDate: new Date(file.lastModified),
-        content: await getFileContents(file, type),
+        content,
         size: file.size,
         sizeInKb: file.size / 1000,
         sizeInMb: file.size / 1000000,
         sizeInGb: file.size / 1000000000,
-    };
+    } as FO;
 };
 
 /** https://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript */
@@ -203,7 +218,11 @@ const FilePicker: NuiFilePicker = React.memo(
             const totalSize = _.reduce(
                 value,
                 (acc, file) => {
-                    return acc + file.size;
+                    // For some reason, file can be typed as "number" or "string". This enforces the FileObject type
+                    if (typeof file === "object") {
+                        return acc + file.size;
+                    }
+                    return acc;
                 },
                 0
             );
@@ -334,7 +353,7 @@ const FilePicker: NuiFilePicker = React.memo(
                                 )
                             )
                         );
-                        onChange(next, e);
+                        onChange(next as FileObject<string & ArrayBuffer>[], e);
                     }
                 } catch (err) {
                     clearInputFiles();
