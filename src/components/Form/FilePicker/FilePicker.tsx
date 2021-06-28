@@ -19,8 +19,6 @@ import { HTMLInputProps } from "../InputContainer/types";
 import FileInputError from "./FileInputError";
 import * as fileReaders from "./fileReaders";
 
-// TODO: Dynamically type the content type based on "contentType" prop
-
 const MAX_DISPLAYED_LENGTH = 30;
 
 /** Returns nothing when it is valid and throws an error when it doesn't */
@@ -67,9 +65,11 @@ const getFileContents = <
             return fileReaders.binaryString(file) as R;
         case "dataURL":
             return fileReaders.dataUrl(file) as R;
-        default:
         case "text":
             return fileReaders.text(file) as R;
+        case "file":
+        default:
+            return Promise.resolve(file) as R;
     }
 };
 
@@ -125,7 +125,7 @@ const FilePicker: NuiFilePicker = React.memo(
                 minFileSize: propsMinFileSize,
                 maxFileSize: propsMaxFileSize,
                 accept: propsAccept = [],
-                contentType = "text",
+                contentType = "file",
                 hideConfigText = false,
                 hideErrors = false,
                 className,
@@ -353,7 +353,10 @@ const FilePicker: NuiFilePicker = React.memo(
                                 )
                             )
                         );
-                        onChange(next as FileObject<string & ArrayBuffer>[], e);
+                        onChange(
+                            next as FileObject<string & ArrayBuffer & File>[],
+                            e
+                        );
                     }
                 } catch (err) {
                     clearInputFiles();
@@ -438,9 +441,9 @@ const FilePicker: NuiFilePicker = React.memo(
                 />
                 <div className="NuiFilePicker__overlay">
                     {error ? (
-                        <IoMdCloseCircleOutline className="NuiFilePicker__drop-icon NuiFilePicker__drop-icon--normal" />
+                        <IoMdCloseCircleOutline className="NuiFilePicker__drop-icon NuiFilePicker__drop-icon--error" />
                     ) : (
-                        <BsBoxArrowInDown className="NuiFilePicker__drop-icon NuiFilePicker__drop-icon--error" />
+                        <BsBoxArrowInDown className="NuiFilePicker__drop-icon NuiFilePicker__drop-icon--normal" />
                     )}
                     <div
                         className="NuiFilePicker__action-tip"

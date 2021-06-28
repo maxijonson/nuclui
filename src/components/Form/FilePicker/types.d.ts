@@ -9,6 +9,7 @@ import FileInputError from "./FileInputError";
  * Content type names
  */
 export type ContentTypeName =
+    | "file"
     | "text"
     | "base64"
     | "dataURL"
@@ -18,7 +19,7 @@ export type ContentTypeName =
 /**
  * Potential data type in the `content` attribute of the `FileObject` generated when choosing files
  */
-export type ContentType = string | ArrayBuffer;
+export type ContentType = string | ArrayBuffer | File;
 
 /**
  * Object generated for each chosen file
@@ -45,6 +46,7 @@ type FileObjectIf<
 > = Nui.Utils.If<CTN, CTNV, FileObject<CT>, never>;
 
 export type FileObjectFor<CTN extends ContentTypeName> =
+    | FileObjectIf<CTN, "file", File>
     | FileObjectIf<CTN, "text" | "base64" | "dataURL" | "binaryString", string>
     | FileObjectIf<CTN, "arrayBuffer", ArrayBuffer>;
 
@@ -117,13 +119,14 @@ interface FilePickerDynamicProps<
     /**
      * The type of the contents in the extracted FileObject.
      *
-     * `text`: plain text data
-     * `base64`: base64 encoded file
-     * `dataURL`: same as `base64`, but with the data declaration prepended to it
-     * `binaryString`: similar to `text
+     * `file`: the plain, original and untreated `File` object retrieved from the change event when choosing files. If none of the other `contentType` satisfy your needs, this is the most "raw" type you can get \
+     * `text`: plain text data \
+     * `base64`: base64 encoded file \
+     * `dataURL`: same as `base64`, but with the data declaration prepended to it \
+     * `binaryString`: similar to `text` \
      * `arrayBuffer`: content of type `ArrayBuffer`
      *
-     * @default "text"
+     * @default "file"
      */
     contentType: CTN;
 
@@ -151,9 +154,9 @@ interface FilePickerDynamicProps<
  */
 interface FilePickerDefaultDynamicProps extends FilePickerBaseProps {
     contentType?: undefined;
-    value?: FileObject<string>[];
+    value?: FileObject<File>[];
     onChange?: (
-        v: FileObject<string>[],
+        v: FileObject<File>[],
         e:
             | Parameters<HTMLInputProps["onChange"]>[0]
             | React.MouseEvent<SVGElement, MouseEvent>
@@ -164,6 +167,7 @@ interface FilePickerDefaultDynamicProps extends FilePickerBaseProps {
  * All possible combination of content types with their FileObject `content` type associated.
  */
 type FilePickerProps =
+    | FilePickerDynamicProps<"file", File>
     | FilePickerDynamicProps<
           "text" | "base64" | "dataURL" | "binaryString",
           string

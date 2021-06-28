@@ -133,7 +133,7 @@ const UseFormTest = React.memo(() => {
                 initial: "1\n2\n3\n4\n5\n6\n7\n8\n9\n10",
             },
             file: {
-                initial: [] as FileObject<string>[],
+                initial: [] as FileObject<File>[],
             },
         },
     });
@@ -229,7 +229,6 @@ const UseFormTest = React.memo(() => {
             {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size, key) => (
                 <FilePicker
                     {...fields.file}
-                    contentType="base64"
                     minFileSize={1000000}
                     maxFileSize={1000000000}
                     minFiles={2}
