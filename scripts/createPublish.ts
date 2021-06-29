@@ -34,7 +34,7 @@ const main = async () => {
         );
     }
 
-    const argv = yargs
+    const argv = await yargs
         .option("dry", {
             alias: "d",
             boolean: true,

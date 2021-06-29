@@ -20,7 +20,7 @@ const main = async () => {
         "../package.json"
     )).version;
 
-    const argv = yargs
+    const argv = await yargs
         .version(false)
         .option("version", {
             alias: "v",
