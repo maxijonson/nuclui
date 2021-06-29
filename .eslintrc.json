@@ -7,10 +7,9 @@
         "airbnb",
         "typescript",
         "typescript/react",
-        "typescript/prettier-react",
         "plugin:react/recommended",
         "plugin:@typescript-eslint/recommended",
-        "prettier/@typescript-eslint",
+        "prettier",
         "plugin:prettier/recommended"
     ],
     "globals": {
@@ -38,9 +37,16 @@
     "rules": {
         "@typescript-eslint/ban-types": "off",
         "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/explicit-module-boundary-types": "off",
         "@typescript-eslint/interface-name-prefix": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-object-literal-type-assertion": "off",
+        "@typescript-eslint/no-shadow": [
+            "error",
+            {
+                "allow": ["theme"]
+            }
+        ],
         "@typescript-eslint/no-unused-vars": [
             "warn",
             {
@@ -48,7 +54,7 @@
                 "ignoreRestSiblings": true
             }
         ],
-        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "@typescript-eslint/no-use-before-define": "off",
         "class-methods-use-this": "off",
         "consistent-return": "off",
         "eqeqeq": "off",
@@ -70,8 +76,8 @@
         "jsx-a11y/anchor-is-valid": "off",
         "jsx-a11y/click-events-have-key-events": "off",
         "jsx-a11y/control-has-associated-label": "off",
-        "jsx-a11y/no-static-element-interactions": "off",
         "jsx-a11y/label-has-associated-control": "off",
+        "jsx-a11y/no-static-element-interactions": "off",
         "lines-between-class-members": "off",
         "no-console": [
             "warn",
@@ -86,30 +92,31 @@
                 "props": false
             }
         ],
-        "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
-        "no-restricted-globals": "off",
-        "no-restricted-syntax": "off",
-        "no-shadow": [
+        "no-plusplus": [
             "error",
             {
-                "allow": ["theme"]
+                "allowForLoopAfterthoughts": true
             }
         ],
+        "no-restricted-globals": "off",
+        "no-restricted-syntax": "off",
+        "no-shadow": "off",
         "no-underscore-dangle": "off",
+        "no-use-before-define": "off",
         "prettier/prettier": [
             "warn",
             {
-                "tabWidth": 4,
-                "useTabs": false,
+                "arrowParens": "always",
+                "bracketSpacing": true,
+                "endOfLine": "lf",
+                "jsxBracketSameLine": false,
+                "jsxSingleQuote": false,
+                "quoteProps": "consistent",
                 "semi": true,
                 "singleQuote": false,
-                "quoteProps": "consistent",
-                "jsxSingleQuote": false,
+                "tabWidth": 4,
                 "trailingComma": "es5",
-                "bracketSpacing": true,
-                "jsxBracketSameLine": false,
-                "arrowParens": "always",
-                "endOfLine": "lf"
+                "useTabs": false
             }
         ],
         "react-hooks/exhaustive-deps": "warn",

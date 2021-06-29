@@ -4,12 +4,10 @@ module.exports = {
     moduleDirectories: ["node_modules"],
     preset: "ts-jest",
     testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+    testEnvironment: "jsdom",
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
     snapshotSerializers: ["enzyme-to-json/serializer"],
-    setupFilesAfterEnv: [
-        "<rootDir>/src/config/setupTests.ts",
-        "jest-mock-console/dist/setupTestFramework.js",
-    ],
+    setupFilesAfterEnv: ["<rootDir>/src/config/setupTests.ts"],
     moduleNameMapper: {
         // Regex: https://regexr.com/57fm3
         "^@config((?=/).*|(?!/))$": "<rootDir>/src/config$1",

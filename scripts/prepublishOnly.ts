@@ -14,13 +14,7 @@ const pkg = require(PKG_PATH);
 fs.copyFileSync(PKG_PATH, PKG_RESTORE_PATH);
 
 // Packages to exclude from the NPM package
-const deps = [
-    "express",
-    "express-sslify",
-    "ts-node",
-    "react-router-dom",
-    "react-icons",
-];
+const deps = ["express", "express-sslify", "ts-node", "react-router-dom"];
 
 deps.forEach((dep) => delete pkg.dependencies[dep]);
 

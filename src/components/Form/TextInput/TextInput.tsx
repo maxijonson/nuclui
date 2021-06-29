@@ -1,7 +1,6 @@
 import React from "react";
-import MaskedInput from "react-text-mask";
 import clsx from "clsx";
-import { createComponentName, nuiLog } from "@utils";
+import { createComponentName } from "@utils";
 import { NuiTextInput } from "./types";
 import { InputContainer } from "../InputContainer";
 import { HTMLInputProps } from "../InputContainer/types";
@@ -14,13 +13,6 @@ const TextInput: NuiTextInput = React.memo(
                 type = "text",
                 value,
                 onChange,
-                mask = false,
-                guide = true,
-                placeholderChar = "_",
-                keepCharPositions = false,
-                pipe,
-                showMask = false,
-                transform,
                 className,
                 ...inputProps
             },
@@ -31,11 +23,6 @@ const TextInput: NuiTextInput = React.memo(
 
         const [focused, setFocused] = React.useState(false);
         const [touched, setTouched] = React.useState(false);
-
-        const transformValue = React.useCallback(
-            (v: string) => transform?.(v) || v,
-            [transform]
-        );
 
         const handleFocus = React.useCallback<HTMLInputProps["onFocus"]>(
             (e) => {
@@ -50,10 +37,10 @@ const TextInput: NuiTextInput = React.memo(
         const handleChange = React.useCallback<HTMLInputProps["onChange"]>(
             (e) => {
                 if (onChange) {
-                    onChange(transformValue(e.currentTarget.value), e);
+                    onChange(e.currentTarget.value, e);
                 }
             },
-            [onChange, transformValue]
+            [onChange]
         );
 
         const handleBlur = React.useCallback<HTMLInputProps["onBlur"]>(
@@ -67,27 +54,6 @@ const TextInput: NuiTextInput = React.memo(
             [onBlur]
         );
 
-        // HACK: When mask is false, MaskedInput will not show the value if it is updated externally
-        const defaultMask = React.useCallback(
-            (v: string) => v.split("").map(() => /./),
-            []
-        );
-
-        React.useEffect(() => {
-            if (mask && transform) {
-                nuiLog.warn(
-                    `TextInput: when using the "mask" prop, use the "pipe" prop instead of "transform" to avoid potential value errors`,
-                    { once: true }
-                );
-            }
-            if (!mask && pipe) {
-                nuiLog.warn(
-                    `TextInput: using the "pipe" prop without "mask" has no effect. Use the "transform" prop instead`,
-                    { once: true }
-                );
-            }
-        }, [mask, pipe, transform]);
-
         return (
             <InputContainer
                 {...inputContainerProps}
@@ -95,7 +61,7 @@ const TextInput: NuiTextInput = React.memo(
                 touched={touched}
                 className={clsx(["NuiTextInput", className])}
             >
-                <MaskedInput
+                <input
                     {...inputProps}
                     value={value}
                     disabled={disabled}
@@ -105,12 +71,6 @@ const TextInput: NuiTextInput = React.memo(
                     onChange={handleChange}
                     onFocus={handleFocus}
                     onBlur={handleBlur}
-                    mask={mask || defaultMask}
-                    guide={guide}
-                    placeholderChar={placeholderChar}
-                    keepCharPositions={keepCharPositions}
-                    showMask={showMask}
-                    pipe={pipe}
                 />
             </InputContainer>
         );

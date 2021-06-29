@@ -173,11 +173,6 @@ const UseFormTest = React.memo(() => {
         []
     );
 
-    const pipe = React.useCallback<NonNullable<TextInputProps["pipe"]>>(
-        (conformed) => conformed.toUpperCase(),
-        []
-    );
-
     const genderOptions = React.useMemo(
         () => [
             { label: "Male", value: "male" },
@@ -1001,9 +996,6 @@ const UseFormTest = React.memo(() => {
                 {...fields.postalcode}
                 label="Postal Code"
                 variant="underline"
-                mask={mask}
-                pipe={pipe}
-                guide={false}
                 prepend="Search"
             />
             {_.map(fields.adresses.value, (v, i) => (

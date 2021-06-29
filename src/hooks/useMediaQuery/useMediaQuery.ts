@@ -35,8 +35,8 @@ const useMediaQuery = <T>(
     const onChange = React.useCallback(
         (key: string) =>
             function mqlChange(this: MediaQueryList) {
-                setMatches(
-                    produce((draft) => {
+                setMatches((state) =>
+                    produce(state, (draft: useMediaQueryMatches<T>) => {
                         draft[key as Key] = this.matches;
                     })
                 );
