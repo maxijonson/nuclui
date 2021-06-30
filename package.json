@@ -1,6 +1,6 @@
 {
   "name": "nuclui",
-  "version": "0.0.8-dev1598060293709.4",
+  "version": "0.0.8-dev1598060293709.6",
   "description": "A React UI framework, built with TypeScript, to make your developement easier so you can give more focus on your app and less on the design!",
   "main": "dist/index.js",
   "scripts": {
@@ -60,10 +60,10 @@
     "docs/public/assets/images/logo*.png"
   ],
   "peerDependencies": {
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0",
     "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0"
+    "@types/react-dom": "^17.0.0",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0"
   },
   "dependencies": {
     "@types/styled-components": "^5.1.10",
@@ -76,6 +76,7 @@
     "react-helmet": "^6.1.0",
     "react-icons": "^4.2.0",
     "react-router-dom": "^5.2.0",
+    "styled-components": "^5.3.0",
     "ts-essentials": "^7.0.2"
   },
   "devDependencies": {
