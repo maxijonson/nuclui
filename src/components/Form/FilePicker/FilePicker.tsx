@@ -204,7 +204,7 @@ const FilePicker: NuiFilePicker = React.memo(
             if (!value || _.isEmpty(value)) {
                 return clsx([
                     minFiles == maxFiles &&
-                        `Choose ${minFiles} file${minFiles > 1 && "s"}. `,
+                        `Choose ${minFiles} file${minFiles > 1 ? "s" : ""}. `,
                     minFiles == 1 &&
                         maxFiles != 1 &&
                         `Choose up to ${maxFiles} files. `,

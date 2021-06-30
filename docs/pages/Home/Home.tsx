@@ -26,7 +26,6 @@ import {
     FileObject,
 } from "nuclui";
 import { RiAccountCircleFill } from "react-icons/ri";
-import { TextInputProps } from "nuclui/components/Form/TextInput/types";
 import { Link } from "react-router-dom";
 
 const Icon = (
@@ -224,10 +223,6 @@ const UseFormTest = React.memo(() => {
             {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size, key) => (
                 <FilePicker
                     {...fields.file}
-                    minFileSize={1000000}
-                    maxFileSize={1000000000}
-                    minFiles={2}
-                    maxFiles={5}
                     accept={["image/*"]}
                     onError={(code) => console.error(code)}
                     size={size}
