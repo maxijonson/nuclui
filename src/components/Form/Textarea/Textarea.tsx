@@ -226,6 +226,7 @@ const StyledTextarea = styled(Textarea)`
     }
 `;
 
-StyledTextarea.displayName = createComponentName("Textarea");
+StyledTextarea.displayName = createComponentName("StyledTextarea");
+Textarea.displayName = createComponentName("Textarea");
 
 export default StyledTextarea;

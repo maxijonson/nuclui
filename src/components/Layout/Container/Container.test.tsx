@@ -13,7 +13,12 @@ describe("Container", () => {
     });
 
     it("should display the correct name", () => {
-        expect(Container.displayName).toEqual("NuiContainer");
+        expect(Container.displayName).toEqual("NuiStyledContainer");
+        expect(
+            mount(<Container />)
+                .childAt(0)
+                .name()
+        ).toEqual("NuiContainer");
     });
 
     describe("component", () => {

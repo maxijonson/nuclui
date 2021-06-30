@@ -129,6 +129,7 @@ const StyledContainer = styled(Container)`
     }
 `;
 
-StyledContainer.displayName = createComponentName("Container");
+StyledContainer.displayName = createComponentName("StyledContainer");
+Container.displayName = createComponentName("Container");
 
 export default StyledContainer as typeof Container;

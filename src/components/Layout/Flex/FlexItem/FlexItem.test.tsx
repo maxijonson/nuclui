@@ -36,7 +36,12 @@ describe("FlexItem", () => {
     });
 
     it("should display the correct name", () => {
-        expect(FlexItem.displayName).toEqual("NuiFlexItem");
+        expect(FlexItem.displayName).toEqual("NuiStyledFlexItem");
+        expect(
+            mount(<FlexItem />)
+                .childAt(0)
+                .name()
+        ).toEqual("NuiFlexItem");
     });
 
     describe("component", () => {

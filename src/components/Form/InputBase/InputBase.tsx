@@ -181,7 +181,8 @@ const StyledInputBase = styled(InputBase)`
     }
 `;
 
-StyledInputBase.displayName = createComponentName("InputBase");
+StyledInputBase.displayName = createComponentName("StyledInputBase");
+InputBase.displayName = createComponentName("InputBase");
 
 /**
  * Extracts all relevant props for the InputBase and gives them a default value, if needed. The excess is placed in the `restProps` property.

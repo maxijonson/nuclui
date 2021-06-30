@@ -13,7 +13,12 @@ describe("Card", () => {
     });
 
     it("should display the correct name", () => {
-        expect(Card.displayName).toEqual("NuiCard");
+        expect(Card.displayName).toEqual("NuiStyledCard");
+        expect(
+            mount(<Card />)
+                .childAt(0)
+                .name()
+        ).toEqual("NuiCard");
     });
 
     describe("component", () => {

@@ -233,6 +233,7 @@ const StyledFlex = styled(Flex)`
     }
 `;
 
-StyledFlex.displayName = createComponentName("Flex");
+StyledFlex.displayName = createComponentName("StyledFlex");
+Flex.displayName = createComponentName("Flex");
 
 export default StyledFlex as typeof Flex;

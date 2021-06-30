@@ -11,6 +11,7 @@ import { Popover } from "@components/Layout/Popover";
 import { quicksand } from "@fonts";
 import { context, shadow } from "@theme";
 import { useForceUpdate } from "@hooks";
+import { createComponentName } from "@utils";
 import {
     NuiSlider,
     SliderChangeEvent,
@@ -633,5 +634,8 @@ const StyledSlider = styled(Slider)`
         --nui-slider-labelpad: 5px;
     }
 `;
+
+StyledSlider.displayName = createComponentName("StyledSlider");
+Slider.displayName = createComponentName("Slider");
 
 export default StyledSlider as typeof Slider;

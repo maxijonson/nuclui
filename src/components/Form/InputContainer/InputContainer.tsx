@@ -279,7 +279,8 @@ const StyledInputContainer = styled(InputContainer)`
     }
 `;
 
-StyledInputContainer.displayName = createComponentName("InputContainer");
+StyledInputContainer.displayName = createComponentName("StyledInputContainer");
+InputContainer.displayName = createComponentName("InputContainer");
 
 /**
  * Extracts all relevant props for the InputContainer and gives them a default value, if needed. The excess is placed in the `restProps` property.

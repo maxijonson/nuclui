@@ -13,7 +13,12 @@ describe("HR", () => {
     });
 
     it("should display the correct name", () => {
-        expect(HR.displayName).toEqual("NuiHR");
+        expect(HR.displayName).toEqual("NuiStyledHR");
+        expect(
+            mount(<HR />)
+                .childAt(0)
+                .name()
+        ).toEqual("NuiHR");
     });
 
     describe("ref", () => {

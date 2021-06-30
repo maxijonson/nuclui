@@ -12,7 +12,12 @@ describe("Flex", () => {
     });
 
     it("should display the correct name", () => {
-        expect(Flex.displayName).toEqual("NuiFlex");
+        expect(Flex.displayName).toEqual("NuiStyledFlex");
+        expect(
+            mount(<Flex />)
+                .childAt(0)
+                .name()
+        ).toEqual("NuiFlex");
     });
 
     describe("component", () => {

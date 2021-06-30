@@ -59,6 +59,7 @@ const StyledSpacer = styled(Spacer)`
     }
 `;
 
-StyledSpacer.displayName = createComponentName("Spacer");
+StyledSpacer.displayName = createComponentName("StyledSpacer");
+Spacer.displayName = createComponentName("Spacer");
 
 export default StyledSpacer as typeof Spacer;

@@ -213,6 +213,7 @@ const StyledFlexItem = styled(FlexItem)`
     }
 `;
 
-StyledFlexItem.displayName = createComponentName("FlexItem");
+StyledFlexItem.displayName = createComponentName("StyledFlexItem");
+FlexItem.displayName = createComponentName("FlexItem");
 
 export default StyledFlexItem as typeof FlexItem;

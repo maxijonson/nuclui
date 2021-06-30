@@ -13,7 +13,12 @@ describe("Spacer", () => {
     });
 
     it("should display the correct name", () => {
-        expect(Spacer.displayName).toEqual("NuiSpacer");
+        expect(Spacer.displayName).toEqual("NuiStyledSpacer");
+        expect(
+            mount(<Spacer />)
+                .childAt(0)
+                .name()
+        ).toEqual("NuiSpacer");
     });
 
     describe("ref", () => {

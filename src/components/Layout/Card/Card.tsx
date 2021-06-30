@@ -72,6 +72,7 @@ const StyledCard = styled(Card)`
     }
 `;
 
-StyledCard.displayName = createComponentName("Card");
+StyledCard.displayName = createComponentName("StyledCard");
+Card.displayName = createComponentName("Card");
 
 export default StyledCard as typeof Card;

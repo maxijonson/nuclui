@@ -1,5 +1,6 @@
 import React from "react";
 import produce from "immer";
+import { createComponentName } from "@utils";
 import MediaQueryCtx from "./MediaQueryCtx";
 
 const MediaQueryContext = React.memo((props) => {
@@ -43,5 +44,7 @@ const MediaQueryContext = React.memo((props) => {
         />
     );
 });
+
+MediaQueryContext.displayName = createComponentName("MediaQueryContext");
 
 export default MediaQueryContext;

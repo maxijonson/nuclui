@@ -96,6 +96,7 @@ const StyledHR = styled(HR)`
     }
 `;
 
-StyledHR.displayName = createComponentName("HR");
+StyledHR.displayName = createComponentName("StyledHR");
+HR.displayName = createComponentName("HR");
 
 export default StyledHR as typeof HR;

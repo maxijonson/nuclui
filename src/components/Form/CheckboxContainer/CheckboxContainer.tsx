@@ -50,7 +50,10 @@ const StyledCheckboxContainer = styled(CheckboxContainer)`
     }
 `;
 
-StyledCheckboxContainer.displayName = createComponentName("CheckboxContainer");
+StyledCheckboxContainer.displayName = createComponentName(
+    "StyledCheckboxContainer"
+);
+CheckboxContainer.displayName = createComponentName("CheckboxContainer");
 
 /**
  * Extracts all relevant props for the CheckboxContainer and gives them a default value, if needed. The excess is placed in the `restProps` property.

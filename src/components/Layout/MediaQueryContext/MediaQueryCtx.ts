@@ -1,5 +1,5 @@
 import React from "react";
-import { nuiLog } from "@utils";
+import { createComponentName, nuiLog } from "@utils";
 import { MediaQueryContextValue } from "./types";
 
 export const defaultMediaQueryCtxValue = Object.freeze({
@@ -19,5 +19,7 @@ export const defaultMediaQueryCtxValue = Object.freeze({
 const MediaQueryCtx = React.createContext<MediaQueryContextValue>(
     defaultMediaQueryCtxValue
 );
+
+MediaQueryCtx.displayName = createComponentName("MediaQueryCtx");
 
 export default MediaQueryCtx;
