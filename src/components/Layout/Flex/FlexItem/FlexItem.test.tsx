@@ -1,9 +1,9 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import _ from "lodash";
 import { mount, ReactWrapper } from "enzyme";
 import mockConsole from "jest-mock-console";
 import { nuiLog } from "@utils";
+import { createBasicTests } from "@utils/test";
 import FlexItem from "./FlexItem";
 import "jest-styled-components";
 import Flex from "../Flex";
@@ -23,78 +23,24 @@ const resetBps = () => {
     };
 };
 
+const {
+    testClassName,
+    testComponent,
+    testDisplayName,
+    testRef,
+    testRendering,
+} = createBasicTests(FlexItem, {});
+
 describe("FlexItem", () => {
     beforeAll(() => {
         // Suppress MediaQueryContext warnings
         mockConsole("warn");
     });
-
-    it("should render without crashing", () => {
-        const div = document.createElement("div");
-        ReactDOM.render(<FlexItem />, div);
-        ReactDOM.unmountComponentAtNode(div);
-    });
-
-    it("should display the correct name", () => {
-        expect(FlexItem.displayName).toEqual("NuiStyledFlexItem");
-        expect(
-            mount(<FlexItem />)
-                .childAt(0)
-                .name()
-        ).toEqual("NuiFlexItem");
-    });
-
-    describe("component", () => {
-        it("should use button as root node", () => {
-            const wrapper = mount(<FlexItem component="button" />);
-            const root = wrapper.find("button").first();
-            expect(root.length).toBe(1);
-        });
-
-        it("should use div as default root node", () => {
-            const wrapper = mount(<FlexItem />);
-            const root = wrapper.find("div").first();
-            expect(root.length).toBe(1);
-        });
-
-        it("should use div as root node", () => {
-            const wrapper = mount(<FlexItem component="div" />);
-            const root = wrapper.find("div").first();
-            expect(root.length).toBe(1);
-        });
-    });
-
-    describe("ref", () => {
-        it("should have the ref forwarded to the default node", () => {
-            const ref = React.createRef<HTMLDivElement>();
-            const wrapper = mount(<FlexItem ref={ref} />);
-            const div = wrapper.find("div").first().getDOMNode();
-            expect(div).toBe(ref.current);
-        });
-
-        it("should have the ref forwarded to the overriden node", () => {
-            const ref = React.createRef<HTMLButtonElement>();
-            const wrapper = mount(<FlexItem component="button" ref={ref} />);
-            const btn = wrapper.find("button").first().getDOMNode();
-            expect(btn).toBe(ref.current);
-        });
-    });
-
-    describe("className", () => {
-        it("should use the default className", () => {
-            const wrapper = mount(<FlexItem />);
-            const div = wrapper.find("div").first();
-            expect(div.hasClass("NuiFlexItem")).toBeTruthy();
-        });
-
-        it("should use the default className with the one provided", () => {
-            const wrapper = mount(<FlexItem className="test potato" />);
-            const div = wrapper.find("div").first();
-            expect(div.hasClass("NuiFlexItem")).toBeTruthy();
-            expect(div.hasClass("test")).toBeTruthy();
-            expect(div.hasClass("potato")).toBeTruthy();
-        });
-    });
+    testRendering();
+    testDisplayName("NuiStyledFlexItem", "NuiFlexItem");
+    testComponent("div");
+    testRef("div", "button");
+    testClassName("div", "NuiFlexItem");
 
     describe("grow", () => {
         const assertGrow = (

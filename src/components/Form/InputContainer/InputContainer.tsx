@@ -47,7 +47,7 @@ const InputContainer: NuiInputContainer = React.memo(
         );
 
         return (
-            <InputBase
+            <StyledInputContainer
                 {...inputBaseElementProps}
                 {...inputBaseProps}
                 ref={ref}
@@ -67,14 +67,14 @@ const InputContainer: NuiInputContainer = React.memo(
                     />
                 )}
                 <div className="NuiInputContainer__underline" />
-            </InputBase>
+            </StyledInputContainer>
         );
     })
 );
 
 const TRANSITION_TIME = 0.2;
 
-const StyledInputContainer = styled(InputContainer)`
+const StyledInputContainer = styled(InputBase)`
     ${quicksand}
     ${context}
     --nui-inputContainer-underline: 1px;
@@ -310,4 +310,4 @@ export const extractInputContainerProps = <
     };
 };
 
-export default StyledInputContainer as typeof InputContainer;
+export default InputContainer;

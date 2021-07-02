@@ -1,77 +1,24 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import { mount, ReactWrapper } from "enzyme";
+import { createBasicTests } from "@utils/test";
 import Card from "./Card";
 import "jest-styled-components";
 import { CardProps } from "./types";
 
+const {
+    testClassName,
+    testComponent,
+    testDisplayName,
+    testRef,
+    testRendering,
+} = createBasicTests(Card, {});
+
 describe("Card", () => {
-    it("should render without crashing", () => {
-        const div = document.createElement("div");
-        ReactDOM.render(<Card />, div);
-        ReactDOM.unmountComponentAtNode(div);
-    });
-
-    it("should display the correct name", () => {
-        expect(Card.displayName).toEqual("NuiStyledCard");
-        expect(
-            mount(<Card />)
-                .childAt(0)
-                .name()
-        ).toEqual("NuiCard");
-    });
-
-    describe("component", () => {
-        it("should use button as root node", () => {
-            const wrapper = mount(<Card component="button" />);
-            const root = wrapper.find("button").first();
-            expect(root.length).toBe(1);
-        });
-
-        it("should use div as default root node", () => {
-            const wrapper = mount(<Card />);
-            const root = wrapper.find("div").first();
-            expect(root.length).toBe(1);
-        });
-
-        it("should use div as root node", () => {
-            const wrapper = mount(<Card component="div" />);
-            const root = wrapper.find("div").first();
-            expect(root.length).toBe(1);
-        });
-    });
-
-    describe("ref", () => {
-        it("should have the ref forwarded to the default node", () => {
-            const ref = React.createRef<HTMLDivElement>();
-            const wrapper = mount(<Card ref={ref} />);
-            const div = wrapper.find("div").first().getDOMNode();
-            expect(div).toBe(ref.current);
-        });
-
-        it("should have the ref forwarded to the overriden node", () => {
-            const ref = React.createRef<HTMLButtonElement>();
-            const wrapper = mount(<Card component="button" ref={ref} />);
-            const btn = wrapper.find("button").first().getDOMNode();
-            expect(btn).toBe(ref.current);
-        });
-    });
-
-    describe("className", () => {
-        it("should use the default className", () => {
-            const wrapper = mount(<Card />);
-            const div = wrapper.find("div").first();
-            expect(div.hasClass("NuiCard")).toBeTruthy();
-        });
-
-        it("should use the default className with the one provided", () => {
-            const wrapper = mount(<Card className="test potato" />);
-            const div = wrapper.find("div").first();
-            expect(div.hasClass("NuiCard")).toBeTruthy();
-            expect(div.hasClass("test")).toBeTruthy();
-            expect(div.hasClass("potato")).toBeTruthy();
-        });
-    });
+    testRendering();
+    testDisplayName("NuiStyledCard", "NuiCard");
+    testComponent("div");
+    testRef("div", "button");
+    testClassName("div", "NuiCard");
 
     describe("padding", () => {
         const assertPadding = (

@@ -233,6 +233,7 @@ const UseFormTest = React.memo(() => {
             {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size, key) => (
                 <Textarea
                     {...fields.description}
+                    resizeable
                     maxRows={6}
                     size={size}
                     key={key}

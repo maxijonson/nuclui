@@ -166,7 +166,7 @@ const Textarea: NuiTextarea = React.memo(
         }, [max, min]);
 
         return (
-            <InputContainer
+            <StyledTextarea
                 {...inputContainerProps}
                 focused={focused}
                 touched={touched}
@@ -193,12 +193,12 @@ const Textarea: NuiTextarea = React.memo(
                         value={value}
                     />
                 </div>
-            </InputContainer>
+            </StyledTextarea>
         );
     })
 );
 
-const StyledTextarea = styled(Textarea)`
+const StyledTextarea = styled(InputContainer)`
     & .NuiTextarea__container {
         display: flex;
         position: relative;
@@ -229,4 +229,4 @@ const StyledTextarea = styled(Textarea)`
 StyledTextarea.displayName = createComponentName("StyledTextarea");
 Textarea.displayName = createComponentName("Textarea");
 
-export default StyledTextarea;
+export default Textarea;

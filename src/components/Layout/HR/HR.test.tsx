@@ -1,50 +1,18 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import { mount } from "enzyme";
 import mockConsole from "jest-mock-console";
+import { createBasicTests } from "@utils/test";
 import HR from "./HR";
 import "jest-styled-components";
 
+const { testClassName, testDisplayName, testRef, testRendering } =
+    createBasicTests(HR, {});
+
 describe("HR", () => {
-    it("should render without crashing", () => {
-        const div = document.createElement("div");
-        ReactDOM.render(<HR />, div);
-        ReactDOM.unmountComponentAtNode(div);
-    });
-
-    it("should display the correct name", () => {
-        expect(HR.displayName).toEqual("NuiStyledHR");
-        expect(
-            mount(<HR />)
-                .childAt(0)
-                .name()
-        ).toEqual("NuiHR");
-    });
-
-    describe("ref", () => {
-        it("should use the ref forwarded to the default node", () => {
-            const ref = React.createRef<HTMLDivElement>();
-            const wrapper = mount(<HR ref={ref} />);
-            const div = wrapper.find("div").first().getDOMNode();
-            expect(div).toBe(ref.current);
-        });
-    });
-
-    describe("className", () => {
-        it("should use the default className", () => {
-            const wrapper = mount(<HR />);
-            const div = wrapper.find("div").first();
-            expect(div.hasClass("NuiHR")).toBeTruthy();
-        });
-
-        it("should use the default className with the one provided", () => {
-            const wrapper = mount(<HR className="test potato" />);
-            const div = wrapper.find("div").first();
-            expect(div.hasClass("NuiHR")).toBeTruthy();
-            expect(div.hasClass("test")).toBeTruthy();
-            expect(div.hasClass("potato")).toBeTruthy();
-        });
-    });
+    testRendering();
+    testDisplayName("NuiStyledHR", "NuiHR");
+    testRef("div");
+    testClassName("div", "NuiHR");
 
     describe("size", () => {
         it("should use the default size value", () => {

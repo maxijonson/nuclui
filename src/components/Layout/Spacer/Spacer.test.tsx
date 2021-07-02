@@ -1,50 +1,18 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import { mount } from "enzyme";
 import mockConsole from "jest-mock-console";
+import { createBasicTests } from "@utils/test";
 import Spacer from "./Spacer";
 import "jest-styled-components";
 
+const { testClassName, testDisplayName, testRef, testRendering } =
+    createBasicTests(Spacer, {});
+
 describe("Spacer", () => {
-    it("should render without crashing", () => {
-        const div = document.createElement("div");
-        ReactDOM.render(<Spacer />, div);
-        ReactDOM.unmountComponentAtNode(div);
-    });
-
-    it("should display the correct name", () => {
-        expect(Spacer.displayName).toEqual("NuiStyledSpacer");
-        expect(
-            mount(<Spacer />)
-                .childAt(0)
-                .name()
-        ).toEqual("NuiSpacer");
-    });
-
-    describe("ref", () => {
-        it("should use the ref forwarded to the default node", () => {
-            const ref = React.createRef<HTMLDivElement>();
-            const wrapper = mount(<Spacer ref={ref} />);
-            const div = wrapper.find("div").first().getDOMNode();
-            expect(div).toBe(ref.current);
-        });
-    });
-
-    describe("className", () => {
-        it("should use the default className", () => {
-            const wrapper = mount(<Spacer />);
-            const div = wrapper.find("div").first();
-            expect(div.hasClass("NuiSpacer")).toBeTruthy();
-        });
-
-        it("should use the default className with the one provided", () => {
-            const wrapper = mount(<Spacer className="test potato" />);
-            const div = wrapper.find("div").first();
-            expect(div.hasClass("NuiSpacer")).toBeTruthy();
-            expect(div.hasClass("test")).toBeTruthy();
-            expect(div.hasClass("potato")).toBeTruthy();
-        });
-    });
+    testRendering();
+    testDisplayName("NuiStyledSpacer", "NuiSpacer");
+    testRef("div");
+    testClassName("div", "NuiSpacer");
 
     describe("size", () => {
         it("should use the default size value", () => {

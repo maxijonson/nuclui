@@ -1,91 +1,24 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import { mount, ReactWrapper } from "enzyme";
+import { createBasicTests } from "@utils/test";
 import Container from "./Container";
 import "jest-styled-components";
 import { ContainerProps } from "./types";
 
+const {
+    testClassName,
+    testComponent,
+    testDisplayName,
+    testRef,
+    testRendering,
+} = createBasicTests(Container, {});
+
 describe("Container", () => {
-    it("should render without crashing", () => {
-        const div = document.createElement("div");
-        ReactDOM.render(<Container />, div);
-        ReactDOM.unmountComponentAtNode(div);
-    });
-
-    it("should display the correct name", () => {
-        expect(Container.displayName).toEqual("NuiStyledContainer");
-        expect(
-            mount(<Container />)
-                .childAt(0)
-                .name()
-        ).toEqual("NuiContainer");
-    });
-
-    describe("component", () => {
-        it("should use button as root node", () => {
-            const text = "A button container";
-            const wrapper = mount(
-                <Container component="button">{text}</Container>
-            );
-            const root = wrapper.find("button").first();
-            expect(root.length).toBe(1);
-            expect(root.children().text()).toBe(text);
-        });
-
-        it("should use div as default root node", () => {
-            const text = "A default container";
-            const wrapper = mount(<Container>{text}</Container>);
-            const root = wrapper.find("div").first();
-            expect(root.length).toBe(1);
-            expect(root.children().text()).toBe(text);
-        });
-
-        it("should use div as root node", () => {
-            const text = "A default container";
-            const wrapper = mount(
-                <Container component="div">{text}</Container>
-            );
-            const root = wrapper.find("div").first();
-            expect(root.length).toBe(1);
-            expect(root.children().text()).toBe(text);
-        });
-    });
-
-    describe("ref", () => {
-        it("should have the ref forwarded to the default node", () => {
-            const ref = React.createRef<HTMLDivElement>();
-            const wrapper = mount(<Container ref={ref} />);
-            const div = wrapper.find("div").first().getDOMNode();
-            expect(div).toBe(ref.current);
-        });
-
-        it("should have the ref forwarded to the overriden node", () => {
-            const ref = React.createRef<HTMLButtonElement>();
-            const wrapper = mount(
-                <Container component="button" ref={ref}>
-                    Container
-                </Container>
-            );
-            const btn = wrapper.find("button").first().getDOMNode();
-            expect(btn).toBe(ref.current);
-        });
-    });
-
-    describe("className", () => {
-        it("should use the default className", () => {
-            const wrapper = mount(<Container />);
-            const div = wrapper.find("div").first();
-            expect(div.hasClass("NuiContainer")).toBeTruthy();
-        });
-
-        it("should use the default className with the one provided", () => {
-            const wrapper = mount(<Container className="test potato" />);
-            const div = wrapper.find("div").first();
-            expect(div.hasClass("NuiContainer")).toBeTruthy();
-            expect(div.hasClass("test")).toBeTruthy();
-            expect(div.hasClass("potato")).toBeTruthy();
-        });
-    });
+    testRendering();
+    testDisplayName("NuiStyledContainer", "NuiContainer");
+    testComponent("div");
+    testRef("div", "button");
+    testClassName("div", "NuiContainer");
 
     describe("maxWidth", () => {
         const assertMaxWidth = (

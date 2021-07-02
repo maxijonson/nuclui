@@ -61,7 +61,7 @@ const InputBase: NuiInputBase = React.memo(
         );
 
         return (
-            <div {...restProps} className={classes} ref={ref}>
+            <StyledInputBase {...restProps} className={classes} ref={ref}>
                 <label className="NuiInputBase__label-container">
                     {label && (
                         <span
@@ -77,14 +77,14 @@ const InputBase: NuiInputBase = React.memo(
                         children={_.first(errors)}
                     />
                 )}
-            </div>
+            </StyledInputBase>
         );
     })
 );
 
 const TRANSITION_TIME = 0.2;
 
-const StyledInputBase = styled(InputBase)`
+const StyledInputBase = styled.div`
     ${context}
     --nui-inputBase-size: 18px;
     --nui-inputBase-font: 17px;
@@ -215,4 +215,4 @@ export const extractInputBaseProps = <T extends InputBaseProps>(
     };
 };
 
-export default StyledInputBase as typeof InputBase;
+export default InputBase;

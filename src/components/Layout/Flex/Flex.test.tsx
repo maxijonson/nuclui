@@ -1,76 +1,23 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import { mount, shallow } from "enzyme";
+import { createBasicTests } from "@utils/test";
 import Flex from "./Flex";
 import "jest-styled-components";
 
+const {
+    testClassName,
+    testComponent,
+    testDisplayName,
+    testRef,
+    testRendering,
+} = createBasicTests(Flex, {});
+
 describe("Flex", () => {
-    it("should render without crashing", () => {
-        const div = document.createElement("div");
-        ReactDOM.render(<Flex />, div);
-        ReactDOM.unmountComponentAtNode(div);
-    });
-
-    it("should display the correct name", () => {
-        expect(Flex.displayName).toEqual("NuiStyledFlex");
-        expect(
-            mount(<Flex />)
-                .childAt(0)
-                .name()
-        ).toEqual("NuiFlex");
-    });
-
-    describe("component", () => {
-        it("should use button as root node", () => {
-            const wrapper = mount(<Flex component="button" />);
-            const root = wrapper.find("button").first();
-            expect(root.length).toBe(1);
-        });
-
-        it("should use div as default root node", () => {
-            const wrapper = mount(<Flex />);
-            const root = wrapper.find("div").first();
-            expect(root.length).toBe(1);
-        });
-
-        it("should use div as root node", () => {
-            const wrapper = mount(<Flex component="div" />);
-            const root = wrapper.find("div").first();
-            expect(root.length).toBe(1);
-        });
-    });
-
-    describe("ref", () => {
-        it("should have the ref forwarded to the default node", () => {
-            const ref = React.createRef<HTMLDivElement>();
-            const wrapper = mount(<Flex ref={ref} />);
-            const div = wrapper.find("div").first().getDOMNode();
-            expect(div).toBe(ref.current);
-        });
-
-        it("should have the ref forwarded to the overriden node", () => {
-            const ref = React.createRef<HTMLButtonElement>();
-            const wrapper = mount(<Flex component="button" ref={ref} />);
-            const btn = wrapper.find("button").first().getDOMNode();
-            expect(btn).toBe(ref.current);
-        });
-    });
-
-    describe("className", () => {
-        it("should use the default className", () => {
-            const wrapper = mount(<Flex />);
-            const div = wrapper.find("div").first();
-            expect(div.hasClass("NuiFlex")).toBeTruthy();
-        });
-
-        it("should use the default className with the one provided", () => {
-            const wrapper = mount(<Flex className="test potato" />);
-            const div = wrapper.find("div").first();
-            expect(div.hasClass("NuiFlex")).toBeTruthy();
-            expect(div.hasClass("test")).toBeTruthy();
-            expect(div.hasClass("potato")).toBeTruthy();
-        });
-    });
+    testRendering();
+    testDisplayName("NuiStyledFlex", "NuiFlex");
+    testComponent("div");
+    testRef("div", "button");
+    testClassName("div", "NuiFlex");
 
     describe("inline", () => {
         it("should use the default inline value", () => {

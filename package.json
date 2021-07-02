@@ -13,6 +13,7 @@
     "test": "npm-run-all prettier:report lint && jest",
     "test:full": "npm-run-all prettier:report lint && jest --collectCoverage --no-cache",
     "test:watch": "npm run lint && jest --watch",
+    "test:watchcoverage": "npm run lint && jest --watch --collectCoverage",
     "test:publish": "npm run prepublishOnly && npm pack && tar xvzf *.tgz && rm -rf *.tgz && npm run postpublish",
     "test:heroku": "npm run heroku-postbuild && heroku local web",
     "compile": "npm-run-all clean test:full && ttsc --project src/tsconfig.prod.json && npm run copyDeclarations",

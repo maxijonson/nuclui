@@ -389,7 +389,7 @@ const Slider: NuiSlider = React.memo(
         }, [forceUpdate]);
 
         return (
-            <InputBase
+            <StyledSlider
                 {...inputBaseElementProps}
                 {...inputBaseProps}
                 focused={focused}
@@ -501,12 +501,12 @@ const Slider: NuiSlider = React.memo(
                         />
                     )}
                 </div>
-            </InputBase>
+            </StyledSlider>
         );
     })
 );
 
-const StyledSlider = styled(Slider)`
+const StyledSlider = styled(InputBase)`
     ${quicksand}
     ${context}
     --nui-slider-size: 20px;
@@ -638,4 +638,4 @@ const StyledSlider = styled(Slider)`
 StyledSlider.displayName = createComponentName("StyledSlider");
 Slider.displayName = createComponentName("Slider");
 
-export default StyledSlider as typeof Slider;
+export default Slider;

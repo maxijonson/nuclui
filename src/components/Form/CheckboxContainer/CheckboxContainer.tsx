@@ -20,19 +20,19 @@ const CheckboxContainer: NuiCheckboxContainer = React.memo(
         } = extractInputBaseProps(props);
 
         return (
-            <InputBase
+            <StyledCheckboxContainer
                 {...inputBaseElementProps}
                 {...inputBaseProps}
                 ref={ref}
                 className={clsx(["NuiCheckboxContainer", className])}
             >
                 {children}
-            </InputBase>
+            </StyledCheckboxContainer>
         );
     })
 );
 
-const StyledCheckboxContainer = styled(CheckboxContainer)`
+const StyledCheckboxContainer = styled(InputBase)`
     ${context}
     --nui-inputBase-size: 18px;
 
@@ -79,4 +79,4 @@ export const extractCheckboxContainerProps = <
     };
 };
 
-export default StyledCheckboxContainer as typeof CheckboxContainer;
+export default CheckboxContainer;
