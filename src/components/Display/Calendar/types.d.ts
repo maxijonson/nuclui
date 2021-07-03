@@ -32,6 +32,21 @@ export interface CalendarDay {
      * Wether or not this day is out of the current month's scope
      */
     outOfMonth: boolean;
+
+    /**
+     * The day's year
+     */
+    year: number;
+
+    /**
+     * The day's month
+     */
+    month: number;
+
+    /**
+     * The day in number
+     */
+    day: number;
 }
 
 /**

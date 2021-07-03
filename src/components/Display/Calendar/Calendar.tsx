@@ -68,11 +68,14 @@ const Calendar: NuiCalendar = React.forwardRef((props, ref) => {
             i <= prevDaysAmount;
             ++i
         ) {
-            date.setDate(i);
+            date.setFullYear(prevYear, prevMonth, i);
             options.push({
                 label: `${i}`,
                 value: date.getTime(),
                 outOfMonth: true,
+                year: prevYear,
+                month: prevMonth,
+                day: i,
             });
         }
 
@@ -80,11 +83,14 @@ const Calendar: NuiCalendar = React.forwardRef((props, ref) => {
         date.setFullYear(year);
         date.setMonth(month);
         for (let i = 1; i <= daysAmount; ++i) {
-            date.setDate(i);
+            date.setFullYear(year, month, i);
             options.push({
                 label: `${i}`,
                 value: date.getTime(),
                 outOfMonth: false,
+                year,
+                month,
+                day: i,
             });
         }
 
@@ -92,11 +98,14 @@ const Calendar: NuiCalendar = React.forwardRef((props, ref) => {
         date.setFullYear(nextYear);
         date.setMonth(nextMonth);
         for (let i = 1; i <= nextDaysShown; ++i) {
-            date.setDate(i);
+            date.setFullYear(nextYear, nextMonth, i);
             options.push({
                 label: `${i}`,
                 value: date.getTime(),
                 outOfMonth: true,
+                year: nextYear,
+                month: nextMonth,
+                day: i,
             });
         }
 
