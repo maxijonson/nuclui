@@ -1,2 +1,2 @@
-export { default as primary } from "./primary";
-export { default as secondary } from "./secondary";
+export { default as primary, varPrimary } from "./primary";
+export { default as secondary, varSecondary } from "./secondary";

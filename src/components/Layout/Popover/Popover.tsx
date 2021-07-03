@@ -55,8 +55,8 @@ const StyledPopover = styled(Popover)`
     border-radius: 4px;
     border-style: solid;
     border-width: 1px;
-    box-shadow: 0 2px 3px -1px var(--nui-shadow),
-        0 1px 1px -1px var(--nui-shadow);
+    box-shadow: 0 2px 3px -1px ${shadow.varPrimary},
+        0 1px 1px -1px ${shadow.varPrimary};
     box-sizing: border-box;
     position: absolute;
     pointer-events: none;

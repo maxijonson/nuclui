@@ -189,7 +189,7 @@ const StyledSwitch = styled(CheckboxContainer)`
                 }
 
                 & .NuiSwitch__toggle {
-                    border-color: var(--nui-background-primary);
+                    border-color: ${background.varPrimary};
                     left: calc(
                         100% -
                             (var(--nui-switch-toggle) + var(--nui-switch-pad))

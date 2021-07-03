@@ -220,7 +220,7 @@ const StyledNumberInput = styled(InputContainer)`
 
                 width: 100%;
                 height: 100%;
-                fill: var(--nui-text-secondary);
+                fill: ${text.varSecondary};
             }
 
             &.disabled {

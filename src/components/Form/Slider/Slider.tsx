@@ -551,7 +551,7 @@ const StyledSlider = styled(InputBase)`
         width: var(--nui-slider-handlesize);
         height: var(--nui-slider-handlesize);
         background: transparent;
-        box-shadow: 0 2px 3px -1px var(--nui-shadow);
+        box-shadow: 0 2px 3px -1px ${shadow.varPrimary};
         border-radius: 50%;
         cursor: pointer;
         box-sizing: border-box;

@@ -1,8 +1,10 @@
 import { css } from "styled-components";
-import defaultTheme from "../defaultTheme";
+import { createTextTheme } from "../defaultTheme";
+
+const textPrimary = createTextTheme("primary");
+export const varPrimary = textPrimary.var;
 
 export default css`
-    --nui-text-primary: ${({ theme }) =>
-        theme.nui?.text?.primary ?? defaultTheme.text.primary};
-    color: var(--nui-text-primary);
+    ${textPrimary.varName}: ${textPrimary.getVarValue};
+    color: ${varPrimary};
 `;

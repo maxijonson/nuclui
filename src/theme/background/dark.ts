@@ -1,8 +1,10 @@
 import { css } from "styled-components";
-import defaultTheme from "../defaultTheme";
+import { createBackgroundTheme } from "../defaultTheme";
+
+const backgroundDark = createBackgroundTheme("dark");
+export const varDark = backgroundDark.var;
 
 export default css`
-    --nui-background-dark: ${({ theme }) =>
-        theme.nui?.background?.dark ?? defaultTheme.background.dark};
-    background-color: var(--nui-background-dark);
+    ${backgroundDark.varName}: ${backgroundDark.getVarValue};
+    background-color: ${varDark};
 `;

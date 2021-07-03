@@ -55,4 +55,41 @@ const defaultTheme = {
     },
 };
 
+/**
+ * Utility to create consistent CSS variable names for themes
+ *
+ * @param themeName the theme group name
+ * @returns a function that creates a CSS variable name for a given property of the theme group
+ */
+const createTheme =
+    <
+        T extends typeof defaultTheme,
+        K extends string & keyof T,
+        N extends string & keyof T[K]
+    >(
+        themeName: K
+    ) =>
+    (name: N) => {
+        const cssVarName = `--nui-${themeName}-${name}`;
+        return {
+            varName: cssVarName,
+            var: `var(${cssVarName})`,
+            getVarValue: ({ theme }: { theme: { nui?: T } }) => {
+                if (
+                    theme.nui &&
+                    theme.nui[themeName] &&
+                    theme.nui[themeName][name]
+                ) {
+                    return theme.nui[themeName][name];
+                }
+                return (defaultTheme as T)[themeName][name];
+            },
+        };
+    };
+
+export const createBackgroundTheme = createTheme("background");
+export const createBorderTheme = createTheme("border");
+export const createShadowTheme = createTheme("shadow");
+export const createTextTheme = createTheme("text");
+
 export default defaultTheme;

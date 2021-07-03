@@ -1,8 +1,10 @@
 import { css } from "styled-components";
-import defaultTheme from "../defaultTheme";
+import { createBackgroundTheme } from "../defaultTheme";
+
+const backgroundDimmed = createBackgroundTheme("dimmed");
+export const varDimmed = backgroundDimmed.var;
 
 export default css`
-    --nui-background-dimmed: ${({ theme }) =>
-        theme.nui?.background?.dimmed ?? defaultTheme.background.dimmed};
-    background-color: var(--nui-background-dimmed);
+    ${backgroundDimmed.varName}: ${backgroundDimmed.getVarValue};
+    background-color: ${varDimmed};
 `;

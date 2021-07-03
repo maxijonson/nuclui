@@ -1,8 +1,10 @@
 import { css } from "styled-components";
-import defaultTheme from "../defaultTheme";
+import { createTextTheme } from "../defaultTheme";
+
+const textContrast = createTextTheme("contrast");
+export const varContrast = textContrast.var;
 
 export default css`
-    --nui-text-contrast: ${({ theme }) =>
-        theme.nui?.text?.contrast ?? defaultTheme.text.contrast};
-    color: var(--nui-text-contrast);
+    ${textContrast.varName}: ${textContrast.getVarValue};
+    color: ${varContrast};
 `;

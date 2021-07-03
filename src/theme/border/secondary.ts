@@ -1,8 +1,10 @@
 import { css } from "styled-components";
-import defaultTheme from "../defaultTheme";
+import { createBorderTheme } from "../defaultTheme";
+
+const borderSecondary = createBorderTheme("secondary");
+export const varSecondary = borderSecondary.var;
 
 export default css`
-    --nui-border-secondary: ${({ theme }) =>
-        theme.nui?.border?.secondary ?? defaultTheme.border.secondary};
-    border-color: var(--nui-border-secondary);
+    ${borderSecondary.varName}: ${borderSecondary.getVarValue};
+    border-color: ${varSecondary};
 `;

@@ -1,7 +1,9 @@
 import { css } from "styled-components";
-import defaultTheme from "../defaultTheme";
+import { createShadowTheme } from "../defaultTheme";
+
+const shadowPrimary = createShadowTheme("primary");
+export const varPrimary = shadowPrimary.var;
 
 export default css`
-    --nui-shadow: ${({ theme }) =>
-        theme.nui?.shadow?.primary ?? defaultTheme.shadow.primary};
+    ${shadowPrimary.varName}: ${shadowPrimary.getVarValue};
 `;

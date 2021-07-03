@@ -44,8 +44,8 @@ const StyledCard = styled(Card)`
     box-sizing: border-box;
     margin-top: 15px;
     margin-bottom: 15px;
-    box-shadow: 0 2px 3px -1px var(--nui-shadow),
-        0 1px 1px -1px var(--nui-shadow);
+    box-shadow: 0 2px 3px -1px ${shadow.varSecondary},
+        0 1px 1px -1px ${shadow.varSecondary};
     border-radius: 5px;
     border-width: 1px;
     border-style: solid;

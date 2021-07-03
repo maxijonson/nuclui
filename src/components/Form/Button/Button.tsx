@@ -174,12 +174,12 @@ const StyledButton = styled(Button)`
     ${context}
     ${quicksand}
     
-    --nui-button-color: var(--nui-background-dimmed);
-    --nui-button-color-hover: var(--nui-background-dark);
+    --nui-button-color: ${background.varDimmed};
+    --nui-button-color-hover: ${background.varDark};
 
-    --nui-button-outline: var(--nui-text-primary);
-    --nui-button-outline-hover: var(--nui-text-primary);
-    --nui-button-outline-background: var(--nui-background-dimmed);
+    --nui-button-outline: ${text.varPrimary};
+    --nui-button-outline-hover: ${text.varPrimary};
+    --nui-button-outline-background: ${background.varDimmed};
 
     --nui-button-size: 18px;
     --nui-button-pad: 4px;
@@ -230,7 +230,7 @@ const StyledButton = styled(Button)`
         height: calc(100% + 4px);
         opacity: 1;
         box-shadow: 0 calc(var(--nui-button-pad) / 1.75) var(--nui-button-pad)
-            var(--nui-shadow);
+            ${shadow.varPrimary};
         transition: opacity 0.2s, background-color 0.2s;
         background-color: var(--nui-button-color);
     }

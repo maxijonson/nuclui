@@ -90,7 +90,7 @@ const StyledInputContainer = styled(InputBase)`
         box-sizing: border-box;
         transition: border-color ${TRANSITION_TIME}s;
         padding: 0;
-        box-shadow: 0 1px 2px -1px var(--nui-shadow);
+        box-shadow: 0 1px 2px -1px ${shadow.varSecondary};
         border-style: solid;
         border-width: 1px;
 
@@ -198,7 +198,7 @@ const StyledInputContainer = styled(InputBase)`
         & .NuiInputBase__container {
             ${background.secondary}
 
-            box-shadow: 0 1px 2px -1px var(--nui-shadow);
+            box-shadow: 0 1px 2px -1px ${shadow.varSecondary};
             border-width: 1px;
         }
     }
@@ -212,7 +212,7 @@ const StyledInputContainer = styled(InputBase)`
         & .NuiInputBase__container {
             ${background.secondary}
 
-            box-shadow: 0 1px 2px -1px var(--nui-shadow);
+            box-shadow: 0 1px 2px -1px ${shadow.varSecondary};
             border-width: 1px;
             border-left: none;
             border-right: none;

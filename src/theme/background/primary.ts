@@ -1,8 +1,10 @@
 import { css } from "styled-components";
-import defaultTheme from "../defaultTheme";
+import { createBackgroundTheme } from "../defaultTheme";
+
+const backgroundPrimary = createBackgroundTheme("primary");
+export const varPrimary = backgroundPrimary.var;
 
 export default css`
-    --nui-background-primary: ${({ theme }) =>
-        theme.nui?.background?.primary ?? defaultTheme.background.primary};
-    background-color: var(--nui-background-primary);
+    ${backgroundPrimary.varName}: ${backgroundPrimary.getVarValue};
+    background-color: ${varPrimary};
 `;
