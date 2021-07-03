@@ -14,30 +14,27 @@ import FlexContext from "../FlexContext";
  */
 const getBasis = (basis: number | string | undefined) => {
     if (!basis) return undefined;
+    if (typeof basis !== "number") return basis;
 
-    if (typeof basis === "number") {
-        const min = 0;
-        const max = 12;
-        let numericBasis = basis;
+    const min = 0;
+    const max = 12;
+    let numericBasis = basis;
 
-        if (!_.isInteger(basis)) {
-            nuiLog.warn(
-                `FlexItem basis, when specified as a number, must be an integer. The rounded number will be used`,
-                { once: "FlexItem-getBasis-integer" }
-            );
-            numericBasis = _.clamp(_.round(basis), min, max);
-        } else if (basis < min || basis > max) {
-            nuiLog.warn(
-                `FlexItem basis, when specified as a number, must be between ${min} and ${max}. Clamped value will be used.`,
-                { once: "FlexItem-getBasis-bounds" }
-            );
-            numericBasis = _.clamp(basis, min, max);
-        }
-
-        return `${(numericBasis / max) * 100}%`;
+    if (!_.isInteger(basis)) {
+        nuiLog.warn(
+            `FlexItem basis, when specified as a number, must be an integer. The rounded number will be used`,
+            { once: "FlexItem-getBasis-integer" }
+        );
+        numericBasis = _.clamp(_.round(basis), min, max);
+    } else if (basis < min || basis > max) {
+        nuiLog.warn(
+            `FlexItem basis, when specified as a number, must be between ${min} and ${max}. Clamped value will be used.`,
+            { once: "FlexItem-getBasis-bounds" }
+        );
+        numericBasis = _.clamp(basis, min, max);
     }
 
-    return basis;
+    return `${(numericBasis / max) * 100}%`;
 };
 
 const bp = createBreakpoints({ sm: 620, md: 980, lg: 1280, xl: 1920 });

@@ -543,6 +543,28 @@ describe("FlexItem", () => {
                             );
                         });
                     });
+
+                    it(`should use the parent provided ${bpKey} value`, () => {
+                        bps[bpKey].basis = "50%";
+
+                        _.forEach(bps, ({ media }, key) => {
+                            const size = media ?? 100;
+                            window.resizeTo(size, size / 2);
+                            assertBreakpoint(
+                                key == bpKey ? "50%" : defaultBasis,
+                                mount(
+                                    <Flex
+                                        itemBasis={defaultBasis}
+                                        {...{
+                                            [`item${_.capitalize(bpKey)}`]: 6,
+                                        }}
+                                    >
+                                        <FlexItem />
+                                    </Flex>
+                                )
+                            );
+                        });
+                    });
                 }
             );
         });

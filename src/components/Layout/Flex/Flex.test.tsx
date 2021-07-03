@@ -125,6 +125,12 @@ describe("Flex", () => {
             expect(flex.hasClass("NuiFlex--jc-start")).toBeTruthy();
         });
 
+        it("should use the end justify", () => {
+            const wrapper = mount(<Flex justify="end" />);
+            const flex = wrapper.find(".NuiFlex").first();
+            expect(flex.hasClass("NuiFlex--jc-end")).toBeTruthy();
+        });
+
         it("should use the left justify", () => {
             const wrapper = mount(<Flex justify="left" />);
             const flex = wrapper.find(".NuiFlex").first();

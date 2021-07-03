@@ -17,7 +17,10 @@ interface Component<P extends object> {
  * @param props The props that should be given to the component. These should only include the required props. Optional props should be tested on their own. This parameters does **not** test the correct implementation of the required props. It simply provides what is expected to be provided by the client.
  * @returns A suite of multiple tests that can be individually called
  */
-function createBasicTests<P extends object>(Component: Component<P>, props: P) {
+const createBasicTests = <P extends object>(
+    Component: Component<P>,
+    props: P
+) => {
     /**
      * Tests that the component is able to mount/unmount without causing any errors
      *
@@ -150,6 +153,6 @@ function createBasicTests<P extends object>(Component: Component<P>, props: P) {
         testComponent,
         testClassName,
     } as const;
-}
+};
 
 export default createBasicTests;
