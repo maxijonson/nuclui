@@ -466,7 +466,8 @@ const FilePicker: NuiFilePicker = React.memo(
 );
 
 const StyledFilePicker = styled(InputContainer)`
-    ${context}
+    ${context.danger}
+    ${context.dangerLight}
 
     --nui-filepicker-height: 120px;
     --nui-filepicker-configsize: 0.6em;
@@ -520,10 +521,10 @@ const StyledFilePicker = styled(InputContainer)`
     }
 
     &.NuiFilePicker--hasError {
-        color: var(--nui-context-danger);
+        color: ${context.varDanger};
 
         & .NuiFilePicker__config {
-            color: var(--nui-context-dangerLight);
+            color: ${context.varDangerLight};
         }
     }
 

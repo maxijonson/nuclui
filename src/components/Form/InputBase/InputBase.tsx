@@ -85,7 +85,8 @@ const InputBase: NuiInputBase = React.memo(
 const TRANSITION_TIME = 0.2;
 
 const StyledInputBase = styled.div`
-    ${context}
+    ${context.primary}
+    ${context.danger}
     --nui-inputBase-size: 18px;
     --nui-inputBase-font: 17px;
 
@@ -118,14 +119,14 @@ const StyledInputBase = styled.div`
 
     &.NuiInputBase--focused {
         & .NuiInputBase__label {
-            color: var(--nui-context-primary);
+            color: ${context.varPrimary};
         }
     }
 
     &.NuiInputBase--invalid {
         & .NuiInputBase__error,
         & .NuiInputBase__label {
-            color: var(--nui-context-danger);
+            color: ${context.varDanger};
         }
     }
 

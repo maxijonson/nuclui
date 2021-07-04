@@ -76,7 +76,8 @@ const TRANSITION_TIME = 0.2;
 
 const StyledInputContainer = styled(InputBase)`
     ${quicksand}
-    ${context}
+    ${context.primary}
+    ${context.danger}
     --nui-inputContainer-underline: 1px;
     --nui-inputContainer-pad: 8px;
 
@@ -151,7 +152,7 @@ const StyledInputContainer = styled(InputBase)`
         height: var(--nui-inputContainer-underline);
         left: 0;
         bottom: 0;
-        background-color: var(--nui-context-primary);
+        background-color: ${context.varPrimary};
         transform-origin: 50% 50%;
         transform: scaleX(0);
         transition: transform ${TRANSITION_TIME}s;
@@ -243,7 +244,7 @@ const StyledInputContainer = styled(InputBase)`
 
     &.NuiInputBase--focused {
         & .NuiInputBase__container {
-            border-color: var(--nui-context-primary);
+            border-color: ${context.varPrimary};
         }
 
         & .NuiInputContainer__underline {
@@ -253,11 +254,11 @@ const StyledInputContainer = styled(InputBase)`
 
     &.NuiInputBase--invalid {
         & .NuiInputBase__container {
-            border-color: var(--nui-context-danger);
+            border-color: ${context.varDanger};
         }
 
         & .NuiInputContainer__underline {
-            background-color: var(--nui-context-danger);
+            background-color: ${context.varDanger};
         }
     }
 

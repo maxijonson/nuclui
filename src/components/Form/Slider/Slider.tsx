@@ -508,7 +508,9 @@ const Slider: NuiSlider = React.memo(
 
 const StyledSlider = styled(InputBase)`
     ${quicksand}
-    ${context}
+    ${context.primaryVLight}
+    ${context.primaryLight}
+    ${context.primary}
     --nui-slider-size: 20px;
     --nui-slider-pad: 8px;
     --nui-slider-tracksize: 4px;
@@ -531,7 +533,7 @@ const StyledSlider = styled(InputBase)`
         align-items: center;
         width: 100%;
         height: 30%;
-        background: var(--nui-context-primaryVLight);
+        background: ${context.varPrimaryVLight};
         height: var(--nui-slider-tracksize);
         border-radius: var(--nui-slider-trackradius);
         overflow: hidden;
@@ -540,7 +542,7 @@ const StyledSlider = styled(InputBase)`
 
     & .NuiSlider__track__filler {
         height: 100%;
-        background: var(--nui-context-primary);
+        background: ${context.varPrimary};
         pointer-events: none;
     }
 
@@ -560,14 +562,14 @@ const StyledSlider = styled(InputBase)`
         &::after {
             content: "";
             position: absolute;
-            background: var(--nui-context-primary);
+            background: ${context.varPrimary};
             width: 100%;
             height: 100%;
             border-radius: 50%;
         }
 
         &::before {
-            background: var(--nui-context-primaryLight);
+            background: ${context.varPrimaryLight};
             opacity: 0;
             transform: scale(0.75);
             transition: opacity 0.2s, transform 0.2s;

@@ -701,7 +701,8 @@ const DatePicker: NuiDatePicker = React.memo(
 );
 
 const StyledDatePicker = styled(InputContainer)`
-    ${context}
+    ${context.primary}
+    ${context.primaryDark}
 
     & .NuiDatePicker__container {
         width: 100%;
@@ -841,7 +842,7 @@ const StyledDatePicker = styled(InputContainer)`
             &.NuiDatePicker__dial__hour--selected,
             &.NuiDatePicker__dial__minute--selected,
             &.NuiDatePicker__dial__second--selected {
-                background-color: var(--nui-context-primaryDark);
+                background-color: ${context.varPrimaryDark};
             }
         }
 
@@ -853,7 +854,7 @@ const StyledDatePicker = styled(InputContainer)`
         &.NuiDatePicker__dial__second--selected {
             ${text.contrast}
 
-            background-color: var(--nui-context-primary);
+            background-color: ${context.varPrimary};
             font-weight: 600;
         }
     }

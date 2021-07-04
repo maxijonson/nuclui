@@ -90,7 +90,9 @@ const RadioButton: NuiRadioButton = React.memo(
 );
 
 const StyledRadioButton = styled(CheckboxContainer)`
-    ${context}
+    ${context.primaryLight}
+    ${context.primary}
+    ${context.primaryDark}
 
     & .NuiRadioButton__container {
         cursor: pointer;
@@ -113,12 +115,12 @@ const StyledRadioButton = styled(CheckboxContainer)`
         &:active ~ .NuiRadioButton__container {
             ${background.secondary}
 
-            border-color: var(--nui-context-primary);
+            border-color: ${context.varPrimary};
         }
 
         &:checked {
             & ~ .NuiRadioButton__container {
-                background-color: var(--nui-context-primary);
+                background-color: ${context.varPrimary};
                 transform: scale(1);
                 border-color: transparent;
             }
@@ -128,13 +130,13 @@ const StyledRadioButton = styled(CheckboxContainer)`
             }
 
             &:focus-visible ~ .NuiRadioButton__container {
-                background-color: var(--nui-context-primaryLight);
+                background-color: ${context.varPrimaryLight};
             }
 
             &:active ~ .NuiRadioButton__container {
                 ${border.primary}
 
-                background-color: var(--nui-context-primaryDark);
+                background-color: ${context.varPrimaryDark};
             }
         }
     }
@@ -183,7 +185,7 @@ const StyledRadioButton = styled(CheckboxContainer)`
         }
 
         & .NuiRadioButton__input:checked ~ .NuiRadioButton__container {
-            background-color: var(--nui-context-primaryDark);
+            background-color: ${context.varPrimaryDark};
         }
     }
 `;

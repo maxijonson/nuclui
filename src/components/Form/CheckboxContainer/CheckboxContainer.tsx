@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import clsx from "clsx";
-import { context } from "@theme";
 import { createComponentName } from "@utils";
 import {
     CheckboxContainerProps,
@@ -33,7 +32,6 @@ const CheckboxContainer: NuiCheckboxContainer = React.memo(
 );
 
 const StyledCheckboxContainer = styled(InputBase)`
-    ${context}
     --nui-inputBase-size: 18px;
 
     width: fit-content;

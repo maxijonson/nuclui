@@ -171,7 +171,24 @@ const StyledButton = styled(Button)`
     ${text.primary}
     ${background.dimmed}
     ${background.dark}
-    ${context}
+    ${context.primaryVLight}
+    ${context.primary}
+    ${context.primaryDark}
+    ${context.secondaryVLight}
+    ${context.secondary}
+    ${context.secondaryDark}
+    ${context.successVLight}
+    ${context.success}
+    ${context.successDark}
+    ${context.dangerVLight}
+    ${context.danger}
+    ${context.dangerDark}
+    ${context.warnVLight}
+    ${context.warn}
+    ${context.warnDark}
+    ${context.infoVLight}
+    ${context.info}
+    ${context.infoDark}
     ${quicksand}
     
     --nui-button-color: ${background.varDimmed};
@@ -331,51 +348,51 @@ const StyledButton = styled(Button)`
 
     &.NuiButton--color-primary {
         ${text.contrast}
-        --nui-button-color: var(--nui-context-primary);
-        --nui-button-color-hover: var(--nui-context-primaryDark);
-        --nui-button-outline: var(--nui-context-primary);
-        --nui-button-outline-hover: var(--nui-context-primaryDark);
-        --nui-button-outline-background: var(--nui-context-primaryVLight);
+        --nui-button-color: ${context.varPrimary};
+        --nui-button-color-hover: ${context.varPrimaryDark};
+        --nui-button-outline: ${context.varPrimary};
+        --nui-button-outline-hover: ${context.varPrimaryDark};
+        --nui-button-outline-background: ${context.varPrimaryVLight};
     }
     &.NuiButton--color-secondary {
         ${text.contrast}
-        --nui-button-color: var(--nui-context-secondary);
-        --nui-button-color-hover: var(--nui-context-secondaryDark);
-        --nui-button-outline: var(--nui-context-secondary);
-        --nui-button-outline-hover: var(--nui-context-secondaryDark);
-        --nui-button-outline-background: var(--nui-context-secondaryVLight);
+        --nui-button-color: ${context.varSecondary};
+        --nui-button-color-hover: ${context.varSecondaryDark};
+        --nui-button-outline: ${context.varSecondary};
+        --nui-button-outline-hover: ${context.varSecondaryDark};
+        --nui-button-outline-background: ${context.varSecondaryVLight};
     }
     &.NuiButton--color-warn {
         ${text.contrast}
-        --nui-button-color: var(--nui-context-warn);
-        --nui-button-color-hover: var(--nui-context-warnDark);
-        --nui-button-outline: var(--nui-context-warn);
-        --nui-button-outline-hover: var(--nui-context-warnDark);
-        --nui-button-outline-background: var(--nui-context-warnVLight);
+        --nui-button-color: ${context.varWarn};
+        --nui-button-color-hover: ${context.varWarnDark};
+        --nui-button-outline: ${context.varWarn};
+        --nui-button-outline-hover: ${context.varWarnDark};
+        --nui-button-outline-background: ${context.varWarnVLight};
     }
     &.NuiButton--color-danger {
         ${text.contrast}
-        --nui-button-color: var(--nui-context-danger);
-        --nui-button-color-hover: var(--nui-context-dangerDark);
-        --nui-button-outline: var(--nui-context-danger);
-        --nui-button-outline-hover: var(--nui-context-dangerDark);
-        --nui-button-outline-background: var(--nui-context-dangerVLight);
+        --nui-button-color: ${context.varDanger};
+        --nui-button-color-hover: ${context.varDangerDark};
+        --nui-button-outline: ${context.varDanger};
+        --nui-button-outline-hover: ${context.varDangerDark};
+        --nui-button-outline-background: ${context.varDangerVLight};
     }
     &.NuiButton--color-success {
         ${text.contrast}
-        --nui-button-color: var(--nui-context-success);
-        --nui-button-color-hover: var(--nui-context-successDark);
-        --nui-button-outline: var(--nui-context-success);
-        --nui-button-outline-hover: var(--nui-context-successDark);
-        --nui-button-outline-background: var(--nui-context-successVLight);
+        --nui-button-color: ${context.varSuccess};
+        --nui-button-color-hover: ${context.varSuccessDark};
+        --nui-button-outline: ${context.varSuccess};
+        --nui-button-outline-hover: ${context.varSuccessDark};
+        --nui-button-outline-background: ${context.varSuccessVLight};
     }
     &.NuiButton--color-info {
         ${text.contrast}
-        --nui-button-color: var(--nui-context-info);
-        --nui-button-color-hover: var(--nui-context-infoDark);
-        --nui-button-outline: var(--nui-context-info);
-        --nui-button-outline-hover: var(--nui-context-infoDark);
-        --nui-button-outline-background: var(--nui-context-infoVLight);
+        --nui-button-color: ${context.varInfo};
+        --nui-button-color-hover: ${context.varInfoDark};
+        --nui-button-outline: ${context.varInfo};
+        --nui-button-outline-hover: ${context.varInfoDark};
+        --nui-button-outline-background: ${context.varInfoVLight};
     }
 
     &.NuiButton--size-xs {

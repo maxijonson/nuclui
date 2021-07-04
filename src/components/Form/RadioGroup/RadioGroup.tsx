@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import clsx from "clsx";
 import { createComponentName } from "@utils";
-import { context, text } from "@theme";
+import { text } from "@theme";
 import { NuiRadioGroup, RadioGroupContextValue } from "./types";
 
 export const RadioGroupContext = React.createContext<RadioGroupContextValue>(
@@ -68,7 +68,6 @@ const RadioGroup: NuiRadioGroup = React.memo(
 );
 
 const StyledRadioGroup = styled(RadioGroup)`
-    ${context}
     --nui-radiogroup-size: 18px;
     --nui-radiogroup-pad: 8px;
     --nui-radiogroup-font: 17px;

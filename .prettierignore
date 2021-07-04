@@ -9,3 +9,4 @@ scripts/compiled
 coverage
 CHANGELOG.md
 .heroku
+src/theme/context/index.ts

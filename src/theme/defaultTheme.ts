@@ -91,5 +91,6 @@ export const createBackgroundTheme = createTheme("background");
 export const createBorderTheme = createTheme("border");
 export const createShadowTheme = createTheme("shadow");
 export const createTextTheme = createTheme("text");
+export const createContextTheme = createTheme("context");
 
 export default defaultTheme;

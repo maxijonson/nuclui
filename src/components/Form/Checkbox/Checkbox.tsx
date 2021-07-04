@@ -83,7 +83,9 @@ const Checkbox: NuiCheckbox = React.memo(
 );
 
 const StyledCheckbox = styled(CheckboxContainer)`
-    ${context}
+    ${context.primaryLight}
+    ${context.primary}
+    ${context.primaryDark}
 
     & .NuiCheckbox__input {
         position: absolute;
@@ -98,12 +100,12 @@ const StyledCheckbox = styled(CheckboxContainer)`
         &:active ~ .NuiCheckbox__container {
             ${background.secondary}
 
-            border-color: var(--nui-context-primary);
+            border-color: ${context.varPrimary};
         }
 
         &:checked {
             & ~ .NuiCheckbox__container {
-                background-color: var(--nui-context-primary);
+                background-color: ${context.varPrimary};
                 transform: scale(1);
                 border-color: transparent;
             }
@@ -118,13 +120,13 @@ const StyledCheckbox = styled(CheckboxContainer)`
             }
 
             &:focus-visible ~ .NuiCheckbox__container {
-                background-color: var(--nui-context-primaryLight);
+                background-color: ${context.varPrimaryLight};
             }
 
             &:active ~ .NuiCheckbox__container {
                 ${border.primary}
 
-                background-color: var(--nui-context-primaryDark);
+                background-color:  ${context.varPrimaryDark};
             }
         }
     }
@@ -173,7 +175,7 @@ const StyledCheckbox = styled(CheckboxContainer)`
         }
 
         & .NuiCheckbox__input:checked ~ .NuiCheckbox__container {
-            background-color: var(--nui-context-primaryDark);
+            background-color: ${context.varPrimaryDark};
         }
     }
 `;

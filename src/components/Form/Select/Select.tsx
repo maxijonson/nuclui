@@ -350,7 +350,8 @@ const Select: NuiSelect = React.memo(
 );
 
 const StyledSelect = styled(InputContainer)`
-    ${context}
+    ${context.primaryVLight}
+    ${context.primaryLight}
 
     & .NuiSelect__popover {
         width: 100%;
@@ -390,11 +391,11 @@ const StyledSelect = styled(InputContainer)`
         }
 
         &.NuiSelect__options__list__item--selected {
-            background-color: var(--nui-context-primaryVLight);
+            background-color: ${context.varPrimaryVLight};
 
             &:hover,
             &.NuiSelect__options__list__item--highlighted {
-                background-color: var(--nui-context-primaryLight);
+                background-color: ${context.varPrimaryLight};
             }
         }
 

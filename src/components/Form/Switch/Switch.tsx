@@ -95,7 +95,9 @@ const Switch: NuiSwitch = React.memo(
 );
 
 const StyledSwitch = styled(CheckboxContainer)`
-    ${context}
+    ${context.primaryLight}
+    ${context.primary}
+    ${context.primaryDark}
     --nui-switch-pad: 2px;
     --nui-switch-toggle: calc(
         var(--nui-inputBase-size) - (2 * var(--nui-switch-pad) + 2px)
@@ -167,7 +169,7 @@ const StyledSwitch = styled(CheckboxContainer)`
         &:active ~ .NuiSwitch__container {
             ${background.secondary}
 
-            border-color: var(--nui-context-primary);
+            border-color: ${context.varPrimary};
 
             & .NuiSwitch__toggle {
                 transform: scale(0.9);
@@ -176,8 +178,8 @@ const StyledSwitch = styled(CheckboxContainer)`
 
         &:checked {
             & ~ .NuiSwitch__container {
-                background-color: var(--nui-context-primary);
-                border-color: var(--nui-context-primary);
+                background-color: ${context.varPrimary};
+                border-color: ${context.varPrimary};
 
                 & .NuiSwitch__text {
                     ${text.contrast}
@@ -198,13 +200,13 @@ const StyledSwitch = styled(CheckboxContainer)`
             }
 
             &:focus-visible ~ .NuiSwitch__container {
-                background-color: var(--nui-context-primaryLight);
+                background-color: ${context.varPrimaryLight};
             }
 
             &:active ~ .NuiSwitch__container {
                 ${border.primary}
 
-                background-color: var(--nui-context-primaryDark);
+                background-color: ${context.varPrimaryDark};
             }
         }
     }
@@ -220,8 +222,8 @@ const StyledSwitch = styled(CheckboxContainer)`
         }
 
         & .NuiSwitch__input:checked ~ .NuiSwitch__container {
-            background-color: var(--nui-context-primaryDark);
-            border-color: var(--nui-context-primaryDark);
+            background-color: ${context.varPrimaryDark};
+            border-color: ${context.varPrimaryDark};
         }
     }
 
