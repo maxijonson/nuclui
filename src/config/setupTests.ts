@@ -4,6 +4,8 @@ import mediaQuery from "css-mediaquery";
 
 Enzyme.configure({ adapter: new Adapter() });
 
+const { getComputedStyle } = window;
+
 // Mock window.matchMedia's impl.
 Object.defineProperty(window, "matchMedia", {
     writable: true,
@@ -65,3 +67,5 @@ Object.defineProperty(window, "resizeTo", {
         window.dispatchEvent(new Event("resize"));
     },
 });
+
+window.getComputedStyle = (elt, pseudo) => getComputedStyle(elt, pseudo);
