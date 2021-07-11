@@ -3,7 +3,6 @@ import React from "react";
 import styled from "styled-components";
 import { background, border, context, shadow } from "@theme";
 import { createComponentName } from "@utils";
-import { quicksand } from "@fonts";
 import {
     InputContainerProps,
     InputContainerPropsWithBase,
@@ -75,7 +74,6 @@ const InputContainer: NuiInputContainer = React.memo(
 const TRANSITION_TIME = 0.2;
 
 const StyledInputContainer = styled(InputBase)`
-    ${quicksand}
     ${context.primary}
     ${context.danger}
     --nui-inputContainer-underline: 1px;

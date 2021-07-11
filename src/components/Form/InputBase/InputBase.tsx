@@ -4,6 +4,7 @@ import styled from "styled-components";
 import _ from "lodash";
 import { context, text } from "@theme";
 import { createComponentName } from "@utils";
+import { quicksand } from "@fonts";
 import { InputBaseProps, NuiInputBase } from "./types";
 
 const InputBase: NuiInputBase = React.memo(
@@ -85,8 +86,10 @@ const InputBase: NuiInputBase = React.memo(
 const TRANSITION_TIME = 0.2;
 
 const StyledInputBase = styled.div`
+    ${quicksand}
     ${context.primary}
     ${context.danger}
+
     --nui-inputBase-size: 18px;
     --nui-inputBase-font: 17px;
 

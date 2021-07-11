@@ -8,7 +8,6 @@ import Draggable, {
     DraggableEventHandler,
 } from "react-draggable";
 import { Popover } from "@components/Layout/Popover";
-import { quicksand } from "@fonts";
 import { context, shadow } from "@theme";
 import { useForceUpdate } from "@hooks";
 import { createComponentName } from "@utils";
@@ -507,7 +506,6 @@ const Slider: NuiSlider = React.memo(
 );
 
 const StyledSlider = styled(InputBase)`
-    ${quicksand}
     ${context.primaryVLight}
     ${context.primaryLight}
     ${context.primary}

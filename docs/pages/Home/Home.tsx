@@ -220,6 +220,20 @@ const UseFormTest = React.memo(() => {
 
     return (
         <form autoComplete="off" onSubmit={onSubmit}>
+            <RadioGroup
+                {...fields.gender}
+                label="Gender"
+                errors={["There is an error"]}
+            >
+                {_.map(genderOptions, (option) => (
+                    <RadioButton
+                        key={option.value}
+                        label={option.label}
+                        value={option.value}
+                        disabled={option.disabled}
+                    />
+                ))}
+            </RadioGroup>
             {_.map(["xs", "sm", "md", "lg", "xl"] as const, (size, key) => (
                 <FilePicker
                     {...fields.file}
