@@ -15,10 +15,10 @@ const RadioGroup: NuiRadioGroup = React.memo(
             label,
             name,
             size,
+            direction,
             onChange,
             value,
-            errors: errorsProp,
-            direction,
+            errors,
             className,
             children,
             component,
@@ -39,11 +39,11 @@ const RadioGroup: NuiRadioGroup = React.memo(
                     ],
                     [
                         direction == "row-reverse" &&
-                            "NuiRadioGroup--direction-rowreverse",
+                            "NuiRadioGroup--direction-row-reverse",
                         direction == "column" &&
                             "NuiRadioGroup--direction-column",
                         direction == "column-reverse" &&
-                            "NuiRadioGroup--direction-columnreverse",
+                            "NuiRadioGroup--direction-column-reverse",
                     ],
                     className,
                 ]),
@@ -88,13 +88,13 @@ const StyledRadioGroup = styled(RadioGroup)`
         gap: var(--nui-radiogroup-pad);
     }
 
-    &.NuiRadioGroup--direction-rowreverse .NuiRadioGroup__group {
+    &.NuiRadioGroup--direction-row-reverse .NuiRadioGroup__group {
         flex-direction: row-reverse;
     }
     &.NuiRadioGroup--direction-column .NuiRadioGroup__group {
         flex-direction: column;
     }
-    &.NuiRadioGroup--direction-columnreverse .NuiRadioGroup__group {
+    &.NuiRadioGroup--direction-column-reverse .NuiRadioGroup__group {
         flex-direction: column-reverse;
     }
 
