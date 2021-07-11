@@ -2,9 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import clsx from "clsx";
 import { createComponentName } from "@utils";
-import { text } from "@theme";
 import { quicksand } from "@fonts";
 import { NuiRadioGroup, RadioGroupContextValue } from "./types";
+import { InputBase } from "../InputBase";
+import { extractInputBaseProps } from "../InputBase/InputBase";
 
 export const RadioGroupContext = React.createContext<RadioGroupContextValue>(
     {}
@@ -13,31 +14,22 @@ export const RadioGroupContext = React.createContext<RadioGroupContextValue>(
 const RadioGroup: NuiRadioGroup = React.memo(
     React.forwardRef((props, ref) => {
         const {
-            label,
-            name,
-            size,
-            direction,
-            onChange,
-            value,
-            errors,
-            className,
-            children,
-            component,
-            ...restProps
-        } = props;
-
-        const Component = component || "div";
+            restProps: {
+                name,
+                direction,
+                onChange,
+                value,
+                className,
+                children,
+                ...inputBaseElementProps
+            },
+            ...inputBaseProps
+        } = extractInputBaseProps(props);
 
         const classes = React.useMemo(
             () =>
                 clsx([
                     "NuiRadioGroup",
-                    [
-                        size == "xs" && "NuiRadioGroup--size-xs",
-                        size == "md" && "NuiRadioGroup--size-md",
-                        size == "lg" && "NuiRadioGroup--size-lg",
-                        size == "xl" && "NuiRadioGroup--size-xl",
-                    ],
                     [
                         direction == "row-reverse" &&
                             "NuiRadioGroup--direction-row-reverse",
@@ -48,42 +40,40 @@ const RadioGroup: NuiRadioGroup = React.memo(
                     ],
                     className,
                 ]),
-            [className, direction, size]
+            [className, direction]
+        );
+
+        const providerValue = React.useMemo(
+            () => ({
+                name,
+                size: inputBaseProps.size,
+                onChange,
+                value,
+            }),
+            [inputBaseProps.size, name, onChange, value]
         );
 
         return (
-            <Component {...restProps} className={classes} ref={ref}>
-                {label && (
-                    <label className="NuiRadioGroup__label">{label}</label>
-                )}
+            <StyledRadioGroup
+                {...inputBaseElementProps}
+                {...inputBaseProps}
+                className={classes}
+                ref={ref}
+            >
                 <div className="NuiRadioGroup__group" data-group={name}>
-                    <RadioGroupContext.Provider
-                        value={{ name, size, onChange, value }}
-                    >
+                    <RadioGroupContext.Provider value={providerValue}>
                         {children}
                     </RadioGroupContext.Provider>
                 </div>
-            </Component>
+            </StyledRadioGroup>
         );
     })
 );
 
-const StyledRadioGroup = styled(RadioGroup)`
+const StyledRadioGroup = styled(InputBase)`
     ${quicksand}
 
-    --nui-radiogroup-size: 18px;
     --nui-radiogroup-pad: 8px;
-    --nui-radiogroup-font: 17px;
-
-    & .NuiRadioGroup__label {
-        ${text.secondary}
-
-        transition: color 0.2s;
-        font-size: calc(var(--nui-radiogroup-font) / 1.25);
-        font-weight: 500;
-        text-rendering: optimizeLegibility !important;
-        -webkit-font-smoothing: antialiased !important;
-    }
 
     & .NuiRadioGroup__group {
         display: flex;
@@ -101,25 +91,25 @@ const StyledRadioGroup = styled(RadioGroup)`
         flex-direction: column-reverse;
     }
 
-    &.NuiRadioGroup--size-xs {
-        --nui-radiogroup-size: 14px;
+    & .NuiInputBase__label-container {
+        pointer-events: none;
+
+        & .NuiInputBase__label-container {
+            pointer-events: all;
+        }
+    }
+
+    &.NuiInputBase--size-xs {
         --nui-radiogroup-pad: 4px;
-        --nui-radiogroup-font: 12px;
     }
-    &.NuiRadioGroup--size-md {
-        --nui-radiogroup-size: 24px;
+    &.NuiInputBase--size-md {
         --nui-radiogroup-pad: 10px;
-        --nui-radiogroup-font: 23px;
     }
-    &.NuiRadioGroup--size-lg {
-        --nui-radiogroup-size: 32px;
+    &.NuiInputBase--size-lg {
         --nui-radiogroup-pad: 12px;
-        --nui-radiogroup-font: 30px;
     }
-    &.NuiRadioGroup--size-xl {
-        --nui-radiogroup-size: 42px;
+    &.NuiInputBase--size-xl {
         --nui-radiogroup-pad: 14px;
-        --nui-radiogroup-font: 40px;
     }
 `;
 
@@ -127,4 +117,4 @@ RadioGroupContext.displayName = createComponentName("RadioGroupContext");
 RadioGroup.displayName = createComponentName("RadioGroup");
 StyledRadioGroup.displayName = createComponentName("StyledRadioGroup");
 
-export default StyledRadioGroup as typeof RadioGroup;
+export default RadioGroup;

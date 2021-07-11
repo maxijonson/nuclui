@@ -10,9 +10,6 @@ const Benchmark = React.memo(() => {
         },
     });
 
-    // eslint-disable-next-line no-console
-    console.clear();
-
     return (
         <form>
             <RadioGroup {...fields.gender} label="Radio Group">

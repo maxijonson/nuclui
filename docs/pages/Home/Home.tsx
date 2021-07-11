@@ -105,7 +105,7 @@ const UseFormTest = React.memo(() => {
                 initial: false,
             },
             gender: {
-                initial: "",
+                initial: "male",
             },
             dateTime: {
                 initial: Date.now(),

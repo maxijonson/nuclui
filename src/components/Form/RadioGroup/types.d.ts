@@ -1,22 +1,11 @@
+import { InputBaseProps, NuiInputBase } from "../InputBase/types";
 import { HTMLInputProps } from "../InputContainer/types";
 
 export interface RadioGroupProps {
     /**
-     * Label of the RadioGroup
-     */
-    label?: string;
-
-    /**
      * The name of the group. This will be affected to the Radio(s) contained inside the group.
      */
     name?: string;
-
-    /**
-     * The size of the group. This will be affected to the Radio(s) contained inside the group.
-     *
-     * @default "sm"
-     */
-    size?: Nui.Breakpoint;
 
     /**
      * The (flex) direction and order of the RadioButtons contained inside the group.
@@ -37,11 +26,6 @@ export interface RadioGroupProps {
      * The value of the current RadioButton checked
      */
     value?: string;
-
-    /**
-     * The errors associated with the field. Only the first one is shown.
-     */
-    errors?: string[];
 }
 
 export interface RadioGroupContextValue {
@@ -69,7 +53,9 @@ export interface RadioGroupContextValue {
     value?: string;
 }
 
+type RadioGroupPropsWithBase = InputBaseProps & RadioGroupProps;
+
 /**
  * A group to handle multiple RadioButtons and their behaviour
  */
-export type NuiRadioGroup = Nui.FRC<RadioGroupProps, "div">;
+export type NuiRadioGroup = Nui.FRCWC<RadioGroupPropsWithBase, NuiInputBase>;
