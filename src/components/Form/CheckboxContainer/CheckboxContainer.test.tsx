@@ -36,21 +36,22 @@ describe("extractCheckboxContainerProps", () => {
     });
 
     it("should extract the CheckoutContainer props and put other props in the restProps", () => {
-        const inputBaseProps: Required<CheckboxContainerPropsWithBase> = {
-            disabled: true,
-            errors: ["test error"],
-            fluid: true,
-            focused: true,
-            label: "test label",
-            labelPosition: "bottom",
-            size: "xs",
-            touched: false,
-        };
+        const checkboxContainerProps: Required<CheckboxContainerPropsWithBase> =
+            {
+                disabled: true,
+                errors: ["test error"],
+                fluid: true,
+                focused: true,
+                label: "test label",
+                labelPosition: "bottom",
+                size: "xs",
+                touched: false,
+            };
         const customProps = { test: true } as const;
-        const props = { ...inputBaseProps, ...customProps };
+        const props = { ...checkboxContainerProps, ...customProps };
         const { restProps, ...baseProps } =
             extractCheckboxContainerProps(props);
         expect(restProps).toEqual(customProps);
-        expect(baseProps).toEqual(inputBaseProps);
+        expect(baseProps).toEqual(checkboxContainerProps);
     });
 });
