@@ -1,37 +1,63 @@
-import { useForm, RadioGroup, RadioButton } from "nuclui";
+import { Checkbox, Container } from "nuclui";
 import React from "react";
 
 const Benchmark = React.memo(() => {
-    const [fields] = useForm({
-        fields: {
-            gender: {
-                initial: "male",
-            },
-        },
-    });
+    const [value, setValue] = React.useState(false);
+    const [controlled, setControlled] = React.useState(true);
+    const ref = React.useRef<HTMLInputElement>(null);
+
+    const onChange = React.useCallback((v: boolean) => {
+        setValue(v);
+    }, []);
+
+    React.useEffect(() => {
+        setInterval(() => {
+            setControlled((v) => !v);
+        }, 5000);
+    }, []);
 
     return (
-        <form>
-            <RadioGroup {...fields.gender} label="Radio Group">
-                <RadioButton label="Male" value="male" />
-                <RadioButton label="Female" value="female" />
-            </RadioGroup>
-            Radio buttons
-            <RadioButton
-                name="gender"
-                label="Male solo"
-                value="male"
-                onChange={fields.gender.onChange}
-                checked={fields.gender.value == "male"}
-            />
-            <RadioButton
-                name="gender"
-                label="Female solo"
-                value="female"
-                onChange={fields.gender.onChange}
-                checked={fields.gender.value == "female"}
-            />
-        </form>
+        <Container>
+            <form>
+                <Checkbox
+                    value={value}
+                    onChange={onChange}
+                    label="Controlled"
+                />
+                <Checkbox
+                    readOnly
+                    value={value}
+                    onChange={onChange}
+                    label="Controlled (readOnly)"
+                />
+                <Checkbox label="Uncontrolled" />
+                <Checkbox
+                    defaultChecked
+                    label="Uncontrolled (defaultChecked)"
+                />
+                <Checkbox
+                    label="onChange only"
+                    onChange={(v) =>
+                        console.info(
+                            "Uncontrolled change",
+                            v,
+                            ref.current?.checked
+                        )
+                    }
+                    ref={ref}
+                />
+                <Checkbox label="value only" value />
+                <Checkbox
+                    value={controlled ? value : undefined}
+                    onChange={controlled ? onChange : undefined}
+                    label={
+                        controlled
+                            ? "Interval (Controlled)"
+                            : "Interval (Uncontrolled)"
+                    }
+                />
+            </form>
+        </Container>
     );
 });
 

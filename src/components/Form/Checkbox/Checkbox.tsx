@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { border, context, background } from "@theme";
 import { createComponentName } from "@utils";
+import { useControllable } from "@hooks";
 import clsx from "clsx";
 import { HTMLInputProps } from "../InputContainer/types";
 import { NuiCheckbox } from "./types";
@@ -20,11 +21,14 @@ const Checkbox: NuiCheckbox = React.memo(
             },
             ...checkboxContainerProps
         } = extractCheckboxContainerProps(props);
-        const { onFocus, onBlur } = inputProps;
+        const { onFocus, onBlur, defaultChecked } = inputProps;
         const { disabled } = checkboxContainerProps;
 
         const [focused, setFocused] = React.useState(false);
         const [touched, setTouched] = React.useState(false);
+
+        const [controllableValue, controllableOnChange, readOnly] =
+            useControllable(defaultChecked ?? false, props);
 
         const handleFocus = React.useCallback<HTMLInputProps["onFocus"]>(
             (e) => {
@@ -39,11 +43,9 @@ const Checkbox: NuiCheckbox = React.memo(
         const handleChange = React.useCallback<HTMLInputProps["onChange"]>(
             (e) => {
                 setTouched(true);
-                if (onChange) {
-                    onChange(e.currentTarget.checked, e);
-                }
+                controllableOnChange(e.currentTarget.checked, e);
             },
-            [onChange]
+            [controllableOnChange]
         );
 
         const handleBlur = React.useCallback<HTMLInputProps["onBlur"]>(
@@ -67,9 +69,11 @@ const Checkbox: NuiCheckbox = React.memo(
                 <input
                     {...inputProps}
                     ref={ref}
+                    readOnly={readOnly}
+                    defaultChecked={undefined}
                     disabled={disabled}
                     value={inputValue}
-                    checked={value}
+                    checked={controllableValue}
                     onFocus={handleFocus}
                     onChange={handleChange}
                     onBlur={handleBlur}
