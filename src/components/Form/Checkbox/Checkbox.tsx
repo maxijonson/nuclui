@@ -17,11 +17,12 @@ const Checkbox: NuiCheckbox = React.memo(
                 className,
                 value,
                 inputValue,
+                defaultChecked,
                 ...inputProps
             },
             ...checkboxContainerProps
         } = extractCheckboxContainerProps(props);
-        const { onFocus, onBlur, defaultChecked } = inputProps;
+        const { onFocus, onBlur } = inputProps;
         const { disabled } = checkboxContainerProps;
 
         const [focused, setFocused] = React.useState(false);
@@ -70,7 +71,6 @@ const Checkbox: NuiCheckbox = React.memo(
                     {...inputProps}
                     ref={ref}
                     readOnly={readOnly}
-                    defaultChecked={undefined}
                     disabled={disabled}
                     value={inputValue}
                     checked={controllableValue}

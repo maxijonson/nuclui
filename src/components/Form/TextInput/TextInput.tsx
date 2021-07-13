@@ -1,6 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import { createComponentName } from "@utils";
+import { useControllable } from "@hooks";
 import { NuiTextInput } from "./types";
 import { InputContainer } from "../InputContainer";
 import { HTMLInputProps } from "../InputContainer/types";
@@ -12,6 +13,7 @@ const TextInput: NuiTextInput = React.memo(
             restProps: {
                 type = "text",
                 value,
+                defaultValue,
                 onChange,
                 className,
                 ...inputProps
@@ -23,6 +25,9 @@ const TextInput: NuiTextInput = React.memo(
 
         const [focused, setFocused] = React.useState(false);
         const [touched, setTouched] = React.useState(false);
+
+        const [controllableValue, controllableOnChange, readOnly] =
+            useControllable(defaultValue ?? "", props);
 
         const handleFocus = React.useCallback<HTMLInputProps["onFocus"]>(
             (e) => {
@@ -36,11 +41,9 @@ const TextInput: NuiTextInput = React.memo(
 
         const handleChange = React.useCallback<HTMLInputProps["onChange"]>(
             (e) => {
-                if (onChange) {
-                    onChange(e.currentTarget.value, e);
-                }
+                controllableOnChange(e.currentTarget.value, e);
             },
-            [onChange]
+            [controllableOnChange]
         );
 
         const handleBlur = React.useCallback<HTMLInputProps["onBlur"]>(
@@ -63,10 +66,11 @@ const TextInput: NuiTextInput = React.memo(
             >
                 <input
                     {...inputProps}
-                    value={value}
+                    ref={ref}
+                    readOnly={readOnly}
+                    value={controllableValue}
                     disabled={disabled}
                     className="NuiTextInput__input"
-                    ref={ref}
                     type={type}
                     onChange={handleChange}
                     onFocus={handleFocus}

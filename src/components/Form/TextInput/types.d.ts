@@ -18,6 +18,11 @@ export interface TextInputProps {
     value?: string;
 
     /**
+     * The defaultValue (or initial value) of the input. Used for uncontrolled inputs.
+     */
+    defaultValue?: string;
+
+    /**
      * Called when the value changes. The second parameter is the input "onChange" event
      */
     onChange?: (

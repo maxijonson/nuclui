@@ -21,6 +21,11 @@ export interface CheckboxProps {
     value?: boolean;
 
     /**
+     * The defaultChecked (or initial value) of the input. Used for uncontrolled inputs.
+     */
+    defaultChecked?: boolean;
+
+    /**
      * The prop that will be assigned to the actual input element `value` prop
      */
     inputValue?: HTMLInputProps["value"];
