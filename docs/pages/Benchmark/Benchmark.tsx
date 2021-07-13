@@ -1,8 +1,15 @@
 import { Checkbox, Container, Flex, FlexItem, TextInput } from "nuclui";
+import { NumberInput } from "nuclui/components";
 import React from "react";
 
 const Benchmark = React.memo(() => {
     const [controlled, setControlled] = React.useState(true);
+
+    const [checkboxValue, setCheckboxValue] = React.useState(false);
+    const checkboxRef = React.useRef<HTMLInputElement>(null);
+    const onCheckboxChange = React.useCallback((v: boolean) => {
+        setCheckboxValue(v);
+    }, []);
 
     const [textInputValue, setTextInputValue] = React.useState("");
     const textInputRef = React.useRef<HTMLInputElement>(null);
@@ -10,10 +17,10 @@ const Benchmark = React.memo(() => {
         setTextInputValue(v);
     }, []);
 
-    const [checkboxValue, setCheckboxValue] = React.useState(false);
-    const checkboxRef = React.useRef<HTMLInputElement>(null);
-    const onCheckboxChange = React.useCallback((v: boolean) => {
-        setCheckboxValue(v);
+    const [numberInputValue, setNumberInputValue] = React.useState(0);
+    const numberInputRef = React.useRef<HTMLInputElement>(null);
+    const onNumberInputChange = React.useCallback((v: number) => {
+        setNumberInputValue(v);
     }, []);
 
     React.useEffect(() => {
@@ -103,6 +110,56 @@ const Benchmark = React.memo(() => {
                                 controlled
                                     ? "Interval (Controlled)"
                                     : "Interval (Uncontrolled)"
+                            }
+                        />
+                    </FlexItem>
+                    <FlexItem>
+                        <NumberInput
+                            value={numberInputValue}
+                            onChange={onNumberInputChange}
+                            label="Controlled"
+                        />
+                        <NumberInput
+                            readOnly
+                            value={numberInputValue}
+                            onChange={onNumberInputChange}
+                            label="Controlled (readOnly)"
+                        />
+                        <NumberInput label="Uncontrolled" />
+                        <NumberInput
+                            defaultValue={1337}
+                            label="Uncontrolled (defaultValue)"
+                        />
+                        <NumberInput
+                            label="onChange only"
+                            onChange={(v) =>
+                                console.info(
+                                    "Uncontrolled change",
+                                    v,
+                                    numberInputRef.current?.value
+                                )
+                            }
+                            ref={numberInputRef}
+                        />
+                        <NumberInput label="value only" value={66} />
+                        <NumberInput
+                            value={controlled ? numberInputValue : undefined}
+                            onChange={
+                                controlled ? onNumberInputChange : undefined
+                            }
+                            label={
+                                controlled
+                                    ? "Interval (Controlled)"
+                                    : "Interval (Uncontrolled)"
+                            }
+                        />
+                        <input
+                            type="number"
+                            onChange={(e) =>
+                                console.info(
+                                    e.currentTarget.value,
+                                    e.currentTarget.valueAsNumber
+                                )
                             }
                         />
                     </FlexItem>

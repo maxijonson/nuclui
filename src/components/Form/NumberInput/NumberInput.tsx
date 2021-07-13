@@ -3,6 +3,7 @@ import styled from "styled-components";
 import clsx from "clsx";
 import { createComponentName, mergeRefs } from "@utils";
 import { text } from "@theme";
+import { useControllable } from "@hooks";
 import { InputContainer } from "../InputContainer";
 import { HTMLInputProps } from "../InputContainer/types";
 import { NuiNumberInput } from "./types";
@@ -30,6 +31,8 @@ const NumberInput: NuiNumberInput = React.memo(
             restProps: {
                 type,
                 value: propsValue,
+                defaultValue,
+                strict = false,
                 onChange,
                 min,
                 max,
@@ -48,11 +51,13 @@ const NumberInput: NuiNumberInput = React.memo(
 
         const mergedRefs = React.useMemo(() => mergeRefs(ref, inputRef), [ref]);
 
+        const [controllableValue, controllableOnChange, readOnly] =
+            useControllable(defaultValue ?? NaN, props);
+
         const value = React.useMemo(() => {
-            if (propsValue == undefined) return undefined;
-            if (typeof propsValue !== "number") return "";
-            return propsValue;
-        }, [propsValue]);
+            if (isNaN(controllableValue)) return strict ? 0 : "";
+            return controllableValue;
+        }, [controllableValue, strict]);
 
         const canStepUp = React.useMemo(() => {
             if (max == undefined) return true;
@@ -94,11 +99,13 @@ const NumberInput: NuiNumberInput = React.memo(
         const handleChange = React.useCallback<HTMLInputProps["onChange"]>(
             (e) => {
                 const { valueAsNumber } = e.currentTarget;
-                if (onChange && !isNaN(valueAsNumber)) {
-                    onChange(valueAsNumber, e);
+                if (isNaN(valueAsNumber) && strict) {
+                    controllableOnChange(0, e);
+                } else {
+                    controllableOnChange(e.currentTarget.valueAsNumber, e);
                 }
             },
-            [onChange]
+            [controllableOnChange, strict]
         );
 
         const increment = React.useCallback(() => {
@@ -141,6 +148,7 @@ const NumberInput: NuiNumberInput = React.memo(
             >
                 <input
                     {...inputProps}
+                    readOnly={readOnly}
                     disabled={disabled}
                     min={min}
                     max={max}
