@@ -73,7 +73,7 @@ const useControllable = <T, E>(
                   isReadonly,
                   isControlled,
               ]
-    ) as [T, (v: T, e: E) => void, boolean, boolean];
+    ) as [T, (v: T, e?: E) => void, boolean, boolean];
 };
 
 export default useControllable;

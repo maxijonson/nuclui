@@ -3,6 +3,7 @@ import styled from "styled-components";
 import clsx from "clsx";
 import { createComponentName } from "@utils";
 import { background, border, context, text } from "@theme";
+import { useControllable } from "@hooks";
 import { HTMLInputProps } from "../InputContainer/types";
 import { NuiSwitch } from "./types";
 import { CheckboxContainer } from "../CheckboxContainer";
@@ -14,6 +15,7 @@ const Switch: NuiSwitch = React.memo(
             restProps: {
                 onChange,
                 value,
+                defaultChecked,
                 inputValue,
                 onChildren,
                 offChildren,
@@ -27,6 +29,9 @@ const Switch: NuiSwitch = React.memo(
 
         const [focused, setFocused] = React.useState(false);
         const [touched, setTouched] = React.useState(false);
+
+        const [controllableValue, controllableOnChange, readOnly] =
+            useControllable(defaultChecked ?? false, props);
 
         const classes = React.useMemo(
             () => clsx(["NuiSwitch", className]),
@@ -45,11 +50,9 @@ const Switch: NuiSwitch = React.memo(
 
         const handleChange = React.useCallback<HTMLInputProps["onChange"]>(
             (e) => {
-                if (onChange) {
-                    onChange(e.currentTarget.checked, e);
-                }
+                controllableOnChange(e.currentTarget.checked, e);
             },
-            [onChange]
+            [controllableOnChange]
         );
 
         const handleBlur = React.useCallback<HTMLInputProps["onBlur"]>(
@@ -73,9 +76,10 @@ const Switch: NuiSwitch = React.memo(
                 <input
                     {...inputProps}
                     ref={ref}
+                    readOnly={readOnly}
                     disabled={disabled}
                     value={inputValue}
-                    checked={value}
+                    checked={controllableValue}
                     onFocus={handleFocus}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -85,7 +89,7 @@ const Switch: NuiSwitch = React.memo(
                 <div className="NuiSwitch__container">
                     <div
                         className="NuiSwitch__text"
-                        children={props.value ? onChildren : offChildren}
+                        children={controllableValue ? onChildren : offChildren}
                     />
                     <div className="NuiSwitch__toggle" />
                 </div>

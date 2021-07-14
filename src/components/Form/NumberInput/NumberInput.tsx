@@ -96,37 +96,40 @@ const NumberInput: NuiNumberInput = React.memo(
             [onFocus]
         );
 
-        const handleChange = React.useCallback<HTMLInputProps["onChange"]>(
-            (e) => {
-                const { valueAsNumber } = e.currentTarget;
-                if (isNaN(valueAsNumber) && strict) {
+        const onValueChange = React.useCallback(
+            (v: number, e?: React.ChangeEvent<HTMLInputElement>) => {
+                if (isNaN(v) && strict) {
                     controllableOnChange(0, e);
                 } else {
-                    controllableOnChange(e.currentTarget.valueAsNumber, e);
+                    controllableOnChange(v, e);
                 }
             },
             [controllableOnChange, strict]
+        );
+
+        const handleChange = React.useCallback<HTMLInputProps["onChange"]>(
+            (e) => {
+                const { valueAsNumber } = e.currentTarget;
+                onValueChange(valueAsNumber, e);
+            },
+            [onValueChange]
         );
 
         const increment = React.useCallback(() => {
             if (inputRef.current) {
                 inputRef.current.stepUp();
                 setTouched(true);
-                if (onChange) {
-                    onChange(inputRef.current.valueAsNumber);
-                }
+                onValueChange(inputRef.current.valueAsNumber);
             }
-        }, [onChange]);
+        }, [onValueChange]);
 
         const decrement = React.useCallback(() => {
             if (inputRef.current) {
                 inputRef.current.stepDown();
                 setTouched(true);
-                if (onChange) {
-                    onChange(inputRef.current.valueAsNumber);
-                }
+                onValueChange(inputRef.current.valueAsNumber);
             }
-        }, [onChange]);
+        }, [onValueChange]);
 
         const handleBlur = React.useCallback<HTMLInputProps["onBlur"]>(
             (e) => {
@@ -161,32 +164,34 @@ const NumberInput: NuiNumberInput = React.memo(
                     onChange={handleChange}
                     onBlur={handleBlur}
                 />
-                <div className="NuiNumberInput__arrows">
-                    <button
-                        type="button"
-                        disabled={stepUpDisabled}
-                        className={clsx([
-                            "NuiNumberInput__arrows__up",
-                            stepUpDisabled && "disabled",
-                        ])}
-                        onClick={increment}
-                        tabIndex={-1}
-                    >
-                        {arrowUp}
-                    </button>
-                    <button
-                        type="button"
-                        disabled={stepDownDisabled}
-                        className={clsx([
-                            "NuiNumberInput__arrows__down",
-                            stepDownDisabled && "disabled",
-                        ])}
-                        onClick={decrement}
-                        tabIndex={-1}
-                    >
-                        {arrowDown}
-                    </button>
-                </div>
+                {!readOnly && (
+                    <div className="NuiNumberInput__arrows">
+                        <button
+                            type="button"
+                            disabled={stepUpDisabled}
+                            className={clsx([
+                                "NuiNumberInput__arrows__up",
+                                stepUpDisabled && "disabled",
+                            ])}
+                            onClick={increment}
+                            tabIndex={-1}
+                        >
+                            {arrowUp}
+                        </button>
+                        <button
+                            type="button"
+                            disabled={stepDownDisabled}
+                            className={clsx([
+                                "NuiNumberInput__arrows__down",
+                                stepDownDisabled && "disabled",
+                            ])}
+                            onClick={decrement}
+                            tabIndex={-1}
+                        >
+                            {arrowDown}
+                        </button>
+                    </div>
+                )}
             </StyledNumberInput>
         );
     })

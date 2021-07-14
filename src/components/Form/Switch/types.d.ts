@@ -6,11 +6,11 @@ export interface SwitchProps {
     children?: never;
 
     /**
-     * Gets called when the value of the input changes. The first parameter is the next value and the second is the input change event.
+     * Gets called when the value of the input changes. The first parameter is the next value and the second is the input change event if it was triggered from the input itself.
      */
     onChange?: (
         v: boolean,
-        e: Parameters<HTMLInputProps["onChange"]>[0]
+        e?: Parameters<HTMLInputProps["onChange"]>[0]
     ) => void;
 
     /**
@@ -19,6 +19,11 @@ export interface SwitchProps {
      * Note: For convenience with `useForm`, this is actually the `checked` prop of the input. Use `inputValue` to set the actual `input` prop of the input.
      */
     value?: boolean;
+
+    /**
+     * The defaultChecked (or initial value) of the input. Used for uncontrolled inputs.
+     */
+    defaultChecked?: boolean;
 
     /**
      * The prop that will be assigned to the actual input element `value` prop

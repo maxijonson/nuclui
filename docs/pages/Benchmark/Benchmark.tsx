@@ -5,6 +5,7 @@ import {
     FlexItem,
     TextInput,
     Textarea,
+    Switch,
 } from "nuclui";
 import { NumberInput } from "nuclui/components";
 import React from "react";
@@ -34,6 +35,12 @@ const Benchmark = React.memo(() => {
     const textareaRef = React.useRef<HTMLTextAreaElement>(null);
     const onTextareaChange = React.useCallback((v: string) => {
         setTextareaValue(v);
+    }, []);
+
+    const [switchValue, setSwitchValue] = React.useState(false);
+    const switchRef = React.useRef<HTMLInputElement>(null);
+    const onSwitchChange = React.useCallback((v: boolean) => {
+        setSwitchValue(v);
     }, []);
 
     React.useEffect(() => {
@@ -199,6 +206,45 @@ const Benchmark = React.memo(() => {
                         <Textarea
                             value={controlled ? textareaValue : undefined}
                             onChange={controlled ? onTextareaChange : undefined}
+                            label={
+                                controlled
+                                    ? "Interval (Controlled)"
+                                    : "Interval (Uncontrolled)"
+                            }
+                        />
+                    </FlexItem>
+                    <FlexItem>
+                        <Switch
+                            value={switchValue}
+                            onChange={onSwitchChange}
+                            label="Controlled"
+                        />
+                        <Switch
+                            readOnly
+                            value={switchValue}
+                            onChange={onSwitchChange}
+                            label="Controlled (readOnly)"
+                        />
+                        <Switch label="Uncontrolled" />
+                        <Switch
+                            defaultValue="Default"
+                            label="Uncontrolled (defaultValue)"
+                        />
+                        <Switch
+                            label="onChange only"
+                            onChange={(v) =>
+                                console.info(
+                                    "Uncontrolled change",
+                                    v,
+                                    switchRef.current?.value
+                                )
+                            }
+                            ref={switchRef}
+                        />
+                        <Switch label="value only" value />
+                        <Switch
+                            value={controlled ? switchValue : undefined}
+                            onChange={controlled ? onSwitchChange : undefined}
                             label={
                                 controlled
                                     ? "Interval (Controlled)"
