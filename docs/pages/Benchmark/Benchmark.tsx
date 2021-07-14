@@ -6,6 +6,8 @@ import {
     TextInput,
     Textarea,
     Switch,
+    Select,
+    SelectOption,
 } from "nuclui";
 import { NumberInput } from "nuclui/components";
 import React from "react";
@@ -41,6 +43,25 @@ const Benchmark = React.memo(() => {
     const switchRef = React.useRef<HTMLInputElement>(null);
     const onSwitchChange = React.useCallback((v: boolean) => {
         setSwitchValue(v);
+    }, []);
+
+    const options = React.useMemo<SelectOption[]>(
+        () => [
+            {
+                label: "Male",
+                value: "male",
+            },
+            {
+                label: "Female",
+                value: "female",
+            },
+        ],
+        []
+    );
+    const [selectValue, setSelectValue] = React.useState("male");
+    const selectRef = React.useRef<HTMLInputElement>(null);
+    const onSelectChange = React.useCallback((v: string) => {
+        setSelectValue(v);
     }, []);
 
     React.useEffect(() => {
@@ -245,6 +266,54 @@ const Benchmark = React.memo(() => {
                         <Switch
                             value={controlled ? switchValue : undefined}
                             onChange={controlled ? onSwitchChange : undefined}
+                            label={
+                                controlled
+                                    ? "Interval (Controlled)"
+                                    : "Interval (Uncontrolled)"
+                            }
+                        />
+                    </FlexItem>
+                    <FlexItem>
+                        <Select
+                            options={options}
+                            value={selectValue}
+                            onChange={onSelectChange}
+                            label="Controlled"
+                        />
+                        <Select
+                            options={options}
+                            readOnly
+                            value={selectValue}
+                            onChange={onSelectChange}
+                            label="Controlled (readOnly)"
+                        />
+                        <Select options={options} label="Uncontrolled" />
+                        <Select
+                            options={options}
+                            defaultValue="male"
+                            label="Uncontrolled (defaultValue)"
+                        />
+                        <Select
+                            options={options}
+                            label="onChange only"
+                            onChange={(v) =>
+                                console.info(
+                                    "Uncontrolled change",
+                                    v,
+                                    selectRef.current?.value
+                                )
+                            }
+                            ref={selectRef}
+                        />
+                        <Select
+                            options={options}
+                            label="value only"
+                            value="female"
+                        />
+                        <Select
+                            options={options}
+                            value={controlled ? selectValue : undefined}
+                            onChange={controlled ? onSelectChange : undefined}
                             label={
                                 controlled
                                     ? "Interval (Controlled)"

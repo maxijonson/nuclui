@@ -6,6 +6,7 @@ import { background, border, context, text } from "@theme";
 import { createComponentName, mergeRefs } from "@utils";
 import { scrollbar } from "@styles";
 import { Popover } from "@components/Layout/Popover";
+import { useControllable } from "@hooks";
 import { InputContainer } from "../InputContainer";
 import { HTMLInputProps } from "../InputContainer/types";
 import { NuiSelect, SelectOption, HTMLButtonProps } from "./types";
@@ -22,6 +23,7 @@ const Select: NuiSelect = React.memo(
             restProps: {
                 options,
                 value,
+                defaultValue,
                 onChange: onChangeProp,
                 renderOption,
                 creatable = false,
@@ -49,6 +51,9 @@ const Select: NuiSelect = React.memo(
             ...options,
         ]);
 
+        const [controllableValue, controllableOnChange, readOnly] =
+            useControllable(defaultValue ?? "", props);
+
         const mergedInputRef = React.useMemo(
             () => mergeRefs(inputRef, ref),
             [ref]
@@ -72,13 +77,15 @@ const Select: NuiSelect = React.memo(
             if (search != null) return search;
 
             // Show the selected option label
-            const selected = _.find(mergedOptions, (o) => o.value == value);
+            const selected = _.find(
+                mergedOptions,
+                (o) => o.value == controllableValue
+            );
             if (selected) return selected.label;
 
             // Fallback value
-            if (value == null || value == undefined) return "";
-            return value;
-        }, [mergedOptions, value, search]);
+            return controllableValue;
+        }, [search, mergedOptions, controllableValue]);
 
         /** Filters `props.options` according to the `search` state */
         const filteredOptions = React.useMemo(() => {
@@ -133,11 +140,9 @@ const Select: NuiSelect = React.memo(
                     inputRef.current.blur();
                 }
 
-                if (onChangeProp) {
-                    onChangeProp(v, e);
-                }
+                controllableOnChange(v, e);
             },
-            [onChangeProp]
+            [controllableOnChange]
         );
 
         /** Changes the search query and resets the highlight position */
@@ -285,6 +290,7 @@ const Select: NuiSelect = React.memo(
                 <div className="NuiSelect__container">
                     <input
                         {...inputProps}
+                        readOnly={readOnly}
                         disabled={disabled}
                         value={inputValue}
                         className="NuiSelect__input"
@@ -326,7 +332,7 @@ const Select: NuiSelect = React.memo(
                                 type="button"
                                 className={clsx([
                                     "NuiSelect__options__list__item",
-                                    option.value == props.value &&
+                                    option.value == controllableValue &&
                                         "NuiSelect__options__list__item--selected",
                                     i == highlight &&
                                         "NuiSelect__options__list__item--highlighted",

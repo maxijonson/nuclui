@@ -1,7 +1,7 @@
 import { StrictOmit } from "ts-essentials";
 import { InputContainerPropsWithBase } from "../InputContainer/types";
 
-interface SelectOption {
+export interface SelectOption {
     label: string;
     value: string;
     disabled?: boolean;
@@ -9,6 +9,13 @@ interface SelectOption {
 
 export interface SelectProps {
     children?: never;
+
+    /**
+     * Forwarded ref to the inner input element of the `Select` component.
+     *
+     * Note: `ref.current.value` points to the value displayed to the user (label), **not** the actual `value` of the option from the `options` array.
+     */
+    ref?: React.ForwardedRef<HTMLInputElement>;
 
     /**
      * Options to choose from
@@ -19,6 +26,11 @@ export interface SelectProps {
      * The selected option value
      */
     value?: string;
+
+    /**
+     * The defaultValue (or initial value) of the input. Used for uncontrolled inputs.
+     */
+    defaultValue?: string;
 
     /**
      * Gets called when an option is selected. The first parameter is the `option.value` string, while the second parameter is the click MouseEvent or KeyDown event.
