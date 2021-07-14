@@ -10,6 +10,11 @@ interface TextareaProps {
     value?: string;
 
     /**
+     * The defaultValue (or initial value) of the input. Used for uncontrolled inputs.
+     */
+    defaultValue?: string;
+
+    /**
      * Called when the value changes. The second parameter is the textarea "onChange" event
      */
     onChange?: (

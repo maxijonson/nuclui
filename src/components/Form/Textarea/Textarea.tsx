@@ -4,7 +4,7 @@ import styled from "styled-components";
 import _ from "lodash";
 import { createComponentName, mergeRefs } from "@utils";
 import { scrollbar } from "@styles";
-import { useForceUpdate } from "@hooks";
+import { useForceUpdate, useControllable } from "@hooks";
 import { NuiTextarea } from "./types";
 import { InputContainer } from "../InputContainer";
 import { extractInputContainerProps } from "../InputContainer/InputContainer";
@@ -32,6 +32,7 @@ const Textarea: NuiTextarea = React.memo(
                 resizeable = false,
                 minRows = 1,
                 maxRows,
+                defaultValue,
                 className,
                 ...textAreaProps
             },
@@ -47,6 +48,9 @@ const Textarea: NuiTextarea = React.memo(
             () => mergeRefs(ref, textareaRef),
             [ref]
         );
+
+        const [controllableValue, controllableOnChange, readOnly] =
+            useControllable(defaultValue ?? "", props);
 
         const hiddenTextareaRef = React.useRef<HTMLTextAreaElement>(null);
         const rowHeight = React.useRef(0);
@@ -113,11 +117,9 @@ const Textarea: NuiTextarea = React.memo(
             React.ChangeEventHandler<HTMLTextAreaElement>
         >(
             (e) => {
-                if (onChange) {
-                    onChange(e.currentTarget.value, e);
-                }
+                controllableOnChange(e.currentTarget.value, e);
             },
-            [onChange]
+            [controllableOnChange]
         );
 
         const handleBlur = React.useCallback<
@@ -150,7 +152,7 @@ const Textarea: NuiTextarea = React.memo(
         React.useEffect(() => {
             if (!hasInit) return;
             autoResize();
-        }, [hasInit, autoResize, value]);
+        }, [hasInit, autoResize, controllableValue]);
 
         React.useEffect(() => {
             if (!textareaRef.current || !rowHeight.current) return;
@@ -176,8 +178,9 @@ const Textarea: NuiTextarea = React.memo(
                     <textarea
                         {...textAreaProps}
                         ref={mergedRefs}
+                        readOnly={readOnly}
                         className="NuiTextarea__textarea"
-                        value={value}
+                        value={controllableValue}
                         disabled={disabled}
                         rows={min}
                         onFocus={handleFocus}
@@ -190,7 +193,7 @@ const Textarea: NuiTextarea = React.memo(
                         aria-hidden="true"
                         tabIndex={-1}
                         className="NuiTextarea__hidden"
-                        value={value}
+                        value={controllableValue}
                     />
                 </div>
             </StyledTextarea>

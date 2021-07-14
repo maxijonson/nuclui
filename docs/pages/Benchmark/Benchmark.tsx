@@ -1,4 +1,11 @@
-import { Checkbox, Container, Flex, FlexItem, TextInput } from "nuclui";
+import {
+    Checkbox,
+    Container,
+    Flex,
+    FlexItem,
+    TextInput,
+    Textarea,
+} from "nuclui";
 import { NumberInput } from "nuclui/components";
 import React from "react";
 
@@ -21,6 +28,12 @@ const Benchmark = React.memo(() => {
     const numberInputRef = React.useRef<HTMLInputElement>(null);
     const onNumberInputChange = React.useCallback((v: number) => {
         setNumberInputValue(v);
+    }, []);
+
+    const [textareaValue, setTextareaValue] = React.useState("Value\nValue");
+    const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+    const onTextareaChange = React.useCallback((v: string) => {
+        setTextareaValue(v);
     }, []);
 
     React.useEffect(() => {
@@ -153,13 +166,43 @@ const Benchmark = React.memo(() => {
                                     : "Interval (Uncontrolled)"
                             }
                         />
-                        <input
-                            type="number"
-                            onChange={(e) =>
+                    </FlexItem>
+                    <FlexItem>
+                        <Textarea
+                            value={textareaValue}
+                            onChange={onTextareaChange}
+                            label="Controlled"
+                        />
+                        <Textarea
+                            readOnly
+                            value={textareaValue}
+                            onChange={onTextareaChange}
+                            label="Controlled (readOnly)"
+                        />
+                        <Textarea label="Uncontrolled" />
+                        <Textarea
+                            defaultValue="Default"
+                            label="Uncontrolled (defaultValue)"
+                        />
+                        <Textarea
+                            label="onChange only"
+                            onChange={(v) =>
                                 console.info(
-                                    e.currentTarget.value,
-                                    e.currentTarget.valueAsNumber
+                                    "Uncontrolled change",
+                                    v,
+                                    textareaRef.current?.value
                                 )
+                            }
+                            ref={textareaRef}
+                        />
+                        <Textarea label="value only" value="Value" />
+                        <Textarea
+                            value={controlled ? textareaValue : undefined}
+                            onChange={controlled ? onTextareaChange : undefined}
+                            label={
+                                controlled
+                                    ? "Interval (Controlled)"
+                                    : "Interval (Uncontrolled)"
                             }
                         />
                     </FlexItem>
