@@ -41,30 +41,33 @@ const CycleSelect: NuiCycleSelect = React.memo(
         );
 
         const prevOption = React.useMemo(() => {
-            if (_.size(options) <= 1) return null;
+            if (!options || _.size(options) <= 1) return null;
             if (selectedOption == -1) return _.first(options);
 
             return selectedOption != 0
-                ? options?.[selectedOption - 1] // Index before
+                ? options[selectedOption - 1] // Index before
                 : _.last(options); // Last index
         }, [options, selectedOption]);
 
         const nextOption = React.useMemo(() => {
-            if (_.size(options) <= 1) return null;
+            if (!options || _.size(options) <= 1) return null;
             if (selectedOption == -1) return _.first(options);
 
             return selectedOption != _.size(options) - 1
-                ? options?.[selectedOption + 1] // Index after
+                ? options[selectedOption + 1] // Index after
                 : _.first(options); // First index
         }, [options, selectedOption]);
 
         const prevDisabled = props.disabled || (!prevOption && !onPrevious);
         const nextDisabled = props.disabled || (!nextOption && !onNext);
-        const disabled = props.disabled || (prevDisabled && nextDisabled);
+        const disabled =
+            props.disabled || (prevDisabled && nextDisabled && !value);
 
         const inputValue = React.useMemo(() => {
-            if (_.size(options) == 0 && !value) return "No Options";
-            if (!options?.[selectedOption]) return value;
+            if (!options || _.size(options) == 0) {
+                return value ?? "No Options";
+            }
+            if (!options[selectedOption]) return value;
             return options[selectedOption].label;
         }, [options, selectedOption, value]);
 

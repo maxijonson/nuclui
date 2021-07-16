@@ -6,6 +6,13 @@ export interface CycleSelectProps {
     type?: "text";
 
     /**
+     * Forwarded ref to the inner input element of the `CycleSelect` component.
+     *
+     * Note: `ref.current.value` points to the value displayed to the user (label), **not** the actual `value` of the option from the `options` array.
+     */
+    ref?: React.ForwardedRef<HTMLInputElement>;
+
+    /**
      * The options to cycle through
      */
     options?: { label: string; value: string }[];
