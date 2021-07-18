@@ -2,7 +2,7 @@ import clsx from "clsx";
 import React from "react";
 import styled from "styled-components";
 import _ from "lodash";
-import { createComponentName, nuiLog, isBetween } from "@utils";
+import { createComponentName, isBetween } from "@utils";
 import { background, border, context, text } from "@theme";
 import { BREAKPOINTS } from "@config";
 import { Calendar } from "@components/Display/Calendar";
@@ -24,6 +24,11 @@ import { extractInputContainerProps } from "../InputContainer/InputContainer";
 // TODO: Range picker
 // TODO: onChange
 // TODO: Better clock design
+
+type YearOption = {
+    value: number;
+    label: string;
+};
 
 const MONTHS = [
     "January",
@@ -50,10 +55,22 @@ const getInitialView = (type: DatePickerProps["type"]): "days" | "time" => {
     return type == "date" || type == "datetime" ? "days" : "time";
 };
 
+const getYearIntervalLabel = (yearOptions: YearOption[]) => {
+    const first = (_.first(yearOptions) as YearOption).label;
+    const last = (_.last(yearOptions) as YearOption).label;
+    return `${first} - ${last}`;
+};
+
 const DatePicker: NuiDatePicker = React.memo(
     React.forwardRef((props, ref) => {
         const {
-            restProps: { type, value, onChange, className, ...inputProps },
+            restProps: {
+                type = "date",
+                value,
+                onChange,
+                className,
+                ...inputProps
+            },
             ...inputContainerProps
         } = extractInputContainerProps(props);
         const { onFocus, onBlur } = inputProps;
@@ -139,7 +156,7 @@ const DatePicker: NuiDatePicker = React.memo(
         }, [month, year]);
 
         /** All years options when in "years" view */
-        const yearsOptions = React.useMemo(() => {
+        const yearsOptions = React.useMemo<YearOption[]>(() => {
             const current = new Date(year, month);
             current.setHours(0, 0, 0, 0);
 
@@ -252,29 +269,25 @@ const DatePicker: NuiDatePicker = React.memo(
         /** Fired when selecting a day from the calendar */
         const handleDaySelect = React.useCallback<HTMLButtonProps["onClick"]>(
             (e) => {
-                if (onChange) {
-                    const v = Number(e.currentTarget.value);
-                    const { ofm } = e.currentTarget.dataset;
-                    const outOfMonth = ofm == "true";
+                if (!onChange) {
+                    return;
+                }
 
-                    if (isNaN(v)) {
-                        return nuiLog.error(
-                            `DatePicker (handleDaySelect): ${e.currentTarget.value} is not a number`
-                        );
-                    }
+                const v = Number(e.currentTarget.value);
+                const { ofm } = e.currentTarget.dataset;
+                const outOfMonth = ofm == "true";
 
-                    const date = new Date(v);
-                    date.setHours(
-                        selectedHour ?? 0,
-                        selectedMinute ?? 0,
-                        selectedSecond ?? 0
-                    );
-                    onChange(date.getTime(), e);
+                const date = new Date(v);
+                date.setHours(
+                    selectedHour ?? 0,
+                    selectedMinute ?? 0,
+                    selectedSecond ?? 0
+                );
+                onChange(date.getTime(), e);
 
-                    if (outOfMonth) {
-                        setMonth(date.getMonth());
-                        setYear(date.getFullYear());
-                    }
+                if (outOfMonth) {
+                    setMonth(date.getMonth());
+                    setYear(date.getFullYear());
                 }
             },
             [onChange, selectedHour, selectedMinute, selectedSecond]
@@ -284,11 +297,6 @@ const DatePicker: NuiDatePicker = React.memo(
         const handleMonthSelect = React.useCallback<HTMLButtonProps["onClick"]>(
             (e) => {
                 const v = Number(e.currentTarget.value);
-                if (isNaN(v)) {
-                    return nuiLog.error(
-                        `DatePicker (handleMonthSelect): ${e.currentTarget.value} is not a number`
-                    );
-                }
                 setMonth(new Date(v).getMonth());
                 setView("days");
             },
@@ -299,11 +307,6 @@ const DatePicker: NuiDatePicker = React.memo(
         const handleYearSelect = React.useCallback<HTMLButtonProps["onClick"]>(
             (e) => {
                 const v = Number(e.currentTarget.value);
-                if (isNaN(v)) {
-                    return nuiLog.error(
-                        `DatePicker (handleYearSelect): ${e.currentTarget.value} is not a number`
-                    );
-                }
                 setYear(new Date(v).getFullYear());
                 setView("months");
                 setYearsOffset(0);
@@ -315,13 +318,6 @@ const DatePicker: NuiDatePicker = React.memo(
         const handleHourSelect = React.useCallback<HTMLButtonProps["onClick"]>(
             (e) => {
                 const v = Number(e.currentTarget.value);
-
-                if (isNaN(v)) {
-                    return nuiLog.error(
-                        `DatePicker (handleHourSelect): ${e.currentTarget.value} is not a number`
-                    );
-                }
-
                 const date = props.value ? new Date(props.value) : new Date();
                 date.setHours(v);
 
@@ -338,13 +334,6 @@ const DatePicker: NuiDatePicker = React.memo(
         >(
             (e) => {
                 const v = Number(e.currentTarget.value);
-
-                if (isNaN(v)) {
-                    return nuiLog.error(
-                        `DatePicker (handleMinuteSelect): ${e.currentTarget.value} is not a number`
-                    );
-                }
-
                 const date = props.value ? new Date(props.value) : new Date();
                 date.setMinutes(v);
 
@@ -361,13 +350,6 @@ const DatePicker: NuiDatePicker = React.memo(
         >(
             (e) => {
                 const v = Number(e.currentTarget.value);
-
-                if (isNaN(v)) {
-                    return nuiLog.error(
-                        `DatePicker (handleSecondSelect): ${e.currentTarget.value} is not a number`
-                    );
-                }
-
                 const date = props.value ? new Date(props.value) : new Date();
                 date.setSeconds(v);
 
@@ -545,9 +527,9 @@ const DatePicker: NuiDatePicker = React.memo(
                                             size={size}
                                             className="NuiDatePicker__calendar__header__yearInterval"
                                             fluid
-                                            value={`${
-                                                _.first(yearsOptions)?.label
-                                            } - ${_.last(yearsOptions)?.label}`}
+                                            value={getYearIntervalLabel(
+                                                yearsOptions
+                                            )}
                                             variant="none"
                                             onPrevious={handlePrevYearInterval}
                                             onNext={handleNextYearInterval}

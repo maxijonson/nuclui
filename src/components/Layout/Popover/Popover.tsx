@@ -39,7 +39,7 @@ const Popover: NuiPopover = React.forwardRef((props, ref) => {
     );
 
     return (
-        <div className={classes} children={children} ref={ref} {...restProps} />
+        <div {...restProps} className={classes} children={children} ref={ref} />
     );
 });
 
