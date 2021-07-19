@@ -75,6 +75,8 @@ interface FilePickerBaseProps {
 
     /**
      * The maximum amount of files that can be selected
+     *
+     * @default 1
      */
     maxFiles?: number;
 

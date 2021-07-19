@@ -69,3 +69,18 @@ Object.defineProperty(window, "resizeTo", {
 });
 
 window.getComputedStyle = (elt, pseudo) => getComputedStyle(elt, pseudo);
+
+class DataTransferMock {
+    testStorage = new Map();
+
+    setData(key: any, value: any) {
+        this.testStorage.set(key, value);
+    }
+    getData(key: any) {
+        return this.testStorage.get(key);
+    }
+}
+
+Object.defineProperty(window, "DataTransfer", {
+    value: DataTransferMock,
+});

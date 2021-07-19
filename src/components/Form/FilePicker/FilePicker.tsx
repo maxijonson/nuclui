@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import React from "react";
 import styled from "styled-components";
 import clsx from "clsx";
@@ -197,6 +198,7 @@ const FilePicker: NuiFilePicker = React.memo(
             }
             return `${value.length} files selected`;
         }, [error, hideErrors, value]);
+
         const configText = React.useMemo(() => {
             if (error && !hideErrors) {
                 return subError;
