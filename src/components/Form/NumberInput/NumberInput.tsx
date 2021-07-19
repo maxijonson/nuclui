@@ -9,8 +9,6 @@ import { HTMLInputProps } from "../InputContainer/types";
 import { NuiNumberInput } from "./types";
 import { extractInputContainerProps } from "../InputContainer/InputContainer";
 
-// FIXME: NumberInput looks almost the same as TextInput. Maybe move some code in a reusable component.
-
 const arrowUp = (
     <svg viewBox="0 0 135 1">
         <g transform="rotate(-180 70,42.50000381469726)">
@@ -61,11 +59,10 @@ const NumberInput: NuiNumberInput = React.memo(
 
         const canStepUp = React.useMemo(() => {
             if (max == undefined) return true;
-            const v = value ?? inputRef.current?.valueAsNumber;
             const s = step ?? 1;
 
-            if (typeof v === "number") {
-                return v + s <= max;
+            if (typeof value === "number") {
+                return value + s <= max;
             }
 
             return min != undefined ? min + s <= max : max >= s;
@@ -73,18 +70,17 @@ const NumberInput: NuiNumberInput = React.memo(
 
         const canStepDown = React.useMemo(() => {
             if (min == undefined) return true;
-            const v = value ?? inputRef.current?.valueAsNumber;
             const s = step ?? 1;
 
-            if (typeof v === "number") {
-                return v - s >= min;
+            if (typeof value === "number") {
+                return value - s >= min;
             }
 
             return -s >= min;
         }, [min, step, value]);
 
-        const stepUpDisabled = disabled || !canStepUp;
-        const stepDownDisabled = disabled || !canStepDown;
+        const stepUpDisabled = disabled || readOnly || !canStepUp;
+        const stepDownDisabled = disabled || readOnly || !canStepDown;
 
         const handleFocus = React.useCallback<HTMLInputProps["onFocus"]>(
             (e) => {
@@ -98,6 +94,7 @@ const NumberInput: NuiNumberInput = React.memo(
 
         const onValueChange = React.useCallback(
             (v: number, e?: React.ChangeEvent<HTMLInputElement>) => {
+                /* istanbul ignore next */
                 if (isNaN(v) && strict) {
                     controllableOnChange(0, e);
                 } else {
@@ -116,19 +113,23 @@ const NumberInput: NuiNumberInput = React.memo(
         );
 
         const increment = React.useCallback(() => {
-            if (inputRef.current) {
-                inputRef.current.stepUp();
-                setTouched(true);
-                onValueChange(inputRef.current.valueAsNumber);
+            /* istanbul ignore next */
+            if (!inputRef.current) {
+                return;
             }
+            inputRef.current.stepUp();
+            setTouched(true);
+            onValueChange(inputRef.current.valueAsNumber);
         }, [onValueChange]);
 
         const decrement = React.useCallback(() => {
-            if (inputRef.current) {
-                inputRef.current.stepDown();
-                setTouched(true);
-                onValueChange(inputRef.current.valueAsNumber);
+            /* istanbul ignore next */
+            if (!inputRef.current) {
+                return;
             }
+            inputRef.current.stepDown();
+            setTouched(true);
+            onValueChange(inputRef.current.valueAsNumber);
         }, [onValueChange]);
 
         const handleBlur = React.useCallback<HTMLInputProps["onBlur"]>(
@@ -164,34 +165,32 @@ const NumberInput: NuiNumberInput = React.memo(
                     onChange={handleChange}
                     onBlur={handleBlur}
                 />
-                {!readOnly && (
-                    <div className="NuiNumberInput__arrows">
-                        <button
-                            type="button"
-                            disabled={stepUpDisabled}
-                            className={clsx([
-                                "NuiNumberInput__arrows__up",
-                                stepUpDisabled && "disabled",
-                            ])}
-                            onClick={increment}
-                            tabIndex={-1}
-                        >
-                            {arrowUp}
-                        </button>
-                        <button
-                            type="button"
-                            disabled={stepDownDisabled}
-                            className={clsx([
-                                "NuiNumberInput__arrows__down",
-                                stepDownDisabled && "disabled",
-                            ])}
-                            onClick={decrement}
-                            tabIndex={-1}
-                        >
-                            {arrowDown}
-                        </button>
-                    </div>
-                )}
+                <div className="NuiNumberInput__arrows">
+                    <button
+                        type="button"
+                        disabled={stepUpDisabled}
+                        className={clsx([
+                            "NuiNumberInput__arrows__up",
+                            stepUpDisabled && "disabled",
+                        ])}
+                        onClick={increment}
+                        tabIndex={-1}
+                    >
+                        {arrowUp}
+                    </button>
+                    <button
+                        type="button"
+                        disabled={stepDownDisabled}
+                        className={clsx([
+                            "NuiNumberInput__arrows__down",
+                            stepDownDisabled && "disabled",
+                        ])}
+                        onClick={decrement}
+                        tabIndex={-1}
+                    >
+                        {arrowDown}
+                    </button>
+                </div>
             </StyledNumberInput>
         );
     })
