@@ -41,7 +41,7 @@ const TextInput: NuiTextInput = React.memo(
 
         const handleChange = React.useCallback<HTMLInputProps["onChange"]>(
             (e) => {
-                controllableOnChange(e.currentTarget.value, e);
+                controllableOnChange(e.target.value, e);
             },
             [controllableOnChange]
         );

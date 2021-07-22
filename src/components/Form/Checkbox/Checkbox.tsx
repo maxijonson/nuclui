@@ -44,7 +44,7 @@ const Checkbox: NuiCheckbox = React.memo(
         const handleChange = React.useCallback<HTMLInputProps["onChange"]>(
             (e) => {
                 setTouched(true);
-                controllableOnChange(e.currentTarget.checked, e);
+                controllableOnChange(e.target.checked, e);
             },
             [controllableOnChange]
         );

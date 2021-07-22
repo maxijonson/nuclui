@@ -43,9 +43,9 @@ const RadioButton: NuiRadioButton = React.memo(
             (e) => {
                 setTouched(true);
                 if (onChange) {
-                    onChange(e.currentTarget.value, e);
+                    onChange(e.target.value, e);
                 } else if (ctx.onChange) {
-                    ctx.onChange(e.currentTarget.value, e);
+                    ctx.onChange(e.target.value, e);
                 }
             },
             [ctx, onChange]

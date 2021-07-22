@@ -117,7 +117,7 @@ const Textarea: NuiTextarea = React.memo(
             React.ChangeEventHandler<HTMLTextAreaElement>
         >(
             (e) => {
-                controllableOnChange(e.currentTarget.value, e);
+                controllableOnChange(e.target.value, e);
             },
             [controllableOnChange]
         );

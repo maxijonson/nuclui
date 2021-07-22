@@ -332,7 +332,7 @@ const FilePicker: NuiFilePicker = React.memo(
         const handleChange = React.useCallback<HTMLInputProps["onChange"]>(
             async (e) => {
                 try {
-                    const { files } = e.currentTarget;
+                    const { files } = e.target;
 
                     if (!files) {
                         throw FileInputError.NO_FILES;

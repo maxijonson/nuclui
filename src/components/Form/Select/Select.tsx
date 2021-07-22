@@ -136,9 +136,9 @@ const Select: NuiSelect = React.memo(
                 setFocused(false);
                 setSearch(null);
                 setHighlight(-1);
-                if (inputRef.current) {
-                    inputRef.current.blur();
-                }
+
+                /* istanbul ignore next */
+                inputRef.current?.blur();
 
                 controllableOnChange(v, e);
             },
@@ -148,7 +148,7 @@ const Select: NuiSelect = React.memo(
         /** Changes the search query and resets the highlight position */
         const handleChange = React.useCallback<HTMLInputProps["onChange"]>(
             (e) => {
-                setSearch(e.currentTarget.value);
+                setSearch(e.target.value);
                 setHighlight(-1);
             },
             []
@@ -163,6 +163,7 @@ const Select: NuiSelect = React.memo(
         /** Adds a new option to the options list */
         const createOption = React.useCallback<HTMLButtonProps["onClick"]>(
             (e) => {
+                /* istanbul ignore next */
                 if (!search) return;
 
                 let createdOption: SelectOption | null = {
@@ -258,6 +259,7 @@ const Select: NuiSelect = React.memo(
                     "NuiSelect__options__list"
                 )[0] as HTMLElement;
 
+                /* istanbul ignore next */
                 if (highlighted && list) {
                     const highlightedPos = highlighted.offsetTop;
 

@@ -106,7 +106,7 @@ const NumberInput: NuiNumberInput = React.memo(
 
         const handleChange = React.useCallback<HTMLInputProps["onChange"]>(
             (e) => {
-                const { valueAsNumber } = e.currentTarget;
+                const { valueAsNumber } = e.target;
                 onValueChange(valueAsNumber, e);
             },
             [onValueChange]

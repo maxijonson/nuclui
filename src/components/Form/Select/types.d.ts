@@ -1,3 +1,4 @@
+import React from "react";
 import { StrictOmit } from "ts-essentials";
 import { InputContainerPropsWithBase } from "../InputContainer/types";
 
@@ -55,7 +56,7 @@ export interface SelectProps {
         option: SelectOption,
         index: number,
         options: SelectOption[]
-    ) => JSX.Element;
+    ) => React.ReactNode;
 
     /**
      * Whether or not the user can create options. The label and value takes the exact value entered (as a string). The behaviour can be customized with `onCreate`
