@@ -27,6 +27,7 @@ import { extractInputBaseProps } from "../InputBase/InputBase";
 // TODO: [Bug] Support decimal steps
 
 /** Adjusts the `value` to a divisible of `step` */
+/* istanbul ignore next */
 const adjustImprecision = (value: number, step: number) => {
     const stepValue = value * step;
     const slippage = stepValue % step;
@@ -38,6 +39,7 @@ const adjustImprecision = (value: number, step: number) => {
 };
 
 /** Gets the position of the handle on the track for it's current value */
+/* istanbul ignore next */
 const getHandlePosition = (
     value: number,
     min: number,
@@ -56,18 +58,21 @@ const getHandlePosition = (
     return axis == "x" ? { x: pos, y: 0 } : { x: 0, y: pos };
 };
 
+/* istanbul ignore next */
 const sortArray = <T extends number[]>(arr: T) =>
     arr.slice(0).sort((a, b) => a - b) as T;
 
 /** Gets the offseted position by which the handle should move */
+/* istanbul ignore next */
 const getHandlePositionOffset = (handleWidth: number, axis: "x" | "y" = "x") =>
     axis == "x"
         ? { x: -(handleWidth / 2), y: 0 }
         : { x: 0, y: -(handleWidth / 2) };
 
 const getElementSize = (trackRef: React.RefObject<HTMLDivElement>) =>
-    trackRef.current?.clientWidth ?? 0;
+    trackRef.current?.getBoundingClientRect().width ?? 0;
 
+/* istanbul ignore next */
 const findClosestIndex = <T extends number[]>(origin: number, targets: T) => {
     return _.reduce(
         targets,
@@ -149,18 +154,20 @@ const Slider: NuiSlider = React.memo(
 
         const firstValue = React.useMemo(() => {
             if (_.isArray(value)) {
-                if (swap) return _.last(value) ?? max;
-                return _.first(value) ?? min;
+                /* istanbul ignore next */
+                if (swap) return value[Handle.SECOND];
+                return value[Handle.FIRST];
             }
             return value;
-        }, [value, swap, max, min]);
+        }, [value, swap]);
         const secondValue = React.useMemo(() => {
             if (_.isArray(value)) {
-                if (swap) return _.first(value) ?? min;
-                return _.last(value) ?? max;
+                /* istanbul ignore next */
+                if (swap) return value[Handle.FIRST];
+                return value[Handle.SECOND];
             }
             return undefined;
-        }, [value, swap, min, max]);
+        }, [value, swap]);
 
         const grid = React.useMemo<[number, number]>(() => {
             const trackSteps = (max - min) / step;
@@ -205,8 +212,8 @@ const Slider: NuiSlider = React.memo(
             [className]
         );
         const trackFillerStyle = React.useMemo<React.CSSProperties>(() => {
-            const start = _.min([firstPosition.x, secondPosition.x]) ?? 0;
-            const end = _.max([firstPosition.x, secondPosition.x]) ?? 0;
+            const start = _.min([firstPosition.x, secondPosition.x]) as number;
+            const end = _.max([firstPosition.x, secondPosition.x]) as number;
 
             return {
                 transform: `translateX(${start}px)`,
@@ -214,6 +221,7 @@ const Slider: NuiSlider = React.memo(
             };
         }, [firstPosition.x, secondPosition.x]);
 
+        /* istanbul ignore next */
         const handleChange = React.useCallback(
             (
                 relativePos: number,
@@ -221,35 +229,37 @@ const Slider: NuiSlider = React.memo(
                 e: SliderChangeEvent,
                 data?: DraggableData
             ) => {
-                if (onChange) {
-                    const trackSteps = (max - min) / step;
-                    const unit = trackWidth / trackSteps;
-                    const next = _.clamp(
-                        min + adjustImprecision(relativePos / unit, step),
-                        min,
-                        max
-                    );
+                if (!onChange) {
+                    return;
+                }
 
-                    if (secondValue == undefined) {
-                        (onChange as SliderOnChangeSingle)(next, e, data);
-                    } else {
-                        const valueArr = [firstValue, secondValue] as [
-                            number,
-                            number
-                        ];
-                        valueArr[handle] = next;
-                        const nextSwap =
-                            valueArr[Handle.FIRST] > valueArr[Handle.SECOND];
+                const trackSteps = (max - min) / step;
+                const unit = trackWidth / trackSteps;
+                const next = _.clamp(
+                    min + adjustImprecision(relativePos / unit, step),
+                    min,
+                    max
+                );
 
-                        if (nextSwap != swap) {
-                            setSwap(nextSwap);
-                        }
-                        (onChange as SliderOnChangeRange)(
-                            sortArray(valueArr),
-                            e,
-                            data
-                        );
+                if (secondValue == undefined) {
+                    (onChange as SliderOnChangeSingle)(next, e, data);
+                } else {
+                    const valueArr = [firstValue, secondValue] as [
+                        number,
+                        number
+                    ];
+                    valueArr[handle] = next;
+                    const nextSwap =
+                        valueArr[Handle.FIRST] > valueArr[Handle.SECOND];
+
+                    if (nextSwap != swap) {
+                        setSwap(nextSwap);
                     }
+                    (onChange as SliderOnChangeRange)(
+                        sortArray(valueArr),
+                        e,
+                        data
+                    );
                 }
             },
             [
@@ -281,6 +291,7 @@ const Slider: NuiSlider = React.memo(
             []
         );
 
+        /* istanbul ignore next */
         const handleDrag = React.useCallback<DraggableEventHandler>(
             (e, data) => {
                 return handleChange(
@@ -297,6 +308,7 @@ const Slider: NuiSlider = React.memo(
             setActiveIndex(-1);
         }, []);
 
+        /* istanbul ignore next */
         const handleTrackPointerDown = React.useCallback(
             (e: React.PointerEvent<HTMLDivElement>) => {
                 if (!trackRef.current) {
@@ -316,6 +328,7 @@ const Slider: NuiSlider = React.memo(
             [firstPosition.x, forceUpdate, handleChange, secondPosition.x]
         );
 
+        /* istanbul ignore next */
         const handleKeydown = React.useCallback(
             (e: React.KeyboardEvent<HTMLDivElement>) => {
                 if (!trackRef.current) {
@@ -372,6 +385,7 @@ const Slider: NuiSlider = React.memo(
         }, [trackRef, firstHandleRef, secondHandleRef, forceUpdate]);
 
         // Re-calculate component when the window is resized
+        /* istanbul ignore next */
         React.useEffect(() => {
             let prevTrackSize = getElementSize(trackRef);
             const onWindowResize = () => {
@@ -434,6 +448,7 @@ const Slider: NuiSlider = React.memo(
                                 >
                                     <Popover
                                         children={firstValue}
+                                        className="NuiSlider__handle__popover NuiSlider__handle__popover-1"
                                         open={
                                             !hideHandlePopover &&
                                             activeIndex === Handle.FIRST
@@ -471,6 +486,7 @@ const Slider: NuiSlider = React.memo(
                                     >
                                         <Popover
                                             children={secondValue}
+                                            className="NuiSlider__handle__popover NuiSlider__handle__popover-2"
                                             open={
                                                 !hideHandlePopover &&
                                                 activeIndex === Handle.SECOND
