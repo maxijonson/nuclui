@@ -10,6 +10,7 @@ const MediaQueryContext = React.memo((props) => {
 
     const onChange = React.useCallback(
         (query: string) =>
+            /* istanbul ignore next */
             function onMqlChange(this: MediaQueryList) {
                 setQueryMatches(
                     produce((draft) => {
