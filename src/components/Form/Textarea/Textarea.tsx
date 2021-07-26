@@ -76,13 +76,14 @@ const Textarea: NuiTextarea = React.memo(
             return m;
         }, [maxRows, minRows]);
         const max = React.useMemo(() => {
-            if (!maxRows) return undefined;
+            if (maxRows === undefined) return undefined;
             const m = _.max([minRows, maxRows]);
             if (!m || m <= 0) return 1;
             return m;
         }, [maxRows, minRows]);
 
         const autoResize = React.useCallback(() => {
+            /* istanbul ignore next */
             if (!textareaRef?.current || !hiddenTextareaRef?.current) {
                 forceUpdate();
                 return;
@@ -136,6 +137,7 @@ const Textarea: NuiTextarea = React.memo(
         );
 
         React.useEffect(() => {
+            /* istanbul ignore next */
             if (!hiddenTextareaRef?.current) {
                 forceUpdate();
                 return;
@@ -155,7 +157,8 @@ const Textarea: NuiTextarea = React.memo(
         }, [hasInit, autoResize, controllableValue]);
 
         React.useEffect(() => {
-            if (!textareaRef.current || !rowHeight.current) return;
+            /* istanbul ignore next */
+            if (!textareaRef.current || rowHeight.current === undefined) return;
             const minHeight = min * rowHeight.current + excessHeight.current;
             const maxHeight = max
                 ? max * rowHeight.current + excessHeight.current
