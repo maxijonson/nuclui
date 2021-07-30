@@ -8,7 +8,7 @@ const { testClassName, testDisplayName, testRef, testRendering } =
     createBasicTests(Popover, {});
 
 describe("Popover", () => {
-    testRendering();
+    testRendering("div");
     testDisplayName("NuiStyledPopover", "NuiPopover");
     testRef("div");
     testClassName("div", "NuiPopover");

@@ -16,7 +16,7 @@ const {
 describe("Card", () => {
     testRendering();
     testDisplayName("NuiStyledCard", "NuiCard");
-    testComponent("div");
+    testComponent("div", "span");
     testRef("div", "button");
     testClassName("div", "NuiCard");
 
