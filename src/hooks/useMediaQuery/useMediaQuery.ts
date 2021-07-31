@@ -32,6 +32,7 @@ const useMediaQuery = <T>(
     const hasContext = React.useMemo(() => ctx != defaultContext, [ctx]);
 
     // The MediaQueryList change listener (only used when not using the context queries)
+    /* istanbul ignore next */
     const onChange = React.useCallback(
         (key: string) =>
             function mqlChange(this: MediaQueryList) {
@@ -44,6 +45,7 @@ const useMediaQuery = <T>(
         []
     );
 
+    /* istanbul ignore next */
     React.useEffect(() => {
         // Use the context matches when it is present
         if (hasContext) {
@@ -80,6 +82,7 @@ const useMediaQuery = <T>(
         });
     }, [ctx, hasContext, onChange, queries]);
 
+    /* istanbul ignore next */
     React.useEffect(
         () => () => {
             _.forEach(registry.current, (reg) =>
