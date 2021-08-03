@@ -1,6 +1,7 @@
 import React from "react";
 import { shallow } from "enzyme";
 import styled, { css } from "styled-components";
+import "jest-styled-components";
 import defaultTheme from "@theme/defaultTheme";
 
 const createThemeTests =
