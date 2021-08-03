@@ -5,12 +5,9 @@ import _ from "lodash";
 import { UseFormOptions, FieldProps, FormErrors } from "./types";
 
 /**
- * FORM GOALS:
- * - Typings at all times
+ * FORM TODO:
  * - Nest objects (other forms) inside a form
  * - Possibility to dynamically add/remove fields of a same type (array)
- * - Possibility for one field to depend on another field
- * - Make it extensible for others to make their own inputs
  */
 
 /**
@@ -149,6 +146,7 @@ const useForm = <T extends {}>(options: UseFormOptions<T>) => {
         const data = formData[name];
 
         // Don't update unecessarily
+        /* istanbul ignore else */
         if (data != fieldProps.current[name].value) {
             // Update the fieldProp.value
             fieldProps.current[name].value = data;
@@ -166,6 +164,7 @@ const useForm = <T extends {}>(options: UseFormOptions<T>) => {
     _.forEach(formErrorsChanges.current, (name) => {
         const errors = formErrors[name];
 
+        /* istanbul ignore else */
         if (!_.isEqual(errors, fieldProps.current[name].errors)) {
             fieldProps.current[name].errors = errors;
         }
