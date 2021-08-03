@@ -14,6 +14,7 @@ const mergeRefs = <RefType>(...refs: Ref<RefType>[]) => {
     if (!filteredRefs.length) return null;
     if (filteredRefs.length === 1) return filteredRefs[0];
     return (instance: RefType | null) => {
+        /* istanbul ignore next */
         for (const ref of filteredRefs) {
             if (typeof ref === "function") {
                 ref(instance);
