@@ -9,8 +9,8 @@ import _ from "lodash";
  * @param inclusive if the bounds are included in the range (defaults to false)
  */
 export default (value: number, min: number, max: number, inclusive = false) => {
-    const lower = _.min([min, max]) ?? 0;
-    const upper = _.max([min, max]) ?? 0;
+    const lower = _.min([min, max]) as number;
+    const upper = _.max([min, max]) as number;
 
     if (lower == upper) {
         return inclusive ? value == lower : false;
