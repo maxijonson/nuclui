@@ -10,6 +10,8 @@
 
 [![build](https://github.com/maxijonson/nuclui/workflows/build/badge.svg)](https://github.com/maxijonson/nuclui/actions?query=workflow%3Abuild)
 [![codecov](https://codecov.io/gh/maxijonson/nuclui/branch/master/graph/badge.svg)](https://codecov.io/gh/maxijonson/nuclui)
+![npm (latest)](https://img.shields.io/npm/v/nuclui/latest?color=blue)
+![npm (next)](https://img.shields.io/npm/v/nuclui/next?color=blue)
 
 </div>
 
