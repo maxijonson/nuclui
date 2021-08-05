@@ -1,8 +1,11 @@
 {
   "name": "nuclui",
-  "version": "0.1.0-dev1628130661854.1",
+  "version": "0.1.0-dev1628130661854.2",
   "description": "A React UI framework, built with TypeScript, to make your developement easier so you can give more focus on your app and less on the design!",
-  "main": "dist/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "sideEffects": false,
   "scripts": {
     "serve": "node docs/dist-server/server.js",
     "start": "cross-env TS_NODE_PROJECT=\"tsconfig.webpack.json\" webpack serve --config=\"webpack.config.ts\"",
@@ -16,7 +19,10 @@
     "test:watchcoverage": "npm run lint && jest --watch --collectCoverage",
     "test:publish": "npm run prepublishOnly && npm pack && tar xvzf *.tgz && rm -rf *.tgz && npm run postpublish",
     "test:heroku": "npm run heroku-postbuild && heroku local web",
-    "compile": "npm-run-all clean test:full && ttsc --project src/tsconfig.prod.json && npm run copyDeclarations",
+    "compile": "npm-run-all clean compile:esm compile:cjs",
+    "compile:esm": "ttsc --project src/tsconfig.prod.json && npm run copyDeclarations:esm",
+    "compile:cjs": "ttsc --project src/tsconfig.prod.json --module commonjs --outDir dist/cjs && npm run copyDeclarations:cjs",
+    "compile:old": "npm-run-all clean && ttsc --project src/tsconfig.prod.json && npm run copyDeclarations",
     "compile:scripts": "tsc --project scripts",
     "build:docs": "npm-run-all clean test:full && cross-env TS_NODE_PROJECT=\"tsconfig.webpack.json\" webpack --config=\"webpack.config.ts\"",
     "build:docs:dev": "npm-run-all clean test:full && cross-env TS_NODE_PROJECT=\"tsconfig.webpack.json\" webpack --env.NODE_ENV=development --config=\"webpack.config.ts\"",
@@ -32,7 +38,8 @@
     "createVersion:dev": "node scripts/compiled/createVersion.js -v dev -s dev && git reset HEAD CHANGELOG.md && git checkout -- CHANGELOG.md",
     "createPublish": "node scripts/compiled/createPublish.js",
     "reinstall": "rm -rf node_modules && rm package-lock.json && npm i",
-    "copyDeclarations": "copyfiles -u 1 \"src/**/*.d.ts\" dist/src"
+    "copyDeclarations:esm": "copyfiles -u 1 \"src/**/*.d.ts\" dist/esm/src",
+    "copyDeclarations:cjs": "copyfiles -u 1 \"src/**/*.d.ts\" dist/cjs/src"
   },
   "repository": {
     "type": "git",
