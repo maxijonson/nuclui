@@ -2,7 +2,13 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [v0.1.1](https://github.com/maxijonson/nuclui/compare/v0.1.1-beta.0...v0.1.1)
+
+- remove -p webpack flag [`393e048`](https://github.com/maxijonson/nuclui/commit/393e048a28c6f202a6e628386051b63dde96f117)
+
 #### [v0.1.1-beta.0](https://github.com/maxijonson/nuclui/compare/v0.1.0-beta.0...v0.1.1-beta.0)
+
+> 5 August 2021
 
 - Edit TSConfig to support ES module compilation [`3a43758`](https://github.com/maxijonson/nuclui/commit/3a43758eeca09285424f7ec878b6e6979ab0df6c)
 - Reduce compiled ESM files [`99ba781`](https://github.com/maxijonson/nuclui/commit/99ba781a2e983214d893bd0e086e714693fe859f)
