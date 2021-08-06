@@ -1,6 +1,6 @@
 {
   "name": "nuclui",
-  "version": "0.1.0-dev1628130661854.3",
+  "version": "0.1.1-beta.0",
   "description": "A React UI framework, built with TypeScript, to make your developement easier so you can give more focus on your app and less on the design!",
   "main": "dist/index.js",
   "module": "dist/esm/index.js",

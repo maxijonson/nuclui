@@ -2,28 +2,37 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [v0.1.1-beta.0](https://github.com/maxijonson/nuclui/compare/v0.1.0-beta.0...v0.1.1-beta.0)
+
+- Edit TSConfig to support ES module compilation [`3a43758`](https://github.com/maxijonson/nuclui/commit/3a43758eeca09285424f7ec878b6e6979ab0df6c)
+- Reduce compiled ESM files [`99ba781`](https://github.com/maxijonson/nuclui/commit/99ba781a2e983214d893bd0e086e714693fe859f)
+- Split bundles into ESM and CJS [`aa6f5ba`](https://github.com/maxijonson/nuclui/commit/aa6f5ba8696e50ccd539f67d036f0ff7cda1646a)
+- Update README with tag badges [`c67b82f`](https://github.com/maxijonson/nuclui/commit/c67b82fa6a15a78eae1e1755ba060d4f16515317)
+
 #### [v0.1.0-beta.0](https://github.com/maxijonson/nuclui/compare/v0.0.8...v0.1.0-beta.0)
+
+> 3 August 2021
 
 - Update dependencies and bump webpack from 4 to 5 [`acf930b`](https://github.com/maxijonson/nuclui/commit/acf930b70eb4536d8871d61c02dff5076d6c0242)
 - Update all dependencies to latest version [`b4c8003`](https://github.com/maxijonson/nuclui/commit/b4c80033635d1c9f46f92d18416006363fa361ae)
 - Start configuration for dev Heroku app [`2acef24`](https://github.com/maxijonson/nuclui/commit/2acef2415bdcb667f8624b911ea9c3f5e16b9b89)
-- Start configuration for dev Heroku app [`643883b`](https://github.com/maxijonson/nuclui/commit/643883b99387cb174b0ba414f08cb91d8720e31e)
-- Component classes WIP [`b0d9caf`](https://github.com/maxijonson/nuclui/commit/b0d9caf57e1dbf640919dafab5bcb17f68094caf)
-- Convert Container props to classes [`cf9cda0`](https://github.com/maxijonson/nuclui/commit/cf9cda05e66cd35f0917ee5bc8982990d5ff9ced)
 - Audit fix [`4386552`](https://github.com/maxijonson/nuclui/commit/4386552c2f1c6108bffe7c42fa5264d91a2bcd58)
-- UseForm prototype and TextInput styling [`6a26232`](https://github.com/maxijonson/nuclui/commit/6a26232b03798fdd6f320a8a3dea3cbabd3da577)
 - Add basic tests to all components [`99b65b1`](https://github.com/maxijonson/nuclui/commit/99b65b1570dfa7461ea11b2a3b7ac140632d6f8a)
-- Externalize InputContainer from TextInput [`03e1607`](https://github.com/maxijonson/nuclui/commit/03e160773c2a7e75a94cc38699104f8508256379)
-- Add DatePicker calendar [`70a0dbd`](https://github.com/maxijonson/nuclui/commit/70a0dbd0ceaf1f6f49f654017b6c1c76b186b7dc)
-- Add DatePicker clock [`857c172`](https://github.com/maxijonson/nuclui/commit/857c172efa3c5faba11287083ae4677f119054be)
-- Implement InputBase with InputContainer based components [`592ed2d`](https://github.com/maxijonson/nuclui/commit/592ed2d0d27fe9db299b36109341e301eb17ad8e)
 - Add DatePicker tests [`0c648cb`](https://github.com/maxijonson/nuclui/commit/0c648cb7a5bf1a778b29269ed052e10114c9a95d)
 - Optimize context theme imports [`ea67751`](https://github.com/maxijonson/nuclui/commit/ea677518220b3bd9e3547ce9ee9102ecb38404da)
-- Initial form components [`8d1cc08`](https://github.com/maxijonson/nuclui/commit/8d1cc08556b528783fec1116070ed5034c1f0dec)
 - Add util for InputContainer props extraction [`f708dc5`](https://github.com/maxijonson/nuclui/commit/f708dc5457d82ed981040069f87783db9078d213)
-- Add util for InputContainer props extraction [`a9eec30`](https://github.com/maxijonson/nuclui/commit/a9eec30001d5899a1e805fdb01a5be210af52525)
-- Add Button component [`0d34faf`](https://github.com/maxijonson/nuclui/commit/0d34faf78145d7aa1484acdc49f0ca1a431d279a)
 - Make theme structure more consistent [`24d7acd`](https://github.com/maxijonson/nuclui/commit/24d7acd8e70023aa9218d154f9061967d3097d32)
+- Slider wip [`c4c053a`](https://github.com/maxijonson/nuclui/commit/c4c053ad0de6c9578cd205dd04629e72567f4304)
+- Add Select tests [`19ae5ac`](https://github.com/maxijonson/nuclui/commit/19ae5ac38dec107fce32b169feba2b21629c36d5)
+- Add FilePicker base [`4a751eb`](https://github.com/maxijonson/nuclui/commit/4a751eb9cfb21ffb95499a4de62fc1f6707fac58)
+- Add CycleSelect tests [`8d2165e`](https://github.com/maxijonson/nuclui/commit/8d2165e12f3eb0142b6644fee3cb3e1c5442b06b)
+- Add Button tests [`6be0714`](https://github.com/maxijonson/nuclui/commit/6be07143d17f5272849413dd36e640c4834ee096)
+- Add useForm tests [`9a08033`](https://github.com/maxijonson/nuclui/commit/9a080335e9a7ee31404ebfc5bb3f1810648cd88a)
+- Add Textarea component [`366c1f4`](https://github.com/maxijonson/nuclui/commit/366c1f4a060951b3ad16d35e7f1b605d8451588d)
+- Rewrite CheckboxContainer descendants with props extraction [`32b8b8f`](https://github.com/maxijonson/nuclui/commit/32b8b8fb0c0ed2c75296e96d6d3ff0e029900cf4)
+- Add FilePicker overlay [`6c79f4a`](https://github.com/maxijonson/nuclui/commit/6c79f4a5d2aca9dea588b98e028ad90b413ead69)
+- Add Calendar tests [`29a7b15`](https://github.com/maxijonson/nuclui/commit/29a7b15c6fddd7aa86c3e99128137a4fdabad236)
+- Add InputBase tests [`1270273`](https://github.com/maxijonson/nuclui/commit/1270273393eafe7c52da0cc261f1b37dd74cee60)
 
 #### [v0.0.8](https://github.com/maxijonson/nuclui/compare/v0.0.8-beta.0...v0.0.8)
 
