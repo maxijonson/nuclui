@@ -35,14 +35,14 @@ describe("Root", () => {
     it("should merge the default theme with the provided theme", () => {
         const color = "#FF00FF";
         const wrapper = shallow(
-            <Root theme={{ background: { primary: color } }}>
+            <Root theme={{ background: { surface: color } }}>
                 <div />
             </Root>
         );
         expect(wrapper.find(ThemeProvider).prop("theme")).toEqual({
             nui: {
                 ...defaultTheme,
-                background: { ...defaultTheme.background, primary: color },
+                background: { ...defaultTheme.background, surface: color },
             },
         });
     });

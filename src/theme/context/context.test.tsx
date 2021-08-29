@@ -1,74 +1,74 @@
 import "jest-styled-components";
 import { createThemeTests } from "@utils/test";
 import {
-    infoVLight,
-    infoLight,
     info,
-    infoDark,
-    infoVDark,
-    warnVLight,
-    warnLight,
+    infoActive,
+    infoActiveAlt,
+    infoContrastText,
+    infoSurface,
     warn,
-    warnDark,
-    warnVDark,
-    dangerVLight,
-    dangerLight,
+    warnActive,
+    warnActiveAlt,
+    warnContrastText,
+    warnSurface,
     danger,
-    dangerDark,
-    dangerVDark,
-    successVLight,
-    successLight,
+    dangerActive,
+    dangerActiveAlt,
+    dangerContrastText,
+    dangerSurface,
     success,
-    successDark,
-    successVDark,
-    secondaryVLight,
-    secondaryLight,
+    successActive,
+    successActiveAlt,
+    successContrastText,
+    successSurface,
     secondary,
-    secondaryDark,
-    secondaryVDark,
-    primaryVLight,
-    primaryLight,
+    secondaryActive,
+    secondaryActiveAlt,
+    secondaryContrastText,
+    secondarySurface,
     primary,
-    primaryDark,
-    primaryVDark,
+    primaryActive,
+    primaryActiveAlt,
+    primaryContrastText,
+    primarySurface,
 } from "./index";
 
 const testTheme = createThemeTests("context", "#FF00FF");
 
 describe("theme/context", () => {
-    testTheme("infoVLight", infoVLight);
-    testTheme("infoLight", infoLight);
     testTheme("info", info);
-    testTheme("infoDark", infoDark);
-    testTheme("infoVDark", infoVDark);
+    testTheme("infoActive", infoActive);
+    testTheme("infoActiveAlt", infoActiveAlt);
+    testTheme("infoContrastText", infoContrastText);
+    testTheme("infoSurface", infoSurface);
 
-    testTheme("warnVLight", warnVLight);
-    testTheme("warnLight", warnLight);
     testTheme("warn", warn);
-    testTheme("warnDark", warnDark);
-    testTheme("warnVDark", warnVDark);
+    testTheme("warnActive", warnActive);
+    testTheme("warnActiveAlt", warnActiveAlt);
+    testTheme("warnContrastText", warnContrastText);
+    testTheme("warnSurface", warnSurface);
 
-    testTheme("dangerVLight", dangerVLight);
-    testTheme("dangerLight", dangerLight);
     testTheme("danger", danger);
-    testTheme("dangerDark", dangerDark);
-    testTheme("dangerVDark", dangerVDark);
+    testTheme("dangerActive", dangerActive);
+    testTheme("dangerActiveAlt", dangerActiveAlt);
+    testTheme("dangerContrastText", dangerContrastText);
+    testTheme("dangerSurface", dangerSurface);
 
-    testTheme("successVLight", successVLight);
-    testTheme("successLight", successLight);
     testTheme("success", success);
-    testTheme("successDark", successDark);
-    testTheme("successVDark", successVDark);
+    testTheme("successActive", successActive);
+    testTheme("successActiveAlt", successActiveAlt);
+    testTheme("successContrastText", successContrastText);
+    testTheme("successSurface", successSurface);
 
-    testTheme("secondaryVLight", secondaryVLight);
-    testTheme("secondaryLight", secondaryLight);
     testTheme("secondary", secondary);
-    testTheme("secondaryDark", secondaryDark);
-    testTheme("secondaryVDark", secondaryVDark);
+    testTheme("secondaryActive", secondaryActive);
+    testTheme("secondaryActiveAlt", secondaryActiveAlt);
+    testTheme("secondaryContrastText", secondaryContrastText);
+    testTheme("secondarySurface", secondarySurface);
 
-    testTheme("primaryVLight", primaryVLight);
-    testTheme("primaryLight", primaryLight);
     testTheme("primary", primary);
-    testTheme("primaryDark", primaryDark);
-    testTheme("primaryVDark", primaryVDark);
+    testTheme("primaryActive", primaryActive);
+    testTheme("primaryActiveAlt", primaryActiveAlt);
+    testTheme("primaryContrastText", primaryContrastText);
+    testTheme("primarySurface", primarySurface);
 });

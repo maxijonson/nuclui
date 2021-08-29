@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import React from "react";
 import styled from "styled-components";
-import { background, border, context, shadow } from "@theme";
+import { background, border, context, shadow, text } from "@theme";
 import { createComponentName } from "@utils";
 import {
     InputContainerProps,
@@ -92,9 +92,12 @@ const StyledInputContainer = styled(InputBase)`
         box-shadow: 0 1px 2px -1px ${shadow.varSecondary};
         border-style: solid;
         border-width: 1px;
+        background-color: transparent;
 
         & input,
         & textarea {
+            ${text.primary}
+
             padding: var(--nui-inputContainer-pad);
             font-size: var(--nui-inputContainer-font);
             box-sizing: border-box;
@@ -125,7 +128,7 @@ const StyledInputContainer = styled(InputBase)`
 
     & .NuiInputContainer__prepend,
     & .NuiInputContainer__append {
-        ${background.secondary}
+        ${background.surfaceAlt}
 
         display: flex;
         align-items: center;
@@ -157,12 +160,8 @@ const StyledInputContainer = styled(InputBase)`
     }
 
     &.NuiInputContainer--variant-underline {
-        & .NuiInputContainer__prepend,
-        & .NuiInputContainer__append {
-            ${background.secondary}
-        }
-
         & .NuiInputBase__container {
+            background: transparent;
             box-shadow: none;
             border-width: 0px;
             border-bottom-width: 1px;
@@ -170,12 +169,8 @@ const StyledInputContainer = styled(InputBase)`
     }
 
     &.NuiInputContainer--variant-none {
-        & .NuiInputContainer__prepend,
-        & .NuiInputContainer__append {
-            ${background.secondary}
-        }
-
         & .NuiInputBase__container {
+            background: transparent;
             box-shadow: none;
             border-width: 0;
             border-left: none;
@@ -189,13 +184,8 @@ const StyledInputContainer = styled(InputBase)`
     }
 
     &.NuiInputContainer--variant-filled {
-        & .NuiInputContainer__prepend,
-        & .NuiInputContainer__append {
-            ${background.dimmed}
-        }
-
         & .NuiInputBase__container {
-            ${background.secondary}
+            ${background.surface}
 
             box-shadow: 0 1px 2px -1px ${shadow.varSecondary};
             border-width: 1px;
@@ -203,13 +193,8 @@ const StyledInputContainer = styled(InputBase)`
     }
 
     &.NuiInputContainer--variant-filled-underline {
-        & .NuiInputContainer__prepend,
-        & .NuiInputContainer__append {
-            ${background.dimmed}
-        }
-
         & .NuiInputBase__container {
-            ${background.secondary}
+            ${background.surface}
 
             box-shadow: 0 1px 2px -1px ${shadow.varSecondary};
             border-width: 1px;
@@ -220,13 +205,8 @@ const StyledInputContainer = styled(InputBase)`
     }
 
     &.NuiInputContainer--variant-filled-none {
-        & .NuiInputContainer__prepend,
-        & .NuiInputContainer__append {
-            ${background.dimmed}
-        }
-
         & .NuiInputBase__container {
-            ${background.secondary}
+            ${background.surface}
 
             box-shadow: none;
             border-width: 0;

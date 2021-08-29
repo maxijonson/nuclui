@@ -44,7 +44,7 @@ const Popover: NuiPopover = React.forwardRef((props, ref) => {
 });
 
 const StyledPopover = styled(Popover)`
-    ${background.primary}
+    ${background.surface}
     ${shadow.primary}
     ${border.primary}
     ${text.primary}

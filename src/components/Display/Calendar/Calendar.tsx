@@ -168,7 +168,8 @@ const StyledCalendar = styled(Calendar)`
     }
 
     & .NuiCalendar__day {
-        ${background.primary}
+        ${background.surface}
+        ${text.primary}
 
         flex: 1 0 calc(100% / 7);
         text-align: center;

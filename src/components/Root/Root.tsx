@@ -2,8 +2,9 @@ import React from "react";
 import _ from "lodash";
 import { createComponentName } from "@utils";
 import MediaQueryContext from "@components/Layout/MediaQueryContext/MediaQueryContext";
-import { ThemeProvider } from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import defaultTheme from "@theme/defaultTheme";
+import { background } from "@theme";
 import { Normalize } from "./Normalize";
 import { Fonts } from "./Fonts";
 import { RootProps } from "./types";
@@ -17,18 +18,29 @@ import { RootProps } from "./types";
  */
 const Root: Nui.FC<RootProps> = ({ theme = {}, children }) => {
     const mergedTheme = React.useMemo(
-        () => _.merge({ nui: { ...defaultTheme } }, { nui: theme }),
+        () => _.defaultsDeep({ nui: theme }, { nui: { ...defaultTheme } }),
         [theme]
     );
 
     return (
         <ThemeProvider theme={mergedTheme}>
-            <Normalize />
-            <Fonts />
-            <MediaQueryContext>{children}</MediaQueryContext>
+            <StyledRoot className="NuiRoot">
+                <Normalize />
+                <Fonts />
+                <MediaQueryContext>{children}</MediaQueryContext>
+            </StyledRoot>
         </ThemeProvider>
     );
 };
+
+const StyledRoot = styled.div`
+    ${background.main}
+    min-height: 100vh;
+
+    * {
+        box-sizing: border-box;
+    }
+`;
 
 Root.displayName = createComponentName("Root");
 

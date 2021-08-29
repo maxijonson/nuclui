@@ -11,7 +11,7 @@ export default css`
         background: transparent;
     }
     &::-webkit-scrollbar-thumb {
-        ${background.dimmed}
+        ${background.surfaceAlt}
 
         border-radius: 10px;
     }

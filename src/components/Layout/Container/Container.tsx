@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import clsx from "clsx";
 import { createComponentName, createBreakpoints } from "@utils";
-import { background, text } from "@theme";
+import { text } from "@theme";
 import { quicksand } from "@fonts";
 import { NuiContainer } from "./types";
 
@@ -50,7 +50,6 @@ Container.defaultProps = {
 };
 
 const StyledContainer = styled(Container)`
-    ${background.primary}
     ${text.primary}
     ${quicksand}
 

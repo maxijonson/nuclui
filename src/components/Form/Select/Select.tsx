@@ -358,8 +358,10 @@ const Select: NuiSelect = React.memo(
 );
 
 const StyledSelect = styled(InputContainer)`
-    ${context.primaryVLight}
-    ${context.primaryLight}
+    ${context.primary}
+    ${context.primaryActive}
+    ${context.primaryActiveAlt}
+    ${context.primaryContrastText}
 
     & .NuiSelect__popover {
         width: 100%;
@@ -387,7 +389,8 @@ const StyledSelect = styled(InputContainer)`
     & .NuiSelect__options__list__item,
     & .NuiSelect__options__list__empty,
     & .NuiSelect__options__list__create {
-        ${background.primary}
+        ${background.surface}
+        ${text.primary}
 
         padding: 5px 10px;
         transition: background-color 0.2s, color 0.2s, font-weight 0.2s;
@@ -395,15 +398,16 @@ const StyledSelect = styled(InputContainer)`
 
         &:hover:not(:disabled):not(.NuiSelect__options__list__empty):not(.NuiSelect__options__list__item--selected),
         &.NuiSelect__options__list__item--highlighted {
-            ${background.dimmed}
+            ${background.surfaceAlt}
         }
 
         &.NuiSelect__options__list__item--selected {
-            background-color: ${context.varPrimaryVLight};
+            color: ${context.varPrimaryContrastText};
+            background-color: ${context.varPrimary};
 
             &:hover,
             &.NuiSelect__options__list__item--highlighted {
-                background-color: ${context.varPrimaryLight};
+                background-color: ${context.varPrimaryActive};
             }
         }
 

@@ -1,6 +1,6 @@
 import React from "react";
 import _ from "lodash";
-import styled, { ThemeProvider } from "styled-components";
+import styled from "styled-components";
 import clsx from "clsx";
 import { createComponentName, isBreakpoint } from "@utils";
 import { quicksand } from "@fonts";
@@ -107,29 +107,9 @@ const Flex: NuiFlex = React.forwardRef((props, ref) => {
 
     return (
         <Component {...restProps} ref={ref} className={classes} style={style}>
-            <ThemeProvider
-                theme={{
-                    nui: {
-                        $parent: {
-                            flex: {
-                                itemGrow,
-                                itemShrink,
-                                itemBasis,
-                                itemSpacing,
-                                itemXs,
-                                itemSm,
-                                itemMd,
-                                itemLg,
-                                itemXl,
-                            },
-                        },
-                    },
-                }}
-            >
-                <FlexContext.Provider value={contextValue}>
-                    {children}
-                </FlexContext.Provider>
-            </ThemeProvider>
+            <FlexContext.Provider value={contextValue}>
+                {children}
+            </FlexContext.Provider>
         </Component>
     );
 });

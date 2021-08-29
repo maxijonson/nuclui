@@ -87,9 +87,10 @@ const Checkbox: NuiCheckbox = React.memo(
 );
 
 const StyledCheckbox = styled(CheckboxContainer)`
-    ${context.primaryLight}
     ${context.primary}
-    ${context.primaryDark}
+    ${context.primaryActive}
+    ${context.primaryActiveAlt}
+    ${context.primaryContrastText}
 
     & .NuiCheckbox__input {
         position: absolute;
@@ -98,11 +99,11 @@ const StyledCheckbox = styled(CheckboxContainer)`
         opacity: 0;
 
         &:focus-visible ~ .NuiCheckbox__container {
-            ${background.dimmed}
+            ${background.surfaceAlt}
         }
 
         &:active ~ .NuiCheckbox__container {
-            ${background.secondary}
+            ${background.active}
 
             border-color: ${context.varPrimary};
         }
@@ -115,7 +116,7 @@ const StyledCheckbox = styled(CheckboxContainer)`
             }
 
             & ~ .NuiCheckbox__container::after {
-                border-color: white;
+                border-color: ${context.varPrimaryContrastText};
                 border-width: 0px;
                 border-style: solid;
                 border-right-width: calc(var(--nui-inputBase-size) / 9);
@@ -124,18 +125,19 @@ const StyledCheckbox = styled(CheckboxContainer)`
             }
 
             &:focus-visible ~ .NuiCheckbox__container {
-                background-color: ${context.varPrimaryLight};
+                background-color: ${context.varPrimaryActiveAlt};
             }
 
             &:active ~ .NuiCheckbox__container {
                 ${border.primary}
 
-                background-color:  ${context.varPrimaryDark};
+                background-color:  ${context.varPrimaryActive};
             }
         }
     }
 
     & .NuiCheckbox__container {
+        ${background.surface}
         ${border.primary}
 
         cursor: pointer;
@@ -145,7 +147,6 @@ const StyledCheckbox = styled(CheckboxContainer)`
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: transparent;
         border-radius: 2px;
         border-style: solid;
         border-width: 1px;
@@ -153,7 +154,7 @@ const StyledCheckbox = styled(CheckboxContainer)`
         transition: background-color 200ms ease-out, border-color 200ms ease-out;
 
         &:active {
-            ${background.dimmed}
+            ${background.active}
         }
 
         &::after {
@@ -179,7 +180,7 @@ const StyledCheckbox = styled(CheckboxContainer)`
         }
 
         & .NuiCheckbox__input:checked ~ .NuiCheckbox__container {
-            background-color: ${context.varPrimaryDark};
+            background-color: ${context.varPrimaryActive};
         }
     }
 `;

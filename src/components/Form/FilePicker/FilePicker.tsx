@@ -469,7 +469,7 @@ const FilePicker: NuiFilePicker = React.memo(
 
 const StyledFilePicker = styled(InputContainer)`
     ${context.danger}
-    ${context.dangerLight}
+    ${context.dangerActiveAlt}
 
     --nui-filepicker-height: 120px;
     --nui-filepicker-configsize: 0.6em;
@@ -508,11 +508,17 @@ const StyledFilePicker = styled(InputContainer)`
         position: absolute;
         top: 4px;
         right: 4px;
+
+        & > path {
+            ${text.primary}
+
+            stroke: ${text.varPrimary};
+        }
     }
 
     &.NuiFilePicker--isDragging {
         & .NuiFilePicker__overlay {
-            ${background.secondary}
+            ${background.active}
         }
     }
 
@@ -526,7 +532,7 @@ const StyledFilePicker = styled(InputContainer)`
         color: ${context.varDanger};
 
         & .NuiFilePicker__config {
-            color: ${context.varDangerLight};
+            color: ${context.varDangerActiveAlt};
         }
     }
 

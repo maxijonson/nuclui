@@ -99,15 +99,18 @@ const Switch: NuiSwitch = React.memo(
 );
 
 const StyledSwitch = styled(CheckboxContainer)`
-    ${context.primaryLight}
     ${context.primary}
-    ${context.primaryDark}
+    ${context.primaryActive}
+    ${context.primaryActiveAlt}
+    ${context.primaryContrastText}
+
     --nui-switch-pad: 2px;
     --nui-switch-toggle: calc(
         var(--nui-inputBase-size) - (2 * var(--nui-switch-pad) + 2px)
     ); /* size - (2 * padding + 2 * toggle-border-width) */
 
     & .NuiSwitch__container {
+        ${background.surface}
         ${border.primary}
 
         cursor: pointer;
@@ -125,6 +128,8 @@ const StyledSwitch = styled(CheckboxContainer)`
     }
 
     & .NuiSwitch__text {
+        ${text.primary}
+
         user-select: none;
         align-items: center;
         justify-content: center;
@@ -137,8 +142,8 @@ const StyledSwitch = styled(CheckboxContainer)`
     }
 
     & .NuiSwitch__toggle {
-        ${border.secondary}
-        ${background.primary}
+        ${border.primary}
+        ${background.surface}
 
         border-radius: 50%;
         border-style: solid;
@@ -167,11 +172,11 @@ const StyledSwitch = styled(CheckboxContainer)`
         opacity: 0;
 
         &:focus-visible ~ .NuiSwitch__container {
-            ${background.dimmed}
+            ${background.active}
         }
 
         &:active ~ .NuiSwitch__container {
-            ${background.secondary}
+            ${background.active}
 
             border-color: ${context.varPrimary};
 
@@ -186,8 +191,7 @@ const StyledSwitch = styled(CheckboxContainer)`
                 border-color: ${context.varPrimary};
 
                 & .NuiSwitch__text {
-                    ${text.contrast}
-
+                    color: ${context.varPrimaryContrastText};
                     margin-left: var(--nui-switch-pad);
                     margin-right: calc(
                         var(--nui-switch-toggle) + var(--nui-switch-pad)
@@ -195,7 +199,8 @@ const StyledSwitch = styled(CheckboxContainer)`
                 }
 
                 & .NuiSwitch__toggle {
-                    border-color: ${background.varPrimary};
+                    background-color: ${context.varPrimaryContrastText};
+                    border-color: ${context.varPrimaryContrastText};
                     left: calc(
                         100% -
                             (var(--nui-switch-toggle) + var(--nui-switch-pad))
@@ -204,13 +209,13 @@ const StyledSwitch = styled(CheckboxContainer)`
             }
 
             &:focus-visible ~ .NuiSwitch__container {
-                background-color: ${context.varPrimaryLight};
+                background-color: ${context.varPrimaryActiveAlt};
             }
 
             &:active ~ .NuiSwitch__container {
                 ${border.primary}
 
-                background-color: ${context.varPrimaryDark};
+                background-color: ${context.varPrimaryActive};
             }
         }
     }
@@ -226,8 +231,8 @@ const StyledSwitch = styled(CheckboxContainer)`
         }
 
         & .NuiSwitch__input:checked ~ .NuiSwitch__container {
-            background-color: ${context.varPrimaryDark};
-            border-color: ${context.varPrimaryDark};
+            background-color: ${context.varPrimaryActive};
+            border-color: ${context.varPrimaryActive};
         }
     }
 

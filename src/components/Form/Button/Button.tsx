@@ -169,34 +169,43 @@ const Button: NuiButton = React.forwardRef((props, ref) => {
 const StyledButton = styled(Button)`
     ${shadow.primary}
     ${text.primary}
-    ${background.dimmed}
-    ${background.dark}
-    ${context.primaryVLight}
+    ${background.surfaceAlt}
+    ${background.active}
+    ${background.activeAlt}
     ${context.primary}
-    ${context.primaryDark}
-    ${context.secondaryVLight}
+    ${context.primaryActive}
+    ${context.primaryActiveAlt}
+    ${context.primaryContrastText}
     ${context.secondary}
-    ${context.secondaryDark}
-    ${context.successVLight}
+    ${context.secondaryActive}
+    ${context.secondaryActiveAlt}
+    ${context.secondaryContrastText}
     ${context.success}
-    ${context.successDark}
-    ${context.dangerVLight}
+    ${context.successActive}
+    ${context.successActiveAlt}
+    ${context.successContrastText}
     ${context.danger}
-    ${context.dangerDark}
-    ${context.warnVLight}
+    ${context.dangerActive}
+    ${context.dangerActiveAlt}
+    ${context.dangerContrastText}
     ${context.warn}
-    ${context.warnDark}
-    ${context.infoVLight}
+    ${context.warnActive}
+    ${context.warnActiveAlt}
+    ${context.warnContrastText}
     ${context.info}
-    ${context.infoDark}
+    ${context.infoActive}
+    ${context.infoActiveAlt}
+    ${context.infoContrastText}
     ${quicksand}
     
-    --nui-button-color: ${background.varDimmed};
-    --nui-button-color-hover: ${background.varDark};
+    --nui-button-color: ${background.varSurfaceAlt};
+    --nui-button-color-hover: ${background.varActive};
+    --nui-button-color-confirm: ${background.varActiveAlt};
+    --nui-button-color-confirmAlt: ${background.varActiveAlt};
 
     --nui-button-outline: ${text.varPrimary};
     --nui-button-outline-hover: ${text.varPrimary};
-    --nui-button-outline-background: ${background.varDimmed};
+    --nui-button-outline-background: ${background.varSurfaceAlt};
 
     --nui-button-size: 18px;
     --nui-button-pad: 4px;
@@ -205,7 +214,6 @@ const StyledButton = styled(Button)`
         if (!confirmDuration || confirmDuration == 0) return "0ms";
         return `${confirmDuration}ms`;
     }};
-    --nui-button-confirm-color: black;
 
     position: relative;
     outline: none;
@@ -223,6 +231,7 @@ const StyledButton = styled(Button)`
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
 
+    /* Confirm */
     &.NuiButton--confirm::after {
         content: "";
         position: absolute;
@@ -230,13 +239,14 @@ const StyledButton = styled(Button)`
         left: 0;
         width: 0%;
         height: 100%;
-        background-color: var(--nui-button-confirm-color);
+        background-color: var(--nui-button-color-confirm);
         box-sizing: border-box;
         opacity: 0.25;
         transition: width var(--nui-button-confirm-duration) linear,
             height var(--nui-button-confirm-duration) linear;
     }
 
+    /* Shadow */
     &::before {
         content: "";
         position: absolute;
@@ -347,52 +357,64 @@ const StyledButton = styled(Button)`
     }
 
     &.NuiButton--color-primary {
-        ${text.contrast}
         --nui-button-color: ${context.varPrimary};
-        --nui-button-color-hover: ${context.varPrimaryDark};
+        --nui-button-color-hover: ${context.varPrimaryActive};
+        --nui-button-color-confirm: ${context.varPrimaryActiveAlt};
+        --nui-button-color-confirmAlt: ${context.varPrimary};
         --nui-button-outline: ${context.varPrimary};
-        --nui-button-outline-hover: ${context.varPrimaryDark};
-        --nui-button-outline-background: ${context.varPrimaryVLight};
+        --nui-button-outline-hover: ${context.varPrimaryActive};
+        --nui-button-outline-background: ${context.varPrimaryActiveAlt};
+        color: ${context.varPrimaryContrastText};
     }
     &.NuiButton--color-secondary {
-        ${text.contrast}
         --nui-button-color: ${context.varSecondary};
-        --nui-button-color-hover: ${context.varSecondaryDark};
+        --nui-button-color-hover: ${context.varSecondaryActive};
+        --nui-button-color-confirm: ${context.varSecondaryActiveAlt};
+        --nui-button-color-confirmAlt: ${context.varSecondary};
         --nui-button-outline: ${context.varSecondary};
-        --nui-button-outline-hover: ${context.varSecondaryDark};
-        --nui-button-outline-background: ${context.varSecondaryVLight};
+        --nui-button-outline-hover: ${context.varSecondaryActive};
+        --nui-button-outline-background: ${context.varSecondaryActiveAlt};
+        color: ${context.varSecondaryContrastText};
     }
     &.NuiButton--color-warn {
-        ${text.contrast}
         --nui-button-color: ${context.varWarn};
-        --nui-button-color-hover: ${context.varWarnDark};
+        --nui-button-color-hover: ${context.varWarnActive};
+        --nui-button-color-confirm: ${context.varWarnActiveAlt};
+        --nui-button-color-confirmAlt: ${context.varWarn};
         --nui-button-outline: ${context.varWarn};
-        --nui-button-outline-hover: ${context.varWarnDark};
-        --nui-button-outline-background: ${context.varWarnVLight};
+        --nui-button-outline-hover: ${context.varWarnActive};
+        --nui-button-outline-background: ${context.varWarnActiveAlt};
+        color: ${context.varWarnContrastText};
     }
     &.NuiButton--color-danger {
-        ${text.contrast}
         --nui-button-color: ${context.varDanger};
-        --nui-button-color-hover: ${context.varDangerDark};
+        --nui-button-color-hover: ${context.varDangerActive};
+        --nui-button-color-confirm: ${context.varDangerActiveAlt};
+        --nui-button-color-confirmAlt: ${context.varDanger};
         --nui-button-outline: ${context.varDanger};
-        --nui-button-outline-hover: ${context.varDangerDark};
-        --nui-button-outline-background: ${context.varDangerVLight};
+        --nui-button-outline-hover: ${context.varDangerActive};
+        --nui-button-outline-background: ${context.varDangerActiveAlt};
+        color: ${context.varDangerContrastText};
     }
     &.NuiButton--color-success {
-        ${text.contrast}
         --nui-button-color: ${context.varSuccess};
-        --nui-button-color-hover: ${context.varSuccessDark};
+        --nui-button-color-hover: ${context.varSuccessActive};
+        --nui-button-color-confirm: ${context.varSuccessActiveAlt};
+        --nui-button-color-confirmAlt: ${context.varSuccess};
         --nui-button-outline: ${context.varSuccess};
-        --nui-button-outline-hover: ${context.varSuccessDark};
-        --nui-button-outline-background: ${context.varSuccessVLight};
+        --nui-button-outline-hover: ${context.varSuccessActive};
+        --nui-button-outline-background: ${context.varSuccessActiveAlt};
+        color: ${context.varSuccessContrastText};
     }
     &.NuiButton--color-info {
-        ${text.contrast}
         --nui-button-color: ${context.varInfo};
-        --nui-button-color-hover: ${context.varInfoDark};
+        --nui-button-color-hover: ${context.varInfoActive};
+        --nui-button-color-confirm: ${context.varInfoActiveAlt};
+        --nui-button-color-confirmAlt: ${context.varInfo};
         --nui-button-outline: ${context.varInfo};
-        --nui-button-outline-hover: ${context.varInfoDark};
-        --nui-button-outline-background: ${context.varInfoVLight};
+        --nui-button-outline-hover: ${context.varInfoActive};
+        --nui-button-outline-background: ${context.varInfoActiveAlt};
+        color: ${context.varInfoContrastText};
     }
 
     &.NuiButton--size-xs {
@@ -420,7 +442,6 @@ const StyledButton = styled(Button)`
     &.NuiButton--variant-round-outline,
     &.NuiButton--variant-empty,
     &.NuiButton--variant-round-empty {
-        --nui-button-confirm-color: var(--nui-button-color-hover);
         background-color: transparent;
         color: var(--nui-button-outline);
 
@@ -428,6 +449,10 @@ const StyledButton = styled(Button)`
         &.NuiButton--isTouch:active {
             color: var(--nui-button-outline-hover);
             background-color: var(--nui-button-outline-background);
+
+            &.NuiButton--confirm {
+                background-color: transparent;
+            }
 
             &::before {
                 background-color: transparent;
@@ -437,6 +462,10 @@ const StyledButton = styled(Button)`
         &::before {
             box-shadow: none;
             background-color: transparent;
+        }
+
+        &.NuiButton--confirm::after {
+            background-color: var(--nui-button-color-confirmAlt);
         }
     }
     &.NuiButton--variant-empty,

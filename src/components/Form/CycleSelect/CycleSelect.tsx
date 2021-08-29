@@ -214,11 +214,11 @@ const StyledCycleSelect = styled(InputContainer)`
         padding: 0 5px;
 
         &:hover:not(:disabled) {
-            ${background.secondary}
+            ${background.surfaceAlt}
         }
 
         &:active:not(:disabled) {
-            ${background.dimmed}
+            ${background.active}
         }
 
         &:disabled {

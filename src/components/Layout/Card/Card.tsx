@@ -34,7 +34,7 @@ const Card: NuiCard = React.forwardRef((props, ref) => {
 
 const StyledCard = styled(Card)`
     ${quicksand}
-    ${background.primary}
+    ${background.surface}
     ${text.primary}
     ${border.secondary}
     ${shadow.secondary}

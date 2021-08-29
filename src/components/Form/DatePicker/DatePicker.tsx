@@ -684,14 +684,15 @@ const DatePicker: NuiDatePicker = React.memo(
 
 const StyledDatePicker = styled(InputContainer)`
     ${context.primary}
-    ${context.primaryDark}
+    ${context.primaryActive}
+    ${context.primaryContrastText}
 
     & .NuiDatePicker__container {
         width: 100%;
     }
 
     & .NuiDatePicker__popover {
-        min-width: 250px;
+        min-width: 300px;
         width: 100%;
     }
 
@@ -711,7 +712,7 @@ const StyledDatePicker = styled(InputContainer)`
         transition: background-color 0.2s;
 
         &:hover {
-            ${background.secondary}
+            ${background.active}
         }
     }
 
@@ -753,6 +754,8 @@ const StyledDatePicker = styled(InputContainer)`
     }
 
     & .NuiDatePicker__time-toggle {
+        ${text.primary}
+
         width: 100%;
         border: none;
         margin: none;
@@ -762,10 +765,10 @@ const StyledDatePicker = styled(InputContainer)`
         cursor: pointer;
 
         &:hover {
-            ${background.secondary}
+            ${background.surfaceAlt}
         }
         &:active {
-            ${background.dimmed}
+            ${background.active}
         }
     }
 
@@ -802,7 +805,8 @@ const StyledDatePicker = styled(InputContainer)`
     & .NuiDatePicker__dial__hour,
     & .NuiDatePicker__dial__minute,
     & .NuiDatePicker__dial__second {
-        ${background.primary}
+        ${background.surface}
+        ${text.primary}
 
         box-sizing: border-box;
         outline: none;
@@ -813,10 +817,10 @@ const StyledDatePicker = styled(InputContainer)`
         border-radius: 3px;
 
         &:hover {
-            ${background.secondary}
+            ${background.surfaceAlt}
         }
         &:active {
-            ${background.dimmed}
+            ${background.active}
 
             &.NuiDatePicker__calendar__day--selected,
             &.NuiDatePicker__calendar__months__month--selected,
@@ -824,7 +828,7 @@ const StyledDatePicker = styled(InputContainer)`
             &.NuiDatePicker__dial__hour--selected,
             &.NuiDatePicker__dial__minute--selected,
             &.NuiDatePicker__dial__second--selected {
-                background-color: ${context.varPrimaryDark};
+                background-color: ${context.varPrimaryActive};
             }
         }
 
@@ -834,8 +838,7 @@ const StyledDatePicker = styled(InputContainer)`
         &.NuiDatePicker__dial__hour--selected,
         &.NuiDatePicker__dial__minute--selected,
         &.NuiDatePicker__dial__second--selected {
-            ${text.contrast}
-
+            color: ${context.varPrimaryContrastText};
             background-color: ${context.varPrimary};
             font-weight: 600;
         }
