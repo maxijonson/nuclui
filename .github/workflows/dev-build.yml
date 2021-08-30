@@ -5,7 +5,10 @@ on:
         branches:
             - develop
             - "feature/**"
+            - "improvement/**"
             - "component/**"
+            - "bugfix/**"
+            - "security/**"
             - "!**-wip"
             - "!wip/**"
     pull_request:
