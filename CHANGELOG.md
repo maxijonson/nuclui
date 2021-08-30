@@ -2,7 +2,18 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [v0.1.2](https://github.com/maxijonson/nuclui/compare/v0.1.1...v0.1.2)
+
+- Fix forced audit vulnerabilities [`a95b31b`](https://github.com/maxijonson/nuclui/commit/a95b31b6d98793c3541b96e0fd2cd7bc7697773f)
+- Fix automatic audit vulnerabilities [`c13d224`](https://github.com/maxijonson/nuclui/commit/c13d224f1f842dfff9e9e3a2e3660395fbb27e97)
+- Rework theming [`b11fd95`](https://github.com/maxijonson/nuclui/commit/b11fd95b1183ee1ebd625de6bd2247da8a31bbf6)
+- fix npm scripts [`e95f2ec`](https://github.com/maxijonson/nuclui/commit/e95f2ec13725ea846b5c59a428c65c34e15d0622)
+- Add more branches types to dev-build workflow [`234a927`](https://github.com/maxijonson/nuclui/commit/234a927f6b90c2d5a9a25a6c1b6a4d5beb40db1b)
+- fix docs server compilation [`05e0486`](https://github.com/maxijonson/nuclui/commit/05e0486d6bf010caaa921f289bda7429833321dc)
+
 #### [v0.1.1](https://github.com/maxijonson/nuclui/compare/v0.1.1-beta.0...v0.1.1)
+
+> 5 August 2021
 
 - remove -p webpack flag [`393e048`](https://github.com/maxijonson/nuclui/commit/393e048a28c6f202a6e628386051b63dde96f117)
 
