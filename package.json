@@ -103,10 +103,10 @@
     "@types/react-helmet": "^6.1.1",
     "@types/react-router-dom": "^5.1.7",
     "@types/react-text-mask": "^5.4.7",
-    "@types/webpack-dev-server": "^3.11.4",
+    "@types/webpack-dev-server": "^4.0.3",
     "@types/yargs": "^17.0.0",
-    "@typescript-eslint/eslint-plugin": "^4.28.1",
-    "@typescript-eslint/parser": "^4.28.1",
+    "@typescript-eslint/eslint-plugin": "^4.29.3",
+    "@typescript-eslint/parser": "^4.29.3",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.2",
     "auto-changelog": "^2.3.0",
     "babel-loader": "^8.2.2",
@@ -132,7 +132,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^6.0.0",
     "inquirer": "^8.1.1",
-    "jasmine-browser-runner": "^0.5.0",
+    "jasmine-browser-runner": "^0.8.0",
     "jest": "^27.0.6",
     "jest-mock-console": "^1.1.0",
     "jest-styled-components": "^7.0.4",
@@ -149,7 +149,7 @@
     "typescript-transform-paths": "^3.0.1",
     "webpack": "^5.41.0",
     "webpack-cli": "^4.7.2",
-    "webpack-dev-server": "^3.11.2",
+    "webpack-dev-server": "^4.0.0",
     "yargs": "^17.0.1"
   }
 }

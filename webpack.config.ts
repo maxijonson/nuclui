@@ -97,8 +97,12 @@ const config = (env: ConfigEnv = {}): webpack.Configuration => {
             port: 3000,
             host: "0.0.0.0",
             historyApiFallback: true,
-            contentBase: path.join(__dirname, "docs/public"),
-            publicPath: "/dist/",
+            devMiddleware: {
+                publicPath: "/dist/",
+            },
+            static: {
+                directory: path.join(__dirname, "docs/public"),
+            },
         },
     };
 };
