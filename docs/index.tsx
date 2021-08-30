@@ -13,7 +13,7 @@ import Benchmark from "./pages/Benchmark/Benchmark";
 import { breeze, dark } from "./config/themes";
 
 const App = () => {
-    const [activeTheme, setActiveTheme] = React.useState<string>("dark");
+    const [activeTheme, setActiveTheme] = React.useState<string>("light");
 
     const theme = React.useMemo<Theme | undefined>(() => {
         switch (activeTheme) {
