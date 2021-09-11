@@ -109,6 +109,7 @@ const Data = React.memo(() => {
                 items={users}
                 columns={columns}
                 maxRows={[5, 8, 12, 20]}
+                fill
             />
             <Card>
                 <Table

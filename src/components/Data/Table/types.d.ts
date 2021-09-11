@@ -57,6 +57,13 @@ export interface TableBaseProps<T extends Record<string, any>> {
     maxRows?: number | number[];
 
     /**
+     * When `true` and `maxRows` is set, empty rows will be rendered to fill the table.
+     *
+     * @default false
+     */
+    fill?: boolean;
+
+    /**
      * Vertical alignment of the table cells.
      *
      * @default "center"

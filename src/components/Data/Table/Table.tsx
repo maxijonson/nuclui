@@ -55,6 +55,7 @@ function NuiTable<T extends Record<string, any>>(
         items,
         columns,
         maxRows,
+        fill = false,
         alignCells = "center",
         compact = false,
         className,
@@ -172,8 +173,6 @@ function NuiTable<T extends Record<string, any>>(
         [items.length]
     );
 
-    console.warn("page", page);
-
     return (
         <StyledTable className={classes}>
             <div className="NuiTable__header" />
@@ -186,6 +185,23 @@ function NuiTable<T extends Record<string, any>>(
                     </thead>
                     <tbody className="NuiTable__table__body">
                         {_.map(visibleItems, renderItemRow)}
+                        {maxVisibleRows !== undefined &&
+                            fill &&
+                            _.times(
+                                maxVisibleRows - visibleItems.length,
+                                (n) => (
+                                    <tr
+                                        key={n}
+                                        className="NuiTable__table__row NuiTable__table__row--body NuiTable__table__row--empty"
+                                    >
+                                        <td
+                                            className="NuiTable__table__cell NuiTable__table__cell--body"
+                                            colSpan={columns.length}
+                                            children="empty"
+                                        />
+                                    </tr>
+                                )
+                            )}
                     </tbody>
                 </table>
             </div>
@@ -248,6 +264,12 @@ const StyledTable = styled.div`
 
     .NuiTable__table__row {
         ${border.secondary}
+
+        &.NuiTable__table__row--empty {
+            opacity: 0;
+            user-select: none;
+            pointer-events: none;
+        }
 
         &:not(.NuiTable__table__row--head):hover {
             ${background.active}
