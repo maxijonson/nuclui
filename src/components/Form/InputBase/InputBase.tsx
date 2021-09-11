@@ -17,6 +17,7 @@ const InputBase: NuiInputBase = React.memo(
             children,
             disabled,
             fluid = false,
+            noGutters = false,
             focused = false,
             touched = true,
             errors: errorsProp,
@@ -47,6 +48,7 @@ const InputBase: NuiInputBase = React.memo(
                     ],
                     disabled && "NuiInputBase--disabled",
                     fluid && "NuiInputBase--fluid",
+                    noGutters && "NuiInputBase--noGutters",
                     className,
                 ]),
             [
@@ -56,6 +58,7 @@ const InputBase: NuiInputBase = React.memo(
                 fluid,
                 focused,
                 labelPosition,
+                noGutters,
                 size,
                 touched,
             ]
@@ -142,6 +145,10 @@ const StyledInputBase = styled.div`
         width: 100%;
     }
 
+    &.NuiInputBase--noGutters {
+        margin: 0;
+    }
+
     &.NuiInputBase--position-right {
         & .NuiInputBase__label-container {
             gap: 10px;
@@ -198,6 +205,7 @@ export const extractInputBaseProps = <T extends InputBaseProps>(
         disabled = false,
         errors = [],
         fluid = false,
+        noGutters = false,
         focused = false,
         label = "",
         labelPosition = "top",
@@ -210,6 +218,7 @@ export const extractInputBaseProps = <T extends InputBaseProps>(
         disabled,
         errors,
         fluid,
+        noGutters,
         focused,
         label,
         labelPosition,

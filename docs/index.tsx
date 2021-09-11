@@ -5,15 +5,27 @@ import {
     Switch,
     Route,
     Redirect,
+    useHistory,
 } from "react-router-dom";
-import { Root, Theme, Container, Select, SelectOption } from "nuclui";
+import {
+    Root,
+    Theme,
+    Container,
+    Select,
+    SelectOption,
+    useForceUpdate,
+} from "nuclui";
 import styled from "styled-components";
 import Home from "./pages/Home/Home";
 import Benchmark from "./pages/Benchmark/Benchmark";
+import Form from "./pages/Form/Form";
 import { breeze, dark } from "./config/themes";
+import Data from "./pages/Data/Data";
 
 const App = () => {
     const [activeTheme, setActiveTheme] = React.useState<string>("light");
+    const history = useHistory();
+    const forceUpdate = useForceUpdate();
 
     const theme = React.useMemo<Theme | undefined>(() => {
         switch (activeTheme) {
@@ -45,9 +57,37 @@ const App = () => {
         []
     );
 
+    const pages = React.useMemo<SelectOption[]>(
+        () => [
+            {
+                value: "/",
+                label: "Home",
+            },
+            {
+                value: "/benchmark",
+                label: "Benchmark",
+            },
+            {
+                value: "/form",
+                label: "Form",
+            },
+            {
+                value: "/data",
+                label: "Data",
+            },
+        ],
+        []
+    );
+
     const onThemeChange = React.useCallback((v: string) => {
         setActiveTheme(v);
     }, []);
+    const onPageChange = React.useCallback(
+        (v: string) => {
+            history.push(v);
+        },
+        [history]
+    );
 
     React.useEffect(() => {
         (window as any).changeTheme = (v: string) => {
@@ -55,48 +95,78 @@ const App = () => {
         };
     }, []);
 
+    React.useEffect(() => {
+        const unsubscribe = history.listen(() => {
+            forceUpdate();
+        });
+        return () => {
+            unsubscribe();
+        };
+    }, [forceUpdate, history]);
+
     return (
-        <Router>
-            <Root theme={theme}>
-                <AppStyled>
-                    <Container>
-                        <div className="ThemeSelectContainer">
-                            <Select
-                                className="ThemeSelect"
-                                options={themes}
-                                value={activeTheme}
-                                onChange={onThemeChange}
-                                fluid
-                            />
-                        </div>
-                    </Container>
-                    <Switch>
-                        <Route exact path="/">
-                            <Home />
-                        </Route>
-                        <Route exact path="/benchmark">
-                            <Benchmark />
-                        </Route>
-                        <Route path="*">
-                            <Redirect to="/" />
-                        </Route>
-                    </Switch>
-                </AppStyled>
-            </Root>
-        </Router>
+        <Root theme={theme}>
+            <AppStyled>
+                <Container>
+                    <div className="SelectsContainer">
+                        <Select
+                            className="Select"
+                            options={themes}
+                            value={activeTheme}
+                            onChange={onThemeChange}
+                            fluid
+                        />
+                        <Select
+                            className="Select"
+                            options={pages}
+                            value={history.location.pathname}
+                            onChange={onPageChange}
+                            fluid
+                        />
+                    </div>
+                </Container>
+                <Switch>
+                    <Route exact path="/">
+                        <Home />
+                    </Route>
+                    <Route exact path="/benchmark">
+                        <Benchmark />
+                    </Route>
+                    <Route exact path="/form">
+                        <Form />
+                    </Route>
+                    <Route exact path="/data">
+                        <Data />
+                    </Route>
+                    <Route path="*">
+                        <Redirect to="/" />
+                    </Route>
+                </Switch>
+            </AppStyled>
+        </Root>
     );
 };
 
 const AppStyled = styled.div`
-    .ThemeSelectContainer {
-        width: 140px;
+    .SelectsContainer {
+        display: flex;
         max-width: 90vw;
         padding-top: 12px;
     }
 
-    .ThemeSelect {
+    .Select {
+        flex-basis: 140px;
         margin: 0;
+
+        &:not(:last-child) {
+            margin-right: 12px;
+        }
     }
 `;
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(
+    <Router>
+        <App />
+    </Router>,
+    document.getElementById("root")
+);

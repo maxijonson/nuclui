@@ -19,6 +19,13 @@ export interface InputBaseProps {
     fluid?: boolean;
 
     /**
+     * If true, removes the margin from the input.
+     *
+     * @default false
+     */
+    noGutters?: boolean;
+
+    /**
      * The errors associated with the field. Only the first one is shown.
      */
     errors?: string[];

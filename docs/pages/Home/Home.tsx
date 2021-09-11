@@ -26,7 +26,6 @@ import {
     FileObject,
 } from "nuclui";
 import { RiAccountCircleFill } from "react-icons/ri";
-import { Link } from "react-router-dom";
 
 const Icon = (
     <svg viewBox="0 0 640 512">
@@ -1049,7 +1048,6 @@ const UseFormTest = React.memo(() => {
 const Home = React.memo(() => {
     return (
         <Container maxWidth="lg">
-            <Link to="/benchmark">Benchmark</Link>
             <div>useForm Test</div>
             <UseFormTest />
             Nuclui is under developement! For now, The docs website is only a

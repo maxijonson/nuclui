@@ -95,8 +95,13 @@ const config = (env: ConfigEnv = {}): webpack.Configuration => {
         devtool: isProduction || isStaging ? "source-map" : "eval-source-map",
         devServer: {
             port: 3000,
-            host: "0.0.0.0",
             historyApiFallback: true,
+            open: true,
+            client: {
+                overlay: {
+                    warnings: false,
+                },
+            },
             devMiddleware: {
                 publicPath: "/dist/",
             },

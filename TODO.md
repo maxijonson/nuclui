@@ -10,6 +10,7 @@
     -   Readonly: disable arrows
 -   Flex or FlexItem
     -   Every Flex or FlexItem instance re-renders when something in the page re-renders...
+-   Remove '& ' in front of styled-components styles
 
 ### Components Roadmap
 
