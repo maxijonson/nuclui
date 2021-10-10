@@ -6,20 +6,27 @@ import clsx from "clsx";
 import _ from "lodash";
 import React from "react";
 import styled from "styled-components";
+import { BsArrowUpShort } from "react-icons/bs";
 import { TableColumn, TableProps } from "./types";
 
 const getCellClassName = (
     isHeader: boolean,
     align?: "left" | "right" | "center",
-    className?: string
+    className?: string,
+    isSortable = false,
+    isSorted = false,
+    sortDesc = false
 ) =>
     clsx([
-        isHeader && "NuiTable__table__cell NuiTable__table__cell--head",
-        !isHeader && "NuiTable__table__cell NuiTable__table__cell--body",
+        "NuiTable__table__cell",
+        `NuiTable__table__cell--${isHeader ? "head" : "body"}`,
         [
             align === "right" && `NuiTable__table__cell--align-right`,
             align === "center" && `NuiTable__table__cell--align-center`,
         ],
+        isSortable && "NuiTable__table__cell--sortable",
+        isSorted && "NuiTable__table__cell--sorted",
+        sortDesc && "NuiTable__table__cell--sort-desc",
         className,
     ]);
 
@@ -65,8 +72,9 @@ function NuiTable<T extends Record<string, any>>(
     const [maxVisibleRows, setMaxVisibleRows] = React.useState<
         number | undefined
     >(getInitialMaxVisibleRows(maxRows));
-
     const [page, setPage] = React.useState(0);
+    const [sortedColumnIndex, setSortedColumnIndex] = React.useState(-1);
+    const [sortDesc, setSortDesc] = React.useState(false);
 
     const classes = React.useMemo(
         () =>
@@ -82,15 +90,24 @@ function NuiTable<T extends Record<string, any>>(
         [alignCells, className, compact]
     );
 
+    const sortedItems = React.useMemo(() => {
+        if (sortedColumnIndex === -1) return items;
+        const sortedColumn = columns[sortedColumnIndex];
+        if (!sortedColumn.sort) return items;
+        const itemsCopy = items.slice();
+        const itemsSorted = itemsCopy.sort(sortedColumn.sort);
+        return sortDesc ? itemsSorted.reverse() : itemsSorted;
+    }, [columns, items, sortDesc, sortedColumnIndex]);
+
     const visibleItems = React.useMemo(() => {
         if (maxVisibleRows !== undefined) {
-            return items.slice(
+            return sortedItems.slice(
                 page * maxVisibleRows,
                 page * maxVisibleRows + maxVisibleRows
             );
         }
-        return items;
-    }, [items, maxVisibleRows, page]);
+        return sortedItems;
+    }, [maxVisibleRows, page, sortedItems]);
 
     const maxRowsOptions = React.useMemo(() => {
         if (!_.isArray(maxRows)) return null;
@@ -103,21 +120,62 @@ function NuiTable<T extends Record<string, any>>(
         );
     }, [maxRows]);
 
-    const renderColumnHeader = React.useCallback((column: TableColumn<T>) => {
-        const columnHeader = column.label ?? column.key;
-        const headerClassName = getCellClassName(
-            true,
-            column.align,
-            column.headerClassName
-        );
-        return (
-            <th key={column.key} className={headerClassName}>
-                <div className="NuiTable__table__cell__innerContainer">
-                    {columnHeader}
-                </div>
-            </th>
-        );
-    }, []);
+    const renderColumnHeader = React.useCallback(
+        (column: TableColumn<T>, index: number) => {
+            const columnHeader = column.label ?? column.key;
+            const isSortable = column.sort !== undefined;
+            const isSorted = sortedColumnIndex === index;
+            const headerClassName = getCellClassName(
+                true,
+                column.align,
+                column.headerClassName,
+                isSortable,
+                isSorted
+            );
+            const onClick = isSortable
+                ? () => {
+                      setSortedColumnIndex(sortDesc ? -1 : index);
+                      setSortDesc((current) => {
+                          if (sortedColumnIndex !== index) return false;
+                          return !current;
+                      });
+                  }
+                : undefined;
+
+            return (
+                <th
+                    key={column.key}
+                    className={headerClassName}
+                    onClick={onClick}
+                >
+                    <div
+                        className={clsx([
+                            "NuiTable__table__cell__innerContainer",
+                            isSortable &&
+                                "NuiTable__table__cell__innerContainer--sortable",
+                            isSorted &&
+                                "NuiTable__table__cell__innerContainer--sorted",
+                        ])}
+                    >
+                        {columnHeader}
+                        {isSortable && (
+                            <BsArrowUpShort
+                                className={clsx([
+                                    "NuiTable__table__cell__sort",
+                                    isSorted &&
+                                        "NuiTable__table__cell__sort--active",
+                                    sortDesc &&
+                                        "NuiTable__table__cell__sort--desc",
+                                ])}
+                                size={16}
+                            />
+                        )}
+                    </div>
+                </th>
+            );
+        },
+        [sortDesc, sortedColumnIndex]
+    );
 
     const renderItemCell = React.useCallback(
         (column: TableColumn<T>, item: T, index: number) => {
@@ -180,7 +238,9 @@ function NuiTable<T extends Record<string, any>>(
                 <table {...tableProps} ref={ref} className="NuiTable__table">
                     <thead className="NuiTable__table__head">
                         <tr className="NuiTable__table__row NuiTable__table__row--head">
-                            {_.map(columns, renderColumnHeader)}
+                            {_.map(columns, (column, index) =>
+                                renderColumnHeader(column, index)
+                            )}
                         </tr>
                     </thead>
                     <tbody className="NuiTable__table__body">
@@ -260,10 +320,13 @@ const StyledTable = styled.div`
     .NuiTable__table {
         border-collapse: collapse;
         width: 100%;
+        table-layout: fixed;
     }
 
     .NuiTable__table__row {
         ${border.secondary}
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
 
         &.NuiTable__table__row--empty {
             opacity: 0;
@@ -274,22 +337,25 @@ const StyledTable = styled.div`
         &:not(.NuiTable__table__row--head):hover {
             ${background.active}
         }
-
-        &:not(.NuiTable__table__row--body:last-child) {
-            border-bottom-width: 1px;
-            border-bottom-style: solid;
-        }
     }
 
     .NuiTable__table__cell {
         ${text.primary}
 
-        padding: 8px;
+        padding: 8px 0;
         font-size: 16px;
 
         &.NuiTable__table__cell--head {
             font-size: 14px;
             font-weight: 600;
+
+            &.NuiTable__table__cell--sortable {
+                cursor: pointer;
+
+                &:hover {
+                    opacity: 0.7;
+                }
+            }
         }
 
         &.NuiTable__table__cell--align-right {
@@ -309,6 +375,27 @@ const StyledTable = styled.div`
     .NuiTable__table__cell__innerContainer {
         display: flex;
         align-items: center;
+        padding: 0 8px;
+
+        &.NuiTable__table__cell__innerContainer--sortable {
+            transform: translateX(16px);
+
+            &.NuiTable__table__cell__innerContainer--sorted {
+                transform: translateX(0px);
+            }
+        }
+    }
+
+    .NuiTable__table__cell__sort {
+        opacity: 0;
+
+        &.NuiTable__table__cell__sort--active {
+            opacity: 1;
+        }
+
+        &.NuiTable__table__cell__sort--desc {
+            transform: rotate(180deg);
+        }
     }
 
     .NuiTable__footer {

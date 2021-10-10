@@ -48,6 +48,7 @@ const columns: TableColumn<User>[] = [
         className: "UserTable__cell--age",
         render: (user) => user.age,
         align: "right",
+        sort: (a, b) => a.age - b.age,
     },
     {
         key: "campaign",

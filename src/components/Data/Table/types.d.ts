@@ -35,6 +35,11 @@ export interface TableColumn<T extends Record<string, any>> {
      * If not specified, the item value for the property defined by `key` will be used. If `key` isn't a property of the item, the cell will be empty.
      */
     render?: (item: T, index: number) => React.ReactNode;
+
+    /**
+     * Describes how the cells in this column should be sorted.
+     */
+    sort?: (a: T, b: T) => number;
 }
 
 export interface TableBaseProps<T extends Record<string, any>> {
