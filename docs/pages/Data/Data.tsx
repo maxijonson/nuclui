@@ -33,6 +33,7 @@ const columns: TableColumn<User>[] = [
         className: "UserTable__cell--rownumber",
         render: (_user, index) => index + 1,
         align: "center",
+        size: "5%",
     },
     {
         key: "name",
@@ -49,6 +50,7 @@ const columns: TableColumn<User>[] = [
         render: (user) => user.age,
         align: "right",
         sort: (a, b) => a.age - b.age,
+        size: "5%",
     },
     {
         key: "campaign",
@@ -66,6 +68,7 @@ const columns: TableColumn<User>[] = [
             <Checkbox value={user.isStudent} readOnly noGutters />
         ),
         align: "center",
+        size: "5%",
     },
     {
         key: "status",

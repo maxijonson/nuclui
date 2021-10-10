@@ -40,6 +40,11 @@ export interface TableColumn<T extends Record<string, any>> {
      * Describes how the cells in this column should be sorted.
      */
     sort?: (a: T, b: T) => number;
+
+    /**
+     * Defines the width of the column. Numbers are for fixed pixels.
+     */
+    size?: number | string;
 }
 
 export interface TableBaseProps<T extends Record<string, any>> {

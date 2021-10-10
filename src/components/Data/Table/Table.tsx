@@ -132,6 +132,13 @@ function NuiTable<T extends Record<string, any>>(
                 isSortable,
                 isSorted
             );
+
+            const size = (() => {
+                if (column.size === undefined) return undefined;
+                if (typeof column.size === "number") return `${column.size}px`;
+                return column.size;
+            })();
+
             const onClick = isSortable
                 ? () => {
                       setSortedColumnIndex(sortDesc ? -1 : index);
@@ -147,6 +154,7 @@ function NuiTable<T extends Record<string, any>>(
                     key={column.key}
                     className={headerClassName}
                     onClick={onClick}
+                    style={{ width: size }}
                 >
                     <div
                         className={clsx([
