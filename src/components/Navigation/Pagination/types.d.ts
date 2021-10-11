@@ -26,6 +26,13 @@ export interface PaginationProps {
     maxPages?: number;
 
     /**
+     * When true, hides the pages completely, leaving only the previous and next buttons.
+     *
+     * @defualt false
+     */
+    hidePages?: boolean;
+
+    /**
      * Whether or not to use the full width of the parent container. \
      * The arrows will be placed on the side and the pages in the middle of the container.
      * Use `spaceEven` to evenly space the pages in the container.

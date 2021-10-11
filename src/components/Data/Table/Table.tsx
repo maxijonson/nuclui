@@ -1,13 +1,18 @@
 import { Pagination } from "@components/Navigation/Pagination";
 import { Select, SelectOption } from "@components/Form/Select";
-import { background, border, text } from "@theme";
+import { border, text } from "@theme";
 import { createComponentName, nuiLog } from "@utils";
 import clsx from "clsx";
 import _ from "lodash";
 import React from "react";
 import styled from "styled-components";
 import { BsArrowUpShort } from "react-icons/bs";
+import { useMediaQuery } from "@hooks";
 import { TableColumn, TableProps } from "./types";
+
+const breakpoints = {
+    hidePaginationPages: `(max-width: 660px)`,
+};
 
 const getCellClassName = (
     isHeader: boolean,
@@ -75,6 +80,8 @@ function NuiTable<T extends Record<string, any>>(
     const [page, setPage] = React.useState(0);
     const [sortedColumnIndex, setSortedColumnIndex] = React.useState(-1);
     const [sortDesc, setSortDesc] = React.useState(false);
+
+    const queries = useMediaQuery(breakpoints);
 
     const classes = React.useMemo(
         () =>
@@ -281,6 +288,7 @@ function NuiTable<T extends Record<string, any>>(
                             active={page}
                             count={items.length / maxVisibleRows}
                             maxPages={5}
+                            hidePages={queries.hidePaginationPages}
                             onPageChange={onPageChange}
                         />
                     </div>
@@ -323,11 +331,13 @@ const StyledTable = styled.div`
     .NuiTable__tableContainer {
         width: 100%;
         overflow-x: auto;
+        margin-bottom: 4px;
     }
 
     .NuiTable__table {
         border-collapse: collapse;
         width: 100%;
+        min-width: 748px;
         table-layout: fixed;
     }
 
@@ -340,10 +350,6 @@ const StyledTable = styled.div`
             opacity: 0;
             user-select: none;
             pointer-events: none;
-        }
-
-        &:not(.NuiTable__table__row--head):hover {
-            ${background.active}
         }
     }
 
@@ -363,6 +369,10 @@ const StyledTable = styled.div`
                 &:hover {
                     opacity: 0.7;
                 }
+            }
+
+            .NuiTable__table__cell__innerContainer {
+                user-select: none;
             }
         }
 

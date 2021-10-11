@@ -12,6 +12,7 @@ const Pagination: NuiPagination = React.memo(
             count: propsCount = 1,
             active: propsActive = 0,
             maxPages: propsMaxPages = 6,
+            hidePages = false,
             fluid = false,
             spaceEven = false,
             showExtremePages = true,
@@ -151,7 +152,7 @@ const Pagination: NuiPagination = React.memo(
                 </button>
 
                 <ul className="NuiPagination__list">
-                    {showExtremePages && showExtremeLeftPage && (
+                    {showExtremePages && showExtremeLeftPage && !hidePages && (
                         <>
                             <li className="NuiPagination__list__item">
                                 <button
@@ -170,26 +171,27 @@ const Pagination: NuiPagination = React.memo(
                             </li>
                         </>
                     )}
-                    {_.map(pageIndexes, (index) => (
-                        <li
-                            className={clsx([
-                                "NuiPagination__list__item",
-                                index === active &&
-                                    "NuiPagination__list__item--active",
-                            ])}
-                            key={index}
-                        >
-                            <button
-                                className="NuiPagination__list__item__button"
-                                type="button"
-                                data-index={index}
-                                onClick={handlePageClick}
+                    {!hidePages &&
+                        _.map(pageIndexes, (index) => (
+                            <li
+                                className={clsx([
+                                    "NuiPagination__list__item",
+                                    index === active &&
+                                        "NuiPagination__list__item--active",
+                                ])}
+                                key={index}
                             >
-                                {renderPageNumber(index)}
-                            </button>
-                        </li>
-                    ))}
-                    {showExtremePages && showExtremeRightPage && (
+                                <button
+                                    className="NuiPagination__list__item__button"
+                                    type="button"
+                                    data-index={index}
+                                    onClick={handlePageClick}
+                                >
+                                    {renderPageNumber(index)}
+                                </button>
+                            </li>
+                        ))}
+                    {showExtremePages && showExtremeRightPage && !hidePages && (
                         <>
                             <li className="NuiPagination__list__item">
                                 <div className="NuiPagination__separator">
@@ -282,6 +284,8 @@ const StyledPagination = styled(Pagination)`
         outline: none;
         padding: 4px 8px;
         border-radius: 4px;
+        min-height: 28px;
+        user-select: none;
 
         &:not(:disabled):hover {
             cursor: pointer;
@@ -290,6 +294,10 @@ const StyledPagination = styled(Pagination)`
         &:disabled {
             opacity: 0.7;
         }
+    }
+
+    .NuiPagination__separator {
+        user-select: none;
     }
 
     .NuiPagination__arrow {

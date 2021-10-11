@@ -11,7 +11,7 @@ import {
     useMediaQueryRegistry,
 } from "./types";
 
-const useMediaQuery = <T>(
+const useMediaQuery = <T extends { [key: string]: string }>(
     queries: useMediaQueryQueries<T>
 ): useMediaQueryMatches<T> => {
     type Key = keyof T;
