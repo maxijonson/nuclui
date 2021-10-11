@@ -308,9 +308,7 @@ function NuiTable<T extends Record<string, any>>(
                                 fluid
                                 noGutters
                                 style={{
-                                    width: queries.hidePaginationPages
-                                        ? 72
-                                        : 172,
+                                    maxWidth: 72,
                                 }}
                             />
                         </div>
@@ -419,10 +417,6 @@ const StyledTable = styled.div`
 
     .NuiTable__paginationContainer {
         margin-right: 16px;
-    }
-
-    .NuiTable__maxRowsSelectContainer {
-        max-width: 172px;
     }
 
     .NuiTable__maxRowsSelect {
