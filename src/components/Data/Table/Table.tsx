@@ -173,12 +173,10 @@ function NuiTable<T extends Record<string, any>>(
                         ])}
                     >
                         {columnHeader}
-                        {isSortable && (
+                        {isSorted && (
                             <BsArrowUpShort
                                 className={clsx([
                                     "NuiTable__table__cell__sort",
-                                    isSorted &&
-                                        "NuiTable__table__cell__sort--active",
                                     sortDesc &&
                                         "NuiTable__table__cell__sort--desc",
                                 ])}
@@ -289,6 +287,7 @@ function NuiTable<T extends Record<string, any>>(
                             count={items.length / maxVisibleRows}
                             maxPages={5}
                             hidePages={queries.hidePaginationPages}
+                            showExtremeArrows={queries.hidePaginationPages}
                             onPageChange={onPageChange}
                         />
                     </div>
@@ -297,13 +296,22 @@ function NuiTable<T extends Record<string, any>>(
                             <Select
                                 className="NuiTable__maxRowsSelect"
                                 value={maxVisibleRows.toString()}
-                                label="Rows per page"
+                                label={
+                                    queries.hidePaginationPages
+                                        ? ""
+                                        : "Rows per page"
+                                }
                                 labelPosition="right"
                                 options={maxRowsOptions}
                                 onChange={onMaxRowsChange}
                                 variant="underline"
                                 fluid
                                 noGutters
+                                style={{
+                                    width: queries.hidePaginationPages
+                                        ? 72
+                                        : 172,
+                                }}
                             />
                         </div>
                     )}
@@ -394,23 +402,9 @@ const StyledTable = styled.div`
         display: flex;
         align-items: center;
         padding: 0 8px;
-
-        &.NuiTable__table__cell__innerContainer--sortable {
-            transform: translateX(16px);
-
-            &.NuiTable__table__cell__innerContainer--sorted {
-                transform: translateX(0px);
-            }
-        }
     }
 
     .NuiTable__table__cell__sort {
-        opacity: 0;
-
-        &.NuiTable__table__cell__sort--active {
-            opacity: 1;
-        }
-
         &.NuiTable__table__cell__sort--desc {
             transform: rotate(180deg);
         }
